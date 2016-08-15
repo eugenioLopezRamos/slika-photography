@@ -576,6 +576,7 @@ if(!scheduled) { //sets a timeout when you click, so you cant spam click on the 
       break;
 
     case "peopleTab":
+  
                   sObj.state = "peopleState";
             history.pushState(sObj.state, "People", "");  
             peopleState();
@@ -686,7 +687,7 @@ case "blogState":
 /********************************************************************************** COMPANY NAME CLICKHANDLER ****************************************************************************************/
 // COMPANY NAME CLICK HANDLER - Exactly the same as clicking "Home" in the Nav menu - need to DRY it up.
 $('.companyName').click(function() {
-
+event.preventDefault();
 homeState();       
 
 });
