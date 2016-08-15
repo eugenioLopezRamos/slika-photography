@@ -1,0 +1,24 @@
+
+
+ 
+<div class="content-Tabs" id="peopleContent">
+    
+    <div class="peopleSlider">
+
+<% @image_dir = 'peopleSlides' 
+    @tab_value = 'peopleSlide' %>
+    
+  <%= render 'layouts/slidersContent' %>
+  
+  </div>
+  
+<%= render 'layouts/sliderButtons' %>
+
+       <div class="slideCounter" id="peopleSlideCounter"> 
+         <span class="sliderValue" id="peopleCounterValue">
+           <input type="text" maxlength="2" class="slidePicker" id="peopleCounterCurrent" value="1"> of 
+           <div class="counterTotal" id="peopleCounterTotal"></div>
+         </span>
+       </div> 
+  
+  </div>

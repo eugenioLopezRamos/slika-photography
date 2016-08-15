@@ -61,7 +61,6 @@ Rails.application.routes.draw do
   root 'static#home'
   
   get '/admin',  to: 'static#admin'
-  
   resources :people, :models, :urban, :events, only: [:show]
   
   
