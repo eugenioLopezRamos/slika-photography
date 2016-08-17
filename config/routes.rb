@@ -58,7 +58,16 @@ Rails.application.routes.draw do
   #     resources :products
   #   end
 
-  root 'static#home'
+  root 'static#home', :tab => 'homeTab'
+  
+  get '/', to: 'static#show', :tab => 'homeTab'
+  get '/people', to: 'static#show', :tab => 'peopleTab'
+  get '/models', to: 'static#show', :tab => 'modelsTab'
+  get '/urban', to: 'static#show', :tab => 'urbanTab'
+  get '/events', to: 'static#show', :tab => 'eventsTab'
+  get '/contact', to: 'static#show', :tab => 'contactTab'
+  get '/blog', to: 'static#show', :tab => 'blogTab'
+  
   
   get '/admin',  to: 'static#admin'
   resources :people, :models, :urban, :events, only: [:show]

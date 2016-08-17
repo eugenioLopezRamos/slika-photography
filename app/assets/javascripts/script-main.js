@@ -2,9 +2,9 @@ var main = function() {
 //sets up the default presentation of the site. Most of these should probably be done on the css - will see later.  
   $('#homeTab').css("background-color", "#111");
 function initialFormat() { //this function is used on load, and when resetting the elements' styling, for example on the resize event listener
-  $('.content-Tabs').hide(0);
+ // $('.content-Tabs').hide(0);
 
-  $('.active-Tab').show(0); 
+  //$('.active-Tab').show(0); 
 
 }
 
@@ -130,20 +130,16 @@ initialFormat(); //sets the initial styling.
 
 
 //different states for each of the site's tabs: 
-var homeState = function(animate) {
-typeof animate == "undefined" ? animate = 1 : "";
-var isAnimated = animate;    
+var homeState = function() {
+
+  
      if(clientWidth<480) {
 $('.menu li').css("background-color", "#333"); // must see how to make the button lose the color before sliding up
 
 }
 
       $('.active-Tab').hide().removeClass('active-Tab');
-if(isAnimated==1) {
      $('#homeContent').fadeIn(600).addClass('active-Tab');    
-} else if(isAnimated==0) {
-    $('#homeContent').show().addClass('active-Tab')
-}     
           $('.menu li').css("background-color", "#333");
       $('#homeTab').css("background-color", "#111");
  activeTabvalue = "homeTab";
@@ -151,15 +147,11 @@ if(isAnimated==1) {
  
 };
 
-var peopleState = function(animate) {
+var peopleState = function() {
     
-typeof animate == "undefined" ? animate = 1 : animate = animate;
-
-var isAnimated = animate;   
 $('.active-Tab').hide().removeClass('active-Tab');
 $('.menu li').css("background-color", "#333");
 $('#peopleTab').css("background-color", "#111");
-
 //if(isAnimated==1) {
 $('#peopleContent').fadeIn(600).addClass('active-Tab');    
 //} else if (isAnimated==0) {
@@ -171,114 +163,75 @@ activeTabvalue = "peopleTab";
   
 };
 
-var modelState = function(animate) {
+var modelState = function() {
 
-typeof animate == "undefined" ? animate = 1 : animate; 
+
     
-var isAnimated = animate;    
+ 
 $('.active-Tab').hide().removeClass('active-Tab');
 $('.menu li').css("background-color", "#333");
 $('#modelTab').css("background-color", "#111");
-
-if(isAnimated==1) {
 $('#modelsContent').fadeIn(600).addClass('active-Tab');    
-} else if(isAnimated==0) {
-$('#modelsContent').show().addClass('active-Tab');      
-}
+
 
 activeTabvalue = "modelTab";
 
   
 };
 
-var urbanState = function(animate) {
+var urbanState = function() {
     
-typeof animate == "undefined" ? animate = 1 : animate;
 
-var isAnimated = animate;   
+
+
           
 $('.active-Tab').hide().removeClass('active-Tab');
 $('.menu li').css("background-color", "#333");
 $('#urbanTab').css("background-color", "#111");
-
-if(isAnimated==1) {
 $('#urbanContent').fadeIn(600).addClass('active-Tab');    
-} else if (isAnimated == 0) {
-$('#urbanContent').show().addClass('active-Tab');        
-}
 
 activeTabvalue = "urbanTab";
 
 };
  
-var eventState = function(animate) {
+var eventState = function() {
     
-typeof animate == "undefined" ? animate = 1 : animate;
-
-var isAnimated = animate;
 
 $('.active-Tab').hide().removeClass('active-Tab');
 $('.menu li').css("background-color", "#333");
 $('#eventTab').css("background-color", "#111");
-
-
-if(isAnimated==1) {
 $('#eventsContent').fadeIn(600).addClass('active-Tab');    
-} else if(isAnimated == 0) {
-$('#eventsContent').show().addClass('active-Tab');      
-}
+
 
 activeTabvalue = "eventTab"; 
 
 };
 
-var contactState = function(animate) {
-    
-typeof animate == "undefined" ? animate = 1 : animate;
-    
-var isAnimated = animate;      
-      $('.active-Tab').hide().removeClass('active-Tab');
-            $('.menu li').css("background-color", "#333");
-      $('#contactTab').css("background-color", "#111");
-      
-      if(isAnimated==1) {
-$('#contactContent').fadeIn(600).addClass('active-Tab');   
-      } else if(isAnimated==0) {
-         $('#contactContent').show().addClass('active-Tab'); 
-      }
-
-         activeTabvalue = "contactTab";
-       
-contactFormHandler();
+var contactState = function() {
+    $('.active-Tab').hide().removeClass('active-Tab');
+    $('.menu li').css("background-color", "#333");
+    $('#contactTab').css("background-color", "#111");
+    $('#contactContent').fadeIn(600).addClass('active-Tab');   
+    activeTabvalue = "contactTab";
+    contactFormHandler();
          
   
 };
 
-var blogState = function(animate) {
+var blogState = function() {
     
-typeof animate == "undefined" ? animate = 1 : animate;
-
-var isAnimated = animate;
-      $('.active-Tab').hide().removeClass('active-Tab');
-            $('.menu li').css("background-color", "#333");
-      $('#blogTab').css("background-color", "#111");
-if(isAnimated==1) {
-      $('#blogContents').fadeIn(600).addClass('active-Tab');
-} else if(isAnimated==0) {
-    $('#blogContents').show().addClass('active-Tab');
-} 
-
-         activeTabvalue = "blogTab";  
-         
-
-  
+    $('.active-Tab').hide().removeClass('active-Tab');
+    $('.menu li').css("background-color", "#333");
+    $('#blogTab').css("background-color", "#111");
+    $('#blogContents').fadeIn(600).addClass('active-Tab');
+    activeTabvalue = "blogTab";  
 };
 
 /*THIS FUNCTION CONTROLS THE DISPLAY OF THE NAV MENU USING TOUCH EVENTS*/
 
 
 
-(function homeTabHandler(){ //this is invoked on load, and there's no need to reinvoke it
+function homeTabHandler(){ 
     
 var setBigThumbEvtHandler = 1;  
 function stopScroll(event) {
@@ -334,7 +287,9 @@ document.addEventListener("touchmove", stopScroll);
 element.addEventListener("click", smallThumbnailHandler);
 });
 
-})();
+}
+
+homeTabHandler();
 
 
 
@@ -452,13 +407,9 @@ return false;
 })();
  
 var isScrollable = (function() {
-
-var activeTabHeight = Math.round(getComputedStyle(document.getElementsByClassName("active-Tab")[0]).getPropertyValue("height").replace('px', '')); //height rounded up.
-var scrollIsAt = activeTabHeight + document.getElementsByClassName("active-Tab")[0].scrollTop;  
-
 return {
     topScroll: (function() {
-                            if(document.getElementsByClassName("active-Tab")[0].scrollTop < 5) {
+                            if(document.getElementsByClassName("content-Tabs")[0].scrollTop < 5) {
                             return false;    
                             }
                             else {
@@ -488,11 +439,11 @@ if(deltaY>0 && !isSlideAttempt) { //user moves his/her finger down, and it is no
       
         menu.removeAttribute("style");
         header.removeAttribute("style");  
-        document.getElementsByClassName("active-Tab")[0].style.pointerEvents = "auto";
+        document.getElementsByClassName("content-Tabs")[0].style.pointerEvents = "auto";
  
 }   
     if(deltaY>minimumMenuHeight && menu.style.height.replace('px', '')<0.9*maxMenuHeight) { //if deltaY>minHeight, menu appears
-        document.getElementsByClassName("active-Tab")[0].style.pointerEvents = "none";
+        document.getElementsByClassName("content-Tabs")[0].style.pointerEvents = "none";
         header.style.height = "auto";  
         menu.style.zIndex = "1";
         menu.style.borderBottom = "2px solid rgb(230,230,230)";
@@ -502,7 +453,7 @@ if(deltaY>0 && !isSlideAttempt) { //user moves his/her finger down, and it is no
     if(menu.style.height.replace('px', '')>=0.9*maxMenuHeight) { //if menuHeight >= 90% of the max menu height, it becomes maxMenuHeight AND removes the evt listener. This also triggers the touchend event that records the
     //current menuHeight to prevHeight, to be used with either of the menu slide functions
         menu.style.height = maxMenuHeight + 'px';
-        document.getElementsByClassName("active-Tab")[0].style.pointerEvents = "auto";
+        document.getElementsByClassName("content-Tabs")[0].style.pointerEvents = "auto";
         document.removeEventListener("touchmove", slideDownHandler);
     }
 
@@ -511,12 +462,12 @@ if(deltaY>0 && !isSlideAttempt) { //user moves his/her finger down, and it is no
 
 if(deltaY<0 && !isSlideAttempt) {
     menu.style.height = menuHeightCalculator + 'px';
-    document.getElementsByClassName("active-Tab")[0].style.pointerEvents = "none";
+    document.getElementsByClassName("content-Tabs")[0].style.pointerEvents = "none";
     
     if(menu.style.height.replace('px', '')<=minimumMenuHeight){
         menu.removeAttribute("style");
         header.removeAttribute("style");
-        document.getElementsByClassName("active-Tab")[0].style.pointerEvents = "auto";
+        document.getElementsByClassName("content-Tabs")[0].style.pointerEvents = "auto";
         document.removeEventListener("touchmove", slideDownHandler);
     }   
     
@@ -545,11 +496,13 @@ document.addEventListener("touchend", touchEndHandler);
 
 /************************************************************************ START OF NAVMENU HANDLER ****************************************************************************************************************/
 $('.menu li').click(function(event) { //added event here so it doesnt fail on firefox
-var clickedId = this.id; 
-event.preventDefault();
+
+var clickedId = this.id.replace('Tab', '');
+
+//event.preventDefault();
 
 prevHeight = 0; //makes menu height reset to zero again
-document.getElementsByClassName("active-Tab")[0].style.pointerEvents = "auto";
+//document.getElementsByClassName("active-Tab")[0].style.pointerEvents = "auto";
   
 //document.documentElement.webkitRequestFullscreen();  
 
@@ -569,54 +522,87 @@ if(!scheduled) { //sets a timeout when you click, so you cant spam click on the 
   switch (clickedId) {
       
     case "homeTab":
-                  sObj.state = "homeState";
-          history.pushState(sObj.state, "Welcome to Leo Photography", "");
-          homeState();
+     $.ajax({url: '/', type: 'GET', dataType: 'script'}).done(function() {
+         
+        sObj.state = "homeState";
+        history.pushState(sObj.state, "Welcome to Leo Photography", "");
+        homeState(); 
+         
+     });
+
           
       break;
 
     case "peopleTab":
-  
-                  sObj.state = "peopleState";
+        
+    $.ajax({url: 'people', type: 'GET', dataType: 'script'}).done(function() {
+        
+            sObj.state = "peopleState";
             history.pushState(sObj.state, "People", "");  
             peopleState();
             slidesHandler();
-
-      break;
+    });
+    break;
 
     case "modelTab":
-        sObj.state = "modelState";
+        
+        
+    $.ajax({url: 'models', type: 'GET', dataType: 'script'}).done(function() {
+              
+              sObj.state = "modelState";
               history.pushState(sObj.state, "Modeling", "");
               modelState();
-              slidesHandler();
-      break;
+              slidesHandler(); 
+       
+    });
+    break;
       
-       case "urbanTab":
-           sObj.state = "urbanState";
-                  history.pushState(sObj.state, "Urban Photography", "");
-              urbanState();
-              slidesHandler();
-      break;
+    case "urbanTab":
+           
+           
+    $.ajax({url: 'urban', type: 'GET', dataType: 'script'}).done(function() { 
+              
+        sObj.state = "urbanState";
+        history.pushState(sObj.state, "Urban Photography", "");
+        urbanState(); 
+        slidesHandler();   
+    });
+    
+    break;
       
     case "eventTab":
+    $.ajax({url: 'events', type: 'GET', dataType: 'script'}).done(function() {
+        
         sObj.state = "eventState";
-             history.pushState(sObj.state, "Event Photography", "");
-             eventState();
-             slidesHandler();
-      break;
+        history.pushState(sObj.state, "Event Photography", "");
+        eventState();
+        slidesHandler();
+        
+    });
+
+             
+    break;
 
     case "contactTab":
-        sObj.state = "contactState";
-           history.pushState(sObj.state, "Contact us", "");
-contactState();
-      break;
+    $.ajax({url: 'contact', type: 'GET', dataType: 'script'}).done(function() {
+        
+    sObj.state = "contactState";
+    history.pushState(sObj.state, "Contact us", "");
+    contactState();  
+        
+    });
+    break;
         
     case "blogTab":
-        sObj.state = "blogState";
-             history.pushState(sObj.state, "Leo's blog", "");
-            blogState();
-       
-      break;
+        
+    $.ajax({url: 'blog', type: 'GET', dataType: 'script'}).done(function(){
+
+    sObj.state = "blogState";
+    history.pushState(sObj.state, "Leo's blog", "");
+    blogState();
+  
+    });
+    break;
     
 }
 
@@ -649,33 +635,31 @@ updateState(sObj.state);
 
 /************************************************************************************* START OF UPDATESTATE FUNCTION *****************************************************************************/
 //This is the function that actually does the job updating the states - this way it can be used by both the nav menu handler and the popstate event listener.
-var updateState = function(status, animate) {
-typeof animate == "undefined" ? animate = 1 : animate = animate;    
-var animated = animate;
+var updateState = function(status) {
 
 
 switch(status) {
 
 case "homeState":
-  homeState(animated);
+  homeState();
   break;
 case "peopleState":
-  peopleState(animated);
+  peopleState();
   break;
 case "modelState":
-  modelState(animated);
+  modelState();
   break;
 case "urbanState":
-  urbanState(animated);
+  urbanState();
   break;
 case "eventState":
-  eventState(animated);
+  eventState();
   break;
 case "contactState":
-  contactState(animated);
+  contactState();
   break;
 case "blogState":
-  blogState(animated);
+  blogState();
   break;
   
 }
@@ -697,7 +681,7 @@ homeState();
 /*********************************************************************************** START OF SLIDES HANDLER ****************************************************************************************/
 function slidesHandler(){
     
-if(typeof slidesHandler.initialized == "undefined") {
+
     
 
 //defines common variables used/shared among the different methods of the slidesHandler object/closure   
@@ -818,31 +802,32 @@ var slidesHTMLCollections = typesOfSlides.map(function(slideName) { // for every
 
 //defines arrays for each slide "group"...
 //...in the following manner: peopleSlides is an array containing all elements with the "peopleSlide" class, and peopleSlidesActiveIndex is the index that additionally has the "active-slide" class.
+/*
 var peopleSlides = [];
 var peopleSlidesActiveIndex;
 
 var modelsSlides = [];
 var modelsSlidesActiveIndex;
-
+*/
 var urbanSlides = [];
 var urbanSlidesActiveIndex;
-
+/*
 var eventsSlides = [];
 var eventsSlidesActiveIndex;
-
+*/
 
 (function slideArrayConstructor(){ //creates arrays out of the HTML collections
     
-peopleSlides = Array.prototype.slice.call(slidesHTMLCollections[0]); //Array.prototype is replaceable with [] (so it would be [].slice.call(HTMLCollections[0])
-modelsSlides = Array.prototype.slice.call(slidesHTMLCollections[1]); //calls the slice method from the array prototype on the not-really-an-array-but-hey HTML collection indexed [1-4], transforming the variable into an array.
+/*peopleSlides = Array.prototype.slice.call(slidesHTMLCollections[0]); //Array.prototype is replaceable with [] (so it would be [].slice.call(HTMLCollections[0])
+modelsSlides = Array.prototype.slice.call(slidesHTMLCollections[1]);*/ //calls the slice method from the array prototype on the not-really-an-array-but-hey HTML collection indexed [1-4], transforming the variable into an array.
 urbanSlides = Array.prototype.slice.call(slidesHTMLCollections[2]); 
-eventsSlides = Array.prototype.slice.call(slidesHTMLCollections[3]);
+//eventsSlides = Array.prototype.slice.call(slidesHTMLCollections[3]);
 //sets the max amount of slides in the slides picker
 
-document.getElementById("peopleCounterTotal").innerHTML = peopleSlides.length; // sets the value of  the number after "of" in the slides pickers
-document.getElementById("modelsCounterTotal").innerHTML = modelsSlides.length;
+//document.getElementById("peopleCounterTotal").innerHTML = peopleSlides.length; // sets the value of  the number after "of" in the slides pickers
+//document.getElementById("modelsCounterTotal").innerHTML = modelsSlides.length;
 document.getElementById("urbanCounterTotal").innerHTML = urbanSlides.length;
-document.getElementById("eventsCounterTotal").innerHTML = eventsSlides.length;
+//document.getElementById("eventsCounterTotal").innerHTML = eventsSlides.length;
 
 
 })();
@@ -898,10 +883,10 @@ if(element.classList.contains("active-slide")) {
    }    
 };
 
-peopleSlidesActiveIndex = peopleSlides.findIndex(findTheActiveSlide, 0); //finds the index of the slide that has the "active-slide" class, and returns it.
-modelsSlidesActiveIndex = modelsSlides.findIndex(findTheActiveSlide, 0);
+//peopleSlidesActiveIndex = peopleSlides.findIndex(findTheActiveSlide, 0); //finds the index of the slide that has the "active-slide" class, and returns it.
+//modelsSlidesActiveIndex = modelsSlides.findIndex(findTheActiveSlide, 0);
 urbanSlidesActiveIndex  = urbanSlides.findIndex(findTheActiveSlide, 0);
-eventsSlidesActiveIndex = eventsSlides.findIndex(findTheActiveSlide, 0);
+//eventsSlidesActiveIndex = eventsSlides.findIndex(findTheActiveSlide, 0);
 
 currentTabActiveIndex   = currentTab.findIndex(findTheActiveSlide, 0);
 
@@ -1035,15 +1020,15 @@ slidesTouchHandler.touchEnd();
 
 function assignTouchEventListeners() {
 // start of touch event listener
-peopleSlides[peopleSlidesActiveIndex].addEventListener("touchstart", onTouch);
-modelsSlides[modelsSlidesActiveIndex].addEventListener("touchstart", onTouch);
+//peopleSlides[peopleSlidesActiveIndex].addEventListener("touchstart", onTouch);
+//modelsSlides[modelsSlidesActiveIndex].addEventListener("touchstart", onTouch);
 urbanSlides[urbanSlidesActiveIndex].addEventListener("touchstart", onTouch);
-eventsSlides[eventsSlidesActiveIndex].addEventListener("touchstart", onTouch);
+//eventsSlides[eventsSlidesActiveIndex].addEventListener("touchstart", onTouch);
 //end of touch event listener
-peopleSlides[peopleSlidesActiveIndex].addEventListener("touchend", onTouchEnd);
-modelsSlides[modelsSlidesActiveIndex].addEventListener("touchend", onTouchEnd);
+//peopleSlides[peopleSlidesActiveIndex].addEventListener("touchend", onTouchEnd);
+//modelsSlides[modelsSlidesActiveIndex].addEventListener("touchend", onTouchEnd);
 urbanSlides[urbanSlidesActiveIndex].addEventListener("touchend", onTouchEnd);
-eventsSlides[eventsSlidesActiveIndex].addEventListener("touchend", onTouchEnd);
+//eventsSlides[eventsSlidesActiveIndex].addEventListener("touchend", onTouchEnd);
 }
 
 assignTouchEventListeners();
@@ -1162,8 +1147,8 @@ nextButton.map(function(element, array, index) {element.removeEventListener("cli
 
 //here there should be another function to remove the event listeners (since the ones on the hidden slides are unnecessary)
 
-}
-slidesHandler.initialized = 1; //stops event listener stacking
+
+//stops event listener stacking
 
 } //slides handler closing bracket
 
