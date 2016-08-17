@@ -515,7 +515,6 @@ header.removeAttribute('style');
 menu.removeAttribute('style');
 
 $('.menu li').css("background-color", "#333");
-console.log(clickedId);
 $('#' + clickedId).css("background-color", "#111");
 
 sObj.state = clickedId.replace('Tab', 'State');
@@ -524,106 +523,6 @@ sObj.state = clickedId.replace('Tab', 'State');
 updateState(sObj.state);
 
 
-
-/*if(!scheduled) { //sets a timeout when you click, so you cant spam click on the menu items (else the page calls states too quickly and can end up with 2 tabs on one page)
-     scheduled=true;
-    setTimeout(function() {
-       scheduled=false;
-     
-  $('.menu li').css("background-color", "#333");
-  $('.topHr').show();
-  
-  switch (clickedId) {
-      
-    case "homeTab":
-     $.ajax({url: '/', type: 'GET', dataType: 'script'}).done(function() {
-         
-        sObj.state = "homeState";
-        history.pushState(sObj.state, "Welcome to Leo Photography", "");
-        homeState(); 
-         
-     });
-
-          
-      break;
-
-    case "peopleTab":
-        
-    $.ajax({url: 'people', type: 'GET', dataType: 'script'}).done(function() {
-        
-            sObj.state = "peopleState";
-            history.pushState(sObj.state, "People", "");  
-            peopleState();
-            slidesHandler();
-    });
-    break;
-
-    case "modelTab":
-        
-        
-    $.ajax({url: 'models', type: 'GET', dataType: 'script'}).done(function() {
-              
-              sObj.state = "modelState";
-              history.pushState(sObj.state, "Modeling", "");
-              modelState();
-              slidesHandler(); 
-       
-    });
-    break;
-      
-    case "urbanTab":
-           
-           
-    $.ajax({url: 'urban', type: 'GET', dataType: 'script'}).done(function() { 
-              
-        sObj.state = "urbanState";
-        history.pushState(sObj.state, "Urban Photography", "");
-        urbanState(); 
-        slidesHandler();   
-    });
-    
-    break;
-      
-    case "eventTab":
-    $.ajax({url: 'events', type: 'GET', dataType: 'script'}).done(function() {
-        
-        sObj.state = "eventState";
-        history.pushState(sObj.state, "Event Photography", "");
-        eventState();
-        slidesHandler();
-        
-    });
-
-             
-    break;
-
-    case "contactTab":
-    $.ajax({url: 'contact', type: 'GET', dataType: 'script'}).done(function() {
-        
-    sObj.state = "contactState";
-    history.pushState(sObj.state, "Contact us", "");
-    contactState();  
-        
-    });
-    break;
-        
-    case "blogTab":
-        
-    $.ajax({url: 'blog', type: 'GET', dataType: 'script'}).done(function(){
-
-    sObj.state = "blogState";
-    history.pushState(sObj.state, "Leo's blog", "");
-    blogState();
-  
-    });
-    break;
-    
-}
-
-}, 400);
-
-}
-*/
 
 });
 /*************************************************************************************END OF NAVMENU HANDLER ************************************************************************************/
@@ -650,22 +549,27 @@ updateState(sObj.state);
 /************************************************************************************* START OF UPDATESTATE FUNCTION *****************************************************************************/
 //This is the function that actually does the job updating the states - this way it can be used by both the nav menu handler and the popstate event listener.
 var updateState = function(status) {
+    
+var trimmedStatus = status.replace('State', '');
 
-activeTabvalue = status.replace('State', 'Tab'); //sets activeTabvalue
+activeTabvalue = trimmedStatus + "Tab" ; //sets activeTabvalue
 
-$.ajax({url: status.replace('State', ''), type: 'GET', dataType: 'script'}).done(function() {
+$.ajax({url: trimmedStatus, type: 'GET', dataType: 'script'}).done(function() {
 
 if(status == "homeState") {
+history.pushState(sObj.state, trimmedStatus, '');
 homeTabHandler();
 return;
 }
 
 if(status == "contactState") {
+history.pushState(sObj.state, trimmedStatus, '');
 contactFormHandler();
 return;
 }
 
 if(status == "blogState") {
+history.pushState(sObj.state, trimmedStatus, '');
 //blog not implemented yet, but blogHandler() should go here
 return;
 }
@@ -674,7 +578,7 @@ else{
     
 var parentNode = document.getElementsByClassName("content-Tabs")[0];
 var keepLoopAlive = true;
-
+history.pushState(sObj.state, trimmedStatus, '');
 while(keepLoopAlive) {
     console.log("going");
     
@@ -692,40 +596,21 @@ console.log("no Sliders found!");
 }
 return;
 }
-
-});
+//FIX!
+if(element.hasChildNodes() == false) {
+keepLoopAlive = false;    
 
 }
 
+});
+
+
+}
+
+
 }
 
 });
-/*
-switch(status) {
-
-case "homeState":
-  homeState();
-  break;
-case "peopleState":
-  peopleState();
-  break;
-case "modelState":
-  modelState();
-  break;
-case "urbanState":
-  urbanState();
-  break;
-case "eventState":
-  eventState();
-  break;
-case "contactState":
-  contactState();
-  break;
-case "blogState":
-  blogState();
-  break;
-  
-}*/
 
 };
 /********************************************************************************* END OF UPDATESTATE FUNCTION ***********************************************************************************/
@@ -744,8 +629,12 @@ homeState();
 /*********************************************************************************** START OF SLIDES HANDLER ****************************************************************************************/
 function slidesHandler(){
     
+typeof tabStateObject[activeTabvalue] == "undefined" ? tabStateObject[activeTabvalue] = 1 : ""; //creates a key/value pair such as 'peopleTab: 1'. This is used as
+// 'memory' to remember what slide you were seeing, so it can be displayed when using the back/forward browser buttons
+//it is done this way because for this case I think cookies are a bit excessive/intrusive, since state is only relevant while the page is active (as oppossed to e.g. login status)
 
-    
+console.log(tabStateObject[activeTabvalue]);
+console.log(tabStateObject);
 
 //defines common variables used/shared among the different methods of the slidesHandler object/closure   
 
@@ -762,7 +651,6 @@ slidesTouchHandler.touchMove(event);
 var slidesTouchHandler = (function() {
 
 return {
-
 
 touchStart: function(e){ //this is called upon touching the screen, and it does 2 things: saves the position where the screen was touched (in touchStartPosX, in the slidesHandler scope) and
 //creates an eventListener for touch movements. This listener has the handler MovePass, which is also set in the slidesHandler scope because it must be reused between the properties of the slidesTouchHandler object
@@ -828,10 +716,6 @@ if(deltaX<0) {
 document.getElementsByClassName("active-slide")[0].style.right = -deltaX + 'px';    
     
 }
-
-
-
-
 
 if(deltaX>0 && deltaX>touchMoveThreshold) { //user moves touch to the right for more than 110 pixels
 document.removeEventListener("touchmove", movePass); //if I don't remove this, every 1px you move the touch cursor will change slides
@@ -908,7 +792,7 @@ switch(activeTabvalue) { //depending on activeTabvalue, assign value to currentT
     activePicker = document.getElementById("peopleCounterCurrent");
     break;
     
-    case "modelTab":
+    case "modelsTab":
     currentTab = modelsSlides;
     activePicker = document.getElementById("modelsCounterCurrent");
     break;    
@@ -918,7 +802,7 @@ switch(activeTabvalue) { //depending on activeTabvalue, assign value to currentT
     activePicker = document.getElementById("urbanCounterCurrent");
     break;
     
-    case "eventTab":
+    case "eventsTab":
     currentTab = eventsSlides;
     activePicker = document.getElementById("eventsCounterCurrent");
     break;
@@ -1438,17 +1322,6 @@ var dragBoxFunction = (function(){
 							if (newX + nodeToOffset.offsetLeft + boxToMoveWidth > boundaryWidth) newX = boundaryWidth - boxToMoveWidth - nodeToOffset.offsetLeft; //right border
 							if (newY + nodeToOffset.offsetTop + boxToMoveHeight > boundaryHeight) newY = boundaryHeight -boxToMoveHeight - nodeToOffset.offsetTop; //top border
 						    
-						    
-						    
-						    
-				
-						  //	console.log("newX    " + newX + "newY   " + newY);
-						  	
-						  //  newX = parseInt(newX, 10); // needed or doesnt work in IE
-						    //newY = parseInt(newY, 10); //^
-						
-					
-					
                             dragBoxFunction.positionChange(boxToMove,newX,newY);
                         };
      },
