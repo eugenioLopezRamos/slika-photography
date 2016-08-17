@@ -237,7 +237,7 @@ margin-left: auto;
     
 }
 
-.navMenu a {
+.navMenu span {
   text-decoration: none;
   color: white;
   font-style: italic;
@@ -251,7 +251,7 @@ margin: auto;
 }
 
 .menu > li:hover {
-  background-color: #111 !important; /*need to check this out, make it so js doesnt overwrite this.*/
+  background-color: #111 !important; /*:hover needs to be done with !important, otherwise the js styling overwrites it*/
   opacity: 0.6;
 }
 

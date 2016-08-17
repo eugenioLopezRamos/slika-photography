@@ -10,10 +10,13 @@ function initialFormat() { //this function is used on load, and when resetting t
 
 initialFormat();
 
-
+var tabStateObject = { //this object keeps track of the state of the different tabs eg peopleSlideCurrentSlide: 7;
+    
+};
 
 var sObj = {// initializes the state object for use in the nav menu handler
-state: "homeState"
+state: "homeState",
+hasSlides: 0
 };
 
 history.replaceState(sObj.state, "Welcome to Leo Photography", ""); //The page uses the history API for the tabs. This line of code is used for consistency, I wanted to declare the initial state of the page instead of using the browser's default.
@@ -497,21 +500,32 @@ document.addEventListener("touchend", touchEndHandler);
 /************************************************************************ START OF NAVMENU HANDLER ****************************************************************************************************************/
 $('.menu li').click(function(event) { //added event here so it doesnt fail on firefox
 
-var clickedId = this.id.replace('Tab', '');
+var clickedId = this.id;
 
 //event.preventDefault();
 
 prevHeight = 0; //makes menu height reset to zero again
-//document.getElementsByClassName("active-Tab")[0].style.pointerEvents = "auto";
+document.getElementsByClassName("content-Tabs")[0].style.pointerEvents = "auto";
   
 //document.documentElement.webkitRequestFullscreen();  
 
 var header = document.getElementById('header');    
 var menu = document.getElementById('menu');
 header.removeAttribute('style');
-menu.removeAttribute('style');    
+menu.removeAttribute('style');
 
-if(!scheduled) { //sets a timeout when you click, so you cant spam click on the menu items (else the page calls states too quickly and can end up with 2 tabs on one page)
+$('.menu li').css("background-color", "#333");
+console.log(clickedId);
+$('#' + clickedId).css("background-color", "#111");
+
+sObj.state = clickedId.replace('Tab', 'State');
+
+
+updateState(sObj.state);
+
+
+
+/*if(!scheduled) { //sets a timeout when you click, so you cant spam click on the menu items (else the page calls states too quickly and can end up with 2 tabs on one page)
      scheduled=true;
     setTimeout(function() {
        scheduled=false;
@@ -609,7 +623,7 @@ if(!scheduled) { //sets a timeout when you click, so you cant spam click on the 
 }, 400);
 
 }
-
+*/
 
 });
 /*************************************************************************************END OF NAVMENU HANDLER ************************************************************************************/
@@ -637,7 +651,56 @@ updateState(sObj.state);
 //This is the function that actually does the job updating the states - this way it can be used by both the nav menu handler and the popstate event listener.
 var updateState = function(status) {
 
+activeTabvalue = status.replace('State', 'Tab'); //sets activeTabvalue
 
+$.ajax({url: status.replace('State', ''), type: 'GET', dataType: 'script'}).done(function() {
+
+if(status == "homeState") {
+homeTabHandler();
+return;
+}
+
+if(status == "contactState") {
+contactFormHandler();
+return;
+}
+
+if(status == "blogState") {
+//blog not implemented yet, but blogHandler() should go here
+return;
+}
+
+else{
+    
+var parentNode = document.getElementsByClassName("content-Tabs")[0];
+var keepLoopAlive = true;
+
+while(keepLoopAlive) {
+    console.log("going");
+    
+[].slice.call(parentNode.children).map(function(element, index, array) { //could also use '.children instead of childNodes and then it wouldn't require the 'nodeType == 3 conditional'
+
+if(element.classList.contains(status.replace('State', 'Slider'))) {
+slidesHandler();
+keepLoopAlive = false;
+return;
+} else {
+    
+if(index+1>array.length) {
+keepLoopAlive = false;
+console.log("no Sliders found!");
+}
+return;
+}
+
+});
+
+}
+
+}
+
+});
+/*
 switch(status) {
 
 case "homeState":
@@ -662,7 +725,7 @@ case "blogState":
   blogState();
   break;
   
-}
+}*/
 
 };
 /********************************************************************************* END OF UPDATESTATE FUNCTION ***********************************************************************************/
