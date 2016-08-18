@@ -10,21 +10,17 @@ function initialFormat() { //this function is used on load, and when resetting t
 
 initialFormat();
 
-var tabStateObject = { //this object keeps track of the state of the different tabs eg peopleSlideCurrentSlide: 7;
-    
-};
-
-var sObj = {// initializes the state object for use in the nav menu handler
+var stateObject = {// initializes the state object for use in the nav menu handler
 state: "homeState",
-hasSlides: 0
+
 };
 
-history.replaceState(sObj.state, "Welcome to Leo Photography", ""); //The page uses the history API for the tabs. This line of code is used for consistency, I wanted to declare the initial state of the page instead of using the browser's default.
+history.replaceState(stateObject, "Welcome to Leo Photography", ""); //The page uses the history API for the tabs. This line of code is used for consistency, I wanted to declare the initial state of the page instead of using the browser's default.
 
 var prevHeight = 0; //this variable defines the starting size of the menu on mobile, it needs to be outside the menuToggle function because otherwise it cannot be changed when clicking a menu item, so when you click a menu item
 //and then slide down the menu will start growing from where it was, not from zero.
 
-var activeTabvalue = "homeTab"; //used to manage the state of the different tabs
+var activeTabValue = "homeTab"; //used to manage the state of the different tabs
 
 var currentOrientation = window.orientation; // 0 = portrait, -90 || 90 = landscape, undefined = device doesn't support rotation - used on event listeners that style things according to orientation.
 
@@ -121,7 +117,7 @@ element.removeAttribute("style");
 
 });
 
-updateState(sObj.state, 0); //shows the current tab
+updateState(stateObject.state, 0); //shows the current tab
 
 initialFormat(); //sets the initial styling.
 
@@ -145,7 +141,7 @@ $('.menu li').css("background-color", "#333"); // must see how to make the butto
      $('#homeContent').fadeIn(600).addClass('active-Tab');    
           $('.menu li').css("background-color", "#333");
       $('#homeTab').css("background-color", "#111");
- activeTabvalue = "homeTab";
+ activeTabValue = "homeTab";
   
  
 };
@@ -161,7 +157,7 @@ $('#peopleContent').fadeIn(600).addClass('active-Tab');
 //$('#peopleContent').show().addClass('active-Tab');      
 //}
 
-activeTabvalue = "peopleTab";  
+activeTabValue = "peopleTab";  
    
   
 };
@@ -177,7 +173,7 @@ $('#modelTab').css("background-color", "#111");
 $('#modelsContent').fadeIn(600).addClass('active-Tab');    
 
 
-activeTabvalue = "modelTab";
+activeTabValue = "modelTab";
 
   
 };
@@ -193,7 +189,7 @@ $('.menu li').css("background-color", "#333");
 $('#urbanTab').css("background-color", "#111");
 $('#urbanContent').fadeIn(600).addClass('active-Tab');    
 
-activeTabvalue = "urbanTab";
+activeTabValue = "urbanTab";
 
 };
  
@@ -206,7 +202,7 @@ $('#eventTab').css("background-color", "#111");
 $('#eventsContent').fadeIn(600).addClass('active-Tab');    
 
 
-activeTabvalue = "eventTab"; 
+activeTabValue = "eventTab"; 
 
 };
 
@@ -215,7 +211,7 @@ var contactState = function() {
     $('.menu li').css("background-color", "#333");
     $('#contactTab').css("background-color", "#111");
     $('#contactContent').fadeIn(600).addClass('active-Tab');   
-    activeTabvalue = "contactTab";
+    activeTabValue = "contactTab";
     contactFormHandler();
          
   
@@ -227,7 +223,7 @@ var blogState = function() {
     $('.menu li').css("background-color", "#333");
     $('#blogTab').css("background-color", "#111");
     $('#blogContents').fadeIn(600).addClass('active-Tab');
-    activeTabvalue = "blogTab";  
+    activeTabValue = "blogTab";  
 };
 
 /*THIS FUNCTION CONTROLS THE DISPLAY OF THE NAV MENU USING TOUCH EVENTS*/
@@ -429,10 +425,9 @@ var menuHeightCalculator = (function() {
 })();
 
 
-
 if(Math.abs(deltaY)>0) {
 
-if(isScrollable.topScroll || getComputedStyle(document.getElementById("bigThumbnails")).getPropertyValue("display") !== "none") {
+if(isScrollable.topScroll || activeTabValue == "homeTab" ? getComputedStyle(document.getElementById("bigThumbnails")).getPropertyValue("display") !== "none": "") {
 document.removeEventListener("touchmove", slideDownHandler);    
 }
 
@@ -502,7 +497,7 @@ $('.menu li').click(function(event) { //added event here so it doesnt fail on fi
 
 var clickedId = this.id;
 
-//event.preventDefault();
+event.preventDefault();
 
 prevHeight = 0; //makes menu height reset to zero again
 document.getElementsByClassName("content-Tabs")[0].style.pointerEvents = "auto";
@@ -517,26 +512,27 @@ menu.removeAttribute('style');
 $('.menu li').css("background-color", "#333");
 $('#' + clickedId).css("background-color", "#111");
 
-sObj.state = clickedId.replace('Tab', 'State');
+stateObject.state = clickedId.replace('Tab', 'State');
+history.pushState(stateObject, "string", "");
 
 
-updateState(sObj.state);
 
-
+updateState(stateObject);
 
 });
 /*************************************************************************************END OF NAVMENU HANDLER ************************************************************************************/
 
 /*************************************************************************************START OF POPSTATE EVENT LISTENER ************************************************************************************/
 //popstate event listener - handles the behavior of the page when a popstate event fires. Made this so the site can handle users using the back/forward browser buttons.
-window.addEventListener("popstate", function(sObj) {
+window.addEventListener("popstate", function(popstateEvent) {
 if(!scheduled) {
      scheduled=true;
     setTimeout(function() {
        scheduled=false;
-       
-     
-updateState(sObj.state);
+document.getElementById(activeTabValue).style.backgroundColor = "#333";
+var param = popstateEvent;
+stateObject.state = popstateEvent.state.state; //sets the state property value to the value of the state property that's on the popstate event (so, back or forwards)
+updateState(param.state);
 }, 400);
 }
 });
@@ -549,27 +545,30 @@ updateState(sObj.state);
 /************************************************************************************* START OF UPDATESTATE FUNCTION *****************************************************************************/
 //This is the function that actually does the job updating the states - this way it can be used by both the nav menu handler and the popstate event listener.
 var updateState = function(status) {
-    
-var trimmedStatus = status.replace('State', '');
 
-activeTabvalue = trimmedStatus + "Tab" ; //sets activeTabvalue
+    
+var stateToRequest = status.state;
+
+var trimmedStatus = status.state.replace('State', '');
+
+activeTabValue = trimmedStatus + "Tab" ; //sets activeTabvalue
 
 $.ajax({url: trimmedStatus, type: 'GET', dataType: 'script'}).done(function() {
 
-if(status == "homeState") {
-history.pushState(sObj.state, trimmedStatus, '');
+if(stateToRequest == "homeState") {
+//history.pushState(stateObject, trimmedStatus, '');
 homeTabHandler();
 return;
 }
 
-if(status == "contactState") {
-history.pushState(sObj.state, trimmedStatus, '');
+if(stateToRequest == "contactState") {
+//history.pushState(stateObject, trimmedStatus, '');
 contactFormHandler();
 return;
 }
 
-if(status == "blogState") {
-history.pushState(sObj.state, trimmedStatus, '');
+if(stateToRequest == "blogState") {
+//history.pushState(stateObject, trimmedStatus, '');
 //blog not implemented yet, but blogHandler() should go here
 return;
 }
@@ -578,13 +577,12 @@ else{
     
 var parentNode = document.getElementsByClassName("content-Tabs")[0];
 var keepLoopAlive = true;
-history.pushState(sObj.state, trimmedStatus, '');
+//history.pushState(stateObject, trimmedStatus, '/'+ trimmedStatus);
 while(keepLoopAlive) {
-    console.log("going");
     
 [].slice.call(parentNode.children).map(function(element, index, array) { //could also use '.children instead of childNodes and then it wouldn't require the 'nodeType == 3 conditional'
 
-if(element.classList.contains(status.replace('State', 'Slider'))) {
+if(element.classList.contains(status.state.replace('State', 'Slider'))) {
 slidesHandler();
 keepLoopAlive = false;
 return;
@@ -593,13 +591,14 @@ return;
 if(index+1>array.length) {
 keepLoopAlive = false;
 console.log("no Sliders found!");
-}
 return;
 }
-//FIX!
+
+}
+//FIX THIS LINE BELOW!
 if(element.hasChildNodes() == false) {
 keepLoopAlive = false;    
-
+return;
 }
 
 });
@@ -609,6 +608,12 @@ keepLoopAlive = false;
 
 
 }
+
+if(!document.getElementsByClassName("content-Tabs")[0].classList.contains("active-Tab")) {
+document.getElementsByClassName("content-Tabs")[0].classList.add("active-Tab");    
+}
+
+document.getElementById(activeTabValue).style.backgroundColor = "#111";
 
 });
 
@@ -629,12 +634,10 @@ homeState();
 /*********************************************************************************** START OF SLIDES HANDLER ****************************************************************************************/
 function slidesHandler(){
     
-typeof tabStateObject[activeTabvalue] == "undefined" ? tabStateObject[activeTabvalue] = 1 : ""; //creates a key/value pair such as 'peopleTab: 1'. This is used as
+typeof stateObject[activeTabValue] == "undefined" ? stateObject[activeTabValue] = 1 : ""; //creates a key/value pair such as 'peopleTab: 1'. This is used as
 // 'memory' to remember what slide you were seeing, so it can be displayed when using the back/forward browser buttons
 //it is done this way because for this case I think cookies are a bit excessive/intrusive, since state is only relevant while the page is active (as oppossed to e.g. login status)
 
-console.log(tabStateObject[activeTabvalue]);
-console.log(tabStateObject);
 
 //defines common variables used/shared among the different methods of the slidesHandler object/closure   
 
@@ -667,15 +670,11 @@ doubleTapCounter = 0;
 
 if(doubleTapCounter >= 2) { // if a double tap happens, toggles between fullscreen and non-fullscreen.
 
-    if(document.webkitExitFullscreen()){ 
-
+    if(document.webkitExitFullscreen()) { 
         document.webkitExitFullscreen();  
-
     } 
-
     else if(!document.fullScreenElement) { //calls fullscreen API on webkit, need to add firefox/IE. Element to fullscreen is jumbotron, since that's the element that has the content.
         document.getElementById("jumbotron").webkitRequestFullscreen();   
-
     } 
 
 doubleTapCounter = 0;
@@ -740,83 +739,14 @@ nextSlideHandler(); //nextSlide function.
 
 //Yes, I am aware that the whole previous/next slide and add/remove class is MUCH faster w/ jQuery (.prev(), .next(), .addClass(), .removeClass(), however I wanted to try a vanilla JS solution
 
-var typesOfSlides = ["peopleSlide", "modelsSlide", "urbanSlide", "eventsSlide"]; //defines what types of slide exist
 
-var slidesHTMLCollections = typesOfSlides.map(function(slideName) { // for every type of slide (index) from typesOfSlides, return doc.getElem(index);
-    //(so, this is basically a shorter way to say slidesHTMLCollections.push(document.getElementsByClassName("peopleSlide"/"modelsSlide"/etc)
-    return document.getElementsByClassName(slideName);
-}); //array[length=4] with 4 HTMLCollections (one for each slide type)
-
-//defines arrays for each slide "group"...
-//...in the following manner: peopleSlides is an array containing all elements with the "peopleSlide" class, and peopleSlidesActiveIndex is the index that additionally has the "active-slide" class.
-/*
-var peopleSlides = [];
-var peopleSlidesActiveIndex;
-
-var modelsSlides = [];
-var modelsSlidesActiveIndex;
-*/
-var urbanSlides = [];
-var urbanSlidesActiveIndex;
-/*
-var eventsSlides = [];
-var eventsSlidesActiveIndex;
-*/
-
-(function slideArrayConstructor(){ //creates arrays out of the HTML collections
-    
-/*peopleSlides = Array.prototype.slice.call(slidesHTMLCollections[0]); //Array.prototype is replaceable with [] (so it would be [].slice.call(HTMLCollections[0])
-modelsSlides = Array.prototype.slice.call(slidesHTMLCollections[1]);*/ //calls the slice method from the array prototype on the not-really-an-array-but-hey HTML collection indexed [1-4], transforming the variable into an array.
-urbanSlides = Array.prototype.slice.call(slidesHTMLCollections[2]); 
-//eventsSlides = Array.prototype.slice.call(slidesHTMLCollections[3]);
-//sets the max amount of slides in the slides picker
-
-//document.getElementById("peopleCounterTotal").innerHTML = peopleSlides.length; // sets the value of  the number after "of" in the slides pickers
-//document.getElementById("modelsCounterTotal").innerHTML = modelsSlides.length;
-document.getElementById("urbanCounterTotal").innerHTML = urbanSlides.length;
-//document.getElementById("eventsCounterTotal").innerHTML = eventsSlides.length;
-
-
-})();
-
-
-var currentTab; //current Tab
-var activePicker; //current slides picker (the small box with the number so you can jump slides)
-
-function determineCurrentTab() { //this function will have to be called several times.
-    
-switch(activeTabvalue) { //depending on activeTabvalue, assign value to currentTab/activePicker.
-    
-    case "peopleTab":
-    currentTab = peopleSlides;
-    activePicker = document.getElementById("peopleCounterCurrent");
-    break;
-    
-    case "modelsTab":
-    currentTab = modelsSlides;
-    activePicker = document.getElementById("modelsCounterCurrent");
-    break;    
-   
-    case "urbanTab":
-    currentTab = urbanSlides;
-    activePicker = document.getElementById("urbanCounterCurrent");
-    break;
-    
-    case "eventsTab":
-    currentTab = eventsSlides;
-    activePicker = document.getElementById("eventsCounterCurrent");
-    break;
-    
-    default:
-    console.log("ActiveTabvalue has no slides/is not known");
-}        
-    
-}
-
-determineCurrentTab();
-
-
-var currentTabActiveIndex;
+var currentTab = [].slice.call(document.getElementsByClassName(stateObject.state.replace('State', 'Slide'))); //makes an array of items of all the slide containing divs
+var currentTabActiveIndex = stateObject[activeTabValue]-1;
+console.log("is this firing?");
+var activePicker = document.getElementById(stateObject.state.replace('State', 'CounterCurrent'));
+activePicker.value = stateObject[activeTabValue];
+document.getElementById(stateObject.state.replace('State', 'CounterTotal')).innerHTML = currentTab.length; //length of the slide picker at the bottom
+currentTab[stateObject[activeTabValue]-1].classList.add("active-slide"); //from the currentTab array, check on stateObject what's the slide we should be at, and add 'active-slide to it'
 
 
 function determineActiveIndex() {//this function has to be called every time the classes are modified
@@ -829,25 +759,15 @@ if(element.classList.contains("active-slide")) {
         return; 
    }    
 };
-
-//peopleSlidesActiveIndex = peopleSlides.findIndex(findTheActiveSlide, 0); //finds the index of the slide that has the "active-slide" class, and returns it.
-//modelsSlidesActiveIndex = modelsSlides.findIndex(findTheActiveSlide, 0);
-urbanSlidesActiveIndex  = urbanSlides.findIndex(findTheActiveSlide, 0);
-//eventsSlidesActiveIndex = eventsSlides.findIndex(findTheActiveSlide, 0);
-
-currentTabActiveIndex   = currentTab.findIndex(findTheActiveSlide, 0);
-
+currentTabActiveIndex = currentTab.findIndex(findTheActiveSlide, 0);
+stateObject[activeTabValue] = currentTabActiveIndex+1;
 }
-
 determineActiveIndex();
 
 function prevSlideHandler() {
     
 if(!scheduled) {
 scheduled=true; //stops the event from happening again.
-
-determineCurrentTab(); //I would like not having to do this, but since the code is so linked together (one thing leads to another) its hard to take vars out of the module. Not sure on solutions for this?
-determineActiveIndex(); //^
 
 var currentTabPrevSlide = (function(){
 if (currentTabActiveIndex==0){
@@ -866,11 +786,10 @@ if (currentTabActiveIndex==0){
     currentTabPrevSlide.classList.add("active-slide");
     currentTabPrevSlide.style.animation = "imgFadeIn 0.45s forwards";
     currentTabPrevSlide.style.display= "flex";
-    determineActiveIndex();
-    
+
     activePicker.value = (function() {
     if(activePicker.value == 1) {
-    return 10;    
+    return currentTab.length;    
     }
     else {
     return parseInt(activePicker.value, 10) - 1;
@@ -879,8 +798,13 @@ if (currentTabActiveIndex==0){
    
     assignTouchEventListeners(); //assigns the touch evt listeners - Can probably make this more efficient by not loading them on non touch devices + removing all the evt listeners except the one currently in use(on currentTab)
     scheduled=false; //allows the event to happen again once its finished
+    
+    determineActiveIndex(); 
+    console.log(currentTabActiveIndex);
     }, 460);    
     
+    
+
 }
     
 }
@@ -891,8 +815,6 @@ function nextSlideHandler() {
 if(!scheduled) {
 scheduled=true; //stops the event from happening again.    
 
-determineCurrentTab();
-determineActiveIndex();
 
 
 var currentTabNextSlide = (function(){
@@ -911,7 +833,7 @@ currentTab[currentTabActiveIndex].classList.remove("active-slide");
 currentTabNextSlide.classList.add("active-slide");
 currentTabNextSlide.style.animation = "imgFadeIn 0.45s forwards";
 currentTabNextSlide.style.display= "flex";
-determineActiveIndex();
+
 
 
  activePicker.value = (function() {
@@ -925,20 +847,21 @@ determineActiveIndex();
 
 assignTouchEventListeners();    
 scheduled=false; //allows the event to happen again once its finished
-}, 460);    
+determineActiveIndex();  
+console.log(currentTabActiveIndex);
+}, 460);   
+
 }
 }
 
 function jumpToSlide(currentTab, slideToJumpTo) {
-determineCurrentTab();
-removePrevNextButtonHandlers();
 
 if(slideToJumpTo < 1) {
 slideToJumpTo = 0;    
 }
 
 if(slideToJumpTo > currentTab.length) {
-slideToJumpTo = 10;    
+slideToJumpTo = currentTab.length;    
 }
 
 currentTab[currentTabActiveIndex].style.animation = "fadeOut 0.45s forwards";
@@ -950,10 +873,11 @@ currentTab[currentTabActiveIndex].style.animation = "fadeOut 0.45s forwards";
     currentTab[slideToJumpTo].style.animation = "imgFadeIn 0.45s forwards";
     currentTab[slideToJumpTo].style.display= "flex";
     activePicker.value = slideToJumpTo+1;
-    determineActiveIndex();
-    assignTouchEventListeners();     
+    assignTouchEventListeners();
+    determineActiveIndex();  
     }, 460);    
-   
+
+    console.log(currentTabActiveIndex);
 }
 
 
@@ -967,19 +891,13 @@ slidesTouchHandler.touchEnd();
 
 function assignTouchEventListeners() {
 // start of touch event listener
-//peopleSlides[peopleSlidesActiveIndex].addEventListener("touchstart", onTouch);
-//modelsSlides[modelsSlidesActiveIndex].addEventListener("touchstart", onTouch);
-urbanSlides[urbanSlidesActiveIndex].addEventListener("touchstart", onTouch);
-//eventsSlides[eventsSlidesActiveIndex].addEventListener("touchstart", onTouch);
+
+currentTab[currentTabActiveIndex].addEventListener("touchstart", onTouch);
 //end of touch event listener
-//peopleSlides[peopleSlidesActiveIndex].addEventListener("touchend", onTouchEnd);
-//modelsSlides[modelsSlidesActiveIndex].addEventListener("touchend", onTouchEnd);
-urbanSlides[urbanSlidesActiveIndex].addEventListener("touchend", onTouchEnd);
-//eventsSlides[eventsSlidesActiveIndex].addEventListener("touchend", onTouchEnd);
+currentTab[currentTabActiveIndex].addEventListener("touchend", onTouchEnd);
 }
 
 assignTouchEventListeners();
-
 
 
 
@@ -990,7 +908,7 @@ function slidePickerHandler() {
 
 var slidePicker = [].slice.call(document.getElementsByClassName("slidePicker")); //array of all slide pickers 
 
-
+console.log(slidePicker);
 //I don't really like this solution...seems really ugly.
 
 //It works like this: .map goes through each item of slidePicker, sets a new var called "assignEvtListeners" to true. if assignEvtListeners is true, executes  array[index].addEvtListener("focus"...)'s
@@ -1005,7 +923,6 @@ var assignEvtListeners = true;
 
 array[index].addEventListener("focus", function() {
 if(assignEvtListeners == true) {    
-determineCurrentTab();
 determineActiveIndex();
 //definir el valor activo al momento de focusear activePicker.
 var activePickerCurValue = activePicker.value;
@@ -1421,7 +1338,7 @@ switch(currentOrientation) {
     jumbotron.style.maxHeight = "100vh";
     bottomBackground.style.display = "none";
     
-    if(activeTabvalue == "contactTab") {
+    if(activeTabValue == "contactTab") {
     aboutButton.style.display = "none";
     contactContent.style.overflow = "scroll";
     }
@@ -1455,7 +1372,7 @@ target[i].addEventListener("blur", function(event) {
         index.removeAttribute("style");
         });   
         
-        if(activeTabvalue =="contactTab") {
+        if(activeTabValue =="contactTab") {
         contactContent.removeAttribute("style");   
         aboutButton.style.animation = "expand3d 0s forwards";
         aboutButton.style.display = "flex";   
