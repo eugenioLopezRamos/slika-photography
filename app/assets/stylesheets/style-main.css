@@ -299,15 +299,19 @@ will-change: opacity;    /* browser optimizes the processes for opacity transiti
 
 .content-Tabs {
 height: 100%;
-   margin-left: auto;
-  margin-right: auto;
-  width: 100%; /*64.21 was the original value, but it doesnt work on firefox*/
-  max-width: 1233px;
-  display: block;
-/*need to set min-width too so it doesnt resize on browser window resize*/
+margin-left: auto;
+margin-right: auto;
+width: 100%; /*64.21 was the original value, but it doesnt work on firefox*/
+max-width: 1233px;
 min-width: 75em; /*1200px*/
 min-height: 51em; /*816px*/
-will-change: opacity;  
+will-change: opacity; 
+display: none;
+}
+
+.active-Tab {
+display: block;
+animation: imgFadeIn 0.45s forwards;
 }
 
 
