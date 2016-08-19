@@ -55,8 +55,8 @@ if (!Array.prototype.findIndex) { //findIndex polyfill for IE source: MDN - http
 
   
 window.addEventListener("resize", function() { //handles resizing when changing screen orientation
-  //document.getElementById("menu").removeAttribute("style");
-  //document.getElementById("header").removeAttribute("style");
+  document.getElementById("menu").removeAttribute("style");
+  document.getElementById("header").removeAttribute("style");
   document.getElementsByClassName("active-Tab")[0].removeAttribute("style");
 if(currentOrientation !== window.orientation) { //if this evaluates to true, it means there's been a resize with no orientation change made, which means
 //that the user is focus-ing on an input/textarea in the "Contact Us" tab, and that is handled differently, in the contactFormHandler function
@@ -120,7 +120,7 @@ element.removeAttribute("style");
 
 });
 
-updateState(stateObject.state, 0); //shows the current tab
+//updateState(stateObject.state, 0); //shows the current tab
 
 initialFormat(); //sets the initial styling.
 
@@ -303,8 +303,6 @@ return {
             };
 
 })();
-
-
 var menuHeightCalculator = (function() {
    return prevHeight + deltaY;
 })();
@@ -442,6 +440,13 @@ var stateToRequest = status.state;
 var trimmedStatus = status.state.replace('State', '');
 
 activeTabValue = trimmedStatus + "Tab" ; //sets activeTabvalue
+
+/*if(document.getElementById("fb-root")) {
+document.getElementById("fb-script").innerHTML = "";
+var fbCreatedDiv = document.getElementById("fb-root");
+fbCreatedDiv.parentNode.removeChild(fbCreatedDiv);
+    
+}*/
 
 $.ajax({url: trimmedStatus, type: 'GET', dataType: 'script'}).done(function() {
 
@@ -889,6 +894,12 @@ var contactFormHandler = function() {
  //defines a new object type - inputField, used for the data relating to the inputfields and text area for the contact form     
 
 
+(function() {
+window.fbAsyncInit(); //reloads the fb script, needed or it doesn't work when you: visit Contact -> visit another tab -> visit Contact again
+}
+)();
+//document.getElementsByClassName("fb-page fb_iframe_widget")[0].setAttribute("src", document.getElementsByClassName("fb-page fb_iframe_widget")[0].attributes.src);
+
 function inputField(target, textValue, eventName, eventClass, eventId, defaultValue) {
 this.target = target,
 this.textValue = textValue,
@@ -1178,8 +1189,6 @@ aboutButton.style.animation ="unexpand3d 1.5s forwards";
 
 /**** START part handles the formatting when the input boxes receive focus *****/
 
-
-
 var allInputs = document.getElementsByTagName("input"); //these are my targets
 var allTextAreas = document.getElementsByTagName("textarea"); //this one too
 
@@ -1208,9 +1217,6 @@ switch(currentOrientation) {
     aboutButton.style.display = "none";
     contactContent.style.overflow = "scroll";
     }
- 
-    
-    
     
     break;
     
@@ -1243,8 +1249,6 @@ target[i].addEventListener("blur", function(event) {
         aboutButton.style.animation = "expand3d 0s forwards";
         aboutButton.style.display = "flex";   
         }
-
-
         break;
         
         case -90 || 90:

@@ -1,24 +1,8 @@
-  <!--this is the facebook script-->
-  <script>window.fbAsyncInit = function() {
-    FB.init({
-      appId      : '1015943141834553',
-      xfbml      : true,
-      version    : 'v2.6'
-    });
-  };
 
-  (function(d, s, id){
-     var js, fjs = d.getElementsByTagName(s)[0];
-     if (d.getElementById(id)) {return;}
-     js = d.createElement(s); js.id = id;
-     js.src = "//connect.facebook.net/en_US/sdk.js";
-     fjs.parentNode.insertBefore(js, fjs);
-   }(document, 'script', 'facebook-jssdk'));
-  </script>
-
+<%= render '/layouts/tabs/contactFBScript' %>
 
 <div class="content-Tabs" id="contactContent">
- <div class="aboutButton" id="aboutButton">About me</div>
+ <div class="aboutButton" id="aboutButton"><span class="contactButtonText">About Me</span></div>
     <div class="contactText" id="contactText">
 
         <div class="leoPhoto"><img id="leoPic" src="https://static.wixstatic.com/media/be0972_3a91d40d363f4931a645b694c4f466c2.jpg/v1/fill/w_261,h_357,al_c,q_80,usm_0.66_1.00_0.01/be0972_3a91d40d363f4931a645b694c4f466c2.jpg"></div>
