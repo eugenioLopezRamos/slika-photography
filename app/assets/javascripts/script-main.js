@@ -427,7 +427,7 @@ var menuHeightCalculator = (function() {
 
 if(Math.abs(deltaY)>0) {
 
-if(isScrollable.topScroll || activeTabValue == "homeTab" ? getComputedStyle(document.getElementById("bigThumbnails")).getPropertyValue("display") !== "none": "") {
+if(isScrollable.topScroll) {//|| activeTabValue == "homeTab" ? getComputedStyle(document.getElementById("bigThumbnails")).getPropertyValue("display") !== "none": true) {
 document.removeEventListener("touchmove", slideDownHandler);    
 }
 
@@ -642,14 +642,11 @@ typeof stateObject[activeTabValue] == "undefined" ? stateObject[activeTabValue] 
 //defines common variables used/shared among the different methods of the slidesHandler object/closure   
 
 var touchStartPosX;//position of the touch X "pointer" at the start of the touch event
-var touchMoveThreshold = 110; //threshold for slide change (in px) - 110px
+var touchMoveThreshold = 140; //threshold for slide change (in px) - 110px
 var doubleTapCounter = 0; //used to check for double taps to use the fullscreen API
 var movePass = function(event){ //need a named function for the event listener, so it can later be removed with removeEventListener.
 slidesTouchHandler.touchMove(event);        
 };
-
-
-
 
 var slidesTouchHandler = (function() {
 
@@ -658,75 +655,58 @@ return {
 touchStart: function(e){ //this is called upon touching the screen, and it does 2 things: saves the position where the screen was touched (in touchStartPosX, in the slidesHandler scope) and
 //creates an eventListener for touch movements. This listener has the handler MovePass, which is also set in the slidesHandler scope because it must be reused between the properties of the slidesTouchHandler object
 //which I should rename because its a bit confusing.
-
 //this code should check for double taps on jumbotron, to use the fullscreen API
-
 doubleTapCounter++;
-
 setTimeout(function() { //when a touchstart event happens, waits 200ms before reseting the counter back to zero
 doubleTapCounter = 0;
 }, 200);
 
-
 if(doubleTapCounter >= 2) { // if a double tap happens, toggles between fullscreen and non-fullscreen.
-
     if(document.webkitExitFullscreen()) { 
         document.webkitExitFullscreen();  
     } 
     else if(!document.fullScreenElement) { //calls fullscreen API on webkit, need to add firefox/IE. Element to fullscreen is jumbotron, since that's the element that has the content.
         document.getElementById("jumbotron").webkitRequestFullscreen();   
     } 
-
 doubleTapCounter = 0;
-
 }
-
-
 touchStartPosX =  e.changedTouches[0].clientX; //assigns X coordinate of the touchstart event.
-
-
 document.addEventListener("touchmove", movePass); //adds the slidesHandler.touchMove function as handler for the "touchmove" event.
-
-},
-
-touchEnd: function(){ //called upon lifting the finger off the activeslide, it simply removes the event listener we set up in touchStart.
-document.getElementsByClassName("active-slide")[0].removeAttribute("style"); 
-document.removeEventListener("touchmove", movePass);
 },
 
 touchMove: function(event){ //this property is called by the movePass handler function from the event listener set in .touchStart
-
 event = this.event || window.event; //window. event is for IE compat, need to check if this is still needed.
-
 var originalPosX = touchStartPosX; //the X coords of the start of the touch event, set in .touchStart
-
 var newX = event.changedTouches[0].clientX; //the current position of the touch X coords (after the user has slid his/her finger)
-
 var deltaX = newX - originalPosX;//the difference between the start X position and the current position - a negative value means newX is to the left of originalPosX, positive is to the right
-
 
 if(deltaX>0) {
 document.getElementsByClassName("active-slide")[0].style.left = deltaX + 'px';
-  
-    
 }
 
 if(deltaX<0) {
 document.getElementsByClassName("active-slide")[0].style.right = -deltaX + 'px';    
-    
 }
 
 if(deltaX>0 && deltaX>touchMoveThreshold) { //user moves touch to the right for more than 110 pixels
+//document.getElementsByClassName("active-slide")[0].style.display = "none";
 document.removeEventListener("touchmove", movePass); //if I don't remove this, every 1px you move the touch cursor will change slides
 prevSlideHandler(); //goes to the prevSlide function
 
 }
 if(deltaX<0 && deltaX<touchMoveThreshold*-1) {//user moves touch to the left for more than 110 pixels
+//document.getElementsByClassName("active-slide")[0].style.display = "none";
 document.removeEventListener("touchmove", movePass);
 nextSlideHandler(); //nextSlide function.
 
 }
 
+},
+
+touchEnd: function(){ //called upon lifting the finger off the activeslide, it simply removes the event listener we set up in touchStart.
+parseInt(document.getElementsByClassName("active-slide")[0].style.right, 10) < touchMoveThreshold ? document.getElementsByClassName("active-slide")[0].removeAttribute("style") : "";
+parseInt(document.getElementsByClassName("active-slide")[0].style.left, 10) < touchMoveThreshold  ? document.getElementsByClassName("active-slide")[0].removeAttribute("style") : "";
+document.removeEventListener("touchmove", movePass);
 },
 
 
@@ -739,15 +719,12 @@ nextSlideHandler(); //nextSlide function.
 
 //Yes, I am aware that the whole previous/next slide and add/remove class is MUCH faster w/ jQuery (.prev(), .next(), .addClass(), .removeClass(), however I wanted to try a vanilla JS solution
 
-
 var currentTab = [].slice.call(document.getElementsByClassName(stateObject.state.replace('State', 'Slide'))); //makes an array of items of all the slide containing divs
 var currentTabActiveIndex = stateObject[activeTabValue]-1;
-console.log("is this firing?");
 var activePicker = document.getElementById(stateObject.state.replace('State', 'CounterCurrent'));
 activePicker.value = stateObject[activeTabValue];
 document.getElementById(stateObject.state.replace('State', 'CounterTotal')).innerHTML = currentTab.length; //length of the slide picker at the bottom
 currentTab[stateObject[activeTabValue]-1].classList.add("active-slide"); //from the currentTab array, check on stateObject what's the slide we should be at, and add 'active-slide to it'
-
 
 function determineActiveIndex() {//this function has to be called every time the classes are modified
 
@@ -781,6 +758,7 @@ if (currentTabActiveIndex==0){
     currentTab[currentTabActiveIndex].style.animation = "fadeOut 0.45s forwards";//this will get changed to an animation, but for now it will suffice
     
     window.setTimeout(function() { //waits until the anim is over to start processing the rest of the code
+    currentTab[currentTabActiveIndex].removeAttribute("style");
     currentTab[currentTabActiveIndex].style.display = "none";
     currentTab[currentTabActiveIndex].classList.remove("active-slide");
     currentTabPrevSlide.classList.add("active-slide");
@@ -796,10 +774,11 @@ if (currentTabActiveIndex==0){
     }
     })();
    
-    assignTouchEventListeners(); //assigns the touch evt listeners - Can probably make this more efficient by not loading them on non touch devices + removing all the evt listeners except the one currently in use(on currentTab)
     scheduled=false; //allows the event to happen again once its finished
     
     determineActiveIndex(); 
+    assignTouchEventListeners(); //assigns the touch evt listeners - Can probably make this more efficient by not loading them on non touch devices + removing all the evt listeners except the one currently in use(on currentTab)
+
     console.log(currentTabActiveIndex);
     }, 460);    
     
@@ -828,15 +807,14 @@ var currentTabNextSlide = (function(){
 
 currentTab[currentTabActiveIndex].style.animation = "fadeOut 0.45s forwards";//this will get changed to an animation, but for now it will suffice
 window.setTimeout(function() {
+currentTab[currentTabActiveIndex].removeAttribute("style");
 currentTab[currentTabActiveIndex].style.display = "none";
 currentTab[currentTabActiveIndex].classList.remove("active-slide");
 currentTabNextSlide.classList.add("active-slide");
 currentTabNextSlide.style.animation = "imgFadeIn 0.45s forwards";
 currentTabNextSlide.style.display= "flex";
 
-
-
- activePicker.value = (function() {
+activePicker.value = (function() {
     if (activePicker.value == currentTab.length) {
     return 1;    
     }
@@ -845,9 +823,10 @@ currentTabNextSlide.style.display= "flex";
     }
 })();
 
-assignTouchEventListeners();    
+
 scheduled=false; //allows the event to happen again once its finished
 determineActiveIndex();  
+assignTouchEventListeners();    
 console.log(currentTabActiveIndex);
 }, 460);   
 
@@ -873,8 +852,8 @@ currentTab[currentTabActiveIndex].style.animation = "fadeOut 0.45s forwards";
     currentTab[slideToJumpTo].style.animation = "imgFadeIn 0.45s forwards";
     currentTab[slideToJumpTo].style.display= "flex";
     activePicker.value = slideToJumpTo+1;
+    determineActiveIndex(); 
     assignTouchEventListeners();
-    determineActiveIndex();  
     }, 460);    
 
     console.log(currentTabActiveIndex);
@@ -891,18 +870,15 @@ slidesTouchHandler.touchEnd();
 
 function assignTouchEventListeners() {
 // start of touch event listener
-
 currentTab[currentTabActiveIndex].addEventListener("touchstart", onTouch);
 //end of touch event listener
 currentTab[currentTabActiveIndex].addEventListener("touchend", onTouchEnd);
+console.log(currentTab);
+console.log(currentTabActiveIndex);
+console.log("assign touch evt listener");
 }
 
 assignTouchEventListeners();
-
-
-
-
-
 
 function slidePickerHandler() {
 
