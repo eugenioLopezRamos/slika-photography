@@ -60,7 +60,7 @@ Rails.application.routes.draw do
 
   root 'static#home', :tab => 'homeTab'
   
-  get '/', to: 'static#show', :tab => 'homeTab'
+  get '/home', to: 'static#show', :tab => 'homeTab'
   get '/people', to: 'static#show', :tab => 'peopleTab'
   get '/models', to: 'static#show', :tab => 'modelsTab'
   get '/urban', to: 'static#show', :tab => 'urbanTab'
