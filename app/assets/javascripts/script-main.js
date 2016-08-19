@@ -132,11 +132,10 @@ initialFormat(); //sets the initial styling.
 function homeTabHandler(){ 
     
 var setBigThumbEvtHandler = 1;  
-function stopScroll(event) {
 
+function stopScroll(event) {
     event.stopPropagation();
     event.preventDefault();
-
 }
 
 function bigThumbEvtHandler() {
@@ -146,10 +145,13 @@ setBigThumbEvtHandler = 0;
 document.getElementById("bigThumbnails").style.animation = "fadeOut 0.45s forwards";
 window.setTimeout(function() {document.getElementById("bigThumbnails").removeAttribute("style")}, 460);
 
-document.removeEventListener("touchmove", stopScroll);
-
+document.getElementsByClassName("active-Tab")[0].removeEventListener("touchmove", stopScroll);
 
 }    //end of bigThumbEvtHandler
+
+
+
+
     
 function smallThumbnailHandler(event) {
 
@@ -167,15 +169,12 @@ document.getElementsByClassName("bigThumbnailImgs")[clickedImageIndex].style.dis
 document.getElementById("bigThumbnails").style.display = "block"; //makes the container visible.
 
 
-document.addEventListener("touchmove", stopScroll);
+document.getElementsByClassName("active-Tab")[0].addEventListener("touchmove", stopScroll); //this way the evt listener is dumped by JS garbage collection on tab change, and it stops a bug where
+//if you change tabs while a big thumbnail is open, when coming back the stopScroll function would still be in memory  and thus the homeTab becomes un-scrollable (because of event.preventDefault)
 (setBigThumbEvtHandler==1) ? document.getElementById("bigThumbnails").addEventListener("click", bigThumbEvtHandler) : ""; //sets an event listener for the big imgs container (if it has not been set yet)
 
 
 }    //end of smallThumbnailHandler
-
-
-
-
 
 [].slice.call(document.getElementsByClassName("smallThumbnailImgs")).map(function(element, array, index) { //adds a click event listener to each element with the class "smallThumbnail"
 element.addEventListener("click", smallThumbnailHandler);
@@ -183,16 +182,10 @@ element.addEventListener("click", smallThumbnailHandler);
 
 }
 
-homeTabHandler();
-
-
-
-
 /**************************************************************************START OF MENU SLIDE DOWN HANDLER***************************************************************************************************************/
 
 (function menuToggle() { //toggle is a misnomer really, this makes the menu slidable down/up
     
-
 var menuSlideStartY; //starting Y coordinate of the touch event
 var menuSlideStartX; //starting X coordinate of the touch event
 var newY; //new value of the Y coordinate of the touch event after sliding down or up
@@ -235,10 +228,7 @@ if(prevHeight<minimumMenuHeight) {
 
 }   
     
-    
 }, 1850); 
-
-    
 
 })(); //closes function
 
@@ -322,7 +312,7 @@ var menuHeightCalculator = (function() {
 
 if(Math.abs(deltaY)>0) {
 
-if(isScrollable.topScroll) {//|| activeTabValue == "homeTab" ? getComputedStyle(document.getElementById("bigThumbnails")).getPropertyValue("display") !== "none": true) {
+if(isScrollable.topScroll) {
 document.removeEventListener("touchmove", slideDownHandler);    
 }
 
@@ -458,7 +448,7 @@ $.ajax({url: trimmedStatus, type: 'GET', dataType: 'script'}).done(function() {
 window.setTimeout(function(){
     
     
- if(stateToRequest == "homeState") {
+if(stateToRequest == "homeState") {
 homeTabHandler();
 return;
 }
