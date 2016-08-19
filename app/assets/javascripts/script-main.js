@@ -441,17 +441,9 @@ var trimmedStatus = status.state.replace('State', '');
 
 activeTabValue = trimmedStatus + "Tab" ; //sets activeTabvalue
 
-/*if(document.getElementById("fb-root")) {
-document.getElementById("fb-script").innerHTML = "";
-var fbCreatedDiv = document.getElementById("fb-root");
-fbCreatedDiv.parentNode.removeChild(fbCreatedDiv);
-    
-}*/
-
 $.ajax({url: trimmedStatus, type: 'GET', dataType: 'script'}).done(function() {
 
 window.setTimeout(function(){
-    
     
 if(stateToRequest == "homeState") {
 homeTabHandler();
@@ -892,13 +884,11 @@ nextButton.map(function(element, array, index) {element.removeEventListener("cli
 //Probably Fancy Programming Syndrome, but at least I learned a bit...
 var contactFormHandler = function() { 
  //defines a new object type - inputField, used for the data relating to the inputfields and text area for the contact form     
-
-
 (function() {
 window.fbAsyncInit(); //reloads the fb script, needed or it doesn't work when you: visit Contact -> visit another tab -> visit Contact again
 }
 )();
-//document.getElementsByClassName("fb-page fb_iframe_widget")[0].setAttribute("src", document.getElementsByClassName("fb-page fb_iframe_widget")[0].attributes.src);
+
 
 function inputField(target, textValue, eventName, eventClass, eventId, defaultValue) {
 this.target = target,
@@ -929,13 +919,16 @@ var inputData = [inputName, inputEmail, inputSubject, inputMessage];
 //sets the default values for the inputfields
 var inputDefaultValues = ["Your Name", "Your Email", "Your Subject", "Your Message"];
 
-var i; // scope=contactFormHandler - should I see how to make its scope smaller?
+(function() {
+var i; 
 //puts the default values in the inputboxes
 for (i=0; i<inputData.length; i++) {
     inputData[i].defaultValue = inputDefaultValues[i];
     inputData[i].textValue = inputDefaultValues[i];
     $(inputData[i].target).val(inputDefaultValues[i]).css("color", "#A3A3A3");
-}
+}    
+})();
+
 
 
 //event listener for changes in input boxes eg. detect when the user types in the inputbox http://stackoverflow.com/questions/6458840/on-input-change-event
