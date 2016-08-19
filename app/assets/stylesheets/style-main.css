@@ -97,13 +97,13 @@ from {
   
 } 
 to {
-  transform: translate3d(0, -35.125em, 0);
+  transform: translate3d(0, -34.125em, 0);
 }  
 }
 
 @keyframes uncontract-text3d {
 from {
-  transform: translate3d(0, -35.125em, 0);
+  transform: translate3d(0, -34.125em, 0);
 } 
 to {
   transform: translate3d(0, 0,0);
@@ -117,7 +117,7 @@ from {
   transform:translate3d(0, 24.875em,0);
 
 }  to {
-  transform: translate3d(0, -11em,0); /*320px*/
+  transform: translate3d(0, -12em,0); /*320px*/
 }
 }
 
@@ -878,7 +878,6 @@ overflow: hidden;
 
 .aboutButton {
 height: 0px;
-width: 100px;
 background-color: green;
 display: none;
 animation: none;
@@ -1554,13 +1553,13 @@ vertical-align: middle;
 .aboutButton {
 
 transform: translate3d(0, -3.25em, 0);  /*3.125em height + 2*0.0625em borders*/
-left: 33%;
-right: 33%;
+left: calc(50% - 50px);
 display: flex;
 justify-content: center;
 text-align: center;
 background-color: #333;
 height: 3.125em; /*50 px*/
+width: 100px; /**/
 font-family:  Calibri, Helvetica, Arial, sans-serif;
 color: white;
 border: 0.0625em solid white; /*1px*/
