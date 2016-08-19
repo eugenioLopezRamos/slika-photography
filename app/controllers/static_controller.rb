@@ -1,8 +1,9 @@
 class StaticController < ApplicationController
   def home
-    respond_to do |format|
-    format.html {render 'home'}
-    end
+    #respond_to do |format|
+   # format.html {render 'home'}
+   # end
+   redirect_to '/home'
   end
 
   def show

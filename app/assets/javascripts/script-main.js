@@ -1,26 +1,35 @@
 var main = function() {
 //sets up the default presentation of the site. Most of these should probably be done on the css - will see later.  
-  $('#homeTab').css("background-color", "#111");
-function initialFormat() { //this function is used on load, and when resetting the elements' styling, for example on the resize event listener
- // $('.content-Tabs').hide(0);
+  //$('#homeTab').css("background-color", "#111");
+  
+var activeTabValue = window.location.pathname.replace('/', '') + 'Tab'; //used to manage the state of the different tabs
 
-  //$('.active-Tab').show(0); 
+var stateObject = {// initializes the state object for use in the nav menu handler
+state: activeTabValue.replace('Tab', 'State'),
+
+};
+var scheduled = false; // this is used to delay applying the state changes so the page doesnt get messed up - src= http://eloquentjavascript.net/14_event.html  - Thanks! 
+
+history.replaceState(stateObject, "Leonardo Antonio PhotoArt", ""); //The page uses the history API for the tabs. This line of code is used for consistency, I wanted to declare the initial state of the page instead of using the browser's default.
+updateState(stateObject);
+
+function initialFormat() { //this function is used on load, and when resetting the elements' styling, for example on the resize event listener
+
 
 }
 
+//al finalizar load se debe determinar la activeTab de manera dinamica, y mandar una orden de replaceState que llama a la function updateState para 
+//invocar al eventHandler apropiado para la tab
+console.log(window.location);
+
 initialFormat();
 
-var stateObject = {// initializes the state object for use in the nav menu handler
-state: "homeState",
 
-};
-
-history.replaceState(stateObject, "Welcome to Leo Photography", ""); //The page uses the history API for the tabs. This line of code is used for consistency, I wanted to declare the initial state of the page instead of using the browser's default.
 
 var prevHeight = 0; //this variable defines the starting size of the menu on mobile, it needs to be outside the menuToggle function because otherwise it cannot be changed when clicking a menu item, so when you click a menu item
 //and then slide down the menu will start growing from where it was, not from zero.
 
-var activeTabValue = "homeTab"; //used to manage the state of the different tabs
+
 
 var currentOrientation = window.orientation; // 0 = portrait, -90 || 90 = landscape, undefined = device doesn't support rotation - used on event listeners that style things according to orientation.
 
@@ -49,7 +58,6 @@ if (!Array.prototype.findIndex) { //findIndex polyfill for IE source: MDN - http
   };
 }  
 
-var scheduled = false; // this is used to delay applying the state changes so the page doesnt get messed up - src= http://eloquentjavascript.net/14_event.html  - Thanks!  
   
 window.addEventListener("resize", function() { //handles resizing when changing screen orientation
   //document.getElementById("menu").removeAttribute("style");
@@ -126,110 +134,6 @@ initialFormat(); //sets the initial styling.
 }    
 });
 
-
-
-//different states for each of the site's tabs: 
-var homeState = function() {
-
-  
-     if(clientWidth<480) {
-$('.menu li').css("background-color", "#333"); // must see how to make the button lose the color before sliding up
-
-}
-
-      $('.active-Tab').hide().removeClass('active-Tab');
-     $('#homeContent').fadeIn(600).addClass('active-Tab');    
-          $('.menu li').css("background-color", "#333");
-      $('#homeTab').css("background-color", "#111");
- activeTabValue = "homeTab";
-  
- 
-};
-
-var peopleState = function() {
-    
-$('.active-Tab').hide().removeClass('active-Tab');
-$('.menu li').css("background-color", "#333");
-$('#peopleTab').css("background-color", "#111");
-//if(isAnimated==1) {
-$('#peopleContent').fadeIn(600).addClass('active-Tab');    
-//} else if (isAnimated==0) {
-//$('#peopleContent').show().addClass('active-Tab');      
-//}
-
-activeTabValue = "peopleTab";  
-   
-  
-};
-
-var modelState = function() {
-
-
-    
- 
-$('.active-Tab').hide().removeClass('active-Tab');
-$('.menu li').css("background-color", "#333");
-$('#modelTab').css("background-color", "#111");
-$('#modelsContent').fadeIn(600).addClass('active-Tab');    
-
-
-activeTabValue = "modelTab";
-
-  
-};
-
-var urbanState = function() {
-    
-
-
-
-          
-$('.active-Tab').hide().removeClass('active-Tab');
-$('.menu li').css("background-color", "#333");
-$('#urbanTab').css("background-color", "#111");
-$('#urbanContent').fadeIn(600).addClass('active-Tab');    
-
-activeTabValue = "urbanTab";
-
-};
- 
-var eventState = function() {
-    
-
-$('.active-Tab').hide().removeClass('active-Tab');
-$('.menu li').css("background-color", "#333");
-$('#eventTab').css("background-color", "#111");
-$('#eventsContent').fadeIn(600).addClass('active-Tab');    
-
-
-activeTabValue = "eventTab"; 
-
-};
-
-var contactState = function() {
-    $('.active-Tab').hide().removeClass('active-Tab');
-    $('.menu li').css("background-color", "#333");
-    $('#contactTab').css("background-color", "#111");
-    $('#contactContent').fadeIn(600).addClass('active-Tab');   
-    activeTabValue = "contactTab";
-    contactFormHandler();
-         
-  
-};
-
-var blogState = function() {
-    
-    $('.active-Tab').hide().removeClass('active-Tab');
-    $('.menu li').css("background-color", "#333");
-    $('#blogTab').css("background-color", "#111");
-    $('#blogContents').fadeIn(600).addClass('active-Tab');
-    activeTabValue = "blogTab";  
-};
-
-/*THIS FUNCTION CONTROLS THE DISPLAY OF THE NAV MENU USING TOUCH EVENTS*/
-
-
-
 function homeTabHandler(){ 
     
 var setBigThumbEvtHandler = 1;  
@@ -253,10 +157,6 @@ document.removeEventListener("touchmove", stopScroll);
 }    //end of bigThumbEvtHandler
     
 function smallThumbnailHandler(event) {
-
-
-
-
 
 var clickedImageIndex = [].slice.call(document.getElementsByClassName("smallThumbnailImgs")).findIndex(function(element) { //index of the element whose id is equal to the id of the target of the smallThumbnails click event
     if(element.id == event.target.id){
@@ -510,10 +410,11 @@ header.removeAttribute('style');
 menu.removeAttribute('style');
 
 $('.menu li').css("background-color", "#333");
+console.log(clickedId);
 $('#' + clickedId).css("background-color", "#111");
 
 stateObject.state = clickedId.replace('Tab', 'State');
-history.pushState(stateObject, "string", "");
+history.pushState(stateObject, "state", "/" + clickedId.replace('Tab', ''));
 
 
 
@@ -522,20 +423,25 @@ updateState(stateObject);
 });
 /*************************************************************************************END OF NAVMENU HANDLER ************************************************************************************/
 
+function popStateHandler(popstateEvent) {
+//if(!popStateScheduled) {
+    //window.removeEventListener("popstate", popStateHandler);    
+    //popStateScheduled=true; //need to stop this evt listener from listening while in progress (I'll remove it)
+   // setTimeout(function() {
+    document.getElementById(activeTabValue).style.backgroundColor = "#333";
+    var param = popstateEvent;
+    stateObject.state = popstateEvent.state.state; //sets the state property value to the value of the state property that's on the popstate event (so, back or forwards)
+    updateState(param.state);
+   // window.addEventListener("popstate", popStateHandler);
+    //popStateScheduled=false;
+//}, 400); //setTimeout close
+//}//scheduled close
+}//function close
+
+
 /*************************************************************************************START OF POPSTATE EVENT LISTENER ************************************************************************************/
 //popstate event listener - handles the behavior of the page when a popstate event fires. Made this so the site can handle users using the back/forward browser buttons.
-window.addEventListener("popstate", function(popstateEvent) {
-if(!scheduled) {
-     scheduled=true;
-    setTimeout(function() {
-       scheduled=false;
-document.getElementById(activeTabValue).style.backgroundColor = "#333";
-var param = popstateEvent;
-stateObject.state = popstateEvent.state.state; //sets the state property value to the value of the state property that's on the popstate event (so, back or forwards)
-updateState(param.state);
-}, 400);
-}
-});
+window.addEventListener("popstate", popStateHandler);
 
 /*************************************************************************************END OF POPSTATE EVENT LISTENER ****************************************************************************/
 
@@ -544,9 +450,8 @@ updateState(param.state);
 
 /************************************************************************************* START OF UPDATESTATE FUNCTION *****************************************************************************/
 //This is the function that actually does the job updating the states - this way it can be used by both the nav menu handler and the popstate event listener.
-var updateState = function(status) {
+function updateState(status) {
 
-    
 var stateToRequest = status.state;
 
 var trimmedStatus = status.state.replace('State', '');
@@ -555,7 +460,10 @@ activeTabValue = trimmedStatus + "Tab" ; //sets activeTabvalue
 
 $.ajax({url: trimmedStatus, type: 'GET', dataType: 'script'}).done(function() {
 
-if(stateToRequest == "homeState") {
+window.setTimeout(function(){
+    
+    
+ if(stateToRequest == "homeState") {
 //history.pushState(stateObject, trimmedStatus, '');
 homeTabHandler();
 return;
@@ -603,21 +511,20 @@ return;
 
 });
 
-
 }
+}//else close   
+    
+}, 200);
 
-
-}
 
 if(!document.getElementsByClassName("content-Tabs")[0].classList.contains("active-Tab")) {
-document.getElementsByClassName("content-Tabs")[0].classList.add("active-Tab");    
+document.getElementsByClassName("content-Tabs")[0].classList.add("active-Tab");
+document.getElementsByClassName("active-Tab")[0].style.animation = "imgFadeIn 0.45s forwards";
 }
 
-document.getElementById(activeTabValue).style.backgroundColor = "#111";
-
 });
-
-};
+document.getElementById(activeTabValue).style.backgroundColor = "#111";
+}
 /********************************************************************************* END OF UPDATESTATE FUNCTION ***********************************************************************************/
 
 
