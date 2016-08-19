@@ -23,13 +23,8 @@ function initialFormat() { //this function is used on load, and when resetting t
 console.log(window.location);
 
 initialFormat();
-
-
-
 var prevHeight = 0; //this variable defines the starting size of the menu on mobile, it needs to be outside the menuToggle function because otherwise it cannot be changed when clicking a menu item, so when you click a menu item
 //and then slide down the menu will start growing from where it was, not from zero.
-
-
 
 var currentOrientation = window.orientation; // 0 = portrait, -90 || 90 = landscape, undefined = device doesn't support rotation - used on event listeners that style things according to orientation.
 
@@ -464,20 +459,18 @@ window.setTimeout(function(){
     
     
  if(stateToRequest == "homeState") {
-//history.pushState(stateObject, trimmedStatus, '');
 homeTabHandler();
 return;
 }
 
 if(stateToRequest == "contactState") {
-//history.pushState(stateObject, trimmedStatus, '');
+
 contactFormHandler();
 return;
 }
 
 if(stateToRequest == "blogState") {
-//history.pushState(stateObject, trimmedStatus, '');
-//blog not implemented yet, but blogHandler() should go here
+
 return;
 }
 
@@ -519,7 +512,6 @@ return;
 
 if(!document.getElementsByClassName("content-Tabs")[0].classList.contains("active-Tab")) {
 document.getElementsByClassName("content-Tabs")[0].classList.add("active-Tab");
-document.getElementsByClassName("active-Tab")[0].style.animation = "imgFadeIn 0.45s forwards";
 }
 
 });
@@ -532,7 +524,8 @@ document.getElementById(activeTabValue).style.backgroundColor = "#111";
 // COMPANY NAME CLICK HANDLER - Exactly the same as clicking "Home" in the Nav menu - need to DRY it up.
 $('.companyName').click(function() {
 event.preventDefault();
-homeState();       
+homeState();  
+//need to add menu for mobile here (or redirect to home in all the other cases)
 
 });
 
