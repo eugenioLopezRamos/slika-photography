@@ -447,51 +447,52 @@ window.setTimeout(function(){
     
 if(stateToRequest == "homeState") {
 homeTabHandler();
-return;
+//return;
 }
 
 if(stateToRequest == "contactState") {
 
 contactFormHandler();
-return;
+//return;
 }
 
 if(stateToRequest == "blogState") {
-
-return;
+//To be implemented
+//return;
 }
 
 else{
     
-var parentNode = document.getElementsByClassName("content-Tabs")[0];
-var keepLoopAlive = true;
-//history.pushState(stateObject, trimmedStatus, '/'+ trimmedStatus);
-while(keepLoopAlive) {
-    
-[].slice.call(parentNode.children).map(function(element, index, array) { //could also use '.children instead of childNodes and then it wouldn't require the 'nodeType == 3 conditional'
+var contentParentNode = document.getElementsByClassName("content-Tabs")[0];
 
+var checkForSliders = function(whereToCheck) {
+
+[].slice.call(whereToCheck.children).map(function(element, index, array) {
+    
 if(element.classList.contains(status.state.replace('State', 'Slider'))) {
 slidesHandler();
-keepLoopAlive = false;
 return;
-} else {
+}    
+
+else if(index+1>array.length) {// && contentParentNode.children.length>0) {
+var iterator = 0;
+for (iterator=0; iterator<contentParentNode.children.length; iterator++) {
+contentParentNode = whereToCheck.children[iterator];
+checkForSliders(contentParentNode);    
+}
+return;
+}
+
+else {
+console.log("No sliders found");
+return;
+}  
     
-if(index+1>array.length) {
-keepLoopAlive = false;
-console.log("no Sliders found!");
-return;
-}
-
-}
-//FIX THIS LINE BELOW!
-if(element.hasChildNodes() == false) {
-keepLoopAlive = false;    
-return;
-}
-
 });
+};
 
-}
+checkForSliders(contentParentNode); //checks all nodes of content-Tabs for the existence of one whose class contains "<tabName>Slider" (such as peopleSlider, modelSlider, etc);
+
 }//else close   
     
 }, 200);
