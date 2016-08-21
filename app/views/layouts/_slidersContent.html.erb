@@ -16,6 +16,8 @@ slides_number = Dir[File.join(full_dir, '**', '*')].count { |file| File.file?(fi
   <%# end -%>
   
 <%# else %>
+
+
 <%= content_tag :div, class: "#{@tab_value}" do -%>
   <%= image_tag("/assets/#{@image_dir}/#{slide}.jpg") -%>
   <% end -%>
