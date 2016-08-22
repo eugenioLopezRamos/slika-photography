@@ -885,11 +885,15 @@ nextButton.map(function(element, array, index) {element.removeEventListener("cli
 //Probably Fancy Programming Syndrome, but at least I learned a bit...
 var contactFormHandler = function() { 
  //defines a new object type - inputField, used for the data relating to the inputfields and text area for the contact form     
+if(typeof FB == "undefined") {
+console.log("FB is undefined");    
+}
+else {
 (function() {
 window.fbAsyncInit(); //reloads the fb script, needed or it doesn't work when you: visit Contact -> visit another tab -> visit Contact again
 }
 )();
-
+}
 
 function inputField(target, textValue, eventName, eventClass, eventId, defaultValue) {
 this.target = target,

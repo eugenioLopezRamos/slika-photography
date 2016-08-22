@@ -5,10 +5,17 @@ class SiteMailer < ApplicationMailer
   #
   #   en.site_mailer.client_contact.subject
   #
-  def client_contact
-    @greeting = "Hi"
 
-    mail to: "to@example.org"
+
+  def new_contact_email(name, email, subject, message)
+    @greeting = "Hi!"
+    @name = name
+    @email = email   
+    @subject = subject
+    @cl_message = message
+   # debugger
+    mail to: "eugenionlopez@gmail.com", subject: "You have been contacted"
+    #render 'views/layouts/tabs/contactForm'
   end
 
   # Subject can be set in your I18n file at config/locales/en.yml

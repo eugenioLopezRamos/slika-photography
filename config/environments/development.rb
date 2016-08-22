@@ -13,8 +13,31 @@ Rails.application.configure do
   config.consider_all_requests_local       = true
   config.action_controller.perform_caching = false
 
+
+  #actually send mails out
+ # config.action_mailer.perform_deliveries = true
+  
+  config.action_mailer.perform_deliveries = true
   # Don't care if the mailer can't send.
-  config.action_mailer.raise_delivery_errors = false
+  config.action_mailer.raise_delivery_errors = true
+  #config.action_mailer.delivery_method = :test
+  #host = 'rails-implementation-e0plus.c9users.io'
+  #config.action_mailer.default_url_options = { host: host, protocol: 'https' }
+
+
+
+
+config.action_mailer.delivery_method = :smtp
+config.action_mailer.smtp_settings = {
+    :address        => 'smtp.gmail.com',
+    :domain         => 'rails-implementation-e0plus.c9users.io',
+    :port           => 587,
+    :user_name      => 'eugenionlopez@gmail.com',
+    :password       => 'nikolaz7',
+    :authentication => "login"
+}
+
+
 
   # Print deprecation notices to the Rails logger.
   config.active_support.deprecation = :log
