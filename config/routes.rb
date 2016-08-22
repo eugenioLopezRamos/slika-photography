@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  get 'users/new'
+
   get 'static/home'
 
   get 'static/admin'
@@ -66,11 +68,12 @@ Rails.application.routes.draw do
   get '/urban', to: 'static#show', :tab => 'urbanTab'
   get '/events', to: 'static#show', :tab => 'eventsTab'
   get '/contact', to: 'static#show', :tab => 'contactTab'
+  post '/contact', to: 'contact_mailer#create'
   get '/blog', to: 'static#show', :tab => 'blogTab'
   
   
   get '/admin',  to: 'static#admin'
   #resources :people, :models, :urban, :events, only: [:show]
-  
+
   
 end

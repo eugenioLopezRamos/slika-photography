@@ -1,6 +1,4 @@
-<h1>Static#admin</h1>
-<p id="jumbotron">This will eventually be an admin panel, just you wait</p>
-<%= form_for(:contact_mailer) do |f| %>
+<%= form_for :contact_mailer do |f| %>
 
 <%=f.text_field :client_name, name: 'clientName' %>
 <%=f.email_field :client_email, name: 'clientEmail' %>
@@ -8,4 +6,5 @@
 <%=f.text_area :client_message, name: 'clientMessage' %>
 
 <%= f.submit yield(:button_text), name: 'submit' %>
+
 <% end %>

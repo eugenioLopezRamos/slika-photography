@@ -2,8 +2,8 @@
 class SiteMailerPreview < ActionMailer::Preview
 
   # Preview this email at http://localhost:3000/rails/mailers/site_mailer/client_contact
-  def client_contact
-    SiteMailer.client_contact
+  def new_contact_email
+    SiteMailer.new_contact_email
   end
 
   # Preview this email at http://localhost:3000/rails/mailers/site_mailer/account_activation

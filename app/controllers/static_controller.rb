@@ -13,15 +13,9 @@ class StaticController < ApplicationController
   def show_404
 
   end
-  
-  
-
-
-
 
   def admin
-    
-
+  
   end
   
 end

@@ -1,4 +1,4 @@
-
+<% provide(:button_text, 'Submit') %>
 <%= render '/layouts/tabs/contactFBScript' %>
 
 <div class="content-Tabs" id="contactContent">
@@ -19,7 +19,7 @@
    <div class="contactButton" id="contactButton"><span class="contactButtonText">Contact Me</span></div>
    
    
-<form class="contactForm" id="emailForm">    
+<div class="contactForm" id="emailForm">    
 
  <div class="contactFormText top">Send me an email</div>
  
@@ -35,17 +35,9 @@
 <input type="submit" name="submit" value="Submit">
 
 -->
-<!--asgasgsa-->s
+<%= render 'layouts/tabs/contactForm' %>
 
-<%= form_for(:client_contact) do |f| %>
 
-<%=f.text_field :client_name, name: 'clientName' %>
-<%=f.email_field :client_email, name: 'clientEmail' %>
-<%=f.text_field :client_subject, name: 'clientSubject' %>
-<%=f.text_area :client_message, name: 'clientMessage' %>
-
-<%= f.submit yield(:button_text), name: 'submit' %>
-    <% end %>
 
 <!------------------------------------------------------------------------>  
   
@@ -69,7 +61,7 @@
     </div>
     
 
-     </form>   
+     </div>   
   <!-- I don't really like that the fb message box and the twitter msg box are different, but twitter doesn't allow embedding the web intents target page, maybe I can iframe it if I remove the script?   -->
        
   </div> 
