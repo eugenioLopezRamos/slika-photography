@@ -70,7 +70,7 @@ Rails.application.routes.draw do
   
   
   get '/admin',  to: 'static#admin'
-  resources :people, :models, :urban, :events, only: [:show]
+  #resources :people, :models, :urban, :events, only: [:show]
   
   
 end
