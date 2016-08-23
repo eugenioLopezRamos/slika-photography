@@ -15,7 +15,7 @@ class SiteMailer < ApplicationMailer
     @cl_message = message
    # debugger
     mail to: "eugenionlopez@gmail.com", subject: "You have been contacted"
-    #render 'views/layouts/tabs/contactForm'
+
   end
 
   # Subject can be set in your I18n file at config/locales/en.yml
