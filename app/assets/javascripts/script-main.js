@@ -919,22 +919,23 @@ $('input[name="clientSubject"]').val());
 var inputMessage = new inputField($('textarea[name="clientMessage"]'), $('textarea[name="clientMessage"]').val(), $('textarea[name="clientMessage"]').attr("name"), $('textarea[name="clientMessage"]').class, $('textarea[name="clientMessage"]').id,//
 $('textarea[name="clientMessage"]').val());
 
+
 //defines an array containing all the inputfields
 var inputData = [inputName, inputEmail, inputSubject, inputMessage];
 //sets the default values for the inputfields
 var inputDefaultValues = ["Your Name", "Your Email", "Your Subject", "Your Message"];
-
-(function() {
+function initInputs() {
 var i; 
 //puts the default values in the inputboxes
 for (i=0; i<inputData.length; i++) {
     inputData[i].defaultValue = inputDefaultValues[i];
     inputData[i].textValue = inputDefaultValues[i];
-    $(inputData[i].target).val(inputDefaultValues[i]).css("color", "#A3A3A3");
+    $(inputData[i].target).val(inputDefaultValues[i]).blur().css("color", "#A3A3A3");
 }    
-})();
 
+}
 
+initInputs();
 
 //event listener for changes in input boxes eg. detect when the user types in the inputbox http://stackoverflow.com/questions/6458840/on-input-change-event
 
@@ -1042,6 +1043,20 @@ fbMessageBox.style.animation = "none";
 }, 451);
 
 
+});
+
+//here I need some client side validations
+
+
+
+
+//Responses to form submission
+$('#contactUsForm').on("ajax:success", function(e, data, status, xhr) {
+    alert("We have been emailed");
+    initInputs();
+});
+$('#contactUsForm').on("ajax:failure", function(e, data, status, xhr) {
+   alert("Unfortunately, an error has occurred:", status, xhr); 
 });
 
 
