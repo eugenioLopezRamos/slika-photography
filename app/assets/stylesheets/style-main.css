@@ -872,7 +872,7 @@ border: 3px double white;
 text-align: center;
 color: white;
 padding: 0.5em 0 0.5em 0;
-overflow: hidden;
+/*overflow: hidden;*/
 
 }
 
@@ -979,15 +979,15 @@ opacity: 0.5;
 }
 
 .socialMessageBox {
-width: 425px;
+width: 275px;
 height: 325px;
 background-color: #333;
 box-sizing: border-box;
 border:1px double white;
 text-align: center;
 vertical-align: middle;
-top:50px;
-left:50px;
+top:12px;
+left:calc(50% - 138px);
 
   
 }
@@ -1002,7 +1002,7 @@ font-family: Helvetica, Calibri, Arial, sans-serif;
 font-style: bold;
 position: absolute;
 z-index: 2;
-left: 400px;
+left: 250px;
 text-align: center;
 box-sizing: border-box;
 border-left: 1px solid white;
@@ -1021,7 +1021,8 @@ height: 2.5em; /*40px*/
 
 top: 50%;
 transform: translateY(-50%); /*top + transform combined seem to be the same as transform: translateY(16%) - in this particular case at least*/
-overflow:hidden;
+
+
 }
 
 
@@ -1565,6 +1566,17 @@ color: white;
 border: 0.0625em solid white; /*1px*/
 font-style: italic;
 position: absolute;
+
+}
+
+.socialMessageBox {
+left:12px;
+height: 325px;  
+}
+
+
+.fb-page.fb_iframe_widget {
+top: 12px;
 
 }
 

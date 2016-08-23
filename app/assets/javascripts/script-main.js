@@ -453,7 +453,7 @@ homeTabHandler();
 if(stateToRequest == "contactState") {
 
 contactFormHandler();
-//return;
+
 }
 
 if(stateToRequest == "blogState") {
@@ -888,11 +888,19 @@ var contactFormHandler = function() {
 if(typeof FB == "undefined") {
 console.log("FB is undefined");    
 }
+
 else {
-(function() {
-window.fbAsyncInit(); //reloads the fb script, needed or it doesn't work when you: visit Contact -> visit another tab -> visit Contact again
+
+document.documentElement.clientWidth < 480 ? delay = 1800 : delay = 0;    
+(function(delay) {
+window.setTimeout(function() {
+    
+  window.fbAsyncInit(); //reloads the fb script, needed or it doesn't work when you: visit Contact -> visit another tab -> visit Contact again  
+    
+}, delay);
+
 }
-)();
+)(delay);
 }
 
 function inputField(target, textValue, eventName, eventClass, eventId, defaultValue) {
@@ -924,14 +932,15 @@ $('textarea[name="clientMessage"]').val());
 var inputData = [inputName, inputEmail, inputSubject, inputMessage];
 //sets the default values for the inputfields
 var inputDefaultValues = ["Your Name", "Your Email", "Your Subject", "Your Message"];
+
 function initInputs() {
 var i; 
 //puts the default values in the inputboxes
 for (i=0; i<inputData.length; i++) {
     inputData[i].defaultValue = inputDefaultValues[i];
     inputData[i].textValue = inputDefaultValues[i];
-    $(inputData[i].target).val(inputDefaultValues[i]).blur().css("color", "#A3A3A3");
-}    
+    $(inputData[i].target).val(inputDefaultValues[i]).css("color", "#A3A3A3");
+}
 
 }
 
@@ -1008,6 +1017,23 @@ modifyInputValues(clickedObject);
 modifyInputValues(notClickedObjects, false);
 });
 
+//here I need some client side validations
+
+//something like if XXXX field is empty => evt.preventdefault() alert => "cant be mepty field yada yada yada"
+
+
+//Responses to form submission
+
+$('#contactUsForm').on("ajax:success", function(e, data, status, xhr) {
+    alert("We have been emailed");
+    initInputs();
+});
+$('#contactUsForm').on("ajax:failure", function(e, data, status, xhr) {
+   alert("Unfortunately, an error has occurred:", status, xhr); 
+});
+
+
+
 //This handles the display of the social plugins and their behavior:
 var fbMessageBox = document.getElementById("fbMessageBox");
 var fbMessageButton = document.getElementById("fbMessageButton");
@@ -1045,19 +1071,7 @@ fbMessageBox.style.animation = "none";
 
 });
 
-//here I need some client side validations
 
-
-
-
-//Responses to form submission
-$('#contactUsForm').on("ajax:success", function(e, data, status, xhr) {
-    alert("We have been emailed");
-    initInputs();
-});
-$('#contactUsForm').on("ajax:failure", function(e, data, status, xhr) {
-   alert("Unfortunately, an error has occurred:", status, xhr); 
-});
 
 
 //this handles the drag-ability of the message box. As I understand it, this should be way easier with the jQuery UI .draggable() method but understanding this might be useful in case I want to program an HTML5 canvas game or 

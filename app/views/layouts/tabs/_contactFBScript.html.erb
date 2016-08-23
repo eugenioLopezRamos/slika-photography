@@ -1,4 +1,8 @@
-<script>   
+<script> 
+var delay;
+document.documentElement.clientWidth < 480 ? delay = 1800 : delay = 200;  
+window.setTimeout(function(delay) {
+  
 window.fbAsyncInit = function() {
     FB.init({
       appId      : '1015943141834553',
@@ -13,9 +17,9 @@ window.fbAsyncInit = function() {
      js = d.createElement(s); js.id = id;
      js.src = "//connect.facebook.net/en_US/sdk.js";
      fjs.parentNode.insertBefore(js, fjs);
-   }(document, 'script', 'facebook-jssdk'));    
-
-
-
+   }(document, 'script', 'facebook-jssdk'));      
+    
+    
+}, delay)
 
 </script>
