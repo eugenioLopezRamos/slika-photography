@@ -68,7 +68,7 @@ Rails.application.routes.draw do
   get '/urban', to: 'static#show', :tab => 'urbanTab'
   get '/events', to: 'static#show', :tab => 'eventsTab'
   get '/contact', to: 'static#show', :tab => 'contactTab'
-  post '/contact', to: 'contact_mailer#create'
+  post '/contact', to: 'contact_mailer#create', :tab => 'contactTab'
   get '/blog', to: 'static#show', :tab => 'blogTab'
   
   
