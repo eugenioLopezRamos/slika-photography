@@ -17,7 +17,7 @@ Rails.application.configure do
   #actually send mails out
  # config.action_mailer.perform_deliveries = true
   
-  config.action_mailer.perform_deliveries = true
+  config.action_mailer.perform_deliveries = false
   # Don't care if the mailer can't send.
   config.action_mailer.raise_delivery_errors = true
   #config.action_mailer.delivery_method = :test
@@ -26,18 +26,20 @@ Rails.application.configure do
 
 
 
-
-config.action_mailer.delivery_method = :smtp
-config.action_mailer.smtp_settings = {
-    :address        => 'smtp.gmail.com',
-    :domain         => 'rails-implementation-e0plus.c9users.io',
-    :port           => 587,
-    :user_name      => 'eugenionlopez@gmail.com',
-    :password       => 'nikolaz7',
-    :authentication => "login"
-}
+### ACTIVATE MAIL HERE
 
 
+#config.action_mailer.delivery_method = :smtp
+#config.action_mailer.smtp_settings = {
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***
+#}
+
+#### /ACTIVATE MAIL HERE
 
   # Print deprecation notices to the Rails logger.
   config.active_support.deprecation = :log
