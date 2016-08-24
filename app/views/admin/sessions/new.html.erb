@@ -1,2 +1,16 @@
-<h1>Sessions#new</h1>
-<p>Find me in app/views/sessions/new.html.erb</p>
+<h2>Log In</h2>
+<p>Please enter your credentials</p>
+
+<div class="Container">
+    
+    <div class="login-form">
+        <%= form_for(:session, url: admin_login_path) do |f| %>
+            <%= f.label :email %>
+            <%= f.email_field :email, class: 'input-field' %>
+            <%= f.label :password %>
+            <%= f.password_field :password, class: 'input-field' %>
+            <%= f.submit "Log In", class: 'submit-button' %>
+        <% end %>
+    </div>
+
+</div>

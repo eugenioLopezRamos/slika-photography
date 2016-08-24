@@ -1,12 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title><%= full_title(yield(:title)) %></title>
-  <%= stylesheet_link_tag    'application', media: 'all'%>
-  <%= javascript_include_tag 'application'%> 
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-  <link href='https://fonts.googleapis.com/css?family=Stalemate&subset=latin,latin-ext' rel='stylesheet' type='text/css'>	
-  <%= csrf_meta_tags %>
+<title><%= full_title(yield(:title)) %></title>
+<%= csrf_meta_tags %>
 </head>
 <body>
 
@@ -16,22 +12,7 @@
 
 <%= yield %>
 
-<script>window.twttr = (function(d, s, id) {
-  var js, fjs = d.getElementsByTagName(s)[0],
-    t = window.twttr || {};
-  if (d.getElementById(id)) return t;
-  js = d.createElement(s);
-  js.id = id;
-  js.src = "https://platform.twitter.com/widgets.js";
-  fjs.parentNode.insertBefore(js, fjs);
- 
-  t._e = [];
-  t.ready = function(f) {
-    t._e.push(f);
-  };
- 
-  return t;
-}(document, "script", "twitter-wjs"));</script>
+
 
 
 </body>
