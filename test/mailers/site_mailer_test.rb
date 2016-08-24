@@ -1,10 +1,10 @@
 require 'test_helper'
 
 class SiteMailerTest < ActionMailer::TestCase
-  test "client_contact" do
-    mail = SiteMailer.client_contact
-    assert_equal "Client contact", mail.subject
-    assert_equal ["to@example.org"], mail.to
+  test "new_contact_email" do
+    mail = SiteMailer.new_contact_email("Pedro", "from@example.com","Client contact", "Hi")
+    assert_equal "You have been contacted", mail.subject
+    assert_equal ["eugenionlopez@gmail.com"], mail.to
     assert_equal ["from@example.com"], mail.from
     assert_match "Hi", mail.body.encoded
   end
