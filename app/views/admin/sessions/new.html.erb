@@ -1,8 +1,13 @@
+    <% if flash[:danger] %>
+    <div class="notice" style="background-color:red;color:white"><%= flash[:danger] %></div>
+    <% end %>
+
+
 <h2>Log In</h2>
 <p>Please enter your credentials</p>
 
 <div class="Container">
-    
+
     <div class="login-form">
         <%= form_for(:session, url: admin_login_path) do |f| %>
             <%= f.label :email %>
