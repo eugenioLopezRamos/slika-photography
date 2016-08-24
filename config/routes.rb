@@ -1,9 +1,4 @@
-Rails.application.routes.draw do
-  get 'users/new'
 
-  get 'static/home'
-
-  get 'static/admin'
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
@@ -60,6 +55,12 @@ Rails.application.routes.draw do
   #     resources :products
   #   end
 
+Rails.application.routes.draw do
+ # get 'sessions/new'
+
+ # get 'users/new'
+
+  get 'static/home'
   root 'static#home', :tab => 'homeTab'
   
   get '/home', to: 'static#show', :tab => 'homeTab'
@@ -72,8 +73,15 @@ Rails.application.routes.draw do
   get '/blog', to: 'static#show', :tab => 'blogTab'
   
   
-  get '/admin',  to: 'static#admin'
-  #resources :people, :models, :urban, :events, only: [:show]
-
+ # get '/admin',  to: 'static#admin'
+  get '/admin/login', to: 'admin/sessions#new'
+  post '/admin/login', to: 'admin/sessions#create'
+  get '/admin/logout', to: 'admin/sessions#destroy'
   
+namespace :admin do
+  resources :users
+  
+
+end
+
 end

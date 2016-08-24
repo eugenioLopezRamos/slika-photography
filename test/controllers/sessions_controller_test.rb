@@ -1,8 +1,8 @@
 require 'test_helper'
 
-class UsersControllerTest < ActionDispatch::IntegrationTest
+class SessionsControllerTest < ActionDispatch::IntegrationTest
   test "should get new" do
-    get new_admin_user_path
+    get admin_login_path
     assert_response :success
   end
 
