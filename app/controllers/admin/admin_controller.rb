@@ -1,6 +1,4 @@
-class AdminController < ApplicationController
-    
-    
-    
-    
+class Admin::AdminController < ApplicationController
+
+
 end
