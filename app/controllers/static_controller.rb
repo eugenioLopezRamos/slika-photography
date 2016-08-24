@@ -14,8 +14,4 @@ class StaticController < ApplicationController
 
   end
 
-  def admin
-  #loggedin ? enter : redirect_to '/login'
-  end
-  
 end

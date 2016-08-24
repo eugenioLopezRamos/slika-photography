@@ -6,9 +6,4 @@ class StaticControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
-  test "should get admin" do
-    get static_admin_url
-    assert_response :success
-  end
-
 end
