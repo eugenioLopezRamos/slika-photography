@@ -81,7 +81,7 @@ namespace :admin do
  
  resources :users
 
- post 'users/new', to: 'users#create'
+ #post 'users/new', to: 'users#create'
  get '/login', to: 'sessions#new'
  post '/login', to: 'sessions#create'
  get '/logout', to: 'sessions#destroy'
