@@ -4,6 +4,11 @@ class UsersLoginTest < ActionDispatch::IntegrationTest
   # test "the truth" do
   #   assert true
   # end
+  
+  def setup
+#    @user = users(:michael)
+  end
+  
   test "invalid login" do
     
   get admin_login_path
@@ -16,5 +21,14 @@ class UsersLoginTest < ActionDispatch::IntegrationTest
   
   end
   
+ # test "valid login works" do
+
+  #  get admin_login_path
+   # assert_template 'admin/sessions/new'
+   # post admin_login_path, params: {session: {email: @user.email, password: @user.password_digest}}
+
+  # assert_template 'admin/user/[:id]'
+   # follow_redirect!
+# end
   
 end
