@@ -4,7 +4,12 @@ class Admin::UsersController < ApplicationController
   end
   
   def show
+    if logged_in?
     @user = User.find(params[:id])
+    else
+      redirect_to admin_login_path
+      flash.now[:danger] = "Please login to access this section"
+    end
   end
   
   

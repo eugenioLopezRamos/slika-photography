@@ -36,6 +36,21 @@ class UsersLoginTest < ActionDispatch::IntegrationTest
     assert_redirected_to '/home'
     follow_redirect!
     assert_select 'div#sitewrapper'
+    
+    #simulate logout on another window
+    delete admin_logout_path
+    follow_redirect!
+    assert_select 'div#sitewrapper'
+  end
+  
+  test "login w/ remember" do
+    log_in_as(@user, remember_me: '1')
+    assert_equal cookies['remember_token'], assigns(:user).remember_token
+  end
+  
+  test "login w/o remember" do
+    log_in_as(@user, remember_me: '0')
+    assert_nil cookies['remember_token']
   end
   
 end

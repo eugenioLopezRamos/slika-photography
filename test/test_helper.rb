@@ -9,13 +9,22 @@ class ActiveSupport::TestCase
   fixtures :all
   
   def is_logged_in?
-    !session[:user_id].nil?
+    !session[:admin_user_id].nil?
   end
-  
+  #log in as a particular user
+  def log_in_as(user)
+    session[:user_id] = user.id
+  end
+end
   # Add more helper methods to be used by all tests here...
   include ApplicationHelper
   
-  
-  
+class ActionDispatch::IntegrationTest
+  #log in as a particular user
+  def log_in_as(user, password: 'password', remember_me: '1')
+    post admin_login_path, params: { session: { email: user.email,
+                                               password: password,
+                                               remember_me: remember_me } }
+  end
   
 end
