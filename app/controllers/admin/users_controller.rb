@@ -1,6 +1,11 @@
 class Admin::UsersController < ApplicationController
   def new
+    if logged_in? && admin_user
     @user = User.new
+    else
+    flash[:danger] = "You are not allowed to create new users"
+    redirect_to admin_user_path(current_user)
+    end
   end
   
   def show
@@ -31,6 +36,11 @@ class Admin::UsersController < ApplicationController
   
     def user_params
       params.require(:admin_user).permit(:name, :email, :password, :password_confirmation)
+    end
+    
+    # Confirms an admin user.
+    def admin_user
+     current_user.admin?
     end
     
 end

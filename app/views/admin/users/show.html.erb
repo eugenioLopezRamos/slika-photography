@@ -3,4 +3,11 @@
 <%= @user.email %><br>
 <%= "created at: #{@user.created_at}"%><br>
 <%= "updated at #{@user.updated_at}" %><br>
+
+<% if logged_in? && current_user.admin %>
+<%= button_to "Create new user", new_admin_user_path, method: "get" %><br>
+<% end %>
+
+
+
 <%= button_to "Log out", admin_logout_path, method: "delete" %>
