@@ -75,15 +75,16 @@ Rails.application.routes.draw do
 
  # get '/admin',  to: 'static#admin'
   #get '/admin', to: 'admin/sessions#new' #should send to admin panel if logged in, to login form if not
-  get 'admin/login', to: 'admin/sessions#new'
-  post 'admin/login', to: 'admin/sessions#create'
-  get 'admin/logout', to: 'admin/sessions#destroy'
 
-  get 'admin/admin/login', to: 'admin/sessions#new'
-
+  
 namespace :admin do
+ 
  resources :users
+
  post 'users/new', to: 'users#create'
+ get '/login', to: 'sessions#new'
+ post '/login', to: 'sessions#create'
+ get '/logout', to: 'sessions#destroy'
 
 end
 
