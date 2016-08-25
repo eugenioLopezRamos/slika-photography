@@ -83,6 +83,7 @@ Rails.application.routes.draw do
 
 namespace :admin do
  resources :users
+ post 'users/new', to: 'users#create'
 
 end
 
