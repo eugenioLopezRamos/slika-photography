@@ -6,7 +6,7 @@ class UsersLoginTest < ActionDispatch::IntegrationTest
   # end
   
   def setup
-#    @user = users(:michael)
+    @user = users(:michael)
   end
   
   test "invalid login" do
@@ -21,14 +21,21 @@ class UsersLoginTest < ActionDispatch::IntegrationTest
   
   end
   
- # test "valid login works" do
+  test "valid login works, then logout works" do
 
-  #  get admin_login_path
-   # assert_template 'admin/sessions/new'
-   # post admin_login_path, params: {session: {email: @user.email, password: @user.password_digest}}
-
-  # assert_template 'admin/user/[:id]'
-   # follow_redirect!
-# end
+    get admin_login_path
+    assert_template 'admin/sessions/new'
+    post admin_login_path, params: {session: {email: @user.email, password: 'password'}}
+    assert is_logged_in?
+    assert_redirected_to admin_user_url(@user)
+    follow_redirect!
+    assert_template 'users/show'
+    
+    delete admin_logout_path
+    assert_not is_logged_in?
+    assert_redirected_to '/home'
+    follow_redirect!
+    assert_select 'div#sitewrapper'
+  end
   
 end
