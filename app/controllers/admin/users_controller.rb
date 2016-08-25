@@ -12,8 +12,10 @@ class Admin::UsersController < ApplicationController
     
     @user = User.new(user_params)
     if @user.save
-      flash[:success] = "Welcome!"
+      log_in @user
       redirect_to admin_user_url(@user)
+      flash[:success] = "Welcome!"
+
     else
      render 'new'
     end

@@ -15,7 +15,19 @@ class UsersSignupTest < ActionDispatch::IntegrationTest
       end
       follow_redirect!
       assert_template 'users/show'
+      assert is_logged_in?
   end
   
+  test "invalid creation info" do
+    get new_admin_user_path
+    assert_no_difference 'User.count' do
+     post admin_users_path, params:  {admin_user: {name: "Example User",
+                                                   email: "asdx,kj@alll.s",
+                                                   password: "short",
+                                                   password_confirmation: "shwrt"} }
+    
+    end
+    assert_select "div#error_explanation"
+  end
   
 end
