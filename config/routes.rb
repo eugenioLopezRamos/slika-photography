@@ -72,10 +72,6 @@ Rails.application.routes.draw do
   post '/contact', to: 'contact_mailer#create'#, :tab => 'contactTab'
   get '/blog', to: 'static#show', :tab => 'blogTab'
   
-
- # get '/admin',  to: 'static#admin'
-  #get '/admin', to: 'admin/sessions#new' #should send to admin panel if logged in, to login form if not
-
   
 namespace :admin do
  
