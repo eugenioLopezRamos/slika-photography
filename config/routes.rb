@@ -78,7 +78,7 @@ namespace :admin do
  resources :users #creates the REST routes for the users model
  resources :posts #creates the REST routes for the posts. These are under admin/post, and the contents will be displayed in root_path/blog for clients to see
 
-
+ get '/', to: 'admin#login'
  get '/login', to: 'sessions#new'
  post '/login', to: 'sessions#create'
  delete '/logout', to: 'sessions#destroy'
