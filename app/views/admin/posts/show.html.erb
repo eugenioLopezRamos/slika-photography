@@ -1,1 +1,2 @@
-<%= render @post %>
+<%= sanitize @post.title, tags: %w(strong em a div p img) %>
+<%= sanitize @post.content, tags: %w(strong em div p img), attributes: %w(style src) %>
