@@ -76,8 +76,8 @@ Rails.application.routes.draw do
 namespace :admin do
  
  resources :users #creates the REST routes for the users model
- resources :blogs  #creates the REST routes for the blog. These are under admin/blog, and the contents will be displayed in root/blog for clients to see
- #post 'users/new', to: 'users#create'
+ resources :posts #creates the REST routes for the blog. These are under admin/post, and the contents will be displayed in root_path/blog for clients to see
+
 
  get '/login', to: 'sessions#new'
  post '/login', to: 'sessions#create'
