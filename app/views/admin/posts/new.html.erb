@@ -1,8 +1,10 @@
 <script src="//cdn.ckeditor.com/4.5.10/standard/ckeditor.js"></script>
 <h3>Here you can create new posts for the blog</h3>
 
-<%= form_for(:posts, url: admin_posts_url) do |f| %>
-    <%= f.label  "Post editor" %>
+<%= form_for(:post, url: admin_posts_url) do |f| %>
+    <%= f.label  "Post title" %><br>
+    <%= f.text_field :title, class: "post-title" %><br>
+    <%= f.label "Post content" %><br>
     <%= f.text_area :content, :id =>"post-editor", class: "post-editor" %>
             <script> //replaces the default text area with a CKEDITOR text area
                 CKEDITOR.replace( 'post-editor' );
