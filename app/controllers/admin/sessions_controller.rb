@@ -1,6 +1,9 @@
 class Admin::SessionsController < ApplicationController
 
 def new
+    if logged_in?
+        redirect_to admin_user_path(current_user)
+    end
 end
 
 def create
