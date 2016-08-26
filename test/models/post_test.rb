@@ -24,6 +24,17 @@ class PostTest < ActiveSupport::TestCase
     assert_not @post.valid?
   end
   
+  test "order should be most recent first" do
+    assert_equal posts(:most_recent), Post.by_date_desc.first #using explicit scope instead of default scope
+  end
+  
+  test "associated posts should be destroyed when user is deleted" do
+    @user.save
+    @user.posts.create!(content: "loren ipsum")
+    assert_difference 'Post.count', -1 do
+      @user.destroy
+    end
+  end
   
   
 end
