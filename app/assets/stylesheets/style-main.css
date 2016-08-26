@@ -1035,6 +1035,20 @@ transform: translateY(-50%); /*top + transform combined seem to be the same as t
   color: white;
 }
 
+.post-container {
+  height: 95%;
+  width: 60%;
+  margin: 5px;
+  border-right: 2px solid white;
+  overflow: auto;
+}
+
+.post-sidebar {
+  height: 100%;
+  width: 35%;
+  overflow: auto;
+}
+
 
 /*DEFINES THE STYLING OF THE BOTTOM BAR */
 
