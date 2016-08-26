@@ -1,0 +1,7 @@
+<div class="post" id="post-<%= post.id %>">
+    
+    <h3><%= post.title %></h3> 
+    <div class="post-content"><%= post.content %></div>
+    <span class="timestamp">Posted <%= time_ago_in_words(micropost.created_at) %></span>
+    <div class="posts-nav">Prev/Next Buttons go here</div>
+</div>    
