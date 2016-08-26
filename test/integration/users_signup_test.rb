@@ -5,20 +5,38 @@ class UsersSignupTest < ActionDispatch::IntegrationTest
   #   assert true
   # end
   
-  test "valid creation info" do
+  def setup
+    @admin = users(:michael)
+    @notadmin = users(:mary)
+  end
+  
+  test "valid creation info on non logged in user should fail" do
+    get admin_login_path
+    assert_not is_logged_in?
+    assert_select 'input.submit-button'
+    post admin_login_path, params: { session: { email: @admin.email,
+                                                password: 'password' } }
+    assert is_logged_in?
+    delete admin_logout_path
+    
     get new_admin_user_path
-    assert_difference 'User.count', 1 do
+    follow_redirect!
+    assert_template 'admin/sessions/new'
+    assert_no_difference 'User.count' do
       post admin_users_path, params: { admin_user: {name: "Example User",
                                               email: "user@example.com",
                                               password: "password",
                                               password_confirmation: "password"} }
       end
       follow_redirect!
-      assert_template 'users/show'
-      assert is_logged_in?
+      assert_template 'admin/sessions/new'
+      assert_not is_logged_in?
   end
   
   test "invalid creation info" do
+    get admin_login_path
+    post admin_login_path params: { session: { email: @admin.email,
+                                               password: 'password' } }
     get new_admin_user_path
     assert_no_difference 'User.count' do
      post admin_users_path, params:  {admin_user: {name: "Example User",
