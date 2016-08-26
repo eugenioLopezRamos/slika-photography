@@ -1,0 +1,16 @@
+<script src="//cdn.ckeditor.com/4.5.10/standard/ckeditor.js"></script>
+<h3>Here you can create new posts for the blog</h3>
+
+<%= form_for(:posts, url: admin_posts_url) do |f| %>
+    <%= f.label  "Post editor" %>
+    <%= f.text_area :content, :id =>"post-editor", class: "post-editor" %>
+            <script> //replaces the default text area with a CKEDITOR text area
+                CKEDITOR.replace( 'post-editor' );
+            </script>
+    <%= f.button "Upload image" %>
+    <%= f.submit "Submit Post", class: "submit-button" %>
+            
+            <% end %>
+
+<div class="upload-img-button">Upload image</div>
+<div class="submit-post-button">Submit post</div>

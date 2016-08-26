@@ -9,6 +9,16 @@
 <%= "created at: #{@user.created_at}"%><br>
 <%= "updated at #{@user.updated_at}" %><br>
 
+<% if @user.posts.any? %>
+<h3>Your posts</h3>
+<ol class="posts">
+    <% @posts.each do |post| %>
+    <span><%= render post %></span>
+    <% end %>
+</ol>
+<% end %>
+
+
 <% if logged_in? && current_user.admin %>
 <%= button_to "Create new user", new_admin_user_path, method: "get" %><br>
 <% end %>
