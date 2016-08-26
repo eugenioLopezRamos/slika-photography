@@ -48,4 +48,20 @@ class UsersSignupTest < ActionDispatch::IntegrationTest
     assert_select "div#error_explanation"
   end
   
+  test "creation fails when non admin tries to create user" do
+    get admin_login_path
+    post admin_login_path params: { session: { email: @notadmin.email,
+                                               password: 'password' } }
+    get new_admin_user_path
+
+    assert_redirected_to admin_user_path(@notadmin)
+    assert_no_difference 'User.count' do
+      post admin_users_path, params: { admin_user: {name: "Example User",
+                                              email: "user@example.com",
+                                              password: "password",
+                                              password_confirmation: "password"} }
+      end
+                                                   
+  end
+  
 end
