@@ -1,4 +1,9 @@
 <% provide(:title, @user.name) %>
+
+    <% if flash[:danger] %>
+    <div class="notice" style="background-color:red;color:white"><%= flash[:danger] %></div>
+    <% end %>
+    
 <%= @user.name %><br>
 <%= @user.email %><br>
 <%= "created at: #{@user.created_at}"%><br>
