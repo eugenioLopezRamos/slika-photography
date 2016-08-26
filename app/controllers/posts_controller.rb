@@ -1,2 +1,11 @@
-class PostsController < ApplicationController
+class Admin::PostsController < ApplicationController
+    
+    def new
+        render 'new'
+    end
+    
+    def create
+        
+    end
+    
 end
