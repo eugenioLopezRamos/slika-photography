@@ -1033,16 +1033,22 @@ transform: translateY(-50%); /*top + transform combined seem to be the same as t
 #blogContents {
   width: 64.21%;
   color: white;
+  margin:auto;
+  display: flex;
 }
 
 .post-container {
   height: 95%;
   width: 60%;
-  margin: 5px;
+  margin: auto;
+  display:flex;
   border-right: 2px solid white;
   overflow: auto;
 }
-
+.post {
+  width: 100%;
+  margin: 5px;
+}
 .post-sidebar {
   height: 100%;
   width: 35%;
