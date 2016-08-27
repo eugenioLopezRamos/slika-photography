@@ -1042,7 +1042,7 @@ transform: translateY(-50%); /*top + transform combined seem to be the same as t
   width: 60%;
   margin: auto;
   display:flex;
-  border-right: 2px solid white;
+  border-right: 1px solid white;
   overflow: auto;
 }
 .post {

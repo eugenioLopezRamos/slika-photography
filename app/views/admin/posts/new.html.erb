@@ -1,18 +1,40 @@
-<script src="//cdn.ckeditor.com/4.5.10/standard/ckeditor.js"></script>
-<h3>Here you can create new posts for the blog</h3>
 
+<script src="//cdn.ckeditor.com/4.5.10/full/ckeditor.js"></script>
+<style>
+
+    .editor-heading {
+        width: 70%;
+        margin: auto;
+        display: flex;
+        justify-content: center;
+    }
+    .editor-container {
+        width: 70%;
+        margin: auto;
+        display: flex;
+        justify-content: center;
+    }
+    
+</style>
+
+
+<h3 class="editor-heading">Here you can create new posts for the blog</h3>
+<div class="editor-container">
 <%= form_for(:post, url: admin_posts_url) do |f| %>
     <%= f.label  "Post title" %><br>
-    <%= f.text_field :title, class: "post-title" %><br>
+    <%= f.text_field :title, :id => 'post-title', class: "post-title" %><br>
+        <script>
+                    CKEDITOR.replace('post-title', {height: '40', width: '100%', toolbar: [
+    [ 'Source', '-', 'Bold', 'Italic', 'Underline', 'Font', 'FontSize', 'Styles', 'Format', ]
+], language: 'en'});            //editor.resize( '50px', '50px', true );
+        </script>
     <%= f.label "Post content" %><br>
-    <%= f.text_area :content, :id =>"post-editor", class: "post-editor" %>
+    <%= f.text_area :content, :id =>"post-content", class: "post-editor" %>
             <script> //replaces the default text area with a CKEDITOR text area
-                CKEDITOR.replace( 'post-editor' );
+                CKEDITOR.replace( 'post-content', {language: 'en'} );
             </script>
     <%= f.button "Upload image" %>
     <%= f.submit "Submit Post", class: "submit-button" %>
             
-            <% end %>
-
-<div class="upload-img-button">Upload image</div>
-<div class="submit-post-button">Submit post</div>
+<% end %>
+</div>
