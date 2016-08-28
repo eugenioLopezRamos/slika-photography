@@ -1045,15 +1045,41 @@ transform: translateY(-50%); /*top + transform combined seem to be the same as t
   border-right: 1px solid white;
   overflow: auto;
 }
+
 .post {
   width: 100%;
   margin: 5px;
 }
+.post-title {
+  margin: 5px;
+}
+.timestamp {
+  font-family: Helvetica, Calibri, Sans-serif;
+  font-size: 14px;
+  font-style: italic;
+  margin: 5px;
+
+}
+
+.post-content {
+  display: block;
+  margin-top: 5px;
+  overflow-x: none;
+  overflow-y: auto;
+}
+
+.post-content p {
+  width: auto;
+  display:block;
+}
+
 .post-sidebar {
   height: 100%;
   width: 35%;
-  overflow: auto;
+  overflow-x: none;
+  overflow-y: auto;
 }
+
 
 
 /*DEFINES THE STYLING OF THE BOTTOM BAR */
