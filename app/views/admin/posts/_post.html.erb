@@ -3,9 +3,9 @@
     end %>
 <div class="post" id="post-<%= @post.id %>">
     
-    <div class="post-title"><%= sanitize @post.title, tags: %w(strong em a div p img) %></div>
+    <div class="post-title"><%= sanitize @post.title, tags: %w(strong em a div p img span style), attributes: %w(style font-style text-decoration color src font-family font-weight height width) %></div>
     <span class="timestamp">Posted <%= time_ago_in_words(@post.created_at) %> ago</span>
-    <div class="post-content"><%= sanitize @post.content, tags: %w(strong em div p img span), attributes: %w(style src Font-family font-weight) %></div>
+    <div class="post-content"><%= sanitize @post.content, tags: %w(strong em a div p img span style), attributes: %w(style src font-style text-decoration color font-family font-weight height width float) %></div>
 
     
 </div>    

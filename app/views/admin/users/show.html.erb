@@ -13,7 +13,8 @@
 <h3>Your posts</h3>
 
     <% @posts.each do |post| %>
-       <ol class="posts"><%= link_to post.title,  admin_post_path(post) %></ol>
+        <% clean_post_title = sanitize post.title, tags: %w(strong em a div p img) %>
+        <ol class="posts"><%= link_to clean_post_title,  admin_post_path(post) %></ol>
     <% end %>
 
 <% end %>

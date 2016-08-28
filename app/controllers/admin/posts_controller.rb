@@ -11,6 +11,7 @@ class Admin::PostsController < ApplicationController
             flash[:success] = "Post successfully created"
             redirect_to admin_user_url(current_user)
         else
+            flash[:danger] = "Post could not be saved"
             render 'new'
         end
     end
