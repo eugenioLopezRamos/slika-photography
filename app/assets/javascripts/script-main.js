@@ -457,7 +457,7 @@ contactFormHandler();
 }
 
 if(stateToRequest == "blogState") {
-//To be implemented
+blogTabHandler();
 //return;
 }
 
@@ -1300,7 +1300,21 @@ assignFocusListeners(allTextAreas);
 };//end of contactFormHandler
 
 
+var blogTabHandler = function() {
+    var postContainer = document.getElementsByClassName("post-container")[0]; //the div with the actual post
+    var postSidebar = document.getElementsByClassName('post-sidebar')[0] //the sidebar menu that has links to posts
+    
+    postContainer.addEventListener("touchmove", function(event) {
+        if(postContainer.scrollTop > 5) {
+        event.stopPropagation();
+    }
+     
+        
+        
+    });
 
+    
+}; //end of blogTabHandler
 
 
 
