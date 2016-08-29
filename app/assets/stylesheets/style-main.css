@@ -1629,11 +1629,38 @@ top: 12px;
 
 
 /*END OF CONTACT TAB FORMATTING */
+
+
+
+/* BEGINNING OF BLOG TAB FORMATTING*/
+
+#blogContents {
+width: 200%;
+margin: 5px;
+}
+
+.post-container {
+    width: 45%;
+}
+
+.post-sidebar {
+    width:25%;
+    overflow: hidden;
+    left: 40%;
+}
+
+
+
+
+/* END OF BLOG TAB FORMATTING*/
+
+/*BOTTOM BAR WITH LINKS TO SOCIAL MEDIA */  
 .bottomBackground {
 height: auto;  
 }
+
 .bottomBar {
-/*BOTTOM BAR WITH LINKS TO SOCIAL MEDIA */  
+
 width: 100vw;
 min-width:100vw;
 max-width: 100vw;
