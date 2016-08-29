@@ -1352,7 +1352,6 @@ var blogTabHandler = function() {
                 
                 touchEnd: function() {
                     prevMargin = postContainer.style.marginLeft.replace('px', '');
-                    console.log("prevmarg", prevMargin);
                     document.getElementById("blogContents").removeEventListener("touchmove", blogMoveStart);
                 }
             };
