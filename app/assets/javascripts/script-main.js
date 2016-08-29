@@ -1305,15 +1305,13 @@ assignFocusListeners(allTextAreas);
 
 var blogTabHandler = function() {
     
-    
+
     var postContainer = document.getElementsByClassName("post-container")[0]; //the div with the actual post
     var postSidebar = document.getElementsByClassName('post-sidebar')[0]; //the sidebar menu that has links to posts
-    
-  //  postContainer.addEventListener("touchmove", function(event) {
-    //    if(postContainer.scrollTop > 5) {
-      //  event.stopPropagation();
-  //  }
-    //});
+
+    postContainer.addEventListener("touchmove", function(event) {
+
+    });
 
   //  if(document.documentElement.clientWidth<481) {
 
@@ -1331,7 +1329,8 @@ var blogTabHandler = function() {
         var blogTouchHandler = (function() {
             return {
                 touchStart: function(event) {
-                    console.log("hey!");
+                    
+                    postContainer.scrollTop > 5 ? event.stopImmediatePropagation() : "";
                     touchStartPosX = event.changedTouches[0].clientX;
                     document.getElementById("blogContents").addEventListener("touchmove", blogMoveStart);
                 },
@@ -1340,19 +1339,39 @@ var blogTabHandler = function() {
                     var originalPosX = touchStartPosX;
                     var newX = event.changedTouches[0].clientX;
                     var deltaX = newX - originalPosX;
+                    var marginLeftValue = isNaN(parseInt(postContainer.style.marginLeft, 10)) ? 0 : parseInt(postContainer.style.marginLeft, 10);
+                    var leftStopThreshold = 0.6*document.documentElement.clientWidth;
+                    var rightStopThreshold = 0.4 * document.documentElement.clientWidth;
+                    //var isMarginBelowThreshold = (Math.abs(marginLeftValue)<stopThreshold);
+                    var marginLeftIsBlank = postContainer.style.marginLeft == 0;
                     
-                    if(Math.abs(deltaX)>0) {
-                      
-                            console.log(prevMargin);
-                            postContainer.style.marginLeft = (parseInt(prevMargin, 10) + parseInt(deltaX,10)) + 'px';
+                    if(Math.abs(deltaX)>touchMoveThreshold) {
+                          //  deltaX = deltaX - touchMoveThreshold;
+                            console.log(deltaX);
+                            marginLeftValue<=0 ? deltaX : deltaX = Math.min(deltaX, 0);
+                         
+                     
+                            marginLeftValue<=0 && (Math.abs(marginLeftValue+deltaX)) <= leftStopThreshold ? postContainer.style.marginLeft = (parseInt(prevMargin, 10) + parseInt(deltaX,10)) + 'px' : document.getElementById("blogContents").removeEventListener("touchmove", blogMoveStart);
+                           // postContainer.style.marginLeft = (parseInt(prevMargin, 10) + parseInt(deltaX,10)) + 'px';           
+                            
+                        /*    if(deltaX<0 && Math.abs(marginLeftValue)>leftStopThreshold) {
+                                document.getElementById("blogContents").removeEventListener("touchmove", blogMoveStart);
+                            }
+                            if(deltaX>=0 && Math.abs(marginLeftValue)>rightStopThreshold) {
+                                document.getElementById("blogContents").removeEventListener("touchmove", blogMoveStart); 
+                            }
+                            else {
+                                console.log("error");
+                            }*/
                     }
                     
                     
                 },
                 
                 touchEnd: function() {
+                    postContainer.style.marginLeft = Math.min(postContainer.style.marginLeft.replace('px', ''), 0);
                     prevMargin = postContainer.style.marginLeft.replace('px', '');
-                    document.getElementById("blogContents").removeEventListener("touchmove", blogMoveStart);
+                    //document.getElementById("blogContents").removeEventListener("touchmove", blogMoveStart);
                 }
             };
             
