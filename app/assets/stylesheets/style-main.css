@@ -1635,20 +1635,20 @@ top: 12px;
 /* BEGINNING OF BLOG TAB FORMATTING*/
 
 #blogContents {
-max-width: 400%;
-width: 400%;
+max-width: 155%;
+width: 155%;
 
 margin: auto;
 }
 
 .post-container {
-    width: 22.5%;
+    width: 58%;
     margin: auto 0 auto 0;
 }
 
 .post-sidebar {
     
-    width:12.5%;
+    width:42%;
     overflow: hidden;
 
 }
