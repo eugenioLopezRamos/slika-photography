@@ -53,7 +53,7 @@ if (!Array.prototype.findIndex) { //findIndex polyfill for IE source: MDN - http
   };
 }  
 
-  
+window.setTimeout(function() {
 window.addEventListener("resize", function() { //handles resizing when changing screen orientation
   document.getElementById("menu").removeAttribute("style");
   document.getElementById("header").removeAttribute("style");
@@ -127,7 +127,10 @@ initialFormat(); //sets the initial styling.
 } //closes if == portrait
 
 }    
+
 });
+}, 200);
+
 
 function homeTabHandler(){ 
     
@@ -540,7 +543,7 @@ var slidesTouchHandler = (function() {
 
 return {
 
-touchStart: function(e){ //this is called upon touching the screen, and it does 2 things: saves the position where the screen was touched (in touchStartPosX, in the slidesHandler scope) and
+touchStart: function(event){ //this is called upon touching the screen, and it does 2 things: saves the position where the screen was touched (in touchStartPosX, in the slidesHandler scope) and
 //creates an eventListener for touch movements. This listener has the handler MovePass, which is also set in the slidesHandler scope because it must be reused between the properties of the slidesTouchHandler object
 //which I should rename because its a bit confusing.
 //this code should check for double taps on jumbotron, to use the fullscreen API
@@ -558,7 +561,7 @@ if(doubleTapCounter >= 2) { // if a double tap happens, toggles between fullscre
     } 
 doubleTapCounter = 0;
 }
-touchStartPosX =  e.changedTouches[0].clientX; //assigns X coordinate of the touchstart event.
+touchStartPosX =  event.changedTouches[0].clientX; //assigns X coordinate of the touchstart event.
 document.addEventListener("touchmove", movePass); //adds the slidesHandler.touchMove function as handler for the "touchmove" event.
 },
 
@@ -1301,17 +1304,83 @@ assignFocusListeners(allTextAreas);
 
 
 var blogTabHandler = function() {
-    var postContainer = document.getElementsByClassName("post-container")[0]; //the div with the actual post
-    var postSidebar = document.getElementsByClassName('post-sidebar')[0] //the sidebar menu that has links to posts
     
-    postContainer.addEventListener("touchmove", function(event) {
-        if(postContainer.scrollTop > 5) {
-        event.stopPropagation();
-    }
-     
+    
+    var postContainer = document.getElementsByClassName("post-container")[0]; //the div with the actual post
+    var postSidebar = document.getElementsByClassName('post-sidebar')[0]; //the sidebar menu that has links to posts
+    
+  //  postContainer.addEventListener("touchmove", function(event) {
+    //    if(postContainer.scrollTop > 5) {
+      //  event.stopPropagation();
+  //  }
+    //});
+
+  //  if(document.documentElement.clientWidth<481) {
+
+        //add an event listener for touches that will move the post container and the 
+        //sidebar menu with the left/right properties
+        var touchStartPosX;//position of the touch X "pointer" at the start of the touch event
+        var touchMoveThreshold = 80; //threshold for menu movement
+     //   var movePass = function(event){ //need a named function for the event listener, so it can later be removed with removeEventListener.
+       // slidesTouchHandler.touchMove(event);        
+        //};
+        var prevMargin = 0; //keeps track of the margin
+        var containerAndSidebar = [postContainer, postSidebar];
         
+
+        var blogTouchHandler = (function() {
+            return {
+                touchStart: function(event) {
+                    console.log("hey!");
+                    touchStartPosX = event.changedTouches[0].clientX;
+                    document.getElementById("blogContents").addEventListener("touchmove", blogMoveStart);
+                },
+                
+                touchMove: function(event) {
+                    var originalPosX = touchStartPosX;
+                    var newX = event.changedTouches[0].clientX;
+                    var deltaX = newX - originalPosX;
+                    
+                    if(Math.abs(deltaX)>0) {
+                      
+                            console.log(prevMargin);
+                            postContainer.style.marginLeft = (parseInt(prevMargin, 10) + parseInt(deltaX,10)) + 'px';
+                    }
+                    
+                    
+                },
+                
+                touchEnd: function() {
+                    prevMargin = postContainer.style.marginLeft.replace('px', '');
+                    console.log("prevmarg", prevMargin);
+                    document.getElementById("blogContents").removeEventListener("touchmove", blogMoveStart);
+                }
+            };
+            
+        })();
         
-    });
+        var blogTouchStart = function(event) {
+            blogTouchHandler.touchStart(event);
+        };
+        
+        var blogMoveStart = function(event) {
+            blogTouchHandler.touchMove(event);
+        };
+        
+        var blogMoveEnd = function(event) {
+            blogTouchHandler.touchEnd(event);
+        };
+        
+    
+        function assignBlogEventListener() {
+            document.getElementById("blogContents").addEventListener("touchstart", blogTouchStart);    
+            document.getElementById("blogContents").addEventListener("touchend", blogMoveEnd);
+            
+        }
+        assignBlogEventListener();
+
+ //   } // clWidth<481
+        
 
     
 }; //end of blogTabHandler

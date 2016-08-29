@@ -1635,18 +1635,26 @@ top: 12px;
 /* BEGINNING OF BLOG TAB FORMATTING*/
 
 #blogContents {
-width: 200%;
-margin: 5px;
+max-width: 400%;
+width: 400%;
+
+margin: auto;
 }
 
 .post-container {
-    width: 45%;
+    width: 22.5%;
+    margin: auto 0 auto 0;
 }
 
 .post-sidebar {
-    width:25%;
+    
+    width:12.5%;
     overflow: hidden;
-    left: 40%;
+
+}
+
+.post-sidebar ol {
+  margin: 5px;
 }
 
 
