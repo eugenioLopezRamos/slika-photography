@@ -24,7 +24,7 @@ Rails.application.configure do
   #host = 'rails-implementation-e0plus.c9users.io'
   #config.action_mailer.default_url_options = { host: host, protocol: 'https' }
 
-
+  #
 
 ### ACTIVATE MAIL HERE
 
