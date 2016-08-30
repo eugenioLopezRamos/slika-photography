@@ -1318,14 +1318,17 @@ var blogTabHandler = function() {
         //add an event listener for touches that will move the post container and the 
         //sidebar menu with the left/right properties
         var touchStartPosX;//position of the touch X "pointer" at the start of the touch event
-        var touchMoveThreshold = 80; //threshold for menu movement
+        var touchMoveThreshold = 50; //threshold for menu movement
      //   var movePass = function(event){ //need a named function for the event listener, so it can later be removed with removeEventListener.
        // slidesTouchHandler.touchMove(event);        
         //};
         var prevMargin = 0; //keeps track of the margin
         var containerAndSidebar = [postContainer, postSidebar];
-        
-
+        var leftStopThreshold = 0.35*document.documentElement.clientWidth;
+        console.log("leftStop", leftStopThreshold);
+        var postContainerMargin = postContainer.style.marginLeft.replace('px', '');
+        var additionalOffset = 0;
+                
         var blogTouchHandler = (function() {
             return {
                 touchStart: function(event) {
@@ -1340,37 +1343,55 @@ var blogTabHandler = function() {
                     var newX = event.changedTouches[0].clientX;
                     var deltaX = newX - originalPosX;
                     var marginLeftValue = isNaN(parseInt(postContainer.style.marginLeft, 10)) ? 0 : parseInt(postContainer.style.marginLeft, 10);
-                    var leftStopThreshold = 0.6*document.documentElement.clientWidth;
-                    var rightStopThreshold = 0.4 * document.documentElement.clientWidth;
-                    //var isMarginBelowThreshold = (Math.abs(marginLeftValue)<stopThreshold);
-                    var marginLeftIsBlank = postContainer.style.marginLeft == 0;
+getComputedStyle(postContainer, null).getPropertyValue("width")
+    
                     
-                    if(Math.abs(deltaX)>touchMoveThreshold) {
-                          //  deltaX = deltaX - touchMoveThreshold;
-                            console.log(deltaX);
-                            marginLeftValue<=0 ? deltaX : deltaX = Math.min(deltaX, 0);
-                         
-                     
-                            marginLeftValue<=0 && (Math.abs(marginLeftValue+deltaX)) <= leftStopThreshold ? postContainer.style.marginLeft = (parseInt(prevMargin, 10) + parseInt(deltaX,10)) + 'px' : document.getElementById("blogContents").removeEventListener("touchmove", blogMoveStart);
-                           // postContainer.style.marginLeft = (parseInt(prevMargin, 10) + parseInt(deltaX,10)) + 'px';           
+                    if(Math.abs(deltaX) - touchMoveThreshold>0) {
+                           // deltaX = deltaX ;
+                            deltaX>=0 ? additionalOffset++ : additionalOffset--;
+           
                             
-                        /*    if(deltaX<0 && Math.abs(marginLeftValue)>leftStopThreshold) {
-                                document.getElementById("blogContents").removeEventListener("touchmove", blogMoveStart);
-                            }
-                            if(deltaX>=0 && Math.abs(marginLeftValue)>rightStopThreshold) {
-                                document.getElementById("blogContents").removeEventListener("touchmove", blogMoveStart); 
-                            }
-                            else {
-                                console.log("error");
-                            }*/
+                           // marginLeftValue<=0 ? deltaX = deltaX : deltaX = Math.min(deltaX, 0);
+                            
+                            if(marginLeftValue<=0 && Math.abs(marginLeftValue+10) <= leftStopThreshold) {
+                                
+                                console.log("left side of the eq", Math.abs(marginLeftValue + deltaX - touchMoveThreshold));
+                                console.log("right side", leftStopThreshold);
+                                console.log("delta", deltaX);
+                                console.log("margin", postContainer.style.marginLeft);
+                                
+                                
+                                postContainer.style.marginLeft = Math.min((parseInt(prevMargin, 10) + 2*additionalOffset), 0) + 'px';
+                              
+                            }else {
+                                console.log("failure to meet condition");
+                                document.getElementById("blogContents").removeEventListener("touchmove", blogMoveStart);    
+                            } 
+            
                     }
                     
                     
                 },
                 
                 touchEnd: function() {
-                    postContainer.style.marginLeft = Math.min(postContainer.style.marginLeft.replace('px', ''), 0);
+                    console.log(postContainer.style.width);
+                    console.log(getComputedStyle(postContainer, null).getPropertyValue("width"));
+                    additionalOffset = 0;
+                    
+                    if(Math.abs(postContainer.style.marginLeft.replace('px', ''))>leftStopThreshold) {
+                        postContainer.style.marginLeft = -1*leftStopThreshold + 'px';
+                    }
+                    prevMargin = postContainer.style.marginLeft;
+                 /*   if (postContainerMargin> 0) {
+                        postContainer.style.marginLeft = 0 + 'px';
+                    } 
+                    else if(postContainerMargin < 0) {
+                        
+                    }//? 0 : postContainer.style.marginLeft = Math.min(-leftStopThreshold, postContainer.style.marginLeft.replace('px', ''))+'px';
                     prevMargin = postContainer.style.marginLeft.replace('px', '');
+                    console.log(prevMargin);*/
+                    //prevMargin = postContainer.style.marginLeft.replace('px', '');
+                   //Math.abs(prevMargin) <= leftStopThreshold ? prevMargin = -leftStopThreshold : prevMargin = prevMargin; 
                     //document.getElementById("blogContents").removeEventListener("touchmove", blogMoveStart);
                 }
             };
