@@ -1,0 +1,8 @@
+<h3>These are all of the site's users, excluding yourself</h3>    
+    <% User.all.each do |user| %>
+    
+        <% if user.id != current_user.id %>
+            <h2><%= link_to user.name, admin_user_path(user) %></h2>
+        <% end %>
+        
+    <% end %>

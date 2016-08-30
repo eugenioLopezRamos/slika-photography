@@ -2,6 +2,11 @@ class Admin::UsersController < ApplicationController
   before_action :logged_in_user
   before_action :logged_in_admin_user, only: [:new, :create]
   
+  def index
+    
+  end
+  
+  
   def new
     @user = User.new
   end
