@@ -1309,33 +1309,22 @@ var blogTabHandler = function() {
     var postContainer = document.getElementsByClassName("post-container")[0]; //the div with the actual post
     var postSidebar = document.getElementsByClassName('post-sidebar')[0]; //the sidebar menu that has links to posts
 
-    postContainer.addEventListener("touchmove", function(event) {
-
-    });
-
-  //  if(document.documentElement.clientWidth<481) {
-
-        //add an event listener for touches that will move the post container and the 
-        //sidebar menu with the left/right properties
+    if(document.documentElement.clientWidth<481) {
         var touchStartPosX;//position of the touch X "pointer" at the start of the touch event
         var touchMoveThreshold = 50; //threshold for menu movement
-     //   var movePass = function(event){ //need a named function for the event listener, so it can later be removed with removeEventListener.
-       // slidesTouchHandler.touchMove(event);        
-        //};
         var prevMargin = 0; //keeps track of the margin
-        var containerAndSidebar = [postContainer, postSidebar];
         var leftStopThreshold = 0.35*document.documentElement.clientWidth;
-        console.log("leftStop", leftStopThreshold);
-        var postContainerMargin = postContainer.style.marginLeft.replace('px', '');
         var additionalOffset = 0;
-                
+        var clWidth = document.documentElement.clientWidth;
+        var detectedTouchEvents = 0; //counts the number of move events     
+        
         var blogTouchHandler = (function() {
             return {
                 touchStart: function(event) {
                     
                     postContainer.scrollTop > 5 ? event.stopImmediatePropagation() : "";
                     touchStartPosX = event.changedTouches[0].clientX;
-                    document.getElementById("blogContents").addEventListener("touchmove", blogMoveStart);
+                    document.getElementById("blogContents").addEventListener("touchmove", blogMoveStart, {passive: true});
                 },
                 
                 touchMove: function(event) {
@@ -1343,56 +1332,49 @@ var blogTabHandler = function() {
                     var newX = event.changedTouches[0].clientX;
                     var deltaX = newX - originalPosX;
                     var marginLeftValue = isNaN(parseInt(postContainer.style.marginLeft, 10)) ? 0 : parseInt(postContainer.style.marginLeft, 10);
-getComputedStyle(postContainer, null).getPropertyValue("width")
-    
+
+                    // here I should add an animation so when a threshold is passed, the element goes to its end destination, which would solve the inconsistency problem wrt. touch sliding speed.
                     
                     if(Math.abs(deltaX) - touchMoveThreshold>0) {
-                           // deltaX = deltaX ;
-                            deltaX>=0 ? additionalOffset++ : additionalOffset--;
+                            
+                            if(!scheduled) {
+                            deltaX>=0 ? detectedTouchEvents++ : detectedTouchEvents--;
+                            scheduled = true;
+                            window.setTimeout(function() {
+
+                            console.log(detectedTouchEvents);
+                            deltaX>=0 ? additionalOffset = detectedTouchEvents*0.07*clWidth : additionalOffset = detectedTouchEvents*0.07*clWidth;                                    
+                            scheduled = false;
+                            }, 1/30);    // 1/30 = 30 fps
+                            
+                            }
+
+                            
+                            if(marginLeftValue<=0 && Math.abs(marginLeftValue+10) <= leftStopThreshold) { 
+                                postContainer.style.marginLeft = Math.min((parseInt(prevMargin, 10) + 1.2*additionalOffset), 0) + 'px';
+                                }
            
-                            
-                           // marginLeftValue<=0 ? deltaX = deltaX : deltaX = Math.min(deltaX, 0);
-                            
-                            if(marginLeftValue<=0 && Math.abs(marginLeftValue+10) <= leftStopThreshold) {
-                                
-                                console.log("left side of the eq", Math.abs(marginLeftValue + deltaX - touchMoveThreshold));
-                                console.log("right side", leftStopThreshold);
-                                console.log("delta", deltaX);
-                                console.log("margin", postContainer.style.marginLeft);
-                                
-                                
-                                postContainer.style.marginLeft = Math.min((parseInt(prevMargin, 10) + 2*additionalOffset), 0) + 'px';
-                              
-                            }else {
-                                console.log("failure to meet condition");
+                         /*   if(detectedTouchEvents>30) {
+                                postContainer.style.marginLeft = -leftStopThreshold + 'px';
+
+                            }
+                            if(detectedTouchEvents<-30) {
+                                postContainer.style.marginLeft = 0 + 'px';
+                            }*/
+                            else {
                                 document.getElementById("blogContents").removeEventListener("touchmove", blogMoveStart);    
                             } 
-            
+                                          //   prevMargin = 0;
                     }
-                    
-                    
                 },
                 
                 touchEnd: function() {
-                    console.log(postContainer.style.width);
-                    console.log(getComputedStyle(postContainer, null).getPropertyValue("width"));
                     additionalOffset = 0;
-                    
+                    detectedTouchEvents = 0;
                     if(Math.abs(postContainer.style.marginLeft.replace('px', ''))>leftStopThreshold) {
                         postContainer.style.marginLeft = -1*leftStopThreshold + 'px';
                     }
                     prevMargin = postContainer.style.marginLeft;
-                 /*   if (postContainerMargin> 0) {
-                        postContainer.style.marginLeft = 0 + 'px';
-                    } 
-                    else if(postContainerMargin < 0) {
-                        
-                    }//? 0 : postContainer.style.marginLeft = Math.min(-leftStopThreshold, postContainer.style.marginLeft.replace('px', ''))+'px';
-                    prevMargin = postContainer.style.marginLeft.replace('px', '');
-                    console.log(prevMargin);*/
-                    //prevMargin = postContainer.style.marginLeft.replace('px', '');
-                   //Math.abs(prevMargin) <= leftStopThreshold ? prevMargin = -leftStopThreshold : prevMargin = prevMargin; 
-                    //document.getElementById("blogContents").removeEventListener("touchmove", blogMoveStart);
                 }
             };
             
@@ -1411,14 +1393,14 @@ getComputedStyle(postContainer, null).getPropertyValue("width")
         };
         
     
-        function assignBlogEventListener() {
+        var assignBlogEventListener = function() {
             document.getElementById("blogContents").addEventListener("touchstart", blogTouchStart);    
             document.getElementById("blogContents").addEventListener("touchend", blogMoveEnd);
             
-        }
+        };
         assignBlogEventListener();
 
- //   } // clWidth<481
+    } // closes clWidth<481
         
 
     
