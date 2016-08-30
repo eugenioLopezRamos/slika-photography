@@ -4,7 +4,7 @@
         <% if user.id != current_user.id %>
             <h2><%= user.name %></h2>
                 <% user.posts.each do |post| %>
-                    <% clean_post_title = sanitize post.title, tags: %w(strong em a div p img) %>
+                    <% clean_post_title = sanitize post.title, tags: %w(strong em a div img) %>
                     <ol class="others-posts"><%= link_to clean_post_title,  admin_post_path(post) %>, <%= link_to "  |  delete this post", admin_post_path(post),
                     method: 'delete', class: "post-delete", data: {confirm: "Are you sure? This action cannot be undone"} %></ol>
                 <% end %>
