@@ -1314,10 +1314,6 @@ var blogTabHandler = function() {
         var touchMoveThreshold = 50; //threshold for menu movement
         var prevMargin = 0; //keeps track of the margin
         var leftStopThreshold = 0.35*document.documentElement.clientWidth;
-        var additionalOffset = 0;
-        var clWidth = document.documentElement.clientWidth;
-        var detectedTouchEvents = 0; //counts the number of move events     
-        var addPrevMargin = false;    
         var startPrevMargin;
         
         var blogTouchHandler = (function() {
@@ -1327,7 +1323,6 @@ var blogTabHandler = function() {
                     postContainer.scrollTop > 5 ? event.stopImmediatePropagation() : "";
                     touchStartPosX = event.changedTouches[0].clientX;
                     document.getElementById("blogContents").addEventListener("touchmove", blogMoveStart, {passive: true});
-                    //addPrevMargin = true;
                     startPrevMargin = prevMargin;
                 },
                 
@@ -1336,51 +1331,19 @@ var blogTabHandler = function() {
                     var newX = event.changedTouches[0].clientX;
                     var deltaX = (newX - originalPosX) - touchMoveThreshold;
                     var marginLeftValue = isNaN(parseInt(postContainer.style.marginLeft, 10)) ? 0 : parseInt(postContainer.style.marginLeft, 10);
-                   // prevMargin == true ? prevMargin = prevMargin : prevMargin = 0;
-                    // here I should add an animation so when a threshold is passed, the element goes to its end destination, which would solve the inconsistency problem wrt. touch sliding speed.
                     
                     if(Math.abs(deltaX) - touchMoveThreshold>0) {
-                            
-                         //   if(!scheduled) {
-                           // deltaX>=0 ? detectedTouchEvents++ : detectedTouchEvents--;
-                            //scheduled = true;
-                            //window.setTimeout(function() {
                             deltaX>=0 ? deltaX = deltaX - touchMoveThreshold : deltaX = deltaX + touchMoveThreshold;
-                      //      console.log(detectedTouchEvents);
-                           // deltaX>=0 ? additionalOffset = 2*deltaX : additionalOffset = 2*deltaX;//additionalOffset = detectedTouchEvents*0.07*clWidth : additionalOffset = detectedTouchEvents*0.07*clWidth;                                    
-                            //scheduled = false;
-                            //}, 1/30);    // 1/30 = 30 fps
-                            
-                            //}
-                            
-                          /* if(detectedTouchEvents>7) {
-                               console.log("over30 triggered");
-                                postContainer.style.marginLeft = -leftStopThreshold + 'px';
-
-                            }
-                            if(0>detectedTouchEvents<-7) {
-                                console.log("minus30 triggered");
-                                postContainer.style.marginLeft = 0 + 'px';
-                            }*/
-
-                            
                             if(marginLeftValue<=0 && Math.abs(marginLeftValue+10) <= leftStopThreshold) { 
                                 postContainer.style.marginLeft = Math.min((parseInt(startPrevMargin, 10) + deltaX), 0) + 'px';
-                              
                                 }
-           
-
                             else {
                                 document.getElementById("blogContents").removeEventListener("touchmove", blogMoveStart);    
                             } 
-                                          //   prevMargin = 0;
                     }
                 },
                 
                 touchEnd: function() {
-                    additionalOffset = 0;
-                    detectedTouchEvents = 0;
-                
                     if(Math.abs(postContainer.style.marginLeft.replace('px', ''))>leftStopThreshold) {
                         postContainer.style.marginLeft = -1*leftStopThreshold + 'px';
                     }
