@@ -24,7 +24,7 @@ class Admin::UsersController < ApplicationController
   private
   
     def user_params
-      params.require(:admin_user).permit(:name, :email, :password, :password_confirmation)
+      params.require(:admin_user).permit(:id, :name, :email, :password, :password_confirmation)
     end
     
     # Confirms an admin user.

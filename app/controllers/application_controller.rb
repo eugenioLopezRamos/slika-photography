@@ -14,6 +14,13 @@ class ApplicationController < ActionController::Base
     end
   end
   
+  def admin_user
+    unless current_user.admin?
+    flash[:danger] = "You do not have permission to do this"
+    redirect_to admin_user_path(current_user)
+    end
+  end
+  
   
   
   
