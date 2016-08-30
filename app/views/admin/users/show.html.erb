@@ -12,20 +12,41 @@
 <span class="updateDate"><%= "updated at #{@user.updated_at}" %></span><br>
 
 <% if @user.posts.any? %>
-<h3>Your posts</h3>
 
-    <% @posts.each do |post| %>
-        <% clean_post_title = sanitize post.title, tags: %w(strong em a div p img) %>
-        <ol class="posts"><%= link_to clean_post_title,  admin_post_path(post) %>, <%= link_to "  |  delete this post", admin_post_path(post),
-        method: 'delete', class: "post-delete", data: {confirm: "Are you sure? This action cannot be undone"} %></ol>
-    <% end %>
-
+    <h3>Your posts</h3>
+    
+        <% @posts.each do |post| %>
+            <% clean_post_title = sanitize post.title, tags: %w(strong em a div p img) %>
+            <ol class="posts"><%= link_to clean_post_title,  admin_post_path(post) %>, <%= link_to "  |  delete this post", admin_post_path(post),
+            method: 'delete', class: "post-delete", data: {confirm: "Are you sure? This action cannot be undone"} %></ol>
+        <% end %>
+        
 <% end %>
+
+<% if Post.count - @user.posts.count > 0 %>
+<h3>Other user's posts</h3>
+
+    <% User.all.each do |user| %>
+        <% if user.id != current_user.id %>
+            <h2><%= user.name %></h2>
+                <% user.posts.each do |post| %>
+                    <% clean_post_title = sanitize post.title, tags: %w(strong em a div p img) %>
+                    <ol class="others-posts"><%= link_to clean_post_title,  admin_post_path(post) %>, <%= link_to "  |  delete this post", admin_post_path(post),
+                    method: 'delete', class: "post-delete", data: {confirm: "Are you sure? This action cannot be undone"} %></ol>
+                <% end %>
+        <% end %>
+    <% end %>
+    
+<% end %>
+
+
+
 <%= button_to "Create new post", new_admin_post_path, method: "get" %><br>
 
 <% if logged_in? && current_user.admin %>
 <%= button_to "Create new user", new_admin_user_path, method: "get" %><br>
 <% end %>
+
 
 
 
