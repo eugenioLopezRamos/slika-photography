@@ -1,6 +1,6 @@
 class Admin::PostsController < ApplicationController
     before_action :logged_in_user
-    before_action :admin_user, only: [:destroy]
+    before_action :can_delete_post, only: :destroy
     
     def new
         @post = Post.new

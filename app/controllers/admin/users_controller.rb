@@ -1,5 +1,6 @@
 class Admin::UsersController < ApplicationController
-  before_action :logged_in_admin_user
+  before_action :logged_in_user
+  before_action :logged_in_admin_user, only: [:new, :create]
   
   def new
     @user = User.new
@@ -33,16 +34,6 @@ class Admin::UsersController < ApplicationController
     end
     
     #confirms user being logged in AND being an admin user
-    def logged_in_admin_user 
-      unless logged_in?
-      flash[:danger] = "Please log in"
-      redirect_to admin_login_path #and return
-      end
-      
-      if logged_in? && !admin_user
-        flash[:danger] = "You are not an admin"
-        redirect_to admin_user_path(current_user)
-      end
-    end
+
     
 end
