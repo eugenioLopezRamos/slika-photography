@@ -21,6 +21,18 @@ class Admin::PostsController < ApplicationController
     end
     
     
+    def destroy
+        if current_user.admin? || current_user.id == Post.find(params[:user_id])
+        @post = Post.find(params[:id])
+        @post.destroy
+        flash[:success] = "Post deleted"
+        redirect_to request.referrer || admin_user_path(@user)
+        end
+    end
+    
+    
+    
+    
     private
     
     def post_params

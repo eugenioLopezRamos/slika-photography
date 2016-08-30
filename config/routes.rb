@@ -83,7 +83,7 @@ namespace :admin do
  get '/login', to: 'sessions#new'
  post '/login', to: 'sessions#create'
  delete '/logout', to: 'sessions#destroy'
- 
+ #delete 'posts/:id', to: 'posts#destroy'
 
 end
 

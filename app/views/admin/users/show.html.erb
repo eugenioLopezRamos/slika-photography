@@ -1,20 +1,23 @@
 <% provide(:title, @user.name) %>
+<%= javascript_include_tag 'application'%> 
+<%= csrf_meta_tag %>
 
     <% if flash[:danger] %>
     <div class="notice" style="background-color:red;color:white"><%= flash[:danger] %></div>
     <% end %>
     
-<%= @user.name %><br>
-<%= @user.email %><br>
-<%= "created at: #{@user.created_at}"%><br>
-<%= "updated at #{@user.updated_at}" %><br>
+<span class="userName"><%= @user.name %></span><br>
+<span class="userEmail"><%= @user.email %></span><br>
+<span class="creationDate"><%= "created at: #{@user.created_at}"%></span><br>
+<span class="updateDate"><%= "updated at #{@user.updated_at}" %></span><br>
 
 <% if @user.posts.any? %>
 <h3>Your posts</h3>
 
     <% @posts.each do |post| %>
         <% clean_post_title = sanitize post.title, tags: %w(strong em a div p img) %>
-        <ol class="posts"><%= link_to clean_post_title,  admin_post_path(post) %></ol>
+        <ol class="posts"><%= link_to clean_post_title,  admin_post_path(post) %>, <%= link_to "  |  delete this post", admin_post_path(post),
+        method: 'delete', class: "post-delete", data: {confirm: "Are you sure? This action cannot be undone"} %></ol>
     <% end %>
 
 <% end %>
