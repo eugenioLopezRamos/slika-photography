@@ -25,7 +25,7 @@ class UsersLoginTest < ActionDispatch::IntegrationTest
 
     get admin_login_path
     assert_template 'admin/sessions/new'
-    post admin_login_path, params: {session: {email: @user.email, password: 'password'}}
+    post admin_login_path, params: {session: {email: @user.email, password: 'password'}} 
     assert is_logged_in?
     assert_redirected_to admin_user_url(@user)
     follow_redirect!

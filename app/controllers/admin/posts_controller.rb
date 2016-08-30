@@ -1,5 +1,6 @@
 class Admin::PostsController < ApplicationController
     before_action :logged_in_user
+    before_action :admin_user, only: [:destroy]
     
     def new
         @post = Post.new
@@ -22,12 +23,10 @@ class Admin::PostsController < ApplicationController
     
     
     def destroy
-        if current_user.admin? || current_user.id == Post.find(params[:user_id])
         @post = Post.find(params[:id])
         @post.destroy
         flash[:success] = "Post deleted"
-        redirect_to request.referrer || admin_user_path(@user)
-        end
+        redirect_to admin_user_path(current_user)
     end
     
     
