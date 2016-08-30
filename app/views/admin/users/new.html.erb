@@ -1,21 +1,7 @@
 <h2>Create new User</h2>
 <p>Here you can create new users to contribute</p>
 
+<% provide :submit_text, "Create new user" %>
 
-<%= form_for(:admin_user) do |f| %>
-<%= render 'shared/error_messages' %>
 
-<%= f.label :name %>
-<%= f.text_field :name %>
-
-<%= f.label :email %>
-<%= f.email_field :email %>
-
-<%= f.label :password %>
-<%= f.password_field :password %>
-
-<%= f.label :password_confirmation %>
-<%= f.password_field :password_confirmation %>
-
-<%= f.submit "Create new user", class: "submit-button" %>
-<% end %>
+<%= render 'admin/users/user_data_form' %>

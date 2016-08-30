@@ -2,12 +2,14 @@ class Admin::UsersController < ApplicationController
   before_action :logged_in_user
   before_action :logged_in_admin_user, only: [:new, :create]
   before_action :can_destroy_user, only: :destroy
+  before_action :can_edit_user, only: :edit
   
   def index
   end
   
   def new
     @user = User.new
+    @url = admin_users_path
   end
   
   def show
@@ -15,14 +17,28 @@ class Admin::UsersController < ApplicationController
     @posts = @user.posts
   end
   
-  
   def create
     @user = User.new(user_params)
     if @user.save
       redirect_to admin_user_url(current_user)
       flash[:success] = "User successfully created"
     else
-      render 'new'
+      @url = admin_users_path
+      render 'new' 
+    end
+  end
+  
+  def edit
+    @user = User.find(params[:id])
+    @url = admin_user_path(@user)
+  end
+  
+  def update
+    @user = User.find(params[:id])
+    if @user.update_attributes(user_params)
+      ####
+    else
+      render 'edit'
     end
   end
   
@@ -33,10 +49,12 @@ class Admin::UsersController < ApplicationController
     redirect_to admin_user_path(current_user)
   end
   
+
+  
   private
   
     def user_params
-      params.require(:admin_user).permit(:id, :name, :email, :password, :password_confirmation)
+      params.require(:user).permit(:name, :email, :password, :password_confirmation)
     end
     
     # Confirms an admin user.
@@ -52,7 +70,15 @@ class Admin::UsersController < ApplicationController
         redirect_to admin_user_path(current_user)
       end
     end
-  
+    
+    def can_edit_user
+      if current_user.id == User.find(params[:id]).id
+        return true
+      else
+        flash[:danger] = "You are not authorized to do this"
+        redirect_to admin_user_path(current_user)
+      end
+    end
 
     
 end
