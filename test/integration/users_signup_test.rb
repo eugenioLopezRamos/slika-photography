@@ -8,6 +8,7 @@ class UsersSignupTest < ActionDispatch::IntegrationTest
   def setup
     @admin = users(:michael)
     @notadmin = users(:mary)
+    @url = admin_users_path
   end
   
   test "valid creation info on non logged in user should fail" do
@@ -23,7 +24,7 @@ class UsersSignupTest < ActionDispatch::IntegrationTest
     follow_redirect!
     assert_template 'admin/sessions/new'
     assert_no_difference 'User.count' do
-      post admin_users_path, params: { admin_user: {name: "Example User",
+      post admin_users_path, params: { user: {name: "Example User",
                                               email: "user@example.com",
                                               password: "password",
                                               password_confirmation: "password"} }
@@ -39,7 +40,7 @@ class UsersSignupTest < ActionDispatch::IntegrationTest
                                                password: 'password' } }
     get new_admin_user_path
     assert_no_difference 'User.count' do
-     post admin_users_path, params:  {admin_user: {name: "Example User",
+     post admin_users_path, params:  {:user => {name: "Example User",
                                                    email: "asdx,kj@alll.s",
                                                    password: "short",
                                                    password_confirmation: "shwrt"} }
@@ -56,12 +57,25 @@ class UsersSignupTest < ActionDispatch::IntegrationTest
 
     assert_redirected_to admin_user_path(@notadmin)
     assert_no_difference 'User.count' do
-      post admin_users_path, params: { admin_user: {name: "Example User",
+      post admin_users_path, params: { user: {name: "Example User",
                                               email: "user@example.com",
                                               password: "password",
                                               password_confirmation: "password"} }
       end
                                                    
+  end
+  
+  test "valid creation info on logged on admin should succeed" do
+    get admin_login_path
+    post admin_login_path params: { session: { email: @admin.email,
+                                               password: 'password' } }
+    get new_admin_user_path
+    assert_difference 'User.count', 1 do
+      post admin_users_path, params: { user: {name: "Example User",
+                                              email: "user@example.com",
+                                              password: "password",
+                                              password_confirmation: "password"} }
+    end
   end
   
 end
