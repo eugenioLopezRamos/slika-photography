@@ -1,8 +1,14 @@
+<%= javascript_include_tag 'application'%> 
+<%= csrf_meta_tag %>
+
+
 <h3>These are all of the site's users, excluding yourself</h3>    
     <% User.all.each do |user| %>
     
         <% if user.id != current_user.id %>
-            <h2><%= link_to user.name, admin_user_path(user) %></h2>
+            <h2><%= link_to user.name, admin_user_path(user) %>
+            <%= link_to "Delete this user", admin_user_path(user), method: "delete", 
+            data: {confirm: "Are you sure? This CANNOT be undone and will destroy the user AND his/her posts"} %></h2>
         <% end %>
         
     <% end %>
