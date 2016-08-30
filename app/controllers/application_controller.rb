@@ -33,14 +33,7 @@ class ApplicationController < ActionController::Base
       end
   end
   
-  def can_delete_post
-    if current_user.id === Post.find(params[:id]).user_id || current_user.admin?
-      return true
-    else
-      redirect_to admin_user_path(current_user)
-    end
-    
-  end
+
   
 
   
