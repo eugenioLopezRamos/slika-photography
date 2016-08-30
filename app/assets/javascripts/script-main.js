@@ -1317,6 +1317,8 @@ var blogTabHandler = function() {
         var additionalOffset = 0;
         var clWidth = document.documentElement.clientWidth;
         var detectedTouchEvents = 0; //counts the number of move events     
+        var addPrevMargin = false;    
+        var startPrevMargin;
         
         var blogTouchHandler = (function() {
             return {
@@ -1325,42 +1327,49 @@ var blogTabHandler = function() {
                     postContainer.scrollTop > 5 ? event.stopImmediatePropagation() : "";
                     touchStartPosX = event.changedTouches[0].clientX;
                     document.getElementById("blogContents").addEventListener("touchmove", blogMoveStart, {passive: true});
+                    //addPrevMargin = true;
+                    startPrevMargin = prevMargin;
                 },
                 
                 touchMove: function(event) {
                     var originalPosX = touchStartPosX;
                     var newX = event.changedTouches[0].clientX;
-                    var deltaX = newX - originalPosX;
+                    var deltaX = (newX - originalPosX) - touchMoveThreshold;
                     var marginLeftValue = isNaN(parseInt(postContainer.style.marginLeft, 10)) ? 0 : parseInt(postContainer.style.marginLeft, 10);
-
+                   // prevMargin == true ? prevMargin = prevMargin : prevMargin = 0;
                     // here I should add an animation so when a threshold is passed, the element goes to its end destination, which would solve the inconsistency problem wrt. touch sliding speed.
                     
                     if(Math.abs(deltaX) - touchMoveThreshold>0) {
                             
-                            if(!scheduled) {
-                            deltaX>=0 ? detectedTouchEvents++ : detectedTouchEvents--;
-                            scheduled = true;
-                            window.setTimeout(function() {
-
-                            console.log(detectedTouchEvents);
-                            deltaX>=0 ? additionalOffset = detectedTouchEvents*0.07*clWidth : additionalOffset = detectedTouchEvents*0.07*clWidth;                                    
-                            scheduled = false;
-                            }, 1/30);    // 1/30 = 30 fps
+                         //   if(!scheduled) {
+                           // deltaX>=0 ? detectedTouchEvents++ : detectedTouchEvents--;
+                            //scheduled = true;
+                            //window.setTimeout(function() {
+                            deltaX>=0 ? deltaX = deltaX - touchMoveThreshold : deltaX = deltaX + touchMoveThreshold;
+                      //      console.log(detectedTouchEvents);
+                           // deltaX>=0 ? additionalOffset = 2*deltaX : additionalOffset = 2*deltaX;//additionalOffset = detectedTouchEvents*0.07*clWidth : additionalOffset = detectedTouchEvents*0.07*clWidth;                                    
+                            //scheduled = false;
+                            //}, 1/30);    // 1/30 = 30 fps
                             
-                            }
-
+                            //}
                             
-                            if(marginLeftValue<=0 && Math.abs(marginLeftValue+10) <= leftStopThreshold) { 
-                                postContainer.style.marginLeft = Math.min((parseInt(prevMargin, 10) + 1.2*additionalOffset), 0) + 'px';
-                                }
-           
-                         /*   if(detectedTouchEvents>30) {
+                          /* if(detectedTouchEvents>7) {
+                               console.log("over30 triggered");
                                 postContainer.style.marginLeft = -leftStopThreshold + 'px';
 
                             }
-                            if(detectedTouchEvents<-30) {
+                            if(0>detectedTouchEvents<-7) {
+                                console.log("minus30 triggered");
                                 postContainer.style.marginLeft = 0 + 'px';
                             }*/
+
+                            
+                            if(marginLeftValue<=0 && Math.abs(marginLeftValue+10) <= leftStopThreshold) { 
+                                postContainer.style.marginLeft = Math.min((parseInt(startPrevMargin, 10) + deltaX), 0) + 'px';
+                              
+                                }
+           
+
                             else {
                                 document.getElementById("blogContents").removeEventListener("touchmove", blogMoveStart);    
                             } 
@@ -1371,10 +1380,13 @@ var blogTabHandler = function() {
                 touchEnd: function() {
                     additionalOffset = 0;
                     detectedTouchEvents = 0;
+                
                     if(Math.abs(postContainer.style.marginLeft.replace('px', ''))>leftStopThreshold) {
                         postContainer.style.marginLeft = -1*leftStopThreshold + 'px';
                     }
                     prevMargin = postContainer.style.marginLeft;
+                    startPrevMargin = prevMargin;
+                    document.getElementById("blogContents").removeEventListener("touchmove", blogMoveStart);  
                 }
             };
             
