@@ -1,0 +1,12 @@
+
+
+<span class="userName"><h2>
+    <%= @user.name %>
+    <% if current_user.id == @user.id %>
+        <%= link_to "Edit my profile data", edit_admin_user_path(current_user), method: "get" %>
+    <% end %>
+    </h2></span><br>
+    
+<span class="userEmail"><%= @user.email %></span><br>
+<span class="creationDate"><%= "created at: #{@user.created_at}"%></span><br>
+<span class="updateDate"><%= "updated at #{@user.updated_at}" %></span><br>

@@ -8,24 +8,10 @@
     <div class="notice" style="background-color:red;color:white"><%= flash[:danger] %></div>
     <% end %>
     
-<span class="userName"><h2><%= @user.name %>  |   <%= link_to "Edit my profile data", edit_admin_user_path(current_user), method: "get" %></h2></span><br>
-<span class="userEmail"><%= @user.email %></span><br>
-<span class="creationDate"><%= "created at: #{@user.created_at}"%></span><br>
-<span class="updateDate"><%= "updated at #{@user.updated_at}" %></span><br>
+<%= render 'admin/users/profile_info' %>
 
 <% if @user.posts.any? %>
-
-    <h3><%= @user.name %>'s posts</h3>
-    
-        <% @posts.each do |post| %>
-        
-            <% clean_post_title = sanitize post.title, tags: %w(strong em a div img) %>
-            <ol class="posts"><span><%= link_to clean_post_title,  admin_post_path(post) %><%=link_to "  | Edit this post", edit_admin_post_path(post), class: "post-edit-btn" %>
-            <%= link_to "  |  Delete this post", admin_post_path(post),
-            method: 'delete', class: "post-delete", data: {confirm: "Are you sure? This action cannot be undone"} %></span></ol>
-            
-        <% end %>
-        
+    <%= render 'admin/users/own_posts' %>
 <% end %>
 
 <% if Post.count - @user.posts.count > 0  && @user == current_user %>
