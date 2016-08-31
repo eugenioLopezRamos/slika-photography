@@ -77,7 +77,7 @@ Rails.application.routes.draw do
  
  scope '/blog' do
   
- get '/', to: 'static#show', :tab => 'blogTab'  
+ get '', to: 'static#show', :tab => 'blogTab'  
  get '/:post_id', to: 'static#show', :tab => 'blogTab'
  
  end
