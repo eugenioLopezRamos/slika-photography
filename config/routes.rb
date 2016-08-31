@@ -71,10 +71,16 @@ Rails.application.routes.draw do
   get '/contact', to: 'static#show', :tab => 'contactTab'
   post '/contact', to: 'contact_mailer#create'#, :tab => 'contactTab'
   
-  get '/blog', to: 'static#show', :tab => 'blogTab'
+
 
 ## here I should include namespace :blog I think so i can use URL to link to posts
-
+ 
+ scope '/blog' do
+  
+ get '/', to: 'static#show', :tab => 'blogTab'  
+ get '/:post_id', to: 'static#show', :tab => 'blogTab'
+ 
+ end
   
 namespace :admin do
  
