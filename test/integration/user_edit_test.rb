@@ -58,8 +58,5 @@ class UserEditTest < ActionDispatch::IntegrationTest
     
   end
   
-  test "admin cannot edit another user's profile" do
-    
-  end
   
 end
