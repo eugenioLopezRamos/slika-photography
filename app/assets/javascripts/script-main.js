@@ -444,7 +444,8 @@ var trimmedStatus = status.state.replace('State', '');
 
 activeTabValue = trimmedStatus + "Tab" ; //sets activeTabvalue
 
-$.ajax({url: trimmedStatus, type: 'GET', dataType: 'script'}).done(function() {
+$.ajax({url: trimmedStatus, type: 'GET', dataType: 'script'}).done(function(response) {
+
 
 window.setTimeout(function(){
     
@@ -505,7 +506,14 @@ if(!document.getElementsByClassName("content-Tabs")[0].classList.contains("activ
 document.getElementsByClassName("content-Tabs")[0].classList.add("active-Tab");
 }
 
-});
+
+
+
+}).fail(function(response){console.log("failresponse", response)});
+
+
+
+
 document.getElementById(activeTabValue).style.backgroundColor = "#111";
 }
 /********************************************************************************* END OF UPDATESTATE FUNCTION ***********************************************************************************/
