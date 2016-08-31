@@ -9,6 +9,14 @@ class StaticController < ApplicationController
     format.js
     end
   end
+  
+  def show_blog
+   # @post_id = params[:post_id]
+    respond_to do |format|
+      format.html {render 'home'}
+      format.js
+    end
+  end
 
   def show_404
 
