@@ -67,5 +67,28 @@ class PostInterfaceTest < ActionDispatch::IntegrationTest
     assert_equal @original_post, @notadminpost
   end
   
+  test "admin user should be able to edit his/her own posts" do
+    log_in_as(@admin)
+    get admin_user_path(@admin)
+    assert_template 'users/show'
+    assert_select 'a.post-edit-btn'
+    get edit_admin_post_path(@adminpost)
+    
+    @original_post = @adminpost
+    patch admin_post_path(@adminpost), params: { post: {title: "a new title just for admins",
+                                                      content: "a new content just for admins"} }
+    assert_redirected_to admin_user_path(@admin)
+    assert_equal @original_post, @adminpost
+  end
+  
+  test "an user cannot edit another user's posts" do
+    log_in_as(@admin)
+    @original_post = @notadminpost
+    patch admin_post_path(@notadminpost), params: {post: {title: "modifying this title",
+                                                          content: "modifying this content"} }
+    assert_equal @original_post, @notadminpost
+  end
+  
+  ##add test user should not be able to see edit link for other user's posts
   
 end
