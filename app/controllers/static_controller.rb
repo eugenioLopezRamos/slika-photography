@@ -11,6 +11,7 @@ class StaticController < ApplicationController
   end
   
   def show_blog
+
   end
 
   def show_404

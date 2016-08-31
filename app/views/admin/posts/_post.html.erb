@@ -1,6 +1,6 @@
 <% if params[:post_id] != nil ? @post = Post.find(params[:post_id]) : @post = Post.last 
 
-end %>
+ end %>
 
 <div class="post" id="post-<%= @post.id %>">
     

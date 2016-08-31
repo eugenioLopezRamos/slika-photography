@@ -11,7 +11,7 @@ Rails.application.routes.draw do
   get '/contact', to: 'static#show', :tab => 'contactTab'
   post '/contact', to: 'contact_mailer#create'#, :tab => 'contactTab'
 
-  get '/blog', to: 'static#show', :tab => 'blogTab'  
+  get '/blog', to: 'static#show', :tab => 'blogTab'#, :post_id => Post.last.id
   get '/blog/:post_id', to: 'static#show', :tab => 'blogTab'
  
 
