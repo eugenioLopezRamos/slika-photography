@@ -51,7 +51,7 @@ class UsersSignupTest < ActionDispatch::IntegrationTest
   
   test "creation fails when non admin tries to create user" do
     get admin_login_path
-    post admin_login_path params: { session: { email: @notadmin.email,
+    post admin_login_path, params: { session: { email: @notadmin.email,
                                                password: 'password' } }
     get new_admin_user_path
 
@@ -67,7 +67,7 @@ class UsersSignupTest < ActionDispatch::IntegrationTest
   
   test "valid creation info on logged on admin should succeed" do
     get admin_login_path
-    post admin_login_path params: { session: { email: @admin.email,
+    post admin_login_path, params: { session: { email: @admin.email,
                                                password: 'password' } }
     get new_admin_user_path
     assert_difference 'User.count', 1 do
