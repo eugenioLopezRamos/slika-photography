@@ -11,9 +11,6 @@ class StaticController < ApplicationController
   end
   
   def show_blog
-    respond_to do |format|
-      format.html {render 'home'}
-    end
   end
 
   def show_404

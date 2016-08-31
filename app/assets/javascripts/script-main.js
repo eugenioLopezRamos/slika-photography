@@ -403,7 +403,7 @@ stateObject.state = clickedId.replace('Tab', 'State');
 history.pushState(stateObject, "state", "/" + clickedId.replace('Tab', ''));
 
 
-
+//console.log(stateObject);
 updateState(stateObject);
 
 });
@@ -515,7 +515,7 @@ document.getElementById(activeTabValue).style.backgroundColor = "#111";
 // COMPANY NAME CLICK HANDLER - Exactly the same as clicking "Home" in the Nav menu - need to DRY it up.
 $('.companyName').click(function() {
 event.preventDefault();
-homeState();  
+//homeState();  
 //need to add menu for mobile here (or redirect to home in all the other cases)
 
 });
@@ -1304,6 +1304,7 @@ assignFocusListeners(allTextAreas);
 
 
 var blogTabHandler = function() {
+    console.log("blog handler loaded!");
     
     var blogContent = document.getElementById("blogContents");
    // var postContainer = document.getElementsByClassName("post-container")[0]; //the div with the actual post
