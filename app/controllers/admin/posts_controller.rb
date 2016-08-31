@@ -17,6 +17,23 @@ class Admin::PostsController < ApplicationController
         end
     end
     
+    def edit
+        @post = Post.find(params[:id])
+    end
+    
+    def update
+        @post = Post.find(params[:id])
+        @post.update_attributes(post_params)
+        if @post.save
+            flash[:success] = "Changes have been saved"
+            redirect_to admin_user_path(current_user)
+        else
+            flash[:danger] = "Saving changes failed"
+            redirect_to admin_user_path(current_user)
+        end
+    end
+    
+    
     def show
         @post = Post.find(params[:id])
     end
