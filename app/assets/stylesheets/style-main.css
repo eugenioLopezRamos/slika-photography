@@ -1076,10 +1076,20 @@ transform: translateY(-50%); /*top + transform combined seem to be the same as t
 .post-sidebar {
   height: 100%;
   width: 35%;
-  overflow-x: none;
+  overflow-x: hidden;
   overflow-y: auto;
+  display: flex;
+  margin: auto;
+  justify-content: flex-start;
 }
 
+.post-sidebar-menu {
+  height: auto;
+  width: auto;
+  margin: auto auto auto 5px;
+  display: flex;
+  flex-direction: column;
+}
 
 
 /*DEFINES THE STYLING OF THE BOTTOM BAR */

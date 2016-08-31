@@ -396,7 +396,7 @@ header.removeAttribute('style');
 menu.removeAttribute('style');
 
 $('.menu li').css("background-color", "#333");
-console.log(clickedId);
+
 $('#' + clickedId).css("background-color", "#111");
 
 stateObject.state = clickedId.replace('Tab', 'State');
@@ -1305,9 +1305,9 @@ assignFocusListeners(allTextAreas);
 
 var blogTabHandler = function() {
     
-
-    var postContainer = document.getElementsByClassName("post-container")[0]; //the div with the actual post
-    var postSidebar = document.getElementsByClassName('post-sidebar')[0]; //the sidebar menu that has links to posts
+    var blogContent = document.getElementById("blogContents");
+   // var postContainer = document.getElementsByClassName("post-container")[0]; //the div with the actual post
+   // var postSidebar = document.getElementsByClassName('post-sidebar')[0]; //the sidebar menu that has links to posts
 
     if(document.documentElement.clientWidth<481) {
         var touchStartPosX;//position of the touch X "pointer" at the start of the touch event
@@ -1320,7 +1320,7 @@ var blogTabHandler = function() {
             return {
                 touchStart: function(event) {
                     
-                    postContainer.scrollTop > 5 ? event.stopImmediatePropagation() : "";
+                    blogContent.scrollTop > 5 ? event.stopImmediatePropagation() : "";
                     touchStartPosX = event.changedTouches[0].clientX;
                     document.getElementById("blogContents").addEventListener("touchmove", blogMoveStart, {passive: true});
                     startPrevMargin = prevMargin;
@@ -1330,12 +1330,13 @@ var blogTabHandler = function() {
                     var originalPosX = touchStartPosX;
                     var newX = event.changedTouches[0].clientX;
                     var deltaX = (newX - originalPosX) - touchMoveThreshold;
-                    var marginLeftValue = isNaN(parseInt(postContainer.style.marginLeft, 10)) ? 0 : parseInt(postContainer.style.marginLeft, 10);
+                    var marginLeftValue = isNaN(parseInt(blogContent.style.marginLeft, 10)) ? 0 : parseInt(blogContent.style.marginLeft, 10);
                     
                     if(Math.abs(deltaX) - touchMoveThreshold>0) {
                             deltaX>=0 ? deltaX = deltaX - touchMoveThreshold : deltaX = deltaX + touchMoveThreshold;
                             if(marginLeftValue<=0 && Math.abs(marginLeftValue+10) <= leftStopThreshold) { 
-                                postContainer.style.marginLeft = Math.min((parseInt(startPrevMargin, 10) + deltaX), 0) + 'px';
+                                blogContent.style.marginLeft = Math.min((parseInt(startPrevMargin, 10) + deltaX), 0) + 'px';
+                             //   postSidebar.style.marginLeft = postContainer.style.marginLeft.replace('px', '') + 'px';
                                 }
                             else {
                                 document.getElementById("blogContents").removeEventListener("touchmove", blogMoveStart);    
@@ -1344,10 +1345,10 @@ var blogTabHandler = function() {
                 },
                 
                 touchEnd: function() {
-                    if(Math.abs(postContainer.style.marginLeft.replace('px', ''))>leftStopThreshold) {
-                        postContainer.style.marginLeft = -1*leftStopThreshold + 'px';
+                    if(Math.abs(blogContent.style.marginLeft.replace('px', ''))>leftStopThreshold) {
+                        blogContent.style.marginLeft = -1*leftStopThreshold + 'px';
                     }
-                    prevMargin = postContainer.style.marginLeft;
+                    prevMargin = blogContent.style.marginLeft;
                     startPrevMargin = prevMargin;
                     document.getElementById("blogContents").removeEventListener("touchmove", blogMoveStart);  
                 }
