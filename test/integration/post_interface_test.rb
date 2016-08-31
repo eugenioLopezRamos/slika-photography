@@ -57,7 +57,7 @@ class PostInterfaceTest < ActionDispatch::IntegrationTest
     log_in_as(@notadmin)
     get admin_user_path(@notadmin)
     assert_template 'users/show'
-    assert_select 'a.post-edit-btn'
+    assert_select 'a.post-edit'
     get edit_admin_post_path(@notadminpost)
     
     @original_post = @notadminpost
@@ -71,7 +71,7 @@ class PostInterfaceTest < ActionDispatch::IntegrationTest
     log_in_as(@admin)
     get admin_user_path(@admin)
     assert_template 'users/show'
-    assert_select 'a.post-edit-btn'
+    assert_select 'a.post-edit'
     get edit_admin_post_path(@adminpost)
     
     @original_post = @adminpost
@@ -89,6 +89,15 @@ class PostInterfaceTest < ActionDispatch::IntegrationTest
     assert_equal @original_post, @notadminpost
   end
   
+  test "an user should not see links to edit/delete another user's post while on another user's profile" do
+    log_in_as(@admin)
+    get admin_user_path(@admin)
+    assert_select 'a.post-edit'
+    assert_select 'a.post-delete'
+    get admin_user_path(@notadmin)
+    assert_select 'a.post-edit', 0
+    assert_select 'a.post-delete',0
+  end
   ##add test user should not be able to see edit link for other user's posts
   
 end

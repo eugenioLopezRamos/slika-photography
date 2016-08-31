@@ -7,7 +7,7 @@
             <ol class="posts"><span>
                 <%= link_to clean_post_title,  admin_post_path(post) %>
                 <% if current_user.id == @user.id %>
-                <%=link_to "  | Edit this post", edit_admin_post_path(post), class: "post-edit-btn" %>
+                <%=link_to "  | Edit this post", edit_admin_post_path(post), class: "post-edit" %>
                 <%= link_to "  |  Delete this post", admin_post_path(post),
                 method: 'delete', class: "post-delete", data: {confirm: "Are you sure? This action cannot be undone"} %>
                 <% end %>
