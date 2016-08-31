@@ -60,4 +60,13 @@ class Admin::PostsController < ApplicationController
         end
     end
     
+    def can_edit_post
+      if current_user.id == Post.find(params[:id]).user_id
+        return true
+      else
+        flash[:danger] = "You are not authorized to do this"
+        redirect_to admin_user_path(current_user)
+      end
+    end
+    
 end

@@ -51,10 +51,21 @@ class PostInterfaceTest < ActionDispatch::IntegrationTest
     assert_difference 'Post.count', -1 do
      delete admin_post_path(@notadminpost)
     end
-    
-
   end
   
+  test "an non admin user should be able to edit his/her posts" do
+    log_in_as(@notadmin)
+    get admin_user_path(@notadmin)
+    assert_template 'users/show'
+    assert_select 'a.post-edit-btn'
+    get edit_admin_post_path(@notadminpost)
+    
+    @original_post = @notadminpost
+    patch admin_post_path(@notadminpost), params: { post: {title: "a new title",
+                                                      content: "a new content"} }
+    assert_redirected_to admin_user_path(@notadmin)
+    assert_equal @original_post, @notadminpost
+  end
   
   
 end
