@@ -238,7 +238,7 @@ margin-left: auto;
 }
 
 .navMenu span {
-  text-decoration: none;
+
   color: white;
   font-style: italic;
   font-weight: normal;
@@ -248,6 +248,13 @@ height: 1em;
 justify-content: center;
 margin: auto;
 
+}
+
+.navMenu a {
+  text-decoration: none;
+  height: 100%;
+  width: 100%;
+  display:flex;
 }
 
 .menu > li:hover {

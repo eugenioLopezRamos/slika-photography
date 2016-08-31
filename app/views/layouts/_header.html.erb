@@ -5,13 +5,13 @@
         <li id="leoName"><a href="/homeTab">Leonardo Antonio PhotoArt</a></li>
       </ul>
       <ul class="menu" id="menu">
-        <li class="navMenu" id="homeTab"><span id="homeSpan">Home</span></li>
-        <li class="navMenu" id="peopleTab"><span id="peopleSpan">People</span></li>
-        <li class="navMenu" id="modelsTab"><span id="modelSpan">Models</span></li>
-        <li class="navMenu" id="urbanTab"><span id="urbanSpan">Urban</span></li>
-        <li class="navMenu" id="eventsTab"><span id="eventSpan">Events</span></li>
-        <li class="navMenu" id="contactTab"><span id="contactSpan">Contact Us</span></li>
-        <li class="navMenu" id="blogTab"><span id="blogSpan">Blog</span></li>
+        <li class="navMenu" id="homeTab"><%= link_to content_tag(:span, "Home"), "/home" %></li>
+        <li class="navMenu" id="peopleTab"><%= link_to content_tag(:span, "People"), "/people" %></li>
+        <li class="navMenu" id="modelsTab"><%= link_to content_tag(:span, "Models"), "/models" %></li>
+        <li class="navMenu" id="urbanTab"><<%= link_to content_tag(:span, "Urban"), "/urban" %></li>
+        <li class="navMenu" id="eventsTab"><%= link_to content_tag(:span, "Events"), "/events" %></li>
+        <li class="navMenu" id="contactTab"><%= link_to content_tag(:span, "Contact Us"), "/contact" %></li>
+        <li class="navMenu" id="blogTab"><%= link_to content_tag(:span, "Blog"), "/blog" %></li>
       </ul>
     
   </div>
