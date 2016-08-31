@@ -1,6 +1,6 @@
       <ol class="post-sidebar-menu">
         <%= Post.find_each.each do |post| %>
             <% clean_post_title = strip_tags(post.title) %>
-            <li><%= link_to content_tag(:span, clean_post_title), "blog/#{post.id}", class: "post-link #{post.id}", remote: true, method: "get" %></li>
+            <li><%= link_to content_tag(:span, clean_post_title), "/blog/#{post.id}", class: "post-link #{post.id}", remote: true, method: "get" %></li>
         <% end %>
       </ol>

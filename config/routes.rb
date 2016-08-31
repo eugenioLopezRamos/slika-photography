@@ -75,12 +75,12 @@ Rails.application.routes.draw do
 
 ## here I should include namespace :blog I think so i can use URL to link to posts
  
- scope '/blog' do
-  
- get '', to: 'static#show', :tab => 'blogTab'  
- get '/:post_id', to: 'static#show', :tab => 'blogTab'
+
+
+ get '/blog', to: 'static#show', :tab => 'blogTab'  
+ get '/blog/:post_id', to: 'static#show', :tab => 'blogTab'
  
- end
+
   
 namespace :admin do
  
