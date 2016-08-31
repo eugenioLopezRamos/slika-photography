@@ -1387,7 +1387,13 @@ var blogTabHandler = function() {
 
     } // closes clWidth<481
         
+$(document).on("ajax:success", function(response) {
+    console.log("blogtabresponse",response);
+});
 
+$(document).on("ajax:fail", function(response) {
+    console.log("blogfail", response);
+});
     
 }; //end of blogTabHandler
 
