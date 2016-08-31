@@ -18,9 +18,12 @@
     <h3><%= @user.name %>'s posts</h3>
     
         <% @posts.each do |post| %>
+        
             <% clean_post_title = sanitize post.title, tags: %w(strong em a div img) %>
-            <ol class="posts"><span><%= link_to clean_post_title,  admin_post_path(post) %><%= link_to "  |  delete this post", admin_post_path(post),
+            <ol class="posts"><span><%= link_to clean_post_title,  admin_post_path(post) %><%=link_to "  | Edit this post", edit_admin_post_path(post) %>
+            <%= link_to "  |  Delete this post", admin_post_path(post),
             method: 'delete', class: "post-delete", data: {confirm: "Are you sure? This action cannot be undone"} %></span></ol>
+            
         <% end %>
         
 <% end %>
