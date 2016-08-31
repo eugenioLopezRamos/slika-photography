@@ -1066,12 +1066,10 @@ transform: translateY(-50%); /*top + transform combined seem to be the same as t
   margin-top: 5px;
   overflow-x: none;
   overflow-y: auto;
+  max-width: 100%;
+  word-break: break-all;
 }
 
-.post-content p {
-  width: auto;
-  display:block;
-}
 
 .post-sidebar {
   height: 100%;
