@@ -30,11 +30,31 @@ class UserEditTest < ActionDispatch::IntegrationTest
     assert @admin.reload.authenticate(password)
     assert_equal @admin.name, name
     assert_equal @admin.email, email
-   # assert_equal @admin.password_digest, password
     assert_redirected_to admin_user_path(@admin)
   end
   
   test "user cannot edit another user's profile" do
+    log_in_as(@admin)
+    get admin_user_path(@admin)
+    assert_select 'input.all-users-btn'
+    get admin_users_path
+    get admin_user_path(@notadmin)
+    assert_select 'a.profile-edit', 0
+    name = "new nonadmin name"
+    email = "newnotadmin@google.com"
+    password = "newpass"
+    password_confirmation = "newpass"
+
+      patch admin_user_path(@notadmin), params: {user: {name:name,
+                                                        email: email,
+                                                        password:password,
+                                                        password_confirmation: password_confirmation } }
+    @notadmin.reload
+    assert_not @notadmin.reload.authenticate(password)
+    assert_not_equal @notadmin.name, name
+    assert_not_equal @notadmin.email, email
+    assert_redirected_to admin_user_path(@admin)
+
     
   end
   
