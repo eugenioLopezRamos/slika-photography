@@ -73,6 +73,7 @@ Rails.application.routes.draw do
   
   get '/blog', to: 'static#show', :tab => 'blogTab'
 
+## here I should include namespace :blog I think so i can use URL to link to posts
 
   
 namespace :admin do
