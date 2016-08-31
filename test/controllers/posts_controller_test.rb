@@ -50,14 +50,5 @@ class PostsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to admin_login_path
     
   end
-  
-  test "non admin should not be able to delete another user's posts" do
-  
-  end
-  
-  test "admin should be able to delete another user's posts" do
-  
-  end
-  
 
 end
