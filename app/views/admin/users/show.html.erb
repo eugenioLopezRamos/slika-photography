@@ -2,6 +2,15 @@
 <%= javascript_include_tag 'application'%> 
 <%= csrf_meta_tag %>
 
+<style>
+    .profile-main {
+        width: 50%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    
+</style>
+<div class="profile-main">
 <%= render 'admin/users/menu' %>
 
     <% if flash[:danger] %>
@@ -17,5 +26,5 @@
 <% if Post.count - @user.posts.count > 0  && @user == current_user %>
     <%= render 'admin/users/other_posts' %>
 <% end %>
-
+</div>
 
