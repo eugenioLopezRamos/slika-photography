@@ -74,19 +74,28 @@ class PostInterfaceTest < ActionDispatch::IntegrationTest
     assert_select 'a.post-edit'
     get edit_admin_post_path(@adminpost)
     
-    @original_post = @adminpost
-    patch admin_post_path(@adminpost), params: { post: {title: "a new title just for admins",
-                                                      content: "a new content just for admins"} }
+    title = "a new title just for admins"
+    content = "a new content just for admins"
+    patch admin_post_path(@adminpost), params: { post: {title: title,
+                                                      content: content} }
     assert_redirected_to admin_user_path(@admin)
-    assert_equal @original_post, @adminpost
+    @adminpost.reload
+    assert_equal @adminpost.title, title #if these are equal it means the post was successfully modified.
+    assert_equal @adminpost.content, content #if these are equal it means the post was successfully modified.
   end
   
   test "an user cannot edit another user's posts" do
     log_in_as(@admin)
     @original_post = @notadminpost
-    patch admin_post_path(@notadminpost), params: {post: {title: "modifying this title",
-                                                          content: "modifying this content"} }
-    assert_equal @original_post, @notadminpost
+    
+    title = "modifying this title"
+    content = "modifying this content"
+    
+    patch admin_post_path(@notadminpost), params: { post: {title: title,
+                                                          content: content} }
+    @notadminpost.reload                                                      
+    assert_not_equal @notadminpost.title, title # same principle as above, if these are different it means the post wasn't modified
+    assert_not_equal @notadminpost.content, content # same principle as above, if these are different it means the post wasn't modified
   end
   
   test "an user should not see links to edit/delete another user's post while on another user's profile" do
@@ -98,6 +107,6 @@ class PostInterfaceTest < ActionDispatch::IntegrationTest
     assert_select 'a.post-edit', 0
     assert_select 'a.post-delete',0
   end
-  ##add test user should not be able to see edit link for other user's posts
+
   
 end
