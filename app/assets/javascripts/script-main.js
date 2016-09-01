@@ -421,6 +421,11 @@ function popStateHandler(popstateEvent) {
     document.getElementById(activeTabValue).style.backgroundColor = "#333";
     var param = popstateEvent;
     stateObject.state = popstateEvent.state.state; //sets the state property value to the value of the state property that's on the popstate event (so, back or forwards)
+  /*******/
+    stateObject[activeTabValue] = popstateEvent.state[activeTabValue];
+    //aqui tengo q pasar el param.state[activeTabValue] a updateState para q
+    //llegue a la funcion blogtabhandler y asi se pida al servidor el post correcto
+    
     updateState(param.state);
    // window.addEventListener("popstate", popStateHandler);
     //popStateScheduled=false;
@@ -1321,27 +1326,43 @@ assignFocusListeners(allTextAreas);
 
 var blogTabHandler = function(historyPostRequest) {
     console.log("loads bloghandler");
-    console.log(stateObject[activeTabValue]);
+
     var requestPost = false;
-    typeof stateObject[activeTabValue] == "undefined" ? stateObject[activeTabValue] = currentPostId : requestPost = true;
+    console.log(stateObject[activeTabValue]);
+
+    if(typeof stateObject[activeTabValue] == "undefined"){
+        var currentPostId = document.getElementsByClassName("post")[0].id.replace('post-', '');
+        stateObject[activeTabValue] = currentPostId; //: requestPost = true;   
+        history.replaceState(stateObject, "state", "/" + activeTabValue.replace('Tab', '') + "/" + currentPostId);
+    } 
+    else {
+        requestPost = true;
+    }
+    
+    
+    console.log("stateObject post id", stateObject[activeTabValue]);
     
     if(requestPost) {
         $.ajax({url: '/post_api', data: {'post_id': stateObject[activeTabValue]}, type: 'GET', dataType: 'html'}).done(function(response) {
+            
+            history.replaceState(stateObject, "state", "/" + activeTabValue.replace('Tab', '') + "/" + stateObject[activeTabValue]);
             $('#post-container').html(response);
+            currentPostId = stateObject[activeTabValue]
+            requestPost = false;
         });
     }
     
     
-    typeof historyPostRequest == "undefined" ? historyPostRequest = false : historyPostRequest = historyPostRequest;
+    //typeof historyPostRequest == "undefined" ? historyPostRequest = false : historyPostRequest = historyPostRequest;
     
-    if(historyPostRequest) {
+  //  if(historyPostRequest) {
         //brings a post and replaces state. This is used on back/forward button to show the correct post
         
-    }
+   // }
     
-    var currentPostId = document.getElementsByClassName("post")[0].id.replace('post-', '');
 
-    history.replaceState(stateObject, "state", "/" + activeTabValue.replace('Tab', '') + "/" + currentPostId);
+
+  //  history.replaceState(stateObject, "state", "/" + activeTabValue.replace('Tab', '') + "/" + currentPostId);
     
     
     
