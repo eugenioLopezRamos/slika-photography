@@ -408,7 +408,7 @@ history.pushState(stateObject, "state", "/" + clickedId.replace('Tab', ''));
 
 
 //console.log(stateObject);
-updateState(stateObject);
+updateState(stateObject, true);
 
 });
 /*************************************************************************************END OF NAVMENU HANDLER ************************************************************************************/
@@ -425,8 +425,10 @@ function popStateHandler(popstateEvent) {
     stateObject[activeTabValue] = popstateEvent.state[activeTabValue];
     //aqui tengo q pasar el param.state[activeTabValue] a updateState para q
     //llegue a la funcion blogtabhandler y asi se pida al servidor el post correcto
+    var executeAJAX;
+    stateObject.state == "blogState" ? executeAJAX = false : executeAJAX = true;
     
-    updateState(param.state);
+    updateState(param.state, executeAJAX);
    // window.addEventListener("popstate", popStateHandler);
     //popStateScheduled=false;
 //}, 400); //setTimeout close
@@ -446,7 +448,7 @@ window.addEventListener("popstate", popStateHandler);
 /************************************************************************************* START OF UPDATESTATE FUNCTION *****************************************************************************/
 //This is the function that actually does the job updating the states - this way it can be used by both the nav menu handler and the popstate event listener.
 function updateState(status, executeAJAX) {
-typeof executeAJAX === "undefined" ? executeAJAX = true : executeAJAX = executeAJAX;
+//typeof executeAJAX === "undefined" ? executeAJAX = true : executeAJAX = executeAJAX;
 var stateToRequest = status.state;
 
 var trimmedStatus = status.state.replace('State', '');
@@ -455,16 +457,20 @@ console.log("trimmed", trimmedStatus);
 
 activeTabValue = trimmedStatus + "Tab" ; //sets activeTabvalue
 
-if(trimmedStatus == "blog") { //special function for the blog, to handle the dynamically loaded posts
-blogTabHandler(); 
-} 
-else if(executeAJAX) {
+//if(trimmedStatus == "blog") { //special function for the blog, to handle the dynamically loaded posts
+//blogTabHandler(); 
+//} 
+
+if(executeAJAX) {
+    
 $.ajax({url: "/"+trimmedStatus, type: 'GET', dataType: 'script'}).done(function(response) {
-console.log("ajaxing");
-assignTabHandlers();
+
+    assignTabHandlers();
 
 }).fail(function(response){console.log("failresponse", response)});
+
 }
+
 else if(!executeAJAX) {
     assignTabHandlers();
 }
@@ -483,10 +489,10 @@ contactFormHandler();
 
 }
 
-//if(stateToRequest == "blogState") {
-//blogTabHandler();
+if(stateToRequest == "blogState") {
+blogTabHandler();
 //return;
-//}
+}
 
 else{
     
@@ -1328,14 +1334,18 @@ assignFocusListeners(allTextAreas);
 
 
 function blogTabHandler() {
+    
     console.log("loads bloghandler");
+    console.log(stateObject);
 
     var requestPost = false;
-    console.log(stateObject[activeTabValue]);
+    console.log("active tab...",stateObject[activeTabValue]);
 
     if(typeof stateObject[activeTabValue] == "undefined"){
         var currentPostId = document.getElementsByClassName("post")[0].id.replace('post-', '');
-        stateObject[activeTabValue] = currentPostId; //: requestPost = true;   
+
+        stateObject[activeTabValue] = currentPostId; //: requestPost = true;  
+
         history.replaceState(stateObject, "state", "/" + activeTabValue.replace('Tab', '') + "/" + currentPostId);
     } 
     else {
