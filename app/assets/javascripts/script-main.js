@@ -452,10 +452,6 @@ $.ajax({url: trimmedStatus, type: 'GET', dataType: 'script'}).done(function(resp
 
 assignTabHandlers();
 
-
- if(!document.getElementsByClassName("content-Tabs")[0].classList.contains("active-Tab")) {
-document.getElementsByClassName("content-Tabs")[0].classList.add("active-Tab");
-} 
 }).fail(function(response){console.log("failresponse", response)});
 }
 else if(!executeAJAX) {
@@ -516,6 +512,10 @@ checkForSliders(contentParentNode); //checks all nodes of content-Tabs for the e
 }//else close   
   
 }, 200);
+
+ if(!document.getElementsByClassName("content-Tabs")[0].classList.contains("active-Tab")) {
+document.getElementsByClassName("content-Tabs")[0].classList.add("active-Tab");
+} 
 }
 
 
@@ -1324,15 +1324,18 @@ var blogTabHandler = function() {
     function linksClickHandler(event) {
         event.preventDefault();
 
-
+      //  console.log(event);
+    //    console.log(event.target);
         var targetPostId = event.target.className.replace('post-link ', '');
+        console.log("tgtpstId", targetPostId);
 
-
-
-        $.ajax({url: '/blog/' + targetPostId, type: 'GET', dataType: 'script'}).done(function(response) {
-       console.log(response); 
+        $.ajax({url: 'post_api', data: {'post_id': targetPostId}, type: 'GET', dataType: 'html'}).done(function(response) {
+       //console.log("clickhandler response", response);
+       $('#post-container').html(response);
         });
     }
+    
+    
     
     [].slice.call(document.getElementsByClassName("post-link")).map(function(element, index, array) {
     element.addEventListener("click", linksClickHandler);

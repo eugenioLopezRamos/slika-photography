@@ -13,6 +13,8 @@ Rails.application.routes.draw do
 
   get '/blog', to: 'static#show', :tab => 'blogTab'#, :post_id => Post.last.id
   get '/blog/:post_id', to: 'static#show', :tab => 'blogTab'
+  
+  get 'post_api', to: 'static#retrieve_posts'
  
 
   

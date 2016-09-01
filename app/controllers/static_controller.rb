@@ -10,8 +10,9 @@ class StaticController < ApplicationController
     end
   end
   
-  def show_blog
-
+  def retrieve_posts
+    @post = params[:post_id]
+    render partial: 'admin/posts/post'
   end
 
   def show_404
