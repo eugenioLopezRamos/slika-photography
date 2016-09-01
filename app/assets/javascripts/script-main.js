@@ -1323,16 +1323,25 @@ var blogTabHandler = function() {
     
     function linksClickHandler(event) {
         event.preventDefault();
-
-      //  console.log(event);
-    //    console.log(event.target);
+        event.stopPropagation();
+        if(!scheduled) {
+            
+        //console.log(event);
+        console.log(event.target);
+        window.setTimeout(function() {
         var targetPostId = event.target.className.replace('post-link ', '');
         console.log("tgtpstId", targetPostId);
 
         $.ajax({url: 'post_api', data: {'post_id': targetPostId}, type: 'GET', dataType: 'html'}).done(function(response) {
        //console.log("clickhandler response", response);
        $('#post-container').html(response);
-        });
+        });//.fail(function(response) {alert(response)});                    
+            
+            
+        }, 200);
+    
+            
+        }
     }
     
     
