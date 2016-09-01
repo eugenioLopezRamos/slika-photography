@@ -1,6 +1,5 @@
-<% if params[:post_id] != nil ? @post = Post.find(params[:post_id]) : @post = Post.last 
 
- end %>
+<% @post = Post.find(params[:post_id]) %>
 
 <div class="post" id="post-<%= @post.id %>">
     
@@ -9,4 +8,5 @@
     <div class="post-content"><%= sanitize @post.content, tags: %w(strong em a div p img span style), attributes: %w(style src font-style text-decoration color font-family font-weight height width float) %></div>
 
     
-</div>    
+</div>  
+

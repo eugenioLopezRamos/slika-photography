@@ -457,9 +457,10 @@ activeTabValue = trimmedStatus + "Tab" ; //sets activeTabvalue
 
 if(trimmedStatus == "blog") { //special function for the blog, to handle the dynamically loaded posts
 blogTabHandler(); 
-} else if(executeAJAX) {
+} 
+else if(executeAJAX) {
 $.ajax({url: "/"+trimmedStatus, type: 'GET', dataType: 'script'}).done(function(response) {
-
+console.log("ajaxing");
 assignTabHandlers();
 
 }).fail(function(response){console.log("failresponse", response)});
@@ -1326,7 +1327,7 @@ assignFocusListeners(allTextAreas);
 };//end of contactFormHandler
 
 
-function blogTabHandler(historyPostRequest) {
+function blogTabHandler() {
     console.log("loads bloghandler");
 
     var requestPost = false;
@@ -1346,36 +1347,15 @@ function blogTabHandler(historyPostRequest) {
     
     if(requestPost) {
         $.ajax({url: '/post_api', data: {'post_id': stateObject[activeTabValue]}, type: 'GET', dataType: 'html'}).done(function(response) {
-            
+            console.log("requesting");
             history.replaceState(stateObject, "state", "/" + activeTabValue.replace('Tab', '') + "/" + stateObject[activeTabValue]);
             $('#post-container').html(response);
-            currentPostId = stateObject[activeTabValue]
+            currentPostId = stateObject[activeTabValue];
             requestPost = false;
         });
     }
     
-    
-    //typeof historyPostRequest == "undefined" ? historyPostRequest = false : historyPostRequest = historyPostRequest;
-    
-  //  if(historyPostRequest) {
-        //brings a post and replaces state. This is used on back/forward button to show the correct post
-        
-   // }
-    
-
-
-  //  history.replaceState(stateObject, "state", "/" + activeTabValue.replace('Tab', '') + "/" + currentPostId);
-    
-    
-    
-    
-    
-    // add initial setup (add entry to objectState etc)
     var blogContent = document.getElementById("blogContents");
-    ///////
-    function requestPosts() {
-        
-    }
     
     function linksClickHandler(event) {
         event.preventDefault();
@@ -1386,7 +1366,7 @@ function blogTabHandler(historyPostRequest) {
 
 
         $.ajax({url: '/post_api', data: {'post_id': targetPostId}, type: 'GET', dataType: 'html'}).done(function(response) {
-        
+        console.log("link request");
         stateObject.state = 'blogState';
         stateObject[activeTabValue] = targetPostId;
         currentPostId = targetPostId;
