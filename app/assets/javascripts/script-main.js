@@ -1318,7 +1318,7 @@ assignFocusListeners(allTextAreas);
 
 var blogTabHandler = function() {
     console.log("blog handler loaded!");
-    
+    // add initial setup (add entry to objectState etc)
     var blogContent = document.getElementById("blogContents");
     
     function linksClickHandler(event) {
