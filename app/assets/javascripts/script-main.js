@@ -4,6 +4,7 @@ var main = function() {
 
 var activeTabValue = window.location.pathname.replace('/', '').replace(/(\/\d*|\/)/, '')+ 'Tab'; //used to manage the state of the different tabs
 console.log(window.location);
+console.log(activeTabValue);
 var stateObject = {// initializes the state object for use in the nav menu handler
 state: activeTabValue.replace('Tab', 'State'),
 
@@ -444,11 +445,13 @@ typeof executeAJAX === "undefined" ? executeAJAX = true : executeAJAX = executeA
 var stateToRequest = status.state;
 
 var trimmedStatus = status.state.replace('State', '');
+console.log("trimmed", trimmedStatus);
+//trimmedStatus = blog -> ajax solo para TAB blog, no para el resto, y asi el post lo agarra el blogHandler
 
 activeTabValue = trimmedStatus + "Tab" ; //sets activeTabvalue
 
 if(executeAJAX) {
-$.ajax({url: trimmedStatus, type: 'GET', dataType: 'script'}).done(function(response) {
+$.ajax({url: "/"+trimmedStatus, type: 'GET', dataType: 'script'}).done(function(response) {
 
 assignTabHandlers();
 
@@ -1316,11 +1319,41 @@ assignFocusListeners(allTextAreas);
 };//end of contactFormHandler
 
 
-var blogTabHandler = function() {
-    console.log("blog handler loaded!");
+var blogTabHandler = function(historyPostRequest) {
+    console.log("loads bloghandler");
+    console.log(stateObject[activeTabValue]);
+    var requestPost = false;
+    typeof stateObject[activeTabValue] == "undefined" ? stateObject[activeTabValue] = currentPostId : requestPost = true;
+    
+    if(requestPost) {
+        $.ajax({url: '/post_api', data: {'post_id': stateObject[activeTabValue]}, type: 'GET', dataType: 'html'}).done(function(response) {
+            $('#post-container').html(response);
+        });
+    }
+    
+    
+    typeof historyPostRequest == "undefined" ? historyPostRequest = false : historyPostRequest = historyPostRequest;
+    
+    if(historyPostRequest) {
+        //brings a post and replaces state. This is used on back/forward button to show the correct post
+        
+    }
+    
+    var currentPostId = document.getElementsByClassName("post")[0].id.replace('post-', '');
+
+    history.replaceState(stateObject, "state", "/" + activeTabValue.replace('Tab', '') + "/" + currentPostId);
+    
+    
+    
+    
+    
     // add initial setup (add entry to objectState etc)
     var blogContent = document.getElementById("blogContents");
     ///////
+    function requestPosts() {
+        
+    }
+    
     function linksClickHandler(event) {
         event.preventDefault();
 
@@ -1331,6 +1364,9 @@ var blogTabHandler = function() {
 
         $.ajax({url: '/post_api', data: {'post_id': targetPostId}, type: 'GET', dataType: 'html'}).done(function(response) {
         
+        stateObject.state = 'blogState';
+        stateObject[activeTabValue] = targetPostId;
+        currentPostId = targetPostId;
         history.pushState(stateObject, "state", "/blog/" + targetPostId);
         $('#post-container').html(response);
 
