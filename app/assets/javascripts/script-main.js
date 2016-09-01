@@ -455,7 +455,9 @@ console.log("trimmed", trimmedStatus);
 
 activeTabValue = trimmedStatus + "Tab" ; //sets activeTabvalue
 
-if(executeAJAX) {
+if(trimmedStatus == "blog") { //special function for the blog, to handle the dynamically loaded posts
+blogTabHandler(); 
+} else if(executeAJAX) {
 $.ajax({url: "/"+trimmedStatus, type: 'GET', dataType: 'script'}).done(function(response) {
 
 assignTabHandlers();
@@ -480,10 +482,10 @@ contactFormHandler();
 
 }
 
-if(stateToRequest == "blogState") {
-blogTabHandler();
+//if(stateToRequest == "blogState") {
+//blogTabHandler();
 //return;
-}
+//}
 
 else{
     
@@ -1324,7 +1326,7 @@ assignFocusListeners(allTextAreas);
 };//end of contactFormHandler
 
 
-var blogTabHandler = function(historyPostRequest) {
+function blogTabHandler(historyPostRequest) {
     console.log("loads bloghandler");
 
     var requestPost = false;
