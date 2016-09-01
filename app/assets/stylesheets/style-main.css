@@ -844,7 +844,7 @@ font-size: 3.5em;
 }
 
 .leoPhoto {
-/*margin-top: 5px;*/
+  margin-top: 5px;
   padding-right: 5px;
   float: left;
   height:auto;
