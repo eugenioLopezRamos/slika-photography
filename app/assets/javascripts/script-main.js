@@ -1,9 +1,9 @@
 var main = function() {
 //sets up the default presentation of the site. Most of these should probably be done on the css - will see later.  
   //$('#homeTab').css("background-color", "#111");
-  
-var activeTabValue = window.location.pathname.replace('/', '') + 'Tab'; //used to manage the state of the different tabs
 
+var activeTabValue = window.location.pathname.replace('/', '').replace(/(\/\d*|\/)/, '')+ 'Tab'; //used to manage the state of the different tabs
+console.log(window.location);
 var stateObject = {// initializes the state object for use in the nav menu handler
 state: activeTabValue.replace('Tab', 'State'),
 
@@ -11,7 +11,10 @@ state: activeTabValue.replace('Tab', 'State'),
 var scheduled = false; // this is used to delay applying the state changes so the page doesnt get messed up - src= http://eloquentjavascript.net/14_event.html  - Thanks! 
 
 history.replaceState(stateObject, "Leonardo Antonio PhotoArt", ""); //The page uses the history API for the tabs. This line of code is used for consistency, I wanted to declare the initial state of the page instead of using the browser's default.
-updateState(stateObject);
+
+
+
+updateState(stateObject, false);
 
 function initialFormat() { //this function is used on load, and when resetting the elements' styling, for example on the resize event listener
 
@@ -436,18 +439,31 @@ window.addEventListener("popstate", popStateHandler);
 
 /************************************************************************************* START OF UPDATESTATE FUNCTION *****************************************************************************/
 //This is the function that actually does the job updating the states - this way it can be used by both the nav menu handler and the popstate event listener.
-function updateState(status) {
-
+function updateState(status, executeAJAX) {
+typeof executeAJAX === "undefined" ? executeAJAX = true : executeAJAX = executeAJAX;
 var stateToRequest = status.state;
 
 var trimmedStatus = status.state.replace('State', '');
 
 activeTabValue = trimmedStatus + "Tab" ; //sets activeTabvalue
 
+if(executeAJAX) {
 $.ajax({url: trimmedStatus, type: 'GET', dataType: 'script'}).done(function(response) {
 
+assignTabHandlers();
 
-window.setTimeout(function(){
+
+ if(!document.getElementsByClassName("content-Tabs")[0].classList.contains("active-Tab")) {
+document.getElementsByClassName("content-Tabs")[0].classList.add("active-Tab");
+} 
+}).fail(function(response){console.log("failresponse", response)});
+}
+else if(!executeAJAX) {
+    assignTabHandlers();
+}
+
+function assignTabHandlers() {
+    window.setTimeout(function(){
     
 if(stateToRequest == "homeState") {
 homeTabHandler();
@@ -498,20 +514,9 @@ return;
 checkForSliders(contentParentNode); //checks all nodes of content-Tabs for the existence of one whose class contains "<tabName>Slider" (such as peopleSlider, modelSlider, etc);
 
 }//else close   
-    
+  
 }, 200);
-
-
-if(!document.getElementsByClassName("content-Tabs")[0].classList.contains("active-Tab")) {
-document.getElementsByClassName("content-Tabs")[0].classList.add("active-Tab");
 }
-
-
-
-
-}).fail(function(response){console.log("failresponse", response)});
-
-
 
 
 document.getElementById(activeTabValue).style.backgroundColor = "#111";
@@ -1315,9 +1320,26 @@ var blogTabHandler = function() {
     console.log("blog handler loaded!");
     
     var blogContent = document.getElementById("blogContents");
-   // var postContainer = document.getElementsByClassName("post-container")[0]; //the div with the actual post
-   // var postSidebar = document.getElementsByClassName('post-sidebar')[0]; //the sidebar menu that has links to posts
+    
+    function linksClickHandler(event) {
+        event.preventDefault();
 
+
+        var targetPostId = event.target.className.replace('post-link ', '');
+
+
+
+        $.ajax({url: '/blog/' + targetPostId, type: 'GET', dataType: 'script'}).done(function(response) {
+       console.log(response); 
+        });
+    }
+    
+    [].slice.call(document.getElementsByClassName("post-link")).map(function(element, index, array) {
+    element.addEventListener("click", linksClickHandler);
+    });
+   
+
+    
     if(document.documentElement.clientWidth<481) {
         var touchStartPosX;//position of the touch X "pointer" at the start of the touch event
         var touchMoveThreshold = 50; //threshold for menu movement
@@ -1386,6 +1408,8 @@ var blogTabHandler = function() {
         assignBlogEventListener();
 
     } // closes clWidth<481
+
+
         
 $(document).on("ajax:success", function(response) {
     console.log("blogtabresponse",response);
