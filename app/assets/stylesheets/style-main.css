@@ -1057,6 +1057,7 @@ transform: translateY(-50%); /*top + transform combined seem to be the same as t
 .post {
   width: 100%;
   margin: 5px;
+  animation: imgFadeIn 0.45s forwards;
 }
 .post-title {
   margin: 5px;
