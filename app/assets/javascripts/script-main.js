@@ -1323,29 +1323,26 @@ var blogTabHandler = function() {
     
     function linksClickHandler(event) {
         event.preventDefault();
-        event.stopPropagation();
+
         if(!scheduled) {
-            
-        //console.log(event);
-        console.log(event.target);
         window.setTimeout(function() {
         var targetPostId = event.target.className.replace('post-link ', '');
-        console.log("tgtpstId", targetPostId);
 
-        $.ajax({url: 'post_api', data: {'post_id': targetPostId}, type: 'GET', dataType: 'html'}).done(function(response) {
-       //console.log("clickhandler response", response);
-       $('#post-container').html(response);
+
+        $.ajax({url: '/post_api', data: {'post_id': targetPostId}, type: 'GET', dataType: 'html'}).done(function(response) {
+        
+        history.pushState(stateObject, "state", "/blog/" + targetPostId);
+        $('#post-container').html(response);
+
         });//.fail(function(response) {alert(response)});                    
             
             
         }, 200);
-    
+
             
         }
     }
-    
-    
-    
+   
     [].slice.call(document.getElementsByClassName("post-link")).map(function(element, index, array) {
     element.addEventListener("click", linksClickHandler);
     });
@@ -1422,15 +1419,6 @@ var blogTabHandler = function() {
     } // closes clWidth<481
 
 
-        
-$(document).on("ajax:success", function(response) {
-    console.log("blogtabresponse",response);
-});
-
-$(document).on("ajax:fail", function(response) {
-    console.log("blogfail", response);
-});
-    
 }; //end of blogTabHandler
 
 
