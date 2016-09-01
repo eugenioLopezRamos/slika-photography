@@ -1,14 +1,24 @@
 var main = function() {
 //sets up the default presentation of the site. Most of these should probably be done on the css - will see later.  
   //$('#homeTab').css("background-color", "#111");
+var getTabFromUrl = window.location.pathname.replace('/', '').replace(/(\/\d*|\/)/, '');
 
-var activeTabValue = window.location.pathname.replace('/', '').replace(/(\/\d*|\/)/, '')+ 'Tab'; //used to manage the state of the different tabs
+var activeTabValue = getTabFromUrl + 'Tab'; //used to manage the state of the different tabs
 console.log(window.location);
 console.log(activeTabValue);
+
 var stateObject = {// initializes the state object for use in the nav menu handler
 state: activeTabValue.replace('Tab', 'State'),
+blogTab: (function() { //returns the post number (or slug)
+    if(getTabFromUrl == "blog" ) {
+        return window.location.pathname.replace('/blog/', '');
+    }
+})()
 
 };
+
+console.log(stateObject);
+
 var scheduled = false; // this is used to delay applying the state changes so the page doesnt get messed up - src= http://eloquentjavascript.net/14_event.html  - Thanks! 
 
 history.replaceState(stateObject, "Leonardo Antonio PhotoArt", ""); //The page uses the history API for the tabs. This line of code is used for consistency, I wanted to declare the initial state of the page instead of using the browser's default.
@@ -407,6 +417,9 @@ stateObject.state = clickedId.replace('Tab', 'State');
 history.pushState(stateObject, "state", "/" + clickedId.replace('Tab', ''));
 
 
+
+
+
 //console.log(stateObject);
 updateState(stateObject, true);
 
@@ -420,15 +433,34 @@ function popStateHandler(popstateEvent) {
    // setTimeout(function() {
     document.getElementById(activeTabValue).style.backgroundColor = "#333";
     var param = popstateEvent;
-    stateObject.state = popstateEvent.state.state; //sets the state property value to the value of the state property that's on the popstate event (so, back or forwards)
   /*******/
-    stateObject[activeTabValue] = popstateEvent.state[activeTabValue];
+          console.log("popstate", popstateEvent.state.state, "stateObject", stateObject.state);
+   // stateObject[activeTabValue] = popstateEvent.state[activeTabValue];
     //aqui tengo q pasar el param.state[activeTabValue] a updateState para q
     //llegue a la funcion blogtabhandler y asi se pida al servidor el post correcto
     var executeAJAX;
-    stateObject.state == "blogState" ? executeAJAX = false : executeAJAX = true;
     
-    updateState(param.state, executeAJAX);
+  /*  if(popstateEvent.state.state === stateObject.state === "blogState"){
+       // console.log("popstate", popstateEvent, "stateObject", stateObject);
+       console.log("this should fire");
+        executeAJAX = true;    
+    }else {
+        executeAJAX = false; 
+    }*/
+    
+   //
+   
+//   stateObject.state = popstateEvent.state.state; //sets the state property value to the value of the state property that's on the popstate event (so, back or forwards)
+   
+   var isBlogUpdate = (function(){
+       if(popstateEvent.state.state == "blogState" && stateObject.state == "blogState"){
+           return true;
+       }
+   })();
+   
+//  !isBlogUpdate ? executeAJAX = false : executeAJAX = true
+   
+    updateState(param.state, executeAJAX, isBlogUpdate);
    // window.addEventListener("popstate", popStateHandler);
     //popStateScheduled=false;
 //}, 400); //setTimeout close
@@ -447,8 +479,10 @@ window.addEventListener("popstate", popStateHandler);
 
 /************************************************************************************* START OF UPDATESTATE FUNCTION *****************************************************************************/
 //This is the function that actually does the job updating the states - this way it can be used by both the nav menu handler and the popstate event listener.
-function updateState(status, executeAJAX) {
-//typeof executeAJAX === "undefined" ? executeAJAX = true : executeAJAX = executeAJAX;
+function updateState(status, executeAJAX, isBlogUpdate) {
+typeof executeAJAX === "undefined" ? executeAJAX = true : executeAJAX = executeAJAX;
+
+console.log(executeAJAX);
 var stateToRequest = status.state;
 
 var trimmedStatus = status.state.replace('State', '');
@@ -456,23 +490,37 @@ console.log("trimmed", trimmedStatus);
 //trimmedStatus = blog -> ajax solo para TAB blog, no para el resto, y asi el post lo agarra el blogHandler
 
 activeTabValue = trimmedStatus + "Tab" ; //sets activeTabvalue
+stateObject[activeTabValue] = status[activeTabValue];
 
 //if(trimmedStatus == "blog") { //special function for the blog, to handle the dynamically loaded posts
 //blogTabHandler(); 
 //} 
 
-if(executeAJAX) {
-    
-$.ajax({url: "/"+trimmedStatus, type: 'GET', dataType: 'script'}).done(function(response) {
+if(isBlogUpdate) {
+   blogTabHandler(status.blogTab);
+   return;
+}
 
+if(executeAJAX) {
+//if(trimmedStatus != "blog") {
+$.ajax({url: "/"+trimmedStatus, type: 'GET', dataType: 'script'}).done(function(response) {
+   // console.log(response);
+
+    stateObject.state = status.state;
+    //history.pushState(stateObject, "state", "/" + trimmedStatus);
+    
     assignTabHandlers();
 
 }).fail(function(response){console.log("failresponse", response)});
-
+//}
+//if(trimmedStatus == "blog") {
+    
+//}
 }
 
 else if(!executeAJAX) {
     assignTabHandlers();
+
 }
 
 function assignTabHandlers() {
@@ -501,7 +549,7 @@ var contentParentNode = document.getElementsByClassName("content-Tabs")[0];
 var checkForSliders = function(whereToCheck) {
 
 [].slice.call(whereToCheck.children).map(function(element, index, array) {
-    
+console.log(status);
 if(element.classList.contains(status.state.replace('State', 'Slider'))) {
 slidesHandler();
 return;
@@ -1333,13 +1381,16 @@ assignFocusListeners(allTextAreas);
 };//end of contactFormHandler
 
 
-function blogTabHandler() {
-    
-    console.log("loads bloghandler");
-    console.log(stateObject);
-
-    var requestPost = false;
-    console.log("active tab...",stateObject[activeTabValue]);
+function blogTabHandler(postToRequest) {
+    if(typeof postToRequest !== "undefined") {
+       $.ajax({url: '/post_api', data: {'post_id': postToRequest}, type: 'GET', dataType: 'html'}).done(function(response) {
+            //console.log("requesting");
+          //  history.replaceState(stateObject, "state", "/" + activeTabValue.replace('Tab', '') + "/" + stateObject[activeTabValue]);
+            $('#post-container').html(response);
+            currentPostId = stateObject[activeTabValue];
+           
+    });
+    }
 
     if(typeof stateObject[activeTabValue] == "undefined"){
         var currentPostId = document.getElementsByClassName("post")[0].id.replace('post-', '');
@@ -1348,14 +1399,14 @@ function blogTabHandler() {
 
         history.replaceState(stateObject, "state", "/" + activeTabValue.replace('Tab', '') + "/" + currentPostId);
     } 
-    else {
-        requestPost = true;
-    }
+    //else {
+      // requestPost = true;
+//    }
     
     
-    console.log("stateObject post id", stateObject[activeTabValue]);
+    //console.log("stateObject post id", stateObject[activeTabValue]);
     
-    if(requestPost) {
+   /* if(requestPost) {
         $.ajax({url: '/post_api', data: {'post_id': stateObject[activeTabValue]}, type: 'GET', dataType: 'html'}).done(function(response) {
             console.log("requesting");
             history.replaceState(stateObject, "state", "/" + activeTabValue.replace('Tab', '') + "/" + stateObject[activeTabValue]);
@@ -1363,7 +1414,7 @@ function blogTabHandler() {
             currentPostId = stateObject[activeTabValue];
             requestPost = false;
         });
-    }
+    }*/
     
     var blogContent = document.getElementById("blogContents");
     
@@ -1382,6 +1433,7 @@ function blogTabHandler() {
         currentPostId = targetPostId;
         history.pushState(stateObject, "state", "/blog/" + targetPostId);
         $('#post-container').html(response);
+        console.log("value after click", stateObject[activeTabValue]);
 
         });//.fail(function(response) {alert(response)});                    
             

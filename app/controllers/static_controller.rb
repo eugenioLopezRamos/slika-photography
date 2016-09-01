@@ -6,7 +6,7 @@ class StaticController < ApplicationController
   def show
     respond_to do |format|
     format.html {render 'home'}
-    format.js
+    format.js {@parameters = params}
     end
   end
   
