@@ -490,7 +490,7 @@ console.log("trimmed", trimmedStatus);
 //trimmedStatus = blog -> ajax solo para TAB blog, no para el resto, y asi el post lo agarra el blogHandler
 
 activeTabValue = trimmedStatus + "Tab" ; //sets activeTabvalue
-stateObject[activeTabValue] = status[activeTabValue];
+
 
 //if(trimmedStatus == "blog") { //special function for the blog, to handle the dynamically loaded posts
 //blogTabHandler(); 
@@ -507,6 +507,7 @@ $.ajax({url: "/"+trimmedStatus, type: 'GET', dataType: 'script'}).done(function(
    // console.log(response);
 
     stateObject.state = status.state;
+   // stateObject[activeTabValue] = status[activeTabValue];
     //history.pushState(stateObject, "state", "/" + trimmedStatus);
     
     assignTabHandlers();
@@ -1399,22 +1400,7 @@ function blogTabHandler(postToRequest) {
 
         history.replaceState(stateObject, "state", "/" + activeTabValue.replace('Tab', '') + "/" + currentPostId);
     } 
-    //else {
-      // requestPost = true;
-//    }
-    
-    
-    //console.log("stateObject post id", stateObject[activeTabValue]);
-    
-   /* if(requestPost) {
-        $.ajax({url: '/post_api', data: {'post_id': stateObject[activeTabValue]}, type: 'GET', dataType: 'html'}).done(function(response) {
-            console.log("requesting");
-            history.replaceState(stateObject, "state", "/" + activeTabValue.replace('Tab', '') + "/" + stateObject[activeTabValue]);
-            $('#post-container').html(response);
-            currentPostId = stateObject[activeTabValue];
-            requestPost = false;
-        });
-    }*/
+
     
     var blogContent = document.getElementById("blogContents");
     
