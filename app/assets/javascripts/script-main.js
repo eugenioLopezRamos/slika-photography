@@ -712,7 +712,7 @@ if(element.classList.contains("active-slide")) {
 };
 currentTabActiveIndex = currentTab.findIndex(findTheActiveSlide, 0);
 stateObject[activeTabValue] = currentTabActiveIndex+1;
-history.replaceState(stateObject, "", "");
+
 }
 determineActiveIndex();
 
