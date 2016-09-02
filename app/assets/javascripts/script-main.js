@@ -487,8 +487,6 @@ typeof executeAJAX === "undefined" ? executeAJAX = true : executeAJAX = executeA
 var stateToRequest = status.state;
 console.log("stateToRequest", stateToRequest);
 var trimmedStatus = status.state.replace('State', '');
-//var getContentId = stateObject[activeTabValue];
-//trimmedStatus = blog -> ajax solo para TAB blog, no para el resto, y asi el post lo agarra el blogHandler
 
 activeTabValue = trimmedStatus + "Tab" ; //sets activeTabvalue
 
@@ -499,30 +497,20 @@ if(isBlogUpdate) {
 }
 
 if(executeAJAX) { //used for nav menu clicks
-//if(trimmedStatus != "blog") {
-console.log("console log stateObject value", stateObject);
-console.log("console log status value", status);
 
 $.ajax({url: "/tab_getter", data: {tab: activeTabValue, id: status[activeTabValue]}, type: 'GET', dataType: 'html'}).done(function(response) {
-   // console.log(response);
 
     stateObject.state = status.state;
     $('#jumbotron').html(response);
-   // stateObject[activeTabValue] = status[activeTabValue];
-    //history.pushState(stateObject, "state", "/" + trimmedStatus);
-    
+
     assignTabHandlers();
 
 }).fail(function(response){console.log("failresponse", response)});
-//}
-//if(trimmedStatus == "blog") {
-    
-//}
+
 }
 
 else if(!executeAJAX) { //used on first page load
     assignTabHandlers();
-
 }
 
 function assignTabHandlers() {
@@ -551,7 +539,6 @@ var contentParentNode = document.getElementsByClassName("content-Tabs")[0];
 var checkForSliders = function(whereToCheck) {
 
 [].slice.call(whereToCheck.children).map(function(element, index, array) {
-//console.log(status);
 if(element.classList.contains(status.state.replace('State', 'Slider'))) {
 slidesHandler();
 return;
@@ -1398,10 +1385,14 @@ function blogTabHandler(postToRequest, setListeners) {
     if(typeof postToRequest !== "undefined") {
         
        $.ajax({url: '/post_api', data: {'post_id': postToRequest}, type: 'GET', dataType: 'html'}).done(function(response) {
-            $('#post-container').html(response);
-            currentPostId = stateObject[activeTabValue];
+        $('#post-container').html(response);
+        currentPostId = stateObject[activeTabValue];
+        //stateObject[activeTabValue] = postToRequest;
+           
+      //  history.replaceState(stateObject, "state", "");
           //  setActivePost();
     });
+    
     } else if(typeof postToRequest == "undefined"){
         history.replaceState(stateObject, "state", '/blog/' + document.getElementsByClassName("post")[0].id.replace('post-', ''));
     } 
@@ -1432,11 +1423,10 @@ function blogTabHandler(postToRequest, setListeners) {
         if(!scheduled) {
         window.setTimeout(function() {
         var targetPostId = event.target.className.replace('post-link ', ''); //determines the id of the post to retrieve
-    //    var targetButton = event.target;
-            console.log("link handler firing 90000 times");
+
         $.ajax({url: '/post_api', data: {'post_id': targetPostId}, type: 'GET', dataType: 'html'}).done(function(response) {
             
-            console.log("link handler ajax");
+          
 
             stateObject.state = 'blogState'; //updates the state object state (which is used by updatestate/the popstate event listener)
             stateObject[activeTabValue] = targetPostId; //stores the id of the post that was retrieved from the server
