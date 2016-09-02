@@ -1385,6 +1385,10 @@ assignFocusListeners(allTextAreas);
 // START THE BLOG TAB HANDLER
 function blogTabHandler(postToRequest) {
     
+    function setActivePost() {
+        
+    }
+    
     if(typeof postToRequest !== "undefined") {
         
        $.ajax({url: '/post_api', data: {'post_id': postToRequest}, type: 'GET', dataType: 'html'}).done(function(response) {
@@ -1408,17 +1412,19 @@ function blogTabHandler(postToRequest) {
     
     
     var blogContent = document.getElementById("blogContents");
-    
+    if(typeof blogTabHandler.setListeners == "undefined"){
     function linksClickHandler(event) {
         event.preventDefault();
-
+        
         if(!scheduled) {
         window.setTimeout(function() {
         var targetPostId = event.target.className.replace('post-link ', ''); //determines the id of the post to retrieve
-
-
+        var targetButton = event.target;
+            console.log("link handler firing 90000 times");
         $.ajax({url: '/post_api', data: {'post_id': targetPostId}, type: 'GET', dataType: 'html'}).done(function(response) {
-       
+            
+            console.log("link handler ajax");
+
             stateObject.state = 'blogState'; //updates the state object state (which is used by updatestate/the popstate event listener)
             stateObject[activeTabValue] = targetPostId; //stores the id of the post that was retrieved from the server
             currentPostId = targetPostId; //sets current Id variable
@@ -1436,6 +1442,8 @@ function blogTabHandler(postToRequest) {
     }
    
     [].slice.call(document.getElementsByClassName("post-link")).map(function(element, index, array) {
+        console.log(element.removeEventListener("click", linksClickHandler));
+    element.removeEventListener("click", linksClickHandler);
     element.addEventListener("click", linksClickHandler);
     });
    
@@ -1510,7 +1518,8 @@ function blogTabHandler(postToRequest) {
 
     } // closes clWidth<481
 
-
+blogTabHandler.setListeners = false;
+}
 } //end of blogTabHandler
 // FINISH THE BLOG TAB HANDLER
 
