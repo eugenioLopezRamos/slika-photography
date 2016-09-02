@@ -497,11 +497,12 @@ activeTabValue = trimmedStatus + "Tab" ; //sets activeTabvalue
 //} 
 
 if(isBlogUpdate) {
-   blogTabHandler(status.blogTab);
+    $('#blogTab').css('background-color', '#111');
+    blogTabHandler(status.blogTab);
    return;
 }
 
-if(executeAJAX) {
+if(executeAJAX) { //used for nav menu clicks
 //if(trimmedStatus != "blog") {
 $.ajax({url: "/"+trimmedStatus, type: 'GET', dataType: 'script'}).done(function(response) {
    // console.log(response);
@@ -519,7 +520,7 @@ $.ajax({url: "/"+trimmedStatus, type: 'GET', dataType: 'script'}).done(function(
 //}
 }
 
-else if(!executeAJAX) {
+else if(!executeAJAX) { //used on first page load
     assignTabHandlers();
 
 }
@@ -965,7 +966,7 @@ nextButton.map(function(element, array, index) {element.removeEventListener("cli
 
 //This function controls the behavior of the contact tab
 //Probably Fancy Programming Syndrome, but at least I learned a bit...
-var contactFormHandler = function() { 
+function contactFormHandler() { 
  //defines a new object type - inputField, used for the data relating to the inputfields and text area for the contact form     
 if(typeof FB == "undefined") {
 console.log("FB is undefined");    
@@ -1379,28 +1380,32 @@ assignFocusListeners(allTextAreas);
 
 /**** END part that handles the formatting when the input boxes receive focus *****/
 
-};//end of contactFormHandler
+}//end of contactFormHandler
 
-
+// START THE BLOG TAB HANDLER
 function blogTabHandler(postToRequest) {
+    
     if(typeof postToRequest !== "undefined") {
+        
        $.ajax({url: '/post_api', data: {'post_id': postToRequest}, type: 'GET', dataType: 'html'}).done(function(response) {
-            //console.log("requesting");
-          //  history.replaceState(stateObject, "state", "/" + activeTabValue.replace('Tab', '') + "/" + stateObject[activeTabValue]);
             $('#post-container').html(response);
             currentPostId = stateObject[activeTabValue];
-           
+          //  setActivePost();
     });
-    }
+    } else if(typeof postToRequest == "undefined"){
+        history.replaceState(stateObject, "state", 'blog/' + document.getElementsByClassName("post")[0].id.replace('post-', ''));
+    } 
 
     if(typeof stateObject[activeTabValue] == "undefined"){
         var currentPostId = document.getElementsByClassName("post")[0].id.replace('post-', '');
 
-        stateObject[activeTabValue] = currentPostId; //: requestPost = true;  
+        stateObject[activeTabValue] = currentPostId; //: requestPost = true; 
+      //  setActivePost();
 
         history.replaceState(stateObject, "state", "/" + activeTabValue.replace('Tab', '') + "/" + currentPostId);
     } 
 
+    
     
     var blogContent = document.getElementById("blogContents");
     
@@ -1409,17 +1414,17 @@ function blogTabHandler(postToRequest) {
 
         if(!scheduled) {
         window.setTimeout(function() {
-        var targetPostId = event.target.className.replace('post-link ', '');
+        var targetPostId = event.target.className.replace('post-link ', ''); //determines the id of the post to retrieve
 
 
         $.ajax({url: '/post_api', data: {'post_id': targetPostId}, type: 'GET', dataType: 'html'}).done(function(response) {
-        console.log("link request");
-        stateObject.state = 'blogState';
-        stateObject[activeTabValue] = targetPostId;
-        currentPostId = targetPostId;
-        history.pushState(stateObject, "state", "/blog/" + targetPostId);
-        $('#post-container').html(response);
-        console.log("value after click", stateObject[activeTabValue]);
+       
+            stateObject.state = 'blogState'; //updates the state object state (which is used by updatestate/the popstate event listener)
+            stateObject[activeTabValue] = targetPostId; //stores the id of the post that was retrieved from the server
+            currentPostId = targetPostId; //sets current Id variable
+            history.pushState(stateObject, "state", "/blog/" + targetPostId); //pushes the state, changes the URL
+            $('#post-container').html(response); //renders the post
+
 
         });//.fail(function(response) {alert(response)});                    
             
@@ -1506,8 +1511,8 @@ function blogTabHandler(postToRequest) {
     } // closes clWidth<481
 
 
-}; //end of blogTabHandler
-
+} //end of blogTabHandler
+// FINISH THE BLOG TAB HANDLER
 
 
 };

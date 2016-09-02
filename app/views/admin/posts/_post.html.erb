@@ -1,5 +1,7 @@
 
-<% @post = Post.find(params[:post_id]) %>
+<% if !@post then @post = Post.find(params[:post_id]) %>
+<% else @post = @post %>
+<% end %>
 
 <div class="post" id="post-<%= @post.id %>">
     
