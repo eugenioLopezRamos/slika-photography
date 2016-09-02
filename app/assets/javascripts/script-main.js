@@ -487,7 +487,7 @@ typeof executeAJAX === "undefined" ? executeAJAX = true : executeAJAX = executeA
 var stateToRequest = status.state;
 console.log("stateToRequest", stateToRequest);
 var trimmedStatus = status.state.replace('State', '');
-var getContentId = stateObject[activeTabValue];
+//var getContentId = stateObject[activeTabValue];
 //trimmedStatus = blog -> ajax solo para TAB blog, no para el resto, y asi el post lo agarra el blogHandler
 
 activeTabValue = trimmedStatus + "Tab" ; //sets activeTabvalue
@@ -712,7 +712,7 @@ if(element.classList.contains("active-slide")) {
 };
 currentTabActiveIndex = currentTab.findIndex(findTheActiveSlide, 0);
 stateObject[activeTabValue] = currentTabActiveIndex+1;
-
+history.replaceState(stateObject, "", "");
 }
 determineActiveIndex();
 
