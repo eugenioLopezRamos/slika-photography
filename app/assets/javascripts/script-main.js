@@ -4,8 +4,8 @@ var main = function() {
 var getTabFromUrl = window.location.pathname.replace('/', '').replace(/(\/\d*|\/)/, '');
 
 var activeTabValue = getTabFromUrl + 'Tab'; //used to manage the state of the different tabs
-console.log(window.location);
-console.log(activeTabValue);
+
+
 
 var stateObject = {// initializes the state object for use in the nav menu handler
 state: activeTabValue.replace('Tab', 'State'),
@@ -17,7 +17,8 @@ blogTab: (function() { //returns the post number (or slug)
 
 };
 
-console.log(stateObject);
+typeof stateObject[activeTabValue] == "undefined" ? stateObject[activeTabValue] = 1 : "";
+//console.log("first state", stateObject[activeTabValue]);
 
 var scheduled = false; // this is used to delay applying the state changes so the page doesnt get messed up - src= http://eloquentjavascript.net/14_event.html  - Thanks! 
 
@@ -34,7 +35,7 @@ function initialFormat() { //this function is used on load, and when resetting t
 
 //al finalizar load se debe determinar la activeTab de manera dinamica, y mandar una orden de replaceState que llama a la function updateState para 
 //invocar al eventHandler apropiado para la tab
-console.log(window.location);
+
 
 initialFormat();
 var prevHeight = 0; //this variable defines the starting size of the menu on mobile, it needs to be outside the menuToggle function because otherwise it cannot be changed when clicking a menu item, so when you click a menu item
@@ -482,32 +483,31 @@ window.addEventListener("popstate", popStateHandler);
 function updateState(status, executeAJAX, isBlogUpdate) {
 typeof executeAJAX === "undefined" ? executeAJAX = true : executeAJAX = executeAJAX;
 
-console.log(executeAJAX);
-var stateToRequest = status.state;
 
+var stateToRequest = status.state;
+console.log("stateToRequest", stateToRequest);
 var trimmedStatus = status.state.replace('State', '');
-console.log("trimmed", trimmedStatus);
+var getContentId = stateObject[activeTabValue];
 //trimmedStatus = blog -> ajax solo para TAB blog, no para el resto, y asi el post lo agarra el blogHandler
 
 activeTabValue = trimmedStatus + "Tab" ; //sets activeTabvalue
 
-
-//if(trimmedStatus == "blog") { //special function for the blog, to handle the dynamically loaded posts
-//blogTabHandler(); 
-//} 
-
 if(isBlogUpdate) {
     $('#blogTab').css('background-color', '#111');
-    blogTabHandler(status.blogTab);
+    blogTabHandler(status.blogTab, false);
    return;
 }
 
 if(executeAJAX) { //used for nav menu clicks
 //if(trimmedStatus != "blog") {
-$.ajax({url: "/"+trimmedStatus, type: 'GET', dataType: 'script'}).done(function(response) {
+console.log("console log stateObject value", stateObject);
+console.log("console log status value", status);
+
+$.ajax({url: "/tab_getter", data: {tab: activeTabValue, id: status[activeTabValue]}, type: 'GET', dataType: 'html'}).done(function(response) {
    // console.log(response);
 
     stateObject.state = status.state;
+    $('#jumbotron').html(response);
    // stateObject[activeTabValue] = status[activeTabValue];
     //history.pushState(stateObject, "state", "/" + trimmedStatus);
     
@@ -551,7 +551,7 @@ var contentParentNode = document.getElementsByClassName("content-Tabs")[0];
 var checkForSliders = function(whereToCheck) {
 
 [].slice.call(whereToCheck.children).map(function(element, index, array) {
-console.log(status);
+//console.log(status);
 if(element.classList.contains(status.state.replace('State', 'Slider'))) {
 slidesHandler();
 return;
@@ -605,7 +605,16 @@ event.preventDefault();
 /*********************************************************************************** START OF SLIDES HANDLER ****************************************************************************************/
 function slidesHandler(){
     
-typeof stateObject[activeTabValue] == "undefined" ? stateObject[activeTabValue] = 1 : ""; //creates a key/value pair such as 'peopleTab: 1'. This is used as
+var currentTab = [].slice.call(document.getElementsByClassName(stateObject.state.replace('State', 'Slide'))); //makes an array of items of all the slide containing divs
+//var currentTab = stateObject.state.replace('State', 'Slide');
+var currentTabActiveIndex = stateObject[activeTabValue]-1;
+var activePicker = document.getElementById(stateObject.state.replace('State', 'CounterCurrent'));
+activePicker.value = stateObject[activeTabValue];
+document.getElementById(stateObject.state.replace('State', 'CounterTotal')).innerHTML = currentTab.length; //length of the slide picker at the bottom
+//currentTab[stateObject[activeTabValue]-1].classList.add("active-slide"); //from the currentTab array, check on stateObject what's the slide we should be at, and add 'active-slide to it'
+
+    
+//typeof stateObject[activeTabValue] == "undefined" ? determineActiveIndex() : ""; //creates a key/value pair such as 'peopleTab: 1'. This is used as
 // 'memory' to remember what slide you were seeing, so it can be displayed when using the back/forward browser buttons
 //it is done this way because for this case I think cookies are a bit excessive/intrusive, since state is only relevant while the page is active (as oppossed to e.g. login status)
 
@@ -690,12 +699,6 @@ document.removeEventListener("touchmove", movePass);
 
 //Yes, I am aware that the whole previous/next slide and add/remove class is MUCH faster w/ jQuery (.prev(), .next(), .addClass(), .removeClass(), however I wanted to try a vanilla JS solution
 
-var currentTab = [].slice.call(document.getElementsByClassName(stateObject.state.replace('State', 'Slide'))); //makes an array of items of all the slide containing divs
-var currentTabActiveIndex = stateObject[activeTabValue]-1;
-var activePicker = document.getElementById(stateObject.state.replace('State', 'CounterCurrent'));
-activePicker.value = stateObject[activeTabValue];
-document.getElementById(stateObject.state.replace('State', 'CounterTotal')).innerHTML = currentTab.length; //length of the slide picker at the bottom
-currentTab[stateObject[activeTabValue]-1].classList.add("active-slide"); //from the currentTab array, check on stateObject what's the slide we should be at, and add 'active-slide to it'
 
 function determineActiveIndex() {//this function has to be called every time the classes are modified
 
@@ -709,6 +712,7 @@ if(element.classList.contains("active-slide")) {
 };
 currentTabActiveIndex = currentTab.findIndex(findTheActiveSlide, 0);
 stateObject[activeTabValue] = currentTabActiveIndex+1;
+history.replaceState(stateObject, "", "");
 }
 determineActiveIndex();
 
@@ -798,7 +802,8 @@ activePicker.value = (function() {
 scheduled=false; //allows the event to happen again once its finished
 determineActiveIndex();  
 assignTouchEventListeners();    
-console.log(currentTabActiveIndex);
+console.log("crtTab Active index",currentTabActiveIndex);
+console.log(stateObject[activeTabValue]);
 }, 460);   
 
 }
@@ -844,9 +849,9 @@ function assignTouchEventListeners() {
 currentTab[currentTabActiveIndex].addEventListener("touchstart", onTouch);
 //end of touch event listener
 currentTab[currentTabActiveIndex].addEventListener("touchend", onTouchEnd);
-console.log(currentTab);
-console.log(currentTabActiveIndex);
-console.log("assign touch evt listener");
+
+console.log("current tab active index", currentTabActiveIndex);
+
 }
 
 assignTouchEventListeners();
@@ -855,7 +860,7 @@ function slidePickerHandler() {
 
 var slidePicker = [].slice.call(document.getElementsByClassName("slidePicker")); //array of all slide pickers 
 
-console.log(slidePicker);
+//console.log(slidePicker);
 //I don't really like this solution...seems really ugly.
 
 //It works like this: .map goes through each item of slidePicker, sets a new var called "assignEvtListeners" to true. if assignEvtListeners is true, executes  array[index].addEvtListener("focus"...)'s
@@ -1383,7 +1388,8 @@ assignFocusListeners(allTextAreas);
 }//end of contactFormHandler
 
 // START THE BLOG TAB HANDLER
-function blogTabHandler(postToRequest) {
+function blogTabHandler(postToRequest, setListeners) {
+    typeof setListeners == "undefined" ? setListeners = true : setListeners = setListeners;
     
     function setActivePost() {
         
@@ -1397,7 +1403,7 @@ function blogTabHandler(postToRequest) {
           //  setActivePost();
     });
     } else if(typeof postToRequest == "undefined"){
-        history.replaceState(stateObject, "state", 'blog/' + document.getElementsByClassName("post")[0].id.replace('post-', ''));
+        history.replaceState(stateObject, "state", '/blog/' + document.getElementsByClassName("post")[0].id.replace('post-', ''));
     } 
 
     if(typeof stateObject[activeTabValue] == "undefined"){
@@ -1412,14 +1418,21 @@ function blogTabHandler(postToRequest) {
     
     
     var blogContent = document.getElementById("blogContents");
-    if(typeof blogTabHandler.setListeners == "undefined"){
+    
+    
+    
+
+        
+        
+        
+        
     function linksClickHandler(event) {
         event.preventDefault();
         
         if(!scheduled) {
         window.setTimeout(function() {
         var targetPostId = event.target.className.replace('post-link ', ''); //determines the id of the post to retrieve
-        var targetButton = event.target;
+    //    var targetButton = event.target;
             console.log("link handler firing 90000 times");
         $.ajax({url: '/post_api', data: {'post_id': targetPostId}, type: 'GET', dataType: 'html'}).done(function(response) {
             
@@ -1440,7 +1453,17 @@ function blogTabHandler(postToRequest) {
             
         }
     }
-   
+    
+    
+    
+    
+    
+    
+    if(setListeners == true){
+        
+        
+        console.log("setting evt listeners");
+        
     [].slice.call(document.getElementsByClassName("post-link")).map(function(element, index, array) {
         console.log(element.removeEventListener("click", linksClickHandler));
     element.removeEventListener("click", linksClickHandler);
@@ -1518,7 +1541,7 @@ function blogTabHandler(postToRequest) {
 
     } // closes clWidth<481
 
-blogTabHandler.setListeners = false;
+
 }
 } //end of blogTabHandler
 // FINISH THE BLOG TAB HANDLER

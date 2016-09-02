@@ -2,26 +2,36 @@
    active_slide_class = 'active-slide' #HTML class to be used for the active slide - This is used by the javascript and css to display and style things.
    full_dir = "#{assets_dir}" + "#{@image_dir}" #image_dir is provided by the respective partial
   # active_slide = 1 # 1-indexed number of the active slide. Later it will be dynamic
-   
+  
+  
+  
+  
+# debugger 
+  if params[:id].nil?
+      active_slide = 1
+  else
+      active_slide = params[:id]
+      active_slide = active_slide.to_i
+  end
+
+
+  
 slides_number = Dir[File.join(full_dir, '**', '*')].count { |file| File.file?(file) } #Counts the amount of files in the directory determined by the active tab
 #the loop below loops creates slides_number amount of divs that contain an image element, whose source is full_dir/<NUMBER OF SLIDE>.jpg. Additionally, for the active slide, it adds the active_slide_class value
 %>
 
 <% (1...slides_number+1).each do |slide| %> 
 
-<%#if slide == active_slide %>
+<% if slide == active_slide %>
 
-<%#= content_tag :div, class: "#{@tab_value} #{active_slide_class}" do -%>
-  <%#= image_tag("/assets/#{@image_dir}/#{active_slide}.jpg") -%>
-  <%# end -%>
-  
-<%# else %>
-
-
+    <%= content_tag :div, class: "#{@tab_value} #{active_slide_class}" do -%>
+      <%= image_tag("/assets/#{@image_dir}/#{active_slide}.jpg") -%>
+    <% end -%>
+<% else %>
 <%= content_tag :div, class: "#{@tab_value}" do -%>
   <%= image_tag("/assets/#{@image_dir}/#{slide}.jpg") -%>
   <% end -%>
-<%# end %>
+<% end %>
 
 <% end %>
 
