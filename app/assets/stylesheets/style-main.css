@@ -1121,6 +1121,33 @@ transform: translateY(-50%); /*top + transform combined seem to be the same as t
   height: 100%;
   width: 100%;
   display:flex;
+  position:relative;
+}
+
+.active-post{
+  border-top: 1px solid white;
+  border-bottom: 1px solid white;
+}
+
+.active-post:before {
+    content: "";
+    background: transparent;
+    height: 3.3333vw;/*64px;*/
+    box-sizing: border-box;
+    border-right: 1px white solid;
+    transform-origin: center;
+    transform: rotate(45deg) translateY(50%) translateX(-20.5%);
+}
+
+.active-post:after {
+    content: "";
+    background: transparent;
+    height: 3.3333vw;/*64px;*/
+    box-sizing: border-box;
+    border-right: 1px white solid;
+    transform-origin: center;
+    position:absolute;
+    transform: rotate(45deg) translateY(50%) translateX(-20.5%);
 }
 
 .post-sidebar-menu a > span {
