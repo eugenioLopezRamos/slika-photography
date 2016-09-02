@@ -6,8 +6,8 @@ class StaticController < ApplicationController
   def show
     respond_to do |format|
     format.html {render 'home'}
-    format.js {@parameters = params}
-    format.json 
+    format.js
+
     end
   end
   
@@ -16,6 +16,21 @@ class StaticController < ApplicationController
       else @post = Post.find(params[:post_id])
     end
     render partial: 'admin/posts/post'
+  end
+  
+  def retrieve_tabs
+    if params[:id] == "undefined" || params[:id].nil?
+      @id = "1"
+      else 
+        @id = params[:id]
+    end
+    
+    if params[:post_id].nil? then @post = Post.last #need to fix this
+      else @post = Post.find(params[:post_id])
+    end
+
+    render partial: 'layouts/jumbotron' 
+    
   end
 
   def show_404

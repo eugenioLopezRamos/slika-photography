@@ -1,5 +1,7 @@
 
 
-<% @tab = params[:tab] %>
+<%# @tab = params[:tab] %>
 
-<%= render "layouts/tabs/#{@tab}" %>
+<%#debugger %>
+<%= debug(params) if Rails.env.development? %>
+<%= render "layouts/tabs/#{params[:tab]}" %>
