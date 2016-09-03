@@ -29,9 +29,9 @@ To watch some training videos, visit http://www.youtube.com/user/c9ide
 - Correctly assign the "active-post" class to the active post so it gets the correct css
 
 ```
-#!markdown
 
-- ~~Show posts on blog tab from newest to oldest (currently its oldest to newest)~~
+
+- Show posts on blog tab from newest to oldest (currently its oldest to newest)
 ```
 
 - Add vanity URLs to blog posts
