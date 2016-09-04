@@ -32,7 +32,7 @@ To watch some training videos, visit http://www.youtube.com/user/c9ide
 **TO DO**
 
 
-
+- Fix blog tab mobile formatting
 - Add vanity URLs to blog posts
 - Format the admin pages somewhat decently
 - Add the correct partial to display error messages to admin pages
@@ -56,5 +56,3 @@ To watch some training videos, visit http://www.youtube.com/user/c9ide
 
 
 
-
-Just a small change to test git

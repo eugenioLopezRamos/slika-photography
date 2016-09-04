@@ -1426,7 +1426,7 @@ console.log("initial active post", stateObject);
     /**********************************************/
     
     var blogContent = document.getElementById("blogContents");
-    
+    var postContainer = document.getElementsByClassName("post-container")[0];
 
         
     function linksClickHandler(event) {
@@ -1437,8 +1437,6 @@ console.log("initial active post", stateObject);
         var targetPostId = event.target.className.replace('post-link ', ''); //determines the id of the post to retrieve
 
         $.ajax({url: '/post_api', data: {'post_id': targetPostId}, type: 'GET', dataType: 'html'}).done(function(response) {
-            
-          
 
             stateObject.state = 'blogState'; //updates the state object state (which is used by updatestate/the popstate event listener)
             stateObject[activeTabValue] = targetPostId; //stores the id of the post that was retrieved from the server
@@ -1485,13 +1483,27 @@ console.log("initial active post", stateObject);
             return {
                 touchStart: function(event) {
                     
-                    blogContent.scrollTop > 5 ? event.stopImmediatePropagation() : "";
+                    if(postContainer.scrollTop > 5) {
+ 
+                        event.stopPropagation();
+             
+
+                    } 
+
                     touchStartPosX = event.changedTouches[0].clientX;
-                    document.getElementById("blogContents").addEventListener("touchmove", blogMoveStart, {passive: true});
+                    document.getElementById("blogContents").addEventListener("touchmove", blogMoveStart);
                     startPrevMargin = prevMargin;
                 },
                 
                 touchMove: function(event) {
+
+                //    if(postContainer.scrollTop > 5) {
+
+                  //      event.stopPropagation();
+               
+                    //  } 
+
+                    console.log(postContent.scrollTop);
                     var originalPosX = touchStartPosX;
                     var newX = event.changedTouches[0].clientX;
                     var deltaX = (newX - originalPosX) - touchMoveThreshold;

@@ -1726,7 +1726,9 @@ margin: auto;
     overflow: hidden;
 
 }
-
+.post-sidebar-title > span{
+font-size: 2.2em;
+}
 .post-sidebar ol {
   margin: 5px;
 }
