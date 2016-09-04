@@ -1733,6 +1733,10 @@ font-size: 2.2em;
   margin: 5px;
 }
 
+.post-sidebar .post-link {
+word-break: break-all;
+}
+
 
 
 
