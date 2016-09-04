@@ -9,11 +9,12 @@ var activeTabValue = getTabFromUrl + 'Tab'; //used to manage the state of the di
 
 var stateObject = {// initializes the state object for use in the nav menu handler
 state: activeTabValue.replace('Tab', 'State'),
-blogTab: (function() { //returns the post number (or slug)
+/*blogTab: (function() { //returns the post number (or slug)
     if(getTabFromUrl == "blog" ) {
-        return window.location.pathname.replace('/blog/', '');
+       
+       // return window.location.pathname.replace('/blog/', '');
     }
-})()
+})()*/
 
 };
 
@@ -1376,46 +1377,57 @@ assignFocusListeners(allTextAreas);
 
 // START THE BLOG TAB HANDLER
 function blogTabHandler(postToRequest, setListeners) {
+console.log("initial active post", stateObject);
     typeof setListeners == "undefined" ? setListeners = true : setListeners = setListeners;
     
     function setActivePost() {
+        [].slice.call(document.getElementsByClassName("post-link")).map(function(element, index, array) {
+            console.log(currentPostId);
+            element.className.replace('post-link ', '') == currentPostId ? element.classList.add("active-post") : element.classList.remove("active-post");
+
+        });
         
     }
     
-    if(typeof postToRequest !== "undefined") {
+
+    /************************************/
+
+
+    if(typeof postToRequest !== "undefined") { //this is used when both states are blogtab
         
        $.ajax({url: '/post_api', data: {'post_id': postToRequest}, type: 'GET', dataType: 'html'}).done(function(response) {
         $('#post-container').html(response);
-        currentPostId = stateObject[activeTabValue];
+        currentPostId = postToRequest;//stateObject[activeTabValue];
+        console.log(currentPostId);
         //stateObject[activeTabValue] = postToRequest;
-           
+        
       //  history.replaceState(stateObject, "state", "");
-          //  setActivePost();
+            setActivePost();
     });
     
-    } else if(typeof postToRequest == "undefined"){
+    } else if(typeof postToRequest == "undefined"){ //this is used when states are different
+        stateObject[activeTabValue] = document.getElementsByClassName("post")[0].id.replace('post-', '');
         history.replaceState(stateObject, "state", '/blog/' + document.getElementsByClassName("post")[0].id.replace('post-', ''));
+        currentPostId = document.getElementsByClassName('post')[0].id.replace('post-', '');
+        console.log("post request undef", currentPostId);
+        setActivePost();
     } 
 
-    if(typeof stateObject[activeTabValue] == "undefined"){
+
+    /*if(typeof stateObject[activeTabValue] == "undefined"){
         var currentPostId = document.getElementsByClassName("post")[0].id.replace('post-', '');
 
         stateObject[activeTabValue] = currentPostId; //: requestPost = true; 
-      //  setActivePost();
+        setActivePost();
 
         history.replaceState(stateObject, "state", "/" + activeTabValue.replace('Tab', '') + "/" + currentPostId);
-    } 
+    } */
 
-    
+    /**********************************************/
     
     var blogContent = document.getElementById("blogContents");
-    
-    
-    
+    var postContainer = document.getElementsByClassName("post-container")[0];
 
-        
-        
-        
         
     function linksClickHandler(event) {
         event.preventDefault();
@@ -1425,15 +1437,13 @@ function blogTabHandler(postToRequest, setListeners) {
         var targetPostId = event.target.className.replace('post-link ', ''); //determines the id of the post to retrieve
 
         $.ajax({url: '/post_api', data: {'post_id': targetPostId}, type: 'GET', dataType: 'html'}).done(function(response) {
-            
-          
 
             stateObject.state = 'blogState'; //updates the state object state (which is used by updatestate/the popstate event listener)
             stateObject[activeTabValue] = targetPostId; //stores the id of the post that was retrieved from the server
             currentPostId = targetPostId; //sets current Id variable
             history.pushState(stateObject, "state", "/blog/" + targetPostId); //pushes the state, changes the URL
             $('#post-container').html(response); //renders the post
-
+            setActivePost();
 
         });//.fail(function(response) {alert(response)});                    
             
@@ -1466,23 +1476,37 @@ function blogTabHandler(postToRequest, setListeners) {
         var touchStartPosX;//position of the touch X "pointer" at the start of the touch event
         var touchMoveThreshold = 50; //threshold for menu movement
         var prevMargin = 0; //keeps track of the margin
-        var leftStopThreshold = 0.35*document.documentElement.clientWidth;
+        var leftStopThreshold = 0.55*document.documentElement.clientWidth;
         var startPrevMargin;
         
         var blogTouchHandler = (function() {
             return {
                 touchStart: function(event) {
                     
-                    blogContent.scrollTop > 5 ? event.stopImmediatePropagation() : "";
+                    if(postContainer.scrollTop > 5) {
+ 
+                        event.stopPropagation();
+             
+
+                    } 
+
                     touchStartPosX = event.changedTouches[0].clientX;
-                    document.getElementById("blogContents").addEventListener("touchmove", blogMoveStart, {passive: true});
+                    document.getElementById("blogContents").addEventListener("touchmove", blogMoveStart);
                     startPrevMargin = prevMargin;
                 },
                 
                 touchMove: function(event) {
+
+                //    if(postContainer.scrollTop > 5) {
+
+                  //      event.stopPropagation();
+               
+                    //  } 
+
+                    console.log(postContainer.scrollTop);
                     var originalPosX = touchStartPosX;
                     var newX = event.changedTouches[0].clientX;
-                    var deltaX = (newX - originalPosX) - touchMoveThreshold;
+                    var deltaX = (newX - originalPosX);// - touchMoveThreshold;
                     var marginLeftValue = isNaN(parseInt(blogContent.style.marginLeft, 10)) ? 0 : parseInt(blogContent.style.marginLeft, 10);
                     
                     if(Math.abs(deltaX) - touchMoveThreshold>0) {
