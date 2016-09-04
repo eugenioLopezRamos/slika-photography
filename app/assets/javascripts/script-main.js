@@ -9,11 +9,12 @@ var activeTabValue = getTabFromUrl + 'Tab'; //used to manage the state of the di
 
 var stateObject = {// initializes the state object for use in the nav menu handler
 state: activeTabValue.replace('Tab', 'State'),
-blogTab: (function() { //returns the post number (or slug)
+/*blogTab: (function() { //returns the post number (or slug)
     if(getTabFromUrl == "blog" ) {
-        return window.location.pathname.replace('/blog/', '');
+       
+       // return window.location.pathname.replace('/blog/', '');
     }
-})()
+})()*/
 
 };
 
@@ -1376,7 +1377,7 @@ assignFocusListeners(allTextAreas);
 
 // START THE BLOG TAB HANDLER
 function blogTabHandler(postToRequest, setListeners) {
-
+console.log("initial active post", stateObject);
     typeof setListeners == "undefined" ? setListeners = true : setListeners = setListeners;
     
     function setActivePost() {
@@ -1388,34 +1389,41 @@ function blogTabHandler(postToRequest, setListeners) {
         
     }
     
-    if(typeof postToRequest !== "undefined") {
+
+    /************************************/
+
+
+    if(typeof postToRequest !== "undefined") { //this is used when both states are blogtab
         
        $.ajax({url: '/post_api', data: {'post_id': postToRequest}, type: 'GET', dataType: 'html'}).done(function(response) {
         $('#post-container').html(response);
         currentPostId = postToRequest;//stateObject[activeTabValue];
         console.log(currentPostId);
         //stateObject[activeTabValue] = postToRequest;
-           
+        
       //  history.replaceState(stateObject, "state", "");
             setActivePost();
     });
     
-    } else if(typeof postToRequest == "undefined"){
+    } else if(typeof postToRequest == "undefined"){ //this is used when states are different
+        stateObject[activeTabValue] = document.getElementsByClassName("post")[0].id.replace('post-', '');
         history.replaceState(stateObject, "state", '/blog/' + document.getElementsByClassName("post")[0].id.replace('post-', ''));
         currentPostId = document.getElementsByClassName('post')[0].id.replace('post-', '');
+        console.log("post request undef", currentPostId);
         setActivePost();
     } 
 
-    if(typeof stateObject[activeTabValue] == "undefined"){
+
+    /*if(typeof stateObject[activeTabValue] == "undefined"){
         var currentPostId = document.getElementsByClassName("post")[0].id.replace('post-', '');
 
         stateObject[activeTabValue] = currentPostId; //: requestPost = true; 
         setActivePost();
 
         history.replaceState(stateObject, "state", "/" + activeTabValue.replace('Tab', '') + "/" + currentPostId);
-    } 
+    } */
 
-    
+    /**********************************************/
     
     var blogContent = document.getElementById("blogContents");
     
