@@ -1476,7 +1476,7 @@ console.log("initial active post", stateObject);
         var touchStartPosX;//position of the touch X "pointer" at the start of the touch event
         var touchMoveThreshold = 50; //threshold for menu movement
         var prevMargin = 0; //keeps track of the margin
-        var leftStopThreshold = 0.35*document.documentElement.clientWidth;
+        var leftStopThreshold = 0.55*document.documentElement.clientWidth;
         var startPrevMargin;
         
         var blogTouchHandler = (function() {
@@ -1503,7 +1503,7 @@ console.log("initial active post", stateObject);
                
                     //  } 
 
-                    console.log(postContent.scrollTop);
+                    console.log(postContainer.scrollTop);
                     var originalPosX = touchStartPosX;
                     var newX = event.changedTouches[0].clientX;
                     var deltaX = (newX - originalPosX) - touchMoveThreshold;
