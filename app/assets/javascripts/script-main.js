@@ -1376,9 +1376,15 @@ assignFocusListeners(allTextAreas);
 
 // START THE BLOG TAB HANDLER
 function blogTabHandler(postToRequest, setListeners) {
+
     typeof setListeners == "undefined" ? setListeners = true : setListeners = setListeners;
     
     function setActivePost() {
+        [].slice.call(document.getElementsByClassName("post-link")).map(function(element, index, array) {
+            console.log(currentPostId);
+            element.className.replace('post-link ', '') == currentPostId ? element.classList.add("active-post") : element.classList.remove("active-post");
+
+        });
         
     }
     
@@ -1386,22 +1392,25 @@ function blogTabHandler(postToRequest, setListeners) {
         
        $.ajax({url: '/post_api', data: {'post_id': postToRequest}, type: 'GET', dataType: 'html'}).done(function(response) {
         $('#post-container').html(response);
-        currentPostId = stateObject[activeTabValue];
+        currentPostId = postToRequest;//stateObject[activeTabValue];
+        console.log(currentPostId);
         //stateObject[activeTabValue] = postToRequest;
            
       //  history.replaceState(stateObject, "state", "");
-          //  setActivePost();
+            setActivePost();
     });
     
     } else if(typeof postToRequest == "undefined"){
         history.replaceState(stateObject, "state", '/blog/' + document.getElementsByClassName("post")[0].id.replace('post-', ''));
+        currentPostId = document.getElementsByClassName('post')[0].id.replace('post-', '');
+        setActivePost();
     } 
 
     if(typeof stateObject[activeTabValue] == "undefined"){
         var currentPostId = document.getElementsByClassName("post")[0].id.replace('post-', '');
 
         stateObject[activeTabValue] = currentPostId; //: requestPost = true; 
-      //  setActivePost();
+        setActivePost();
 
         history.replaceState(stateObject, "state", "/" + activeTabValue.replace('Tab', '') + "/" + currentPostId);
     } 
@@ -1410,12 +1419,7 @@ function blogTabHandler(postToRequest, setListeners) {
     
     var blogContent = document.getElementById("blogContents");
     
-    
-    
 
-        
-        
-        
         
     function linksClickHandler(event) {
         event.preventDefault();
@@ -1433,7 +1437,7 @@ function blogTabHandler(postToRequest, setListeners) {
             currentPostId = targetPostId; //sets current Id variable
             history.pushState(stateObject, "state", "/blog/" + targetPostId); //pushes the state, changes the URL
             $('#post-container').html(response); //renders the post
-
+            setActivePost();
 
         });//.fail(function(response) {alert(response)});                    
             
