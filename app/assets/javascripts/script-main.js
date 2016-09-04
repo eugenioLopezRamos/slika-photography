@@ -1506,7 +1506,7 @@ console.log("initial active post", stateObject);
                     console.log(postContainer.scrollTop);
                     var originalPosX = touchStartPosX;
                     var newX = event.changedTouches[0].clientX;
-                    var deltaX = (newX - originalPosX) - touchMoveThreshold;
+                    var deltaX = (newX - originalPosX);// - touchMoveThreshold;
                     var marginLeftValue = isNaN(parseInt(blogContent.style.marginLeft, 10)) ? 0 : parseInt(blogContent.style.marginLeft, 10);
                     
                     if(Math.abs(deltaX) - touchMoveThreshold>0) {
