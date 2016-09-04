@@ -32,7 +32,7 @@ To watch some training videos, visit http://www.youtube.com/user/c9ide
 **TO DO**
 
 
-- Fix blog tab mobile formatting
+
 - Add vanity URLs to blog posts
 - Format the admin pages somewhat decently
 - Add the correct partial to display error messages to admin pages
@@ -49,7 +49,7 @@ To watch some training videos, visit http://www.youtube.com/user/c9ide
 - Show posts on blog tab from newest to oldest (currently its oldest to newest)
 - Decide on a css for the active post, since the one I have right now is not viable to use on different screen sizes
 - Correctly assign the "active-post" class to the active post so it gets the correct css
-
+- Fix blog tab mobile formatting
 
 
 ** END DONE **
