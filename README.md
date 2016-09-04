@@ -39,12 +39,12 @@ To watch some training videos, visit http://www.youtube.com/user/c9ide
  - Rails test should be GREEN
 
 
- ** END INSTALLING **
+
 
 
 **TO DO**
 
-- Add vanity URLs to blog posts
+
 - Format the admin pages somewhat decently
 - Add the correct partial to display error messages to admin pages
 - Add checks for error messages display on tests
@@ -52,7 +52,9 @@ To watch some training videos, visit http://www.youtube.com/user/c9ide
 - Add image uploading (given heroku's conditions, it might be best to use S3 from the start)
 - Related to ^, add SendGrid for mails, postgres for DB and whatever other production env changes are necessary to pass to production
 
-** END TO DO **
+
+** IN PROGRESS **
+- Add vanity URLs to blog posts
 
 
 **DONE**
@@ -63,7 +65,7 @@ To watch some training videos, visit http://www.youtube.com/user/c9ide
 - Fix blog tab mobile formatting
 
 
-** END DONE **
+
 
 
 
