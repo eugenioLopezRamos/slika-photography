@@ -11,8 +11,8 @@ Rails.application.routes.draw do
   get '/contact', to: 'static#show', :tab => 'contactTab'
   post '/contact', to: 'contact_mailer#create'#, :tab => 'contactTab'
 
-  get '/blog/' => redirect("/blog/#{Post.last.id}")#, to: 'static#show', :tab => 'blogTab'#, :post_id => Post.last.id
-  get '/blog/:post_id', to: 'static#show', :tab => 'blogTab'
+  get '/blog/' => redirect("/blog/#{Post.last.slug}")#, to: 'static#show', :tab => 'blogTab'#, :post_id => Post.last.id
+  get '/blog/:slug', to: 'static#show', :tab => 'blogTab'
   
   get 'post_api', to: 'static#retrieve_posts'
   get '/tab_getter', to: 'static#retrieve_tabs'
@@ -22,7 +22,7 @@ Rails.application.routes.draw do
 namespace :admin do
  
  resources :users #creates the REST routes for the users model
- resources :posts #creates the REST routes for the posts. These are under admin/post, and the contents will be displayed in root_path/blog for clients to see 
+ resources :posts, param: :slug#creates the REST routes for the posts. These are under admin/post, and the contents will be displayed in root_path/blog for clients to see 
  get '/', to: 'admin#login'
  get '/login', to: 'sessions#new'
  post '/login', to: 'sessions#create'

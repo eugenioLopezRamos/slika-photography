@@ -36,7 +36,9 @@ class Admin::PostsController < ApplicationController
     
     
     def show
-        @post = Post.find(params[:id])
+        debugger
+        @post = Post.find_by(slug: params[:slug])
+
     end
     
     
@@ -47,10 +49,13 @@ class Admin::PostsController < ApplicationController
         redirect_to admin_user_path(current_user)
     end
     
+
+
+
     private
     
     def post_params
-        params.require(:post).permit(:title, :content)
+        params.require(:post).permit(:title, :content, :slug)
     end
     
     def can_destroy_post

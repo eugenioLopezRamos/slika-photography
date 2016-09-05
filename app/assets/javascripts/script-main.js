@@ -1,7 +1,10 @@
 var main = function() {
 //sets up the default presentation of the site. Most of these should probably be done on the css - will see later.  
   //$('#homeTab').css("background-color", "#111");
-var getTabFromUrl = window.location.pathname.replace('/', '').replace(/(\/\d*|\/)/, '');
+console.log(window.location.pathname);
+console.log(window.location.pathname.replace('/', ''));
+console.log("tabname " + window.location.pathname.replace('/', '').split("/")[0]);//.replace(/\/\*+\/+/, ''))
+var getTabFromUrl = window.location.pathname.replace('/', '').split("/")[0];//.replace(/(\/\w+|\/)/, '');
 
 var activeTabValue = getTabFromUrl + 'Tab'; //used to manage the state of the different tabs
 
@@ -515,7 +518,7 @@ else if(!executeAJAX) { //used on first page load
 }
 
 function assignTabHandlers() {
-    window.setTimeout(function(){
+  //  window.setTimeout(function(){
     
 if(stateToRequest == "homeState") {
 homeTabHandler();
@@ -566,7 +569,7 @@ checkForSliders(contentParentNode); //checks all nodes of content-Tabs for the e
 
 }//else close   
   
-}, 200);
+//}, 200);
 
  if(!document.getElementsByClassName("content-Tabs")[0].classList.contains("active-Tab")) {
 document.getElementsByClassName("content-Tabs")[0].classList.add("active-Tab");
@@ -599,6 +602,13 @@ var currentTabActiveIndex = stateObject[activeTabValue]-1;
 var activePicker = document.getElementById(stateObject.state.replace('State', 'CounterCurrent'));
 activePicker.value = stateObject[activeTabValue];
 document.getElementById(stateObject.state.replace('State', 'CounterTotal')).innerHTML = currentTab.length; //length of the slide picker at the bottom
+
+(function animateActiveSlideOnFirstLoad() { //function is an IIFE, name is given only for the benefit of the human reader :)
+    var slideToAnim = document.getElementsByClassName('active-slide')[0];
+    slideToAnim.classList.remove('active-slide');
+    slideToAnim.classList.add('active-slide');
+})();
+
 //currentTab[stateObject[activeTabValue]-1].classList.add("active-slide"); //from the currentTab array, check on stateObject what's the slide we should be at, and add 'active-slide to it'
 
     
@@ -1395,7 +1405,7 @@ console.log("initial active post", stateObject);
 
     if(typeof postToRequest !== "undefined") { //this is used when both states are blogtab
         
-       $.ajax({url: '/post_api', data: {'post_id': postToRequest}, type: 'GET', dataType: 'html'}).done(function(response) {
+       $.ajax({url: '/post_api', data: {'slug': postToRequest}, type: 'GET', dataType: 'html'}).done(function(response) {
         $('#post-container').html(response);
         currentPostId = postToRequest;//stateObject[activeTabValue];
         console.log(currentPostId);
@@ -1436,7 +1446,7 @@ console.log("initial active post", stateObject);
         window.setTimeout(function() {
         var targetPostId = event.target.className.replace('post-link ', ''); //determines the id of the post to retrieve
 
-        $.ajax({url: '/post_api', data: {'post_id': targetPostId}, type: 'GET', dataType: 'html'}).done(function(response) {
+        $.ajax({url: '/post_api', data: {'slug': targetPostId}, type: 'GET', dataType: 'html'}).done(function(response) {
 
             stateObject.state = 'blogState'; //updates the state object state (which is used by updatestate/the popstate event listener)
             stateObject[activeTabValue] = targetPostId; //stores the id of the post that was retrieved from the server

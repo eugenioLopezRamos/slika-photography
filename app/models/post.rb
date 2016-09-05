@@ -4,12 +4,21 @@ class Post < ApplicationRecord
   validates :user_id, presence: true
   validates :title, presence: true
   validates :content, presence: true
+  validates :slug, presence: true
   scope :by_date_desc, -> { order(created_at: :desc) } #It seems using default scopes is...complicated to say at least, even for this case, which I thought it'd be fine,
   #eg. http://weblog.jamisbuck.org/2015/9/19/default-scopes-anti-pattern.html, http://stackoverflow.com/questions/25087336/why-is-using-the-rails-default-scope-often-recommend-against
   #
   scope :by_date_asc, -> {order(created_at: :asc)}
-  #default_scope { order(created_at: :desc)}
 
-  
+
+#  def slug
+ # 	title.downcase.gsub("", "-")
+  #end
+
+  def to_param
+  	slug
+  end
+
+
   
 end
