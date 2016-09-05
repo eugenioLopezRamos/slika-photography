@@ -54,7 +54,7 @@ To watch some training videos, visit http://www.youtube.com/user/c9ide
 
 
 ** IN PROGRESS **
-- Add vanity URLs to blog posts
+- Add vanity URLs to blog posts -> Need to do validations on slugs(maybe make titles unique) and make slugs all lowercase
 
 
 **DONE**
