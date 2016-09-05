@@ -37,17 +37,11 @@ A portfolio site with AJAX, pushstate, and an admin panel
 **DONE**
 
 - Make URLs case insensitive
-
 - Add vanity URLs to blog posts (slugs are unique, and are automatically created from title (with tags stripped & w/ 	  parameterize)
-
 - Show posts on blog tab from newest to oldest (currently its oldest to newest)
-
 - Decide on a css for the active post, since the one I have right now is not viable to use on different screen sizes
-
 - Correctly assign the "active-post" class to the active post so it gets the correct css
-
 - Fix blog tab mobile formatting
-
 - Add redirection tests for case insensitive URLs
 
 
