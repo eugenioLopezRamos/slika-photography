@@ -2,6 +2,8 @@ Rails.application.routes.draw do
  
   get 'static/home'
   root 'static#home', :tab => 'homeTab'
+
+
   
   get '/home', to: 'static#show', :tab => 'homeTab'
   get '/people', to: 'static#show', :tab => 'peopleTab'

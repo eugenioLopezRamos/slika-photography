@@ -55,7 +55,7 @@ class Admin::PostsController < ApplicationController
     private
     
     def post_params
-        params.require(:post).permit(:title, :content, :slug)
+        params.require(:post).permit(:title, :content)
     end
     
     def can_destroy_post
