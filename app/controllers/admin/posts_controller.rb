@@ -19,11 +19,11 @@ class Admin::PostsController < ApplicationController
     end
     
     def edit
-        @post = Post.find(params[:id])
+        @post = Post.find_by(slug: params[:slug])
     end
     
     def update
-        @post = Post.find(params[:id])
+        @post = Post.find_by(slug: params[:slug])
         @post.update_attributes(post_params)
         if @post.save
             flash[:success] = "Changes have been saved"
@@ -43,7 +43,7 @@ class Admin::PostsController < ApplicationController
     
     
     def destroy
-        @post = Post.find(params[:id])
+        @post = Post.find_by(slug: params[:slug])
         @post.destroy
         flash[:success] = "Post deleted"
         redirect_to admin_user_path(current_user)
@@ -59,7 +59,7 @@ class Admin::PostsController < ApplicationController
     end
     
     def can_destroy_post
-        if current_user.id === Post.find(params[:id]).user_id || current_user.admin?
+        if current_user.id === Post.find_by(slug: params[:slug]).user_id || current_user.admin?
             return true
         else
             redirect_to admin_user_path(current_user)
@@ -67,7 +67,7 @@ class Admin::PostsController < ApplicationController
     end
     
     def can_update_post
-      if current_user.id == Post.find(params[:id]).user_id
+      if current_user.id == Post.find_by(slug: params[:slug]).user_id
         return true
       else
         flash[:danger] = "You are not authorized to do this"

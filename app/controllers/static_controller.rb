@@ -3,6 +3,16 @@ class StaticController < ApplicationController
    redirect_to '/home'
   end
 
+  def redirect
+    @tab = request.env['PATH_INFO'].downcase!
+    begin
+      redirect_to @tab
+    rescue
+      redirect_to "/404" and return
+    end   
+  end
+  
+
   def show
     respond_to do |format|
     format.html {render 'home'}

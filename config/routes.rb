@@ -1,10 +1,12 @@
 Rails.application.routes.draw do
  
-  get 'static/home'
+  #get 'static/home'
+
+
+
+
   root 'static#home', :tab => 'homeTab'
 
-
-  
   get '/home', to: 'static#show', :tab => 'homeTab'
   get '/people', to: 'static#show', :tab => 'peopleTab'
   get '/models', to: 'static#show', :tab => 'modelsTab'
@@ -31,5 +33,8 @@ namespace :admin do
  delete '/logout', to: 'sessions#destroy'
 
 end
+
+get '/(:tab)/(:id)', to: 'static#redirect' #if the user doesnt use downcase tab urls, downcases the URL. If 
+#route doesnt exist, redirect to 404
 
 end
