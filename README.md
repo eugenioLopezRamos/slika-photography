@@ -52,14 +52,13 @@ To watch some training videos, visit http://www.youtube.com/user/c9ide
 - Add account activation and password forget to users
 - Add image uploading (given heroku's conditions, it might be best to use S3 from the start)
 - Related to ^, add SendGrid for mails, postgres for DB and whatever other production env changes are necessary to pass to production
-- Make URLs case insensitive
 - Fix post-sidebar-link CSS (Needs to overflow and keep size instead of becoming smaller w/ every post)
 - Add error messages for AJAX requests
 - Post previews on admin page
 
 
 ** IN PROGRESS **
-
+- Make URLs case insensitive
 
 
 **DONE**
