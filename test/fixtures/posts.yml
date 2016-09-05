@@ -5,6 +5,7 @@ crabs:
   content: "The immortality of crabs has always been a subject that piques my interest, however up until now I was not able to put this into words correctly. Now I was able to, and you will learn about them"
   created_at: <%= 10.minutes.ago %>
   user: michael
+  slug: <%= ActionController::Base.helpers.strip_tags("Hello crabs").downcase.parameterize %>
 
 
 apples:
@@ -12,15 +13,18 @@ apples:
   content: "An apple a day keeps the doctor away"
   created_at: <%= 20.minutes.ago %>
   user: mary
+  slug: <%= ActionController::Base.helpers.strip_tags("Hello apples").downcase.parameterize %>
   
 blablah:
   title: "Hello bla"
   content: "bla bla bla bla bla bla bla"
   created_at: <%= 2.weeks.ago %>
   user: michael
-  
+  slug: <%= ActionController::Base.helpers.strip_tags("Hello bla").downcase.parameterize %>
+
 most_recent:
   title: "Hello most recent"
   content: "most recent post here"
   created_at: <%= Time.zone.now %>
   user: mary
+  slug: <%= ActionController::Base.helpers.strip_tags("Hello most recent").downcase.parameterize %>

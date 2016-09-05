@@ -13,14 +13,17 @@ class Post < ApplicationRecord
   #it works with batches, and then just presenting the posts in the view with CSS flex-direction: column-reverse
   scope :by_date_asc, -> {order(created_at: :asc)}
 
+  def to_param
+  	slug
+  end
+  
+
   def create_slug
   	self.slug = ActionController::Base.helpers.strip_tags(self.title).downcase.parameterize
   end
   
 
-  def to_param
-  	slug
-  end
+
 
 
   
