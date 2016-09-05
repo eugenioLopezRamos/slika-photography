@@ -12,8 +12,8 @@ class StaticController < ApplicationController
   end
   
   def retrieve_posts
-    if params[:post_id] == "last" then @post= Post.last 
-      else @post = Post.find(params[:post_id])
+    if params[:slug] == "last" then @post= Post.last 
+      else @post = Post.find_by(slug: params[:slug])
     end
     render partial: 'admin/posts/post'
   end
@@ -31,7 +31,7 @@ class StaticController < ApplicationController
       if params[:id] == "undefined" || params[:id].nil?
         @post = Post.last
       else
-        @post = Post.find(params[:id])
+        @post = Post.find_by(slug: params[:id])
       end
     end
  
