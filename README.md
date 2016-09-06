@@ -22,6 +22,9 @@ A portfolio site with AJAX, pushstate, and an admin panel
 - Related to ^, add SendGrid for mails, postgres for DB and whatever other production env changes are necessary to pass to production
 - Add error messages for AJAX requests
 - Slide picker numbers after load
+- I should probably make the touch evt listeners always work and just constrain the menu height modifications on the menuToggle() func to clWidth<481
+
+
 
 
 

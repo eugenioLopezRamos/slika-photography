@@ -204,7 +204,7 @@ from {
 .scrollbar-scroll {
   background: rgba(230,230,230, 0.3);
   border: 1px solid black;
-  width: 1em;
+  width: 2em;
   box-sizing: border-box;
   position: relative;
   height: 100%;

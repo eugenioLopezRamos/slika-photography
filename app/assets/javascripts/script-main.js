@@ -1395,56 +1395,138 @@ var scrollScheduled = false;
 var menuContainerHeight = parseInt(getComputedStyle(document.getElementsByClassName("post-sidebar-menu-container")[0]).height, 10);
 var sidebarHeight = parseInt(getComputedStyle(postSidebar).height, 10);
 var offsetFromLastItem = postSidebar.lastElementChild.offsetTop + parseInt(getComputedStyle(postSidebar.lastElementChild).height, 10);
-var scrollButton = document.getElementById("blog-menu-scrollbar");
+
+var eventMovement = 0; //uses the event movement measurer method - event.clientY for mouse, event.deltaY for wheel etc
+var scrollBar = document.getElementById("blog-menu-scrollbar");
+var scrollBarHeight = parseInt(getComputedStyle(scrollBar).height, 10);
+var scrollButton = document.getElementById("blog-menu-scrollbar-btn");
+var scrollButtonHeight = parseInt(getComputedStyle(scrollButton).height, 10);
+var mouseStartPositionY = 0;
+var scrollButtonPrevScroll = 0;
+var distance = 0;
+
+
+function postMenuScroller() {
+
+    scrollOffset >= Math.abs(menuContainerHeight - sidebarHeight) - 10 ? scrollOffset = Math.abs(menuContainerHeight - sidebarHeight) : scrollOffset = scrollOffset;      
+    scrollOffset <= 0 ? scrollOffset = 0 : scrollOffset = scrollOffset;
+
+    console.log("scroll + mov ", scrollOffset + eventMovement);
+    scrollOffset + eventMovement <= 0 ? scrollOffset = 0 : scrollOffset = scrollOffset + eventMovement;
+    scrollOffset + eventMovement >= Math.abs(menuContainerHeight - sidebarHeight) ? scrollOffset =  Math.abs(menuContainerHeight - sidebarHeight): 0;//- 10: 0;
+    
 
 
 
 
+    document.getElementsByClassName("post-sidebar-menu")[0].style.transform = "translate3d(0," +  Math.min(scrollOffset * -1, 0) + 'px' + ",0)" 
+    scrollButton.style.transform = "translate3d(0, " + Math.max((scrollBarHeight*(scrollOffset/Math.abs(menuContainerHeight - sidebarHeight)) - scrollButtonHeight), 0) +'px' + ", 0)";
+
+
+}
 
 
 
-//document.getElementsByClassName("scrollbar-button").style.height =
 
-postSidebar.addEventListener("wheel", function(event) {
+postSidebar.addEventListener("wheel", function(event) { //scroll with mousewheel
     if(!scrollScheduled) {
-        scrollScheduled = true;
-
-console.log("max scroll", sidebarHeight - offsetFromLastItem);
-console.log(postSidebar.lastElementChild.scrollTop);
-
-        window.setTimeout(function() {
-      //  menuContainerHeight > sidebarHeight && scrollOffset >= Math.abs(sidebarHeight - offsetFromLastItem) - 10 ? scrollOffset = Math.abs(sidebarHeight - offsetFromLastItem) : scrollOffset = scrollOffset;
-        scrollOffset >= Math.abs(menuContainerHeight - sidebarHeight) - 10 ? scrollOffset = Math.abs(menuContainerHeight - sidebarHeight) : scrollOffset = scrollOffset;
-        
-        scrollOffset <= 0 ? scrollOffset = 0 : scrollOffset = scrollOffset;
-
-
-   // console.log(event.deltaY);
-        scrollOffset + event.deltaY <= 0 ? scrollOffset = 0 : scrollOffset = scrollOffset + event.deltaY;
-     //   menuContainerHeight > sidebarHeight && scrollOffset + event.deltaY >= Math.abs(sidebarHeight - offsetFromLastItem) ? scrollOffset =  Math.abs(sidebarHeight - offsetFromLastItem) - 10: 0;
-        scrollOffset + event.deltaY >= Math.abs(menuContainerHeight - sidebarHeight) ? scrollOffset =  Math.abs(menuContainerHeight - sidebarHeight) - 10: 0;
-   
-   // console.log("scrolltop", postSidebar.scrollTop);
-    //console.log("offset", postSidebar.offsetTop);
-    //console.log("psot client width", postSidebar.clientHeight);
-    //console.log("height", sidebarHeight);
-    //console.log("lsat child offsetTOP", postSidebar.lastElementChild.offsetTop);
-    //scrollOffset = scrollOffset + event.deltaY;
-    //console.log(scrollOffset + event.deltaY);
-        document.getElementsByClassName("post-sidebar-menu")[0].style.transform = "translate3d(0," +  scrollOffset * -1 + 'px' + ",0)" 
-   // console.log(scrollOffset);
-        //scrollButton.style.transform = "translate3d(0 " + scrollOffset/post
         scrollScheduled = false;
-
-
-
-
+        console.log("wheeeeeel");
+        window.setTimeout(function() {
+            eventMovement = event.deltaY;
+            //scrollOffset >= Math.abs(menuContainerHeight - sidebarHeight) - 10 ? scrollOffset = Math.abs(menuContainerHeight - sidebarHeight) : scrollOffset = scrollOffset;      
+            //scrollOffset <= 0 ? scrollOffset = 0 : scrollOffset = scrollOffset;
+            //scrollOffset + eventMovement <= 0 ? scrollOffset = 0 : scrollOffset = scrollOffset + eventMovement;
+            //scrollOffset + eventMovement >= Math.abs(menuContainerHeight - sidebarHeight) ? scrollOffset =  Math.abs(menuContainerHeight - sidebarHeight) : 0;//- 10: 0;
+            //document.getElementsByClassName("post-sidebar-menu")[0].style.transform = "translate3d(0," +  scrollOffset * -1 + 'px' + ",0)" 
+            //scrollButton.style.transform = "translate3d(0, " + Math.max((scrollBarHeight*(scrollOffset/Math.abs(menuContainerHeight - sidebarHeight)) - scrollButtonHeight), 0)+ 'px' + ", 0)";
+            postMenuScroller();
+            scrollButtonPrevScroll = scrollOffset;
+            scrollScheduled = false;
         }, 17)
-
      }
 });
 
 
+
+
+
+function mouseMoveHandler(event) {
+
+  /*  console.log("delta", event.clientY - mouseStartPositionY);
+
+
+
+    if((event.clientY - mouseStartPositionY)>=0) {
+      distance = distance + 1;     
+  } else if((event.clientY - mouseStartPositionY)<0) {
+      distance = distance - 1;
+  }
+    console.log("dist", distance);
+
+    eventMovement = parseInt(distance, 10); //(event.clientY - originalPosition);//*((event.clientY - mouseStartPositionY)/scrollOffset); //+ scrollOffset - scrollButtonPrevScroll);
+    event.preventDefault();
+    console.log("mousemove", event.clientY);
+    console.log("start", mouseStartPositionY);
+
+    console.log("evtmvmt", eventMovement);
+    console.log("scrollOffset", scrollOffset);
+    //console.log("prevScroll", scrollButtonPrevScroll);
+ 
+
+   // if(!scrollScheduled) {
+     //   scrollOffset = scrollButtonPrevScroll;
+       // scrollScheduled = false;
+   // } 
+
+
+    postMenuScroller();
+    mouseStartPosition = event.clientY;
+   // scrollOffset = scrollOffset - eventMovement;
+   
+*/
+
+event.preventDefault();
+
+console.log(event.clientY - mouseStartPositionY);
+    var delta = mouseStartPositionY - event.clientY;
+
+    console.log("suma",scrollButtonPrevScroll - delta) ;
+    console.log("abs", Math.abs(menuContainerHeight - sidebarHeight) );
+    if((scrollButtonPrevScroll - delta)>=Math.abs(menuContainerHeight - sidebarHeight)) {
+        console.log("hey");
+        delta = -(Math.abs(menuContainerHeight - sidebarHeight));
+    }
+
+    if((scrollButtonPrevScroll - delta)<0){
+
+        delta = 0;
+    }
+    
+    document.getElementsByClassName("post-sidebar-menu")[0].style.transform = "translate3d(0," +  (scrollButtonPrevScroll + delta) + 'px' + ",0)" 
+    scrollButton.style.transform = "translate3d(0, " + Math.max((((scrollButtonPrevScroll + delta)*scrollBarHeight/Math.abs(menuContainerHeight - sidebarHeight)+ scrollButtonHeight)*-1 ), 0) +'px' + ", 0)";
+
+    scrollOffset = scrollButtonPrevScroll + delta;
+
+
+}
+
+function mouseDownHandler(event) {
+    mouseStartPositionY = event.clientY;
+    eventMovement = 0;
+
+    document.addEventListener("mousemove", mouseMoveHandler);
+}
+
+function mouseUpHandler(event) {
+    document.removeEventListener("mousemove", mouseMoveHandler);
+    scrollButtonPrevScroll = scrollOffset;
+    //scrollScheduled = false;
+   // scrollButtonPrevScroll = scrollOffset;
+}
+
+scrollButton.addEventListener("mousedown", mouseDownHandler);
+document.addEventListener("mouseup", mouseUpHandler);
 
 
     typeof setListeners == "undefined" ? setListeners = true : setListeners = setListeners;
