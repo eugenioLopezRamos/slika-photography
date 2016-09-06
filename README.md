@@ -23,7 +23,7 @@ A portfolio site with AJAX, pushstate, and an admin panel
 - Add error messages for AJAX requests
 - Slide picker numbers after load
 - I should probably make the touch evt listeners always work and just constrain the menu height modifications on the menuToggle() func to clWidth<481
-
+- Use css height instead of the animation thingy on contact tab mobile
 
 
 
