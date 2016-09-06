@@ -1388,6 +1388,65 @@ assignFocusListeners(allTextAreas);
 // START THE BLOG TAB HANDLER
 function blogTabHandler(postToRequest, setListeners) {
 console.log("initial active post", stateObject);
+
+var postSidebar = document.getElementsByClassName('post-sidebar-menu')[0];
+var scrollOffset = 0;
+var scrollScheduled = false;
+var menuContainerHeight = parseInt(getComputedStyle(document.getElementsByClassName("post-sidebar-menu-container")[0]).height, 10);
+var sidebarHeight = parseInt(getComputedStyle(postSidebar).height, 10);
+var offsetFromLastItem = postSidebar.lastElementChild.offsetTop + parseInt(getComputedStyle(postSidebar.lastElementChild).height, 10);
+var scrollButton = document.getElementById("blog-menu-scrollbar");
+
+
+
+
+
+
+
+//document.getElementsByClassName("scrollbar-button").style.height =
+
+postSidebar.addEventListener("wheel", function(event) {
+    if(!scrollScheduled) {
+        scrollScheduled = true;
+
+console.log("max scroll", sidebarHeight - offsetFromLastItem);
+console.log(postSidebar.lastElementChild.scrollTop);
+
+        window.setTimeout(function() {
+      //  menuContainerHeight > sidebarHeight && scrollOffset >= Math.abs(sidebarHeight - offsetFromLastItem) - 10 ? scrollOffset = Math.abs(sidebarHeight - offsetFromLastItem) : scrollOffset = scrollOffset;
+        scrollOffset >= Math.abs(menuContainerHeight - sidebarHeight) - 10 ? scrollOffset = Math.abs(menuContainerHeight - sidebarHeight) : scrollOffset = scrollOffset;
+        
+        scrollOffset <= 0 ? scrollOffset = 0 : scrollOffset = scrollOffset;
+
+
+   // console.log(event.deltaY);
+        scrollOffset + event.deltaY <= 0 ? scrollOffset = 0 : scrollOffset = scrollOffset + event.deltaY;
+     //   menuContainerHeight > sidebarHeight && scrollOffset + event.deltaY >= Math.abs(sidebarHeight - offsetFromLastItem) ? scrollOffset =  Math.abs(sidebarHeight - offsetFromLastItem) - 10: 0;
+        scrollOffset + event.deltaY >= Math.abs(menuContainerHeight - sidebarHeight) ? scrollOffset =  Math.abs(menuContainerHeight - sidebarHeight) - 10: 0;
+   
+   // console.log("scrolltop", postSidebar.scrollTop);
+    //console.log("offset", postSidebar.offsetTop);
+    //console.log("psot client width", postSidebar.clientHeight);
+    //console.log("height", sidebarHeight);
+    //console.log("lsat child offsetTOP", postSidebar.lastElementChild.offsetTop);
+    //scrollOffset = scrollOffset + event.deltaY;
+    //console.log(scrollOffset + event.deltaY);
+        document.getElementsByClassName("post-sidebar-menu")[0].style.transform = "translate3d(0," +  scrollOffset * -1 + 'px' + ",0)" 
+   // console.log(scrollOffset);
+        //scrollButton.style.transform = "translate3d(0 " + scrollOffset/post
+        scrollScheduled = false;
+
+
+
+
+        }, 17)
+
+     }
+});
+
+
+
+
     typeof setListeners == "undefined" ? setListeners = true : setListeners = setListeners;
     
     function setActivePost() {
@@ -1434,6 +1493,9 @@ console.log("initial active post", stateObject);
     } */
 
     /**********************************************/
+
+    
+
     
     var blogContent = document.getElementById("blogContents");
     var postContainer = document.getElementsByClassName("post-container")[0];

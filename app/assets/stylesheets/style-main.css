@@ -181,6 +181,46 @@ from {
 }
 }
 
+/** SCROLLBAR FORMATTING **/
+/*
+::-webkit-scrollbar {
+
+    background: rgba(230,230,230, 0.3);
+    border: 1px solid black;
+
+    width: 14px;
+    box-sizing: border-box;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #333;
+
+    border: 1px solid white;
+    box-sizing: border-box;
+    width: 12px;
+ 
+}*/
+
+.scrollbar-scroll {
+  background: rgba(230,230,230, 0.3);
+  border: 1px solid black;
+  width: 1em;
+  box-sizing: border-box;
+  position: relative;
+  height: 100%;
+
+}
+
+.scrollbar-button {
+    background: #333;
+    height: 3em;
+    border: 1px solid white;
+    box-sizing: border-box;
+    width: 100%;
+}
+
+
+
 
 /* FULL HD CSS (ALSO WORKS AS DEFAULT */
 
@@ -1046,7 +1086,7 @@ transform: translateY(-50%); /*top + transform combined seem to be the same as t
 }
 
 .post-container {
-  height: 95%;
+  height: 96%;
   width: 60%;
   margin: auto;
   display:flex;
@@ -1055,7 +1095,6 @@ transform: translateY(-50%); /*top + transform combined seem to be the same as t
 
 .post {
   width: 100%;
-  margin: 5px;
   animation: imgFadeIn 0.45s forwards;
 }
 .post-title {
@@ -1080,16 +1119,16 @@ transform: translateY(-50%); /*top + transform combined seem to be the same as t
 
 
 .post-sidebar {
-  height: 95%;
-  width: 35%;
-  overflow-x: hidden;
-  overflow-y: auto;
-  display: flex;
-  flex-direction:column;
-  margin: auto;
-  justify-content: flex-start;
-  border-left: 1px solid white;
-  border-right: 1px solid white;
+    height: 95%;
+    width: 35%;
+    overflow-x: hidden;
+    overflow-y: hidden;
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+    justify-content: flex-start;
+    border-left: 1px solid white;
+    border-right: 1px solid white;
 }
 
 .post-sidebar-title {
@@ -1109,10 +1148,18 @@ transform: translateY(-50%); /*top + transform combined seem to be the same as t
   
 }
 
+.post-sidebar-menu-container {
+  height: 100%;
+  margin-top: 5%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: row;
+}
+
 .post-sidebar-menu {
-  height: 89%;
+  height: auto;
   width: auto;
-  margin: auto;
+  margin: 0 auto auto auto; 
   display: flex;
   flex-direction: column;
   font-family: Helvetica, Calibri, sans-serif;
@@ -1123,6 +1170,9 @@ transform: translateY(-50%); /*top + transform combined seem to be the same as t
 
 .post-sidebar-menu li {
   height: 12.5%;
+  min-height: 12.5%;
+  width: 90%;
+  margin: auto;
   display:flex;
 
 }
@@ -1138,6 +1188,7 @@ transform: translateY(-50%); /*top + transform combined seem to be the same as t
   text-decoration: none;
   color:white;
   height: 100%;
+  min-height: 10vmin;
   width: 100%;
   display:flex;
   position:relative;
