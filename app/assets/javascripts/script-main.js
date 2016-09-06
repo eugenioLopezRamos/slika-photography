@@ -1396,7 +1396,7 @@ var menuContainerHeight = parseInt(getComputedStyle(document.getElementsByClassN
 var sidebarHeight = parseInt(getComputedStyle(postSidebar).height, 10);
 var offsetFromLastItem = postSidebar.lastElementChild.offsetTop + parseInt(getComputedStyle(postSidebar.lastElementChild).height, 10);
 
-var eventMovement = 0; //uses the event movement measurer method - event.clientY for mouse, event.deltaY for wheel etc
+var delta = 0; //uses the event movement measurer method - event.clientY for mouse, event.deltaY for wheel etc
 var scrollBar = document.getElementById("blog-menu-scrollbar");
 var scrollBarHeight = parseInt(getComputedStyle(scrollBar).height, 10);
 var scrollButton = document.getElementById("blog-menu-scrollbar-btn");
@@ -1408,12 +1408,12 @@ var distance = 0;
 
 function postMenuScroller() {
 
-    scrollOffset >= Math.abs(menuContainerHeight - sidebarHeight) - 10 ? scrollOffset = Math.abs(menuContainerHeight - sidebarHeight) : scrollOffset = scrollOffset;      
+/*    scrollOffset >= Math.abs(menuContainerHeight - sidebarHeight) - 10 ? scrollOffset = Math.abs(menuContainerHeight - sidebarHeight) : scrollOffset = scrollOffset;      
     scrollOffset <= 0 ? scrollOffset = 0 : scrollOffset = scrollOffset;
 
-    console.log("scroll + mov ", scrollOffset + eventMovement);
-    scrollOffset + eventMovement <= 0 ? scrollOffset = 0 : scrollOffset = scrollOffset + eventMovement;
-    scrollOffset + eventMovement >= Math.abs(menuContainerHeight - sidebarHeight) ? scrollOffset =  Math.abs(menuContainerHeight - sidebarHeight): 0;//- 10: 0;
+    console.log("scroll + mov ", scrollOffset + delta);
+    scrollOffset + delta <= 0 ? scrollOffset = 0 : scrollOffset = scrollOffset + delta;
+    scrollOffset + delta >= Math.abs(menuContainerHeight - sidebarHeight) ? scrollOffset =  Math.abs(menuContainerHeight - sidebarHeight): 0;//- 10: 0;
     
 
 
@@ -1421,7 +1421,7 @@ function postMenuScroller() {
 
     document.getElementsByClassName("post-sidebar-menu")[0].style.transform = "translate3d(0," +  Math.min(scrollOffset * -1, 0) + 'px' + ",0)" 
     scrollButton.style.transform = "translate3d(0, " + Math.max((scrollBarHeight*(scrollOffset/Math.abs(menuContainerHeight - sidebarHeight)) - scrollButtonHeight), 0) +'px' + ", 0)";
-
+*/
 
 }
 
@@ -1433,11 +1433,11 @@ postSidebar.addEventListener("wheel", function(event) { //scroll with mousewheel
         scrollScheduled = false;
         console.log("wheeeeeel");
         window.setTimeout(function() {
-            eventMovement = event.deltaY;
+            delta = event.deltaY;
             //scrollOffset >= Math.abs(menuContainerHeight - sidebarHeight) - 10 ? scrollOffset = Math.abs(menuContainerHeight - sidebarHeight) : scrollOffset = scrollOffset;      
             //scrollOffset <= 0 ? scrollOffset = 0 : scrollOffset = scrollOffset;
-            //scrollOffset + eventMovement <= 0 ? scrollOffset = 0 : scrollOffset = scrollOffset + eventMovement;
-            //scrollOffset + eventMovement >= Math.abs(menuContainerHeight - sidebarHeight) ? scrollOffset =  Math.abs(menuContainerHeight - sidebarHeight) : 0;//- 10: 0;
+            //scrollOffset + delta <= 0 ? scrollOffset = 0 : scrollOffset = scrollOffset + delta;
+            //scrollOffset + delta >= Math.abs(menuContainerHeight - sidebarHeight) ? scrollOffset =  Math.abs(menuContainerHeight - sidebarHeight) : 0;//- 10: 0;
             //document.getElementsByClassName("post-sidebar-menu")[0].style.transform = "translate3d(0," +  scrollOffset * -1 + 'px' + ",0)" 
             //scrollButton.style.transform = "translate3d(0, " + Math.max((scrollBarHeight*(scrollOffset/Math.abs(menuContainerHeight - sidebarHeight)) - scrollButtonHeight), 0)+ 'px' + ", 0)";
             postMenuScroller();
@@ -1464,12 +1464,12 @@ function mouseMoveHandler(event) {
   }
     console.log("dist", distance);
 
-    eventMovement = parseInt(distance, 10); //(event.clientY - originalPosition);//*((event.clientY - mouseStartPositionY)/scrollOffset); //+ scrollOffset - scrollButtonPrevScroll);
+    delta = parseInt(distance, 10); //(event.clientY - originalPosition);//*((event.clientY - mouseStartPositionY)/scrollOffset); //+ scrollOffset - scrollButtonPrevScroll);
     event.preventDefault();
     console.log("mousemove", event.clientY);
     console.log("start", mouseStartPositionY);
 
-    console.log("evtmvmt", eventMovement);
+    console.log("evtmvmt", delta);
     console.log("scrollOffset", scrollOffset);
     //console.log("prevScroll", scrollButtonPrevScroll);
  
@@ -1482,29 +1482,33 @@ function mouseMoveHandler(event) {
 
     postMenuScroller();
     mouseStartPosition = event.clientY;
-   // scrollOffset = scrollOffset - eventMovement;
+   // scrollOffset = scrollOffset - delta;
    
 */
 
 event.preventDefault();
 
-console.log(event.clientY - mouseStartPositionY);
+//console.log(event.clientY - mouseStartPositionY);
     var delta = mouseStartPositionY - event.clientY;
 
-    console.log("suma",scrollButtonPrevScroll - delta) ;
-    console.log("abs", Math.abs(menuContainerHeight - sidebarHeight) );
-    if((scrollButtonPrevScroll - delta)>=Math.abs(menuContainerHeight - sidebarHeight)) {
-        console.log("hey");
-        delta = -(Math.abs(menuContainerHeight - sidebarHeight));
+    console.log("prev", scrollButtonPrevScroll);
+    //console.log("suma",scrollButtonPrevScroll - delta) ;
+    //console.log("abs", Math.abs(menuContainerHeight - sidebarHeight) );
+
+    if((Math.abs(scrollButtonPrevScroll) - delta)>=Math.abs(menuContainerHeight - sidebarHeight)) {
+        //console.log("hey");
+        console.log("fitringa");
+        delta = -(Math.abs(menuContainerHeight - sidebarHeight) - Math.abs(scrollButtonPrevScroll));
     }
 
-    if((scrollButtonPrevScroll - delta)<0){
-
+    if((Math.abs(scrollButtonPrevScroll) - delta)<0){
+        console.log("iszero");
+        scrollButtonPrevScroll = 0;
         delta = 0;
     }
     
     document.getElementsByClassName("post-sidebar-menu")[0].style.transform = "translate3d(0," +  (scrollButtonPrevScroll + delta) + 'px' + ",0)" 
-    scrollButton.style.transform = "translate3d(0, " + Math.max((((scrollButtonPrevScroll + delta)*scrollBarHeight/Math.abs(menuContainerHeight - sidebarHeight)+ scrollButtonHeight)*-1 ), 0) +'px' + ", 0)";
+    scrollButton.style.transform = "translate3d(0, " + Math.max((((scrollButtonPrevScroll + delta)*scrollBarHeight/Math.abs(menuContainerHeight - sidebarHeight) + scrollButtonHeight)*-1 ), 0) +'px' + ", 0)";
 
     scrollOffset = scrollButtonPrevScroll + delta;
 
@@ -1513,16 +1517,15 @@ console.log(event.clientY - mouseStartPositionY);
 
 function mouseDownHandler(event) {
     mouseStartPositionY = event.clientY;
-    eventMovement = 0;
-
+ 
     document.addEventListener("mousemove", mouseMoveHandler);
 }
 
 function mouseUpHandler(event) {
     document.removeEventListener("mousemove", mouseMoveHandler);
-    scrollButtonPrevScroll = scrollOffset;
-    //scrollScheduled = false;
    // scrollButtonPrevScroll = scrollOffset;
+    //scrollScheduled = false;
+    scrollButtonPrevScroll = scrollOffset;
 }
 
 scrollButton.addEventListener("mousedown", mouseDownHandler);
