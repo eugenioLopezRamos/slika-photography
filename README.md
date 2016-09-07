@@ -34,6 +34,7 @@ A portfolio site with AJAX, pushstate, and an admin panel
 - Add the correct partial to display error messages to admin pages
 - Add checks for error messages display on tests
 - Fix post-sidebar-link CSS (Needs to overflow and keep size instead of becoming smaller w/ every post)
+- Make scrollbar fadeout + disappear, then reappear when moved or its area clicked
 
 
 **DONE**
