@@ -29,11 +29,12 @@ class StaticController < ApplicationController
       else 
         @id = params[:id]
       end 
+
     elsif params[:tab] == "blogTab"
       if params[:id] == "undefined" || params[:id].nil?
         @post = Post.last
       else
-        @post = Post.find_by(slug: params[:id])
+        @post = Post.find_by(slug: params[:id]) 
       end
     end
     render partial: 'layouts/jumbotron'   

@@ -258,15 +258,17 @@ if(prevHeight<minimumMenuHeight) {
 
 
 function touchStartHandler(event) { //handles touching the screen
-menuToggleHandler.touchStart(event);    
+    event.stopPropagation();
+    menuToggleHandler.touchStart(event);    
 }
 
 function touchEndHandler(event) { //handles lifting the finger up
-menuToggleHandler.touchEnd(event);    
+    event.stopPropagation();
+    menuToggleHandler.touchEnd(event);    
 }
 
 function slideDownHandler(event) { //handles sliding finger up/down
-menuToggleHandler.touchMove(event);
+    menuToggleHandler.touchMove(event);
 }
 
 var menuToggleHandler = (function() {
@@ -1497,24 +1499,22 @@ function blogTabHandler(postToRequest, setListeners) {
                     if(postContainer.scrollTop > 5) {
  
                         event.stopPropagation();
-             
-
                     } 
 
                     touchStartPosX = event.changedTouches[0].clientX;
-                    document.getElementById("blogContents").addEventListener("touchmove", blogMoveStart);
+                    blogContent.addEventListener("touchmove", blogMoveStart);
                     startPrevMargin = prevMargin;
                 },
                 
                 touchMove: function(event) {
 
-                //    if(postContainer.scrollTop > 5) {
+                //   if(postContainer.scrollTop > 5) {
+                  //     event.stopPropagation();              
+                     // } 
+                    if(postContainer.scrollTop > 5 && document.getElementById("menu").style.height > 0) {
+                        event.stopPropagation();                       
+                    }
 
-                  //      event.stopPropagation();
-               
-                    //  } 
-
-                    console.log(postContainer.scrollTop);
                     var originalPosX = touchStartPosX;
                     var newX = event.changedTouches[0].clientX;
                     var deltaX = (newX - originalPosX);// - touchMoveThreshold;
@@ -1524,10 +1524,9 @@ function blogTabHandler(postToRequest, setListeners) {
                             deltaX>=0 ? deltaX = deltaX - touchMoveThreshold : deltaX = deltaX + touchMoveThreshold;
                             if(marginLeftValue<=0 && Math.abs(marginLeftValue+10) <= leftStopThreshold) { 
                                 blogContent.style.marginLeft = Math.min((parseInt(startPrevMargin, 10) + deltaX), 0) + 'px';
-                             //   postSidebar.style.marginLeft = postContainer.style.marginLeft.replace('px', '') + 'px';
                                 }
                             else {
-                                document.getElementById("blogContents").removeEventListener("touchmove", blogMoveStart);    
+                                blogContent.removeEventListener("touchmove", blogMoveStart);    
                             } 
                     }
                 },
@@ -1538,7 +1537,7 @@ function blogTabHandler(postToRequest, setListeners) {
                     }
                     prevMargin = blogContent.style.marginLeft;
                     startPrevMargin = prevMargin;
-                    document.getElementById("blogContents").removeEventListener("touchmove", blogMoveStart);  
+                    blogContent.removeEventListener("touchmove", blogMoveStart);  
                 }
             };
             
@@ -1558,8 +1557,8 @@ function blogTabHandler(postToRequest, setListeners) {
         
     
         var assignBlogEventListener = function() {
-            document.getElementById("blogContents").addEventListener("touchstart", blogTouchStart);    
-            document.getElementById("blogContents").addEventListener("touchend", blogMoveEnd);
+            blogContent.addEventListener("touchstart", blogTouchStart);    
+            blogContent.addEventListener("touchend", blogMoveEnd);
             
         };
         assignBlogEventListener();
@@ -1571,15 +1570,17 @@ function blogTabHandler(postToRequest, setListeners) {
 /** var definitions**/
 
 var postSidebarFull = document.getElementsByClassName('post-sidebar')[0];
-//need to change these 2 names ^ & v too confusing
+var postSidebarMenuContainer = document.getElementsByClassName('post-sidebar-menu-container')[0];
 var postSidebar = document.getElementsByClassName('post-sidebar-menu')[0];
+//need to change these 3names ^, they're a bit confusing I think
+
 var sidebarHeight = parseInt(getComputedStyle(postSidebar).height, 10);
-var menuContainerHeight = parseInt(getComputedStyle(document.getElementsByClassName("post-sidebar-menu-container")[0]).height, 10);
+var menuContainerHeight = parseInt(getComputedStyle(postSidebarMenuContainer).height, 10);
 var scrollBar = document.getElementById("blog-menu-scrollbar");
 
 
 if(menuContainerHeight<sidebarHeight) {
-var scrollScheduled = false;
+var scrollScheduled = false; //debouncer
 
 var delta = 0; //uses the event movement measurer method - event.clientY for mouse, event.deltaY for wheel etc
 var scrollBarHeight = parseInt(getComputedStyle(scrollBar).height, 10);
@@ -1672,29 +1673,34 @@ var blogMenuTouchHandler = (function(){
         touchMoveHandler: function(event) {
             event.stopPropagation();
             if(!scrollScheduled) {
-                delta = touchStartPositionY - event.changedTouches[0].clientY;
+                delta = event.changedTouches[0].clientY - touchStartPositionY ;
                 postMenuScroller();
             }
 
         },
         touchStartHandler: function(event) {
+            if(document.getElementById("menu").style.height > 0){ //stops moving if menu is out
+                return;
+            }
             event.stopPropagation();
             touchStartPositionY = event.changedTouches[0].clientY;       
-            document.addEventListener("touchmove", touchMoveHandler);
+            postSidebarMenuContainer.addEventListener("touchmove", touchMoveHandler);
 
         },
         touchEndHandler: function(event) {
-            document.removeEventListener("touchmove", mouseMoveHandler);
+            postSidebarMenuContainer.removeEventListener("touchmove", touchMoveHandler);
             scrollButtonPrevScroll = scrollButtonPrevScroll + delta;            
         }
     }
 })();
 
 function touchMoveHandler(event) {
+
 blogMenuTouchHandler.touchMoveHandler(event);
 }
 
 function touchStartHandler(event) {
+
 blogMenuTouchHandler.touchStartHandler(event);
 }
 
