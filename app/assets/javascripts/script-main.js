@@ -1402,7 +1402,7 @@ function blogTabHandler(postToRequest, setListeners) {
     }
     
 
-    /************************************/
+    /****************** AJAX request handlers ******************/
 
 
     if(typeof postToRequest !== "undefined") { //this is used when both states are blogtab
@@ -1435,7 +1435,7 @@ function blogTabHandler(postToRequest, setListeners) {
         history.replaceState(stateObject, "state", "/" + activeTabValue.replace('Tab', '') + "/" + currentPostId);
     } */
 
-    /**********************************************/
+    /**********************  /AJAX request handlers ************************/
 
     
 
@@ -1470,10 +1470,6 @@ function blogTabHandler(postToRequest, setListeners) {
     }
     
     
-    
-    
-    
-    
     if(setListeners == true){
         
         
@@ -1489,7 +1485,7 @@ function blogTabHandler(postToRequest, setListeners) {
     
     if(document.documentElement.clientWidth<481) {
         var touchStartPosX;//position of the touch X "pointer" at the start of the touch event
-        var touchMoveThreshold = 50; //threshold for menu movement
+        var touchMoveThreshold = 100; //threshold for menu movement
         var prevMargin = 0; //keeps track of the margin
         var leftStopThreshold = 0.55*document.documentElement.clientWidth;
         var startPrevMargin;
@@ -1570,7 +1566,7 @@ function blogTabHandler(postToRequest, setListeners) {
 
     } // closes clWidth<481
 
-/** These affect the behhavior of the scrollbar on the blog menu*/
+/** These affect the behavior of the scrollbar on the blog menu*/
 
 var postSidebar = document.getElementsByClassName('post-sidebar-menu')[0];
 var sidebarHeight = parseInt(getComputedStyle(postSidebar).height, 10);
@@ -1643,7 +1639,7 @@ document.addEventListener("mouseup", mouseUpHandler);
 } else {
     scrollBar.style.display = "none";
 
-}
+} //end of the scrollbar function
 
 
 }

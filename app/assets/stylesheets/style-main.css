@@ -1741,7 +1741,7 @@ top: 12px;
 /* BEGINNING OF BLOG TAB FORMATTING*/
 
 #blogContents {
-max-width: 155%;
+max-width: 175%;
 width: 155%;
 
 margin: auto;
@@ -1755,19 +1755,24 @@ margin: auto;
 .post-sidebar {
     
     width:40%;
-    overflow: hidden;
+  
 
 }
 .post-sidebar-title > span{
 font-size: 2.2em;
 }
-.post-sidebar ol {
-  margin: 5px;
+.post-sidebar-menu {
+ 
+}
+
+.post-sidebar-menu li > a {
+  min-height: 20vmin;
 }
 
 .post-sidebar .post-link {
-word-break: break-all;
+word-break: break-word;
 }
+
 
 
 
