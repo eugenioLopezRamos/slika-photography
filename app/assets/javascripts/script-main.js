@@ -1570,6 +1570,8 @@ function blogTabHandler(postToRequest, setListeners) {
 
 /** var definitions**/
 
+var postSidebarFull = document.getElementsByClassName('post-sidebar')[0];
+//need to change these 2 names ^ & v too confusing
 var postSidebar = document.getElementsByClassName('post-sidebar-menu')[0];
 var sidebarHeight = parseInt(getComputedStyle(postSidebar).height, 10);
 var menuContainerHeight = parseInt(getComputedStyle(document.getElementsByClassName("post-sidebar-menu-container")[0]).height, 10);
@@ -1585,6 +1587,7 @@ var scrollButton = document.getElementById("blog-menu-scrollbar-btn");
 var scrollButtonHeight = parseInt(getComputedStyle(scrollButton).height, 10);
 var mouseStartPositionY = 0;
 var scrollButtonPrevScroll = 0;
+var touchStartPositionY = 0;
 
 /* the function that actually moves the menu */
 function postMenuScroller() {
@@ -1615,7 +1618,7 @@ postSidebar.addEventListener("wheel", function(event) { //scroll with mousewheel
      }
 });
 
-/**** /mouseclick+drag on scrollbar button handlers ***/
+/**** mouseclick+drag on scrollbar button handlers ***/
 
 /*  mousedown(initial click) set records the start coodinates, then calls mouseMoveHandler to
 handle the movement. mouseUpHandler fires on mouseup(when letting the mouse button go, and records the final position
@@ -1659,7 +1662,56 @@ blogMenuMouseHandler.mouseUpHandler(event);
 
 scrollButton.addEventListener("mousedown", mouseDownHandler);
 document.addEventListener("mouseup", mouseUpHandler);
-/**  /end mouseclick+drag on scrollbar button handlers **/
+/**  /mouseclick+drag on scrollbar button handlers **/
+
+
+/** touch scrollbar handler  **/
+
+var blogMenuTouchHandler = (function(){
+    return {
+        touchMoveHandler: function(event) {
+            event.stopPropagation();
+            if(!scrollScheduled) {
+                delta = touchStartPositionY - event.changedTouches[0].clientY;
+                postMenuScroller();
+            }
+
+        },
+        touchStartHandler: function(event) {
+            event.stopPropagation();
+            touchStartPositionY = event.changedTouches[0].clientY;       
+            document.addEventListener("touchmove", touchMoveHandler);
+
+        },
+        touchEndHandler: function(event) {
+            document.removeEventListener("touchmove", mouseMoveHandler);
+            scrollButtonPrevScroll = scrollButtonPrevScroll + delta;            
+        }
+    }
+})();
+
+function touchMoveHandler(event) {
+blogMenuTouchHandler.touchMoveHandler(event);
+}
+
+function touchStartHandler(event) {
+blogMenuTouchHandler.touchStartHandler(event);
+}
+
+function touchEndHandler(event) {
+blogMenuTouchHandler.touchEndHandler(event);
+
+}
+
+postSidebarFull.addEventListener("touchstart", touchStartHandler);
+document.addEventListener("touchend", touchEndHandler);
+
+
+
+
+/** /touch scrollbar handler   **/
+
+
 } else {
     scrollBar.style.display = "none";
 
