@@ -1387,149 +1387,7 @@ assignFocusListeners(allTextAreas);
 
 // START THE BLOG TAB HANDLER
 function blogTabHandler(postToRequest, setListeners) {
-console.log("initial active post", stateObject);
 
-var postSidebar = document.getElementsByClassName('post-sidebar-menu')[0];
-var scrollOffset = 0;
-var scrollScheduled = false;
-var menuContainerHeight = parseInt(getComputedStyle(document.getElementsByClassName("post-sidebar-menu-container")[0]).height, 10);
-var sidebarHeight = parseInt(getComputedStyle(postSidebar).height, 10);
-var offsetFromLastItem = postSidebar.lastElementChild.offsetTop + parseInt(getComputedStyle(postSidebar.lastElementChild).height, 10);
-
-var delta = 0; //uses the event movement measurer method - event.clientY for mouse, event.deltaY for wheel etc
-var scrollBar = document.getElementById("blog-menu-scrollbar");
-var scrollBarHeight = parseInt(getComputedStyle(scrollBar).height, 10);
-var scrollButton = document.getElementById("blog-menu-scrollbar-btn");
-var scrollButtonHeight = parseInt(getComputedStyle(scrollButton).height, 10);
-var mouseStartPositionY = 0;
-var scrollButtonPrevScroll = 0;
-var distance = 0;
-
-
-function postMenuScroller() {
-
-/*    scrollOffset >= Math.abs(menuContainerHeight - sidebarHeight) - 10 ? scrollOffset = Math.abs(menuContainerHeight - sidebarHeight) : scrollOffset = scrollOffset;      
-    scrollOffset <= 0 ? scrollOffset = 0 : scrollOffset = scrollOffset;
-
-    console.log("scroll + mov ", scrollOffset + delta);
-    scrollOffset + delta <= 0 ? scrollOffset = 0 : scrollOffset = scrollOffset + delta;
-    scrollOffset + delta >= Math.abs(menuContainerHeight - sidebarHeight) ? scrollOffset =  Math.abs(menuContainerHeight - sidebarHeight): 0;//- 10: 0;
-    
-
-
-
-
-    document.getElementsByClassName("post-sidebar-menu")[0].style.transform = "translate3d(0," +  Math.min(scrollOffset * -1, 0) + 'px' + ",0)" 
-    scrollButton.style.transform = "translate3d(0, " + Math.max((scrollBarHeight*(scrollOffset/Math.abs(menuContainerHeight - sidebarHeight)) - scrollButtonHeight), 0) +'px' + ", 0)";
-*/
-
-}
-
-
-
-
-postSidebar.addEventListener("wheel", function(event) { //scroll with mousewheel
-    if(!scrollScheduled) {
-        scrollScheduled = false;
-        console.log("wheeeeeel");
-        window.setTimeout(function() {
-            delta = event.deltaY;
-            //scrollOffset >= Math.abs(menuContainerHeight - sidebarHeight) - 10 ? scrollOffset = Math.abs(menuContainerHeight - sidebarHeight) : scrollOffset = scrollOffset;      
-            //scrollOffset <= 0 ? scrollOffset = 0 : scrollOffset = scrollOffset;
-            //scrollOffset + delta <= 0 ? scrollOffset = 0 : scrollOffset = scrollOffset + delta;
-            //scrollOffset + delta >= Math.abs(menuContainerHeight - sidebarHeight) ? scrollOffset =  Math.abs(menuContainerHeight - sidebarHeight) : 0;//- 10: 0;
-            //document.getElementsByClassName("post-sidebar-menu")[0].style.transform = "translate3d(0," +  scrollOffset * -1 + 'px' + ",0)" 
-            //scrollButton.style.transform = "translate3d(0, " + Math.max((scrollBarHeight*(scrollOffset/Math.abs(menuContainerHeight - sidebarHeight)) - scrollButtonHeight), 0)+ 'px' + ", 0)";
-            postMenuScroller();
-            scrollButtonPrevScroll = scrollOffset;
-            scrollScheduled = false;
-        }, 17)
-     }
-});
-
-
-
-
-
-function mouseMoveHandler(event) {
-
-  /*  console.log("delta", event.clientY - mouseStartPositionY);
-
-
-
-    if((event.clientY - mouseStartPositionY)>=0) {
-      distance = distance + 1;     
-  } else if((event.clientY - mouseStartPositionY)<0) {
-      distance = distance - 1;
-  }
-    console.log("dist", distance);
-
-    delta = parseInt(distance, 10); //(event.clientY - originalPosition);//*((event.clientY - mouseStartPositionY)/scrollOffset); //+ scrollOffset - scrollButtonPrevScroll);
-    event.preventDefault();
-    console.log("mousemove", event.clientY);
-    console.log("start", mouseStartPositionY);
-
-    console.log("evtmvmt", delta);
-    console.log("scrollOffset", scrollOffset);
-    //console.log("prevScroll", scrollButtonPrevScroll);
- 
-
-   // if(!scrollScheduled) {
-     //   scrollOffset = scrollButtonPrevScroll;
-       // scrollScheduled = false;
-   // } 
-
-
-    postMenuScroller();
-    mouseStartPosition = event.clientY;
-   // scrollOffset = scrollOffset - delta;
-   
-*/
-
-event.preventDefault();
-
-//console.log(event.clientY - mouseStartPositionY);
-    var delta = mouseStartPositionY - event.clientY;
-
-    console.log("prev", scrollButtonPrevScroll);
-    //console.log("suma",scrollButtonPrevScroll - delta) ;
-    //console.log("abs", Math.abs(menuContainerHeight - sidebarHeight) );
-
-    if((Math.abs(scrollButtonPrevScroll) - delta)>=Math.abs(menuContainerHeight - sidebarHeight)) {
-        //console.log("hey");
-        console.log("fitringa");
-        delta = -(Math.abs(menuContainerHeight - sidebarHeight) - Math.abs(scrollButtonPrevScroll));
-    }
-
-    if((Math.abs(scrollButtonPrevScroll) - delta)<0){
-        console.log("iszero");
-        scrollButtonPrevScroll = 0;
-        delta = 0;
-    }
-    
-    document.getElementsByClassName("post-sidebar-menu")[0].style.transform = "translate3d(0," +  (scrollButtonPrevScroll + delta) + 'px' + ",0)" 
-    scrollButton.style.transform = "translate3d(0, " + Math.max((((scrollButtonPrevScroll + delta)*scrollBarHeight/Math.abs(menuContainerHeight - sidebarHeight) + scrollButtonHeight)*-1 ), 0) +'px' + ", 0)";
-
-    scrollOffset = scrollButtonPrevScroll + delta;
-
-
-}
-
-function mouseDownHandler(event) {
-    mouseStartPositionY = event.clientY;
- 
-    document.addEventListener("mousemove", mouseMoveHandler);
-}
-
-function mouseUpHandler(event) {
-    document.removeEventListener("mousemove", mouseMoveHandler);
-   // scrollButtonPrevScroll = scrollOffset;
-    //scrollScheduled = false;
-    scrollButtonPrevScroll = scrollOffset;
-}
-
-scrollButton.addEventListener("mousedown", mouseDownHandler);
-document.addEventListener("mouseup", mouseUpHandler);
 
 
     typeof setListeners == "undefined" ? setListeners = true : setListeners = setListeners;
@@ -1711,6 +1569,81 @@ document.addEventListener("mouseup", mouseUpHandler);
         assignBlogEventListener();
 
     } // closes clWidth<481
+
+/** These affect the behhavior of the scrollbar on the blog menu*/
+
+var postSidebar = document.getElementsByClassName('post-sidebar-menu')[0];
+var sidebarHeight = parseInt(getComputedStyle(postSidebar).height, 10);
+var menuContainerHeight = parseInt(getComputedStyle(document.getElementsByClassName("post-sidebar-menu-container")[0]).height, 10);
+var scrollBar = document.getElementById("blog-menu-scrollbar");
+
+
+if(menuContainerHeight<sidebarHeight) {
+var scrollScheduled = false;
+
+var delta = 0; //uses the event movement measurer method - event.clientY for mouse, event.deltaY for wheel etc
+var scrollBarHeight = parseInt(getComputedStyle(scrollBar).height, 10);
+var scrollButton = document.getElementById("blog-menu-scrollbar-btn");
+var scrollButtonHeight = parseInt(getComputedStyle(scrollButton).height, 10);
+var mouseStartPositionY = 0;
+var scrollButtonPrevScroll = 0;
+
+
+function postMenuScroller() {
+    if(menuContainerHeight<sidebarHeight){
+        if((Math.abs(scrollButtonPrevScroll) - delta)>=Math.abs(menuContainerHeight - sidebarHeight)) {
+            delta = -(Math.abs(menuContainerHeight - sidebarHeight) - Math.abs(scrollButtonPrevScroll));
+        }
+        if((Math.abs(scrollButtonPrevScroll) - delta)<0){
+            scrollButtonPrevScroll = 0;
+            delta = 0;
+        }
+        document.getElementsByClassName("post-sidebar-menu")[0].style.transform = "translate3d(0," +  (scrollButtonPrevScroll + delta) + 'px' + ",0)" 
+        scrollButton.style.transform = "translate3d(0, " + Math.max((((scrollButtonPrevScroll + delta)*scrollBarHeight/Math.abs(menuContainerHeight - sidebarHeight) + scrollButtonHeight)*-1 ), 0) +'px' + ", 0)";
+    } 
+}
+
+postSidebar.addEventListener("wheel", function(event) { //scroll with mousewheel
+    if(!scrollScheduled) {
+        scrollScheduled = true
+        window.setTimeout(function() {
+            delta = -event.deltaY;
+            postMenuScroller();
+            scrollButtonPrevScroll = scrollButtonPrevScroll + delta;
+            scrollScheduled = false;
+        }, 17)
+     }
+});
+
+
+function mouseMoveHandler(event) {
+
+event.preventDefault();
+event.stopPropagation();
+if(!scrollScheduled){
+    delta = mouseStartPositionY - event.clientY;
+    postMenuScroller();
+}
+
+}
+
+function mouseDownHandler(event) {
+    mouseStartPositionY = event.clientY;
+ 
+    document.addEventListener("mousemove", mouseMoveHandler);
+}
+
+function mouseUpHandler(event) {
+    document.removeEventListener("mousemove", mouseMoveHandler);
+    scrollButtonPrevScroll = scrollButtonPrevScroll + delta;
+}
+
+scrollButton.addEventListener("mousedown", mouseDownHandler);
+document.addEventListener("mouseup", mouseUpHandler);
+} else {
+    scrollBar.style.display = "none";
+
+}
 
 
 }

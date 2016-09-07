@@ -1,17 +1,13 @@
       <div class="post-sidebar-title">
-          <span>Our posts,</span><span id="menu-scroll-value"></span>
+          <span>Our posts,</span>
       </div>
       <div class="post-sidebar-menu-container">
       <ol class="post-sidebar-menu">
           <% @posts_asc = Post %>
-          <% i = 0 %>
         <% @posts_asc.by_date_desc.each do |post| %>
-            <% #i = i + 1 %>
-            <% if i < 3 %>
             <% clean_post_title = strip_tags(post.title) %>
             <li><%= link_to content_tag(:span, clean_post_title), "/blog/#{post.slug}", class: "post-link #{post.slug}" %>
             </li>
-            <% end %>
             <% end %>
             </ol> 
       <div class="scrollbar-scroll" id="blog-menu-scrollbar"><div class="scrollbar-button" id="blog-menu-scrollbar-btn"></div></div>
