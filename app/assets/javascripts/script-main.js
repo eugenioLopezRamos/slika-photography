@@ -1475,37 +1475,12 @@ function blogTabHandler(postToRequest, setListeners) {
     
 
     if(setListeners == true){
-        
-        
-        console.log("setting evt listeners");
-        
+
     [].slice.call(document.getElementsByClassName("post-link")).map(function(element, index, array) {
         console.log(element.removeEventListener("click", linksClickHandler));
     element.removeEventListener("click", linksClickHandler);
     element.addEventListener("click", linksClickHandler);
     });
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     if(document.documentElement.clientWidth<481) {
 
@@ -1519,10 +1494,10 @@ function blogTabHandler(postToRequest, setListeners) {
 
             return {
                 touchStart: function(event) {
-                    var localEvent = event;
+                  
                     if(postContainer.scrollTop > 5) {
                         event.stopPropagation();
-                       // localEvent.stopPropagation();
+                       
                     } 
              
                     touchStartPosX = event.changedTouches[0].clientX;
@@ -1532,15 +1507,10 @@ function blogTabHandler(postToRequest, setListeners) {
                 },
                 
                 touchMove: function(event) {
-                   // event.stopImmediatePropagation();
+                  
                     if(postContainer.scrollTop > 5) {
                       event.stopPropagation();              
                     } 
-                    //var localEvent = event;
-                   // if(postContainer.scrollTop > 5 && parseInt(getComputedStyle(document.getElementById("menu")).height,10) < 5) {
-                      //  console.log("Stops prop");
-                    //                          
-                    //} 
                    
                     var originalPosX = touchStartPosX;
                     var newX = event.changedTouches[0].clientX;
@@ -1556,8 +1526,7 @@ function blogTabHandler(postToRequest, setListeners) {
                                 blogContent.style.marginLeft = Math.min((parseInt(startPrevMargin, 10) + deltaX), 0) + 'px';
                                 }
                             else {
-                                console.log("getting removed");
-                                postContainer.removeEventListener("touchmove", blogMoveStart);    
+                                blogContent.removeEventListener("touchmove", blogMoveStart);    
                             } 
                     }
                 },
@@ -1589,35 +1558,13 @@ function blogTabHandler(postToRequest, setListeners) {
         
     
         function assignBlogEventListener() {
-            postContainer.addEventListener("touchstart", blogTouchStart);    
+            postContainer.addEventListener("touchstart", blogTouchStart);    //was postContainer
             postContainer.addEventListener("touchend", blogMoveEnd);
             
         };
         assignBlogEventListener();
 
     } // closes clWidth<481
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 /** These affect the behavior of the scrollbar on the blog menu*/
@@ -1636,8 +1583,6 @@ var scrollBar = document.getElementById("blog-menu-scrollbar");
 
 
 var scrollButtonPrevScroll = 0;
-
-
 
 
 var delta = 0; //uses the event movement measurer method - event.clientY for mouse, event.deltaY for wheel etc
@@ -1771,7 +1716,7 @@ var blogMenuTouchHandler = (function(){
         },
 
         touchEndHandler: function(event) {
-       
+            event.stopPropagation();
             postSidebarMenuContainer.removeEventListener("touchmove", touchMoveHandler);
             if(initialScrollButtonTransform != currentScrollButtonTransform) {
                 scrollButtonPrevScroll = scrollButtonPrevScroll + delta;  
@@ -1813,27 +1758,6 @@ assignBlogMenuEventListener();
 
 } //end of the scrollbar function
 })()// blogmenu closure
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 }
 } //end of blogTabHandler
