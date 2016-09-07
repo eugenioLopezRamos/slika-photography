@@ -1568,6 +1568,8 @@ function blogTabHandler(postToRequest, setListeners) {
 
 /** These affect the behavior of the scrollbar on the blog menu*/
 
+/** var definitions**/
+
 var postSidebar = document.getElementsByClassName('post-sidebar-menu')[0];
 var sidebarHeight = parseInt(getComputedStyle(postSidebar).height, 10);
 var menuContainerHeight = parseInt(getComputedStyle(document.getElementsByClassName("post-sidebar-menu-container")[0]).height, 10);
@@ -1584,7 +1586,7 @@ var scrollButtonHeight = parseInt(getComputedStyle(scrollButton).height, 10);
 var mouseStartPositionY = 0;
 var scrollButtonPrevScroll = 0;
 
-
+/* the function that actually moves the menu */
 function postMenuScroller() {
     if(menuContainerHeight<sidebarHeight){
         if((Math.abs(scrollButtonPrevScroll) - delta)>=Math.abs(menuContainerHeight - sidebarHeight)) {
@@ -1598,7 +1600,9 @@ function postMenuScroller() {
         scrollButton.style.transform = "translate3d(0, " + Math.max((((scrollButtonPrevScroll + delta)*scrollBarHeight/Math.abs(menuContainerHeight - sidebarHeight) + scrollButtonHeight)*-1 ), 0) +'px' + ", 0)";
     } 
 }
+/**** /the function that actually moves the menu ***********************/
 
+/* mousewheel handler */
 postSidebar.addEventListener("wheel", function(event) { //scroll with mousewheel
     if(!scrollScheduled) {
         scrollScheduled = true
@@ -1611,31 +1615,51 @@ postSidebar.addEventListener("wheel", function(event) { //scroll with mousewheel
      }
 });
 
+/**** /mouseclick+drag on scrollbar button handlers ***/
+
+/*  mousedown(initial click) set records the start coodinates, then calls mouseMoveHandler to
+handle the movement. mouseUpHandler fires on mouseup(when letting the mouse button go, and records the final position
+of the scrollbutton so it doesnt start from zero when clicked/scrolled again) */
+
+var blogMenuMouseHandler = (function(){
+    return  {
+        mouseMoveHandler: function(event) {
+            event.preventDefault();
+            event.stopPropagation();
+            if(!scrollScheduled){
+                delta = mouseStartPositionY - event.clientY;
+                postMenuScroller();
+            }
+        },
+
+        mouseDownHandler: function(event) {
+            mouseStartPositionY = event.clientY;        
+            document.addEventListener("mousemove", mouseMoveHandler);
+        },
+
+        mouseUpHandler: function(event) {
+            document.removeEventListener("mousemove", mouseMoveHandler);
+            scrollButtonPrevScroll = scrollButtonPrevScroll + delta;
+        }
+    }
+})();
 
 function mouseMoveHandler(event) {
-
-event.preventDefault();
-event.stopPropagation();
-if(!scrollScheduled){
-    delta = mouseStartPositionY - event.clientY;
-    postMenuScroller();
-}
-
+blogMenuMouseHandler.mouseMoveHandler(event);
 }
 
 function mouseDownHandler(event) {
-    mouseStartPositionY = event.clientY;
- 
-    document.addEventListener("mousemove", mouseMoveHandler);
+blogMenuMouseHandler.mouseDownHandler(event);
 }
 
 function mouseUpHandler(event) {
-    document.removeEventListener("mousemove", mouseMoveHandler);
-    scrollButtonPrevScroll = scrollButtonPrevScroll + delta;
+blogMenuMouseHandler.mouseUpHandler(event);
+
 }
 
 scrollButton.addEventListener("mousedown", mouseDownHandler);
 document.addEventListener("mouseup", mouseUpHandler);
+/**  /end mouseclick+drag on scrollbar button handlers **/
 } else {
     scrollBar.style.display = "none";
 

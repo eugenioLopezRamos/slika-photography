@@ -1091,10 +1091,10 @@ transform: translateY(-50%); /*top + transform combined seem to be the same as t
 .post-content {
   display: block;
   margin-top: 5px;
-  overflow-x: none;
+  overflow-x: hidden;
   overflow-y: auto;
   max-width: 100%;
-  word-break: break-all;
+  word-break: break-word;
 }
 
 
@@ -1749,7 +1749,7 @@ margin: auto;
 
 .post-container {
     width: 60%;
-    margin: auto 0 auto 0;
+    margin: auto;
 }
 
 .post-sidebar {
@@ -1760,9 +1760,6 @@ margin: auto;
 }
 .post-sidebar-title > span{
 font-size: 2.2em;
-}
-.post-sidebar-menu {
- 
 }
 
 .post-sidebar-menu li > a {
