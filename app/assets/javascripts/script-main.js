@@ -1637,9 +1637,6 @@ postSidebar.addEventListener("wheel", function(event) { //scroll with mousewheel
 handle the movement. mouseUpHandler fires on mouseup(when letting the mouse button go, and records the final position
 of the scrollbutton so it doesnt start from zero when clicked/scrolled again) */
 
-
-
-
 var blogMenuMouseHandler = (function(){
     return  {
         mouseDownHandler: function(event) {
@@ -1655,14 +1652,12 @@ var blogMenuMouseHandler = (function(){
             if(!scrollScheduled){
                 delta = mouseStartPositionY - event.clientY;
                 postMenuScroller();
-        
-
             }
         },
 
         mouseUpHandler: function(event) {
       
-            console.log(event);
+            //console.log(event);
             document.removeEventListener("mousemove", mouseMoveHandler);
             if(initialScrollButtonTransform != currentScrollButtonTransform) {
              //   console.log("initial", initialScrollButtonTransform);
@@ -1716,10 +1711,11 @@ var blogMenuTouchHandler = (function(){
         },
 
         touchEndHandler: function(event) {
-            event.stopPropagation();
+            //event.stopPropagation();
             postSidebarMenuContainer.removeEventListener("touchmove", touchMoveHandler);
             if(initialScrollButtonTransform != currentScrollButtonTransform) {
                 scrollButtonPrevScroll = scrollButtonPrevScroll + delta;  
+                initialScrollButtonTransform = currentScrollButtonTransform;
             } 
                     
         }
@@ -1743,7 +1739,7 @@ blogMenuTouchHandler.touchEndHandler(event);
 
 function assignBlogMenuEventListener() {
 postSidebarMenuContainer.addEventListener("touchstart", touchStartHandler);
-blogContent.addEventListener("touchend", touchEndHandler); //was postSidebarMenuContainer. .....
+postSidebarMenuContainer.addEventListener("touchend", touchEndHandler); //was postSidebarMenuContainer. .....
 
 }
 
@@ -1751,6 +1747,15 @@ assignBlogMenuEventListener();
 
 
 /** /touch scrollbar handler   **/
+
+/* scrollbar click handler (click takes you to that part of scrollbar) */
+
+scrollBar.addEventListener("click", function() {
+
+});
+
+
+/* /scrollbar click handler */
 
 
 } else {
