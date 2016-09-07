@@ -1515,7 +1515,7 @@ function blogTabHandler(postToRequest, setListeners) {
                     var originalPosX = touchStartPosX;
                     var newX = event.changedTouches[0].clientX;
 
-                    var deltaX = (newX - originalPosX);// - touchMoveThreshold;
+                    var deltaX = (newX - originalPosX)*1.1;// - touchMoveThreshold;
                     var marginLeftValue = isNaN(parseInt(blogContent.style.marginLeft, 10)) ? blogContent.style.marginLeft = '0px' : parseInt(getComputedStyle(blogContent).marginLeft, 10);
 
 
@@ -1688,7 +1688,7 @@ blogMenuMouseHandler.mouseUpHandler(event);
 }
 
 scrollButton.addEventListener("mousedown", mouseDownHandler);
-document.addEventListener("mouseup", mouseUpHandler);
+blogContent.addEventListener("mouseup", mouseUpHandler);
 /**  /mouseclick+drag on scrollbar button handlers **/
 
 
@@ -1743,7 +1743,7 @@ blogMenuTouchHandler.touchEndHandler(event);
 
 function assignBlogMenuEventListener() {
 postSidebarMenuContainer.addEventListener("touchstart", touchStartHandler);
-document.addEventListener("touchend", touchEndHandler); //was postSidebarMenuContainer. .....
+blogContent.addEventListener("touchend", touchEndHandler); //was postSidebarMenuContainer. .....
 
 }
 

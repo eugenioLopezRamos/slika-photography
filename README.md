@@ -22,23 +22,21 @@ A portfolio site with AJAX, pushstate, and an admin panel
 - Related to ^, add SendGrid for mails, postgres for DB and whatever other production env changes are necessary to pass to production
 - Add error messages for AJAX requests
 - Slide picker numbers after load
-- I should probably make the touch evt listeners always work and just constrain the menu height modifications on the menuToggle() func to clWidth<481
-- Use css height instead of the animation thingy on contact tab mobile
+
+
 
 
 
 
 ** IN PROGRESS **
-
+- I should probably make the touch evt listeners always work and just constrain the menu height modifications on the menuToggle() func to clWidth<481
 - Format the admin pages somewhat decently
 - Add the correct partial to display error messages to admin pages
 - Add checks for error messages display on tests
-- Fix post-sidebar-link CSS (Needs to overflow and keep size instead of becoming smaller w/ every post)
 - Make AJAX request for active-post not fail
-
+- Use css height instead of the animation thingy on contact tab mobile
 - Make scrollbar fadeout + disappear, then reappear when moved or its area clicked
-- Make scrollbar event listeners go to content-Tabs[0] instead of doc so they're taken out by the garbage collector when loading a different tab
-- Make the main menu stopPropagation
+
 -scrollbar click to take to that point
 
 **DONE**
@@ -50,6 +48,10 @@ A portfolio site with AJAX, pushstate, and an admin panel
 - Correctly assign the "active-post" class to the active post so it gets the correct css
 - Fix blog tab mobile formatting
 - Add redirection tests for case insensitive URLs
+- Make scrollbar event listeners go to content-Tabs[0] instead of doc so they're taken out by the garbage collector when loading a different tab
+- Fix post-sidebar-link CSS (Needs to overflow and keep size instead of becoming smaller w/ every post)
+
+
 
 
 ** OPTIONAL **
