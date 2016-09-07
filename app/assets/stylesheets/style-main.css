@@ -1080,6 +1080,10 @@ transform: translateY(-50%); /*top + transform combined seem to be the same as t
 }
 .post-title {
   margin: 5px;
+  height: auto;
+  width: calc(100% - 10px);
+  max-width: calc(100% - 10px);
+  word-break: break-word;
 }
 .timestamp {
   font-family: Helvetica, Calibri, Sans-serif;
@@ -1091,11 +1095,15 @@ transform: translateY(-50%); /*top + transform combined seem to be the same as t
 
 .post-content {
   display: block;
-  margin-top: 5px;
+  margin: 5px;
   overflow-x: hidden;
   overflow-y: auto;
   max-width: 100%;
   word-break: break-word;
+}
+
+.post-content img {
+box-sizing: border-box;
 }
 
 
@@ -1117,6 +1125,7 @@ transform: translateY(-50%); /*top + transform combined seem to be the same as t
   height: 10%;
   width: 100%;
   position: relative;
+
 
 }
 
