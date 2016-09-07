@@ -181,30 +181,10 @@ from {
 }
 }
 
-/** SCROLLBAR FORMATTING **/
-/*
-::-webkit-scrollbar {
-
-    background: rgba(230,230,230, 0.3);
-    border: 1px solid black;
-
-    width: 14px;
-    box-sizing: border-box;
-}
-
-::-webkit-scrollbar-thumb {
-    background: #333;
-
-    border: 1px solid white;
-    box-sizing: border-box;
-    width: 12px;
- 
-}*/
-
 .scrollbar-scroll {
   background: rgba(230,230,230, 0.3);
   border: 1px solid black;
-  width: 2em;
+  width: 1.5em;
   box-sizing: border-box;
   position: relative;
   height: 100%;
@@ -212,11 +192,11 @@ from {
 }
 
 .scrollbar-button {
-    background: #333;
-    height: 3em;
-    border: 1px solid white;
-    box-sizing: border-box;
-    width: 100%;
+  background: #333;
+  height: 2.5em;
+  border: 1px solid white;
+  box-sizing: border-box;
+  width: 100%;
 }
 
 
@@ -1151,6 +1131,7 @@ transform: translateY(-50%); /*top + transform combined seem to be the same as t
 .post-sidebar-menu-container {
   height: 100%;
   margin-top: 5%;
+  width:100%;
   overflow: hidden;
   display: flex;
   flex-direction: row;
@@ -1158,7 +1139,7 @@ transform: translateY(-50%); /*top + transform combined seem to be the same as t
 
 .post-sidebar-menu {
   height: auto;
-  width: auto;
+  width: 100%;
   margin: 0 auto auto auto; 
   display: flex;
   flex-direction: column;
