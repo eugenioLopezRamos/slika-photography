@@ -1486,46 +1486,61 @@ function blogTabHandler(postToRequest, setListeners) {
 
     
     if(document.documentElement.clientWidth<481) {
-        var touchStartPosX;//position of the touch X "pointer" at the start of the touch event
-        var touchMoveThreshold = 100; //threshold for menu movement
-        var prevMargin = 0; //keeps track of the margin
-        var leftStopThreshold = 0.55*document.documentElement.clientWidth;
-        var startPrevMargin;
+
+
+
+        var blogTouchHandler = (function() {    
+            var touchStartPosX;//position of the touch X "pointer" at the start of the touch event
+            var touchMoveThreshold = 100; //threshold for menu movement
+            var prevMargin = 0; //keeps track of the margin
+            var leftStopThreshold = 0.55*document.documentElement.clientWidth;
+            var startPrevMargin = 0;
         
-        var blogTouchHandler = (function() {
+
             return {
                 touchStart: function(event) {
-                    
+                    var localEvent = event;
                     if(postContainer.scrollTop > 5) {
  
-                        event.stopPropagation();
+                       // localEvent.stopPropagation();
                     } 
-
+                    
+                    console.log("should fire touchstart");
                     touchStartPosX = event.changedTouches[0].clientX;
-                    blogContent.addEventListener("touchmove", blogMoveStart);
                     startPrevMargin = prevMargin;
+                    blogContent.addEventListener("touchmove", blogMoveStart);
+              
                 },
                 
                 touchMove: function(event) {
 
-                //   if(postContainer.scrollTop > 5) {
-                  //     event.stopPropagation();              
-                     // } 
-                    if(postContainer.scrollTop > 5 && document.getElementById("menu").style.height > 0) {
-                        event.stopPropagation();                       
-                    }
-
+                    if(postContainer.scrollTop > 5) {
+                      event.stopPropagation();              
+                    } 
+                    //var localEvent = event;
+                    if(postContainer.scrollTop > 5 && parseInt(getComputedStyle(document.getElementById("menu")).height,10) < 5) {
+                      //  console.log("Stops prop");
+                    //    localEvent.stopImmediatePropagation();                       
+                    } 
+                    console.log("should fire touchmove");
                     var originalPosX = touchStartPosX;
                     var newX = event.changedTouches[0].clientX;
                     var deltaX = (newX - originalPosX);// - touchMoveThreshold;
-                    var marginLeftValue = isNaN(parseInt(blogContent.style.marginLeft, 10)) ? 0 : parseInt(blogContent.style.marginLeft, 10);
+                    var marginLeftValue = isNaN(parseInt(blogContent.style.marginLeft, 10)) ? blogContent.style.marginLeft = '0px' : parseInt(getComputedStyle(blogContent).marginLeft, 10);
                     
+
+                    console.log("deltaX", deltaX);
+                    console.log("marginLeftValue", marginLeftValue);
+
+
                     if(Math.abs(deltaX) - touchMoveThreshold>0) {
                             deltaX>=0 ? deltaX = deltaX - touchMoveThreshold : deltaX = deltaX + touchMoveThreshold;
+                            console.log(deltaX);
                             if(marginLeftValue<=0 && Math.abs(marginLeftValue+10) <= leftStopThreshold) { 
                                 blogContent.style.marginLeft = Math.min((parseInt(startPrevMargin, 10) + deltaX), 0) + 'px';
                                 }
                             else {
+                                console.log("getting removed");
                                 blogContent.removeEventListener("touchmove", blogMoveStart);    
                             } 
                     }
@@ -1671,7 +1686,8 @@ document.addEventListener("mouseup", mouseUpHandler);
 var blogMenuTouchHandler = (function(){
     return {
         touchMoveHandler: function(event) {
-            event.stopPropagation();
+          //  event.stopPropagation();
+            console.log("firing menu");
             if(!scrollScheduled) {
                 delta = event.changedTouches[0].clientY - touchStartPositionY ;
                 postMenuScroller();
@@ -1680,10 +1696,10 @@ var blogMenuTouchHandler = (function(){
         },
         touchStartHandler: function(event) {
             if(document.getElementById("menu").style.height > 0){ //stops moving if menu is out
-                return;
+                //return;
             }
-            event.stopPropagation();
-            touchStartPositionY = event.changedTouches[0].clientY;       
+            //event.stopPropagation();
+     
             postSidebarMenuContainer.addEventListener("touchmove", touchMoveHandler);
 
         },
@@ -1700,7 +1716,7 @@ blogMenuTouchHandler.touchMoveHandler(event);
 }
 
 function touchStartHandler(event) {
-
+touchStartPositionY = event.changedTouches[0].clientY;  
 blogMenuTouchHandler.touchStartHandler(event);
 }
 
@@ -1709,8 +1725,14 @@ blogMenuTouchHandler.touchEndHandler(event);
 
 }
 
+var assignBlogMenuEventListener = function() {
 postSidebarFull.addEventListener("touchstart", touchStartHandler);
 document.addEventListener("touchend", touchEndHandler);
+
+}
+
+assignBlogMenuEventListener();
+
 
 
 
