@@ -1462,7 +1462,9 @@ function blogTabHandler(postToRequest, setListeners) {
             $('#post-container').html(response); //renders the post
             setActivePost();
 
-        }).fail(function(response) {alert(response)});                    
+        }).fail(function(response) {
+            alert("Sorry, something went wrong: " + response.status + ": " + response.responseText);
+            });                    
             
             
         }, 200);
@@ -1471,7 +1473,7 @@ function blogTabHandler(postToRequest, setListeners) {
         }
     }
     
-    
+
     if(setListeners == true){
         
         
@@ -1519,10 +1521,10 @@ function blogTabHandler(postToRequest, setListeners) {
                 touchStart: function(event) {
                     var localEvent = event;
                     if(postContainer.scrollTop > 5) {
- 
+                        event.stopPropagation();
                        // localEvent.stopPropagation();
                     } 
-                    event.stopImmediatePropagation();
+             
                     touchStartPosX = event.changedTouches[0].clientX;
                     startPrevMargin = prevMargin;
                     postContainer.addEventListener("touchmove", blogMoveStart);
@@ -1560,7 +1562,8 @@ function blogTabHandler(postToRequest, setListeners) {
                     }
                 },
                 
-                touchEnd: function() {
+                touchEnd: function(event) {
+                    event.stopPropagation();
                     if(Math.abs(blogContent.style.marginLeft.replace('px', ''))>leftStopThreshold) {
                         blogContent.style.marginLeft = -1*leftStopThreshold + 'px';
                     }
@@ -1633,7 +1636,7 @@ var scrollBar = document.getElementById("blog-menu-scrollbar");
 
 
 var scrollButtonPrevScroll = 0;
-var initialScrollButtonPrevScroll = 0;
+
 
 
 
@@ -1645,6 +1648,8 @@ var scrollBarHeight = parseInt(getComputedStyle(scrollBar).height, 10);
 var scrollButton = document.getElementById("blog-menu-scrollbar-btn");
 var scrollButtonHeight = parseInt(getComputedStyle(scrollButton).height, 10);
 var mouseStartPositionY = 0;
+var initialScrollButtonTransform;
+var currentScrollButtonTransform;
 
 var touchStartPositionY = 0;
 
@@ -1662,7 +1667,8 @@ function postMenuScroller() {
         //console.log("delta value", delta);
         document.getElementsByClassName("post-sidebar-menu")[0].style.transform = "translate3d(0," +  (scrollButtonPrevScroll + delta) + 'px' + ",0)" 
         scrollButton.style.transform = "translate3d(0, " + Math.max((((scrollButtonPrevScroll + delta)*scrollBarHeight/Math.abs(menuContainerHeight - sidebarHeight) + scrollButtonHeight)*-1 ), 0) +'px' + ", 0)";
-        console.log("post menu end of line");
+        currentScrollButtonTransform = scrollButton.style.transform;
+        //console.log(currentScrollButtonTransform)
     } 
 }
 /**** /the function that actually moves the menu ***********************/
@@ -1691,25 +1697,34 @@ of the scrollbutton so it doesnt start from zero when clicked/scrolled again) */
 
 var blogMenuMouseHandler = (function(){
     return  {
+        mouseDownHandler: function(event) {
+            mouseStartPositionY = event.clientY; 
+            initialScrollButtonTransform = scrollButton.style.transform; 
+            console.log(event);     
+            document.addEventListener("mousemove", mouseMoveHandler);
+        },
+
         mouseMoveHandler: function(event) {
             event.preventDefault();
             event.stopPropagation();
             if(!scrollScheduled){
                 delta = mouseStartPositionY - event.clientY;
                 postMenuScroller();
-                console.log("end of the line");
+        
+
             }
         },
 
-        mouseDownHandler: function(event) {
-            mouseStartPositionY = event.clientY;        
-            document.addEventListener("mousemove", mouseMoveHandler);
-        },
-
         mouseUpHandler: function(event) {
-            console.log("mouse end end of line");
+      
+            console.log(event);
             document.removeEventListener("mousemove", mouseMoveHandler);
-            scrollButtonPrevScroll = scrollButtonPrevScroll + delta;
+            if(initialScrollButtonTransform != currentScrollButtonTransform) {
+             //   console.log("initial", initialScrollButtonTransform);
+               // console.log("current", currentScrollButtonTransform);
+                scrollButtonPrevScroll = scrollButtonPrevScroll + delta;
+                initialScrollButtonTransform = currentScrollButtonTransform;
+            }
         }
     }
 })();
@@ -1728,7 +1743,7 @@ blogMenuMouseHandler.mouseUpHandler(event);
 }
 
 scrollButton.addEventListener("mousedown", mouseDownHandler);
-postSidebarMenuContainer.addEventListener("mouseup", mouseUpHandler);
+document.addEventListener("mouseup", mouseUpHandler);
 /**  /mouseclick+drag on scrollbar button handlers **/
 
 
@@ -1736,38 +1751,34 @@ postSidebarMenuContainer.addEventListener("mouseup", mouseUpHandler);
 
 var blogMenuTouchHandler = (function(){
     return {
-
+//
         touchStartHandler: function(event) {
-           // if(document.getElementById("menu").style.height > 0){ //stops moving if menu is out
-              //  return;
-            //}
-            console.log(event.target)
-          //  if (event.target === postSidebarMenuContainer){
-            var localEvent = event;
-            event.stopPropagation();
-            console.log("menu touch start", localEvent.changedTouches[0].clientY);
-            touchStartPositionY = localEvent.changedTouches[0].clientY;  
-     
+            if(currentScrollButtonTransform != "translate3d(0px, 0px, 0px)"){
+                event.stopPropagation();               
+            }
+            touchStartPositionY = event.changedTouches[0].clientY;       
             postSidebarMenuContainer.addEventListener("touchmove", touchMoveHandler);
-//}
+
         },
 
         touchMoveHandler: function(event) {
-          //  event.stopPropagation();
-          var localEvent = event;
-            event.stopPropagation();
-           // if(!scrollScheduled) {
-                delta = (localEvent.changedTouches[0].clientY - touchStartPositionY); /*******************************/
-                postMenuScroller();
-            //}
 
+            if(currentScrollButtonTransform != "translate3d(0px, 0px, 0px)"){
+                 event.stopPropagation();               
+            }
+                delta = (event.changedTouches[0].clientY - touchStartPositionY);
+                postMenuScroller();
         },
 
         touchEndHandler: function(event) {
+       
             postSidebarMenuContainer.removeEventListener("touchmove", touchMoveHandler);
-            scrollButtonPrevScroll = scrollButtonPrevScroll + delta;            
+            if(initialScrollButtonTransform != currentScrollButtonTransform) {
+                scrollButtonPrevScroll = scrollButtonPrevScroll + delta;  
+            } 
+                    
         }
-    }
+    }// return close
 })();
 
 function touchMoveHandler(event) {
@@ -1787,7 +1798,7 @@ blogMenuTouchHandler.touchEndHandler(event);
 
 function assignBlogMenuEventListener() {
 postSidebarMenuContainer.addEventListener("touchstart", touchStartHandler);
-postSidebarMenuContainer.addEventListener("touchend", touchEndHandler);
+document.addEventListener("touchend", touchEndHandler); //was postSidebarMenuContainer. .....
 
 }
 
