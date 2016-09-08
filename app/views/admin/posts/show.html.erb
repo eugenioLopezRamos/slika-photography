@@ -2,16 +2,23 @@
 <%# clean_title = @post.title.gsub("\"", "") #need to check if string contains \ character, otherwise no cleaning is necessary %>
 <% #clean_content = @post.content.gsub("\"", "") %>
 <%#clean_content %>
-<style>
-.post-display {
-    width: 500px
-}
-</style>
 
 
-<div class="post-display">
-<%= sanitize @post.title, tags: %w(strong em a div p img span style), attributes: %w(style font-style text-decoration color src font-family font-weight height width) %>
-<%= sanitize @post.content, tags: %w(strong em a div p img span style), attributes: %w(style src font-style text-decoration color font-family font-weight height width float) %>    
-    
-    
+<%= stylesheet_link_tag    'application', media: 'all'%>
+  <meta name="viewport" content="width=device-width, initial-scale=1., user-scalable=no">
+ <link href='https://fonts.googleapis.com/css?family=Stalemate&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+ <div class="sitewrapper" id="sitewrapper">	 
+<%= render '/layouts/header' %>
+
+<div class="jumbotron">
+<%= render 'layouts/tabs/blogTab' %>
+
+<!--div class="post">
+	<%= sanitize @post.title, tags: %w(strong em a div p img span style), attributes: %w(style font-style text-decoration color src font-family font-weight height width) %>
+	<%= sanitize @post.content, tags: %w(strong em a div p img span style), attributes: %w(style src font-style text-decoration color font-family font-weight height width float) %>     
+	</div-->
+</div>
+
+
+<%= render '/layouts/bottomBar' %>
 </div>
