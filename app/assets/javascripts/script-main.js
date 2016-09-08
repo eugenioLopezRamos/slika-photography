@@ -1609,7 +1609,7 @@ function postMenuScroller() {
             scrollButtonPrevScroll = 0;
             delta = 0;
         }
-        //console.log("delta value", delta);
+        console.log("delta value", delta);
         document.getElementsByClassName("post-sidebar-menu")[0].style.transform = "translate3d(0," +  (scrollButtonPrevScroll + delta) + 'px' + ",0)" 
         scrollButton.style.transform = "translate3d(0, " + Math.max((((scrollButtonPrevScroll + delta)*scrollBarHeight/Math.abs(menuContainerHeight - sidebarHeight) + scrollButtonHeight)*-1 ), 0) +'px' + ", 0)";
         currentScrollButtonTransform = scrollButton.style.transform;
@@ -1753,7 +1753,10 @@ assignBlogMenuEventListener();
 
 scrollBar.addEventListener("click", scrollClickHandler);
 
+
 function scrollClickHandler(event) {
+
+    var scrollButtonPos = parseInt(getComputedStyle(scrollButton).transform.replace("matrix(1, 0, 0, 1, 0, ", "").replace(")", ''), 10); // + scrollButtonHeight/2;// + scrollButtonHeight; //transform3d(0, <value>, 0) + btn height
 
   //  console.log(scrollBar);
     //console.log("matrix", getComputedStyle(scrollButton).transform);
@@ -1777,7 +1780,6 @@ function scrollClickHandler(event) {
     })()
     //var adjustedClickedSpot = (clickedSpot - determinedExtraHeight);
    // console.log("extraheight", determinedExtraHeight);
-    var scrollButtonPos = parseInt(getComputedStyle(scrollButton).transform.replace("matrix(1, 0, 0, 1, 0, ", "").replace(")", ''), 10) + scrollButtonHeight/2;// + scrollButtonHeight; //transform3d(0, <value>, 0) + btn height
     //console.log("btnpos", scrollButtonPos);
 
 
@@ -1799,34 +1801,86 @@ function scrollClickHandler(event) {
 
 
 event.stopPropagation();
-console.log(event);
+//console.log(event);
 
-    var clickedSpot = parseInt(event.screenY) - 110; // <= have to see where these come from - I suspect its margins/paddings etc;
+
+
+    function getPropValue(part, property) {
+       // console.log(part);
+        //console.log(property);
+       return parseInt(getComputedStyle(part)[property], 10);
+    }
+
+
+    var clickedSpot = parseInt(event.clientY); // <= have to see where these come from - I suspect its margins/paddings etc;
     var blogTabHeight = parseInt(getComputedStyle(blogContent).height, 10);
     var newScrollBarHeight = blogTabHeight;//parseInt(scrollBarHeight,10) + parseInt(blogTabHeight, 10);
-    var difference = parseInt((newScrollBarHeight - clickedSpot), 10);
-    console.log("clicked", clickedSpot);
-    console.log("scrollbarht", parseInt(scrollBarHeight, 10));
-    console.log("bloght", blogTabHeight);
+    var difference = parseInt((newScrollBarHeight - clickedSpot), 10) - parseInt(scrollButtonHeight);
+    //console.log("clicked", clickedSpot);
+    //console.log("scrollbarht", parseInt(scrollBarHeight, 10));
+    //console.log("bloght", blogTabHeight);
+    //console.log("newscrollbar ht", newScrollBarHeight);
+   // console.log("clickedspot", clickedSpot);
 
-
-    scrollButtonPrevScroll = 0; //parseInt(getComputedStyle(scrollButton).transform.replace("matrix(1, 0, 0, 1, 0, ", "").replace(")", ''), 10)
+    //scrollButtonPrevScroll = 0; //parseInt(getComputedStyle(scrollButton).transform.replace("matrix(1, 0, 0, 1, 0, ", "").replace(")", ''), 10)
 
     var totalHeight = parseInt( getComputedStyle(document.getElementById('sitewrapper')).height, 10);
     var minusFactor = totalHeight - scrollBarHeight; //640 - 480 = 160
 
 
-    var finalPos = clickedSpot - minusFactor;
-    console.log("scrollbarHT", scrollBarHeight);
-    console.log("totalHt", totalHeight);
-    console.log("finalPos", finalPos);
+  // var scrollBarStartPos = getPropValue(scrollBar, "height");
+  //  console.log("scrollbar startpos", scrollBarStartPos);
+var menu = document.getElementById("menu");
+    var scrollbarStartDelta = getPropValue(menu, "height") + getPropValue(scrollBar.parentElement.parentElement, "marginTop") + getPropValue(scrollBar.parentElement.parentElement, "height") - getPropValue(scrollBar, "height");
+    //console.log("start delta", scrollbarStartDelta);
+
+   // console.log("old clickedSpot", clickedSpot);
+  //  
+   // console.log("menu", menu);
+//    var menuHeight = getPropValue(menu , "height");
+
+
+    clickedSpot = clickedSpot - scrollbarStartDelta;
+   // console.log("new clickedSPot", clickedSpot);
+
+    //scrollButtonPrevScroll = scrollButtonPrevScroll;
+    console.log("prev scroll on click", scrollButtonPrevScroll);
+
+   /* if(clickedSpot < (scrollButtonPrevScroll + scrollButtonHeight/2)){
+        clickedSpot = clickedSpot - scrollButtonHeight/2;
+    }
+    else if(clickedSpot > (scrollButtonPrevScroll + scrollButtonHeight/2)){
+        clickedSpot = clickedSpot - scrollButtonHeight/2;
+    }*/
+
+    var finalDiff = clickedSpot; // - (scrollButtonPrevScroll - scrollButtonHeight/2);
+
+    //console.log("difference", finalDiff);
+
+
+    var finalPos = finalDiff; //clickedSpot; // + scrollbarStartDelta - minusFactor;
+    //console.log("scrollbarHT", scrollBarHeight);
+    //console.log("totalHt", totalHeight);
+    //console.log("finalPos", finalPos);
+        console.log("finalpos", finalPos);
+        console.log("buttonPos", scrollButtonPos);
+
+/*
+    if(finalPos >= scrollButtonPrevScroll) {
+        finalPos = finalPos;
+    }else {
+        finalPos = -finalPos;
+    } */
+
+  //  console.log("last final pos", finalPos);
+    // en este caso mi supuesto "cero" es -80
+ //   console.log()
+  //  console.log(scrollBar.parentElement.parentElement);
+//    console.log("scrollparentHeight", parseInt(getComputedStyle(scrollBar.parentElement.parentElement).height, 10));
 
 
 
-
-
-
-    console.log("diff", difference)
+    //console.log("diff", difference)
    /*var scrollButtonHeightAdjust = adjustedClickedSpot > scrollButtonPos ? scrollButtonHeightAdjust = scrollButtonHeight : scrollButtonHeightAdjust = -scrollButtonHeight;
    
     var distance = scrollButtonPos - adjustedClickedSpot; // + scrollButtonHeightAdjust;
@@ -1834,19 +1888,36 @@ console.log(event);
 
     var finalDistance = -(adjustedClickedSpot) + scrollButtonHeightAdjust;
 
+    
+
+// EL TRANSLATE FINAL ES PREVSCROLL + DELTA
+
+//entonces si click es menor q prevscroll (esta arriaba) -> click - prevscroll es mi delta (ejemplo 50 - 150) = delta -100
+// si click es mayor q prevscroll (esta abajo) -> click - prevscroll es mi delta (ejemplo 150 - 100) = delta +50
+
+    
+
     var anotherDist = -(adjustedClickedSpot) + scrollButtonPos;
     scrollButtonPrevScroll = 0;*/
+   // scrollButtonPrevScroll = scrollButtonPrevScroll - parseInt(scrollButtonHeight, 19)/2
 
-    delta = -finalPos; //(parseInt(scrollButtonPos,10) + diff)*-1;
+
+
+    delta = finalPos + scrollButtonPrevScroll; //(parseInt(scrollButtonPos,10) + diff)*-1;
+  //  scrollButtonPrevScroll = scrollButtonPrevScroll - scrollButtonHeight/2;
+    console.log("old delta", delta);
+    delta = -delta; //-(delta) + scrollButtonHeight;
+      console.log("given delta", delta);
     //console.log(event.clientY);
     //console.log(delta);
     //delta = "zzzzzzzzzzzzzzzzzzz";
 
   //  scrollButtonPrevScroll = 0;//parseInt(scrollButtonPos, 10);
     postMenuScroller();
-   // scrollButtonPrevScroll = parseInt(scrollButtonPos);  
-    scrollButtonPrevScroll = -parseInt(getComputedStyle(scrollButton).transform.replace("matrix(1, 0, 0, 1, 0, ", "").replace(")", ''), 10);
-    console.log("prevScroll", scrollButtonPrevScroll);
+    scrollButtonPrevScroll = parseInt(getComputedStyle(scrollButton).transform.replace("matrix(1, 0, 0, 1, 0, ", "").replace(")", ''), 10);
+    console.log("finalPrevScroll", scrollButtonPrevScroll);
+    //scrollButtonPrevScroll = parseInt(getComputedStyle(scrollButton).transform.replace("matrix(1, 0, 0, 1, 0, ", "").replace(")", ''), 10);
+    //console.log("prevScroll", scrollButtonPrevScroll);
     initialScrollButtonTransform = currentScrollButtonTransform;
     return;
 }

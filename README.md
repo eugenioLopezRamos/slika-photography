@@ -38,6 +38,7 @@ A portfolio site with AJAX, pushstate, and an admin panel
 - Make scrollbar fadeout + disappear, then reappear when moved or its area clicked
 
 -scrollbar click to take to that point
+-add stop propagation to scrollbutton;
 
 **DONE**
 
