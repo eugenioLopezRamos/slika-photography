@@ -22,7 +22,7 @@ A portfolio site with AJAX, pushstate, and an admin panel
 - Related to ^, add SendGrid for mails, postgres for DB and whatever other production env changes are necessary to pass to production
 - Add error messages for AJAX requests
 - Slide picker numbers after load
-
+- scrollbar click to take to that point
 
 
 
@@ -37,7 +37,7 @@ A portfolio site with AJAX, pushstate, and an admin panel
 - Use css height instead of the animation thingy on contact tab mobile
 - Make scrollbar fadeout + disappear, then reappear when moved or its area clicked
 
--scrollbar click to take to that point
+
 -add stop propagation to scrollbutton;
 
 **DONE**
