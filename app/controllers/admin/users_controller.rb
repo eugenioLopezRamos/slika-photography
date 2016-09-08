@@ -65,7 +65,7 @@ class Admin::UsersController < ApplicationController
     end
     
     def can_destroy_user
-      if User.find(params[:id]).admin == 0 && current_user.admin? || current_user.id == User.find(params[:id]) 
+      if User.find(params[:id]).admin === nil && current_user.admin? || current_user.id == User.find(params[:id]).id
         return true
       else
         flash[:danger] = "You are not authorized to do this"
