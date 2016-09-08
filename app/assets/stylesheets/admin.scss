@@ -1,3 +1,115 @@
-// Place all the styles related to the admin controller here.
-// They will automatically be included in application.css.
-// You can use Sass (SCSS) here: http://sass-lang.com/
+    $site-grey-light: #333;
+    $site-grey-dark: #111;
+    $font-stack: Calibri, Helvetica, Sans-serif;
+    $background-light-white: rgb(180,180,180);
+
+    body {
+        font-family: $font-stack;
+        color: $site-grey-light;
+        background-color: $background-light-white;
+        margin:auto;
+        display:flex;
+        justify-content: center;
+        height:auto;
+
+    }
+
+
+  @media screen and (max-width: 480px) {
+
+    .profile-main {
+        width: 95%;
+        margin:auto;
+        display:flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .nav-menu {
+        position: relative;
+        width: 100%;
+        height: 50px;
+        display: flex;
+        justify-content: flex-start;
+        padding: 5px;
+    }
+
+    .nav-menu > a {
+    	padding-left: 5px;
+    	padding-right: 5px;
+    }
+    
+    .user-name-container {
+
+    	font-size: 2em;
+    	width:100%;
+    	display: flex;
+    	flex-direction: column;
+    	justify-content: center;
+    }
+
+
+
+    .user-name-container {
+    	.user-name-text {
+	    	margin-left:auto;
+	    	margin-right:auto;
+	    	position: relative; 	
+    	}
+    	a {
+    		margin-left:auto;
+	    	margin-right:auto;
+    	}
+    }
+
+    .own-posts-container {
+    	width: 100%;
+    	margin: auto;
+    	display: flex;
+    	flex-direction: column;
+    	margin: 20px auto;
+    }
+
+    .user-posts-title {
+	    margin-left:auto;
+	    margin-right:auto;
+    	font-size: 1.2em;
+    }
+
+    .own-post-link{
+    	width: auto;
+    	display:flex;
+    	justify-content: center;
+
+    }
+
+    .modify-post-links {
+    	display:flex;
+    	width:auto;
+    	justify-content: center;
+    	margin: auto;
+    }
+
+    .other-posts-user-name {
+    	margin-left:auto;
+	    margin-right:auto;
+    	font-size: 100%;
+    }
+
+    .others-post-link {
+
+    	width: auto;
+    	display:flex;
+    	justify-content: center;
+    }
+
+
+
+
+
+
+
+
+
+
+  }
