@@ -35,6 +35,7 @@ class Admin::UsersController < ApplicationController
   
   def update
     @user = User.find(params[:id])
+    @url = admin_user_path(@user)
     if @user.update_attributes(user_params)
       flash[:success] = "You have successfully edited your information"
       redirect_to admin_user_path(@user)
