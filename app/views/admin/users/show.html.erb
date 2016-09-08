@@ -1,26 +1,17 @@
 <% provide(:title, @user.name) %>
 <%= javascript_include_tag 'application'%> 
+<%= stylesheet_link_tag 'admin', media: 'all' %>
+<meta name="viewport" content="width=device-width, initial-scale=1., user-scalable=no">
 <%= csrf_meta_tag %>
 
-<style>
-    .profile-main {
-        width: 50%;
-        margin-left: auto;
-        margin-right: auto;
-    }
-
-    body {
-        font-family: Calibri, Helvetica, Sans-serif;
-    }
-    
-</style>
 <div class="profile-main">
 <%= render 'admin/users/menu' %>
+<hr>
 
     <% if flash[:danger] %>
-    <div class="notice" style="background-color:red;color:white"><%= flash[:danger] %></div>
+        <div class="notice" style="background-color:red;color:white"><%= flash[:danger] %></div>
     <% end %>
-    
+
 <%= render 'admin/users/profile_info' %>
 
 <% if @user.posts.any? %>
@@ -31,4 +22,5 @@
     <%= render 'admin/users/other_posts' %>
 <% end %>
 </div>
+
 

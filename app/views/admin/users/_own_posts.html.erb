@@ -1,16 +1,19 @@
 
-    <h3><%= @user.name %>'s posts</h3>
+    <span class="user-posts-title"><%= @user.name %>'s posts</span>
     
         <% @posts.each do |post| %>
         
             <% clean_post_title = sanitize post.title, tags: %w(strong em a div img) %>
-            <ol class="posts"><span>
-                <%= link_to clean_post_title,  admin_post_path(post) %>
+            <div class="own-posts-container">
+                <div class="own-post-link"><%= link_to clean_post_title,  admin_post_path(post) %></div>
                 <% if current_user.id == @user.id %>
-                <%=link_to "  | Edit this post", edit_admin_post_path(post), class: "post-edit" %>
-                <%= link_to "  |  Delete this post", admin_post_path(post),
-                method: 'delete', class: "post-delete", data: {confirm: "Are you sure? This action cannot be undone"} %>
+                <div class="modify-post-links">
+                    <%= link_to "Edit this post  |", edit_admin_post_path(post), class: "post-edit" %>
+                    <%= link_to "  |  Delete this post", admin_post_path(post),
+                    method: 'delete', class: "post-delete", data: {confirm: "Are you sure? This action cannot be undone"} %>
+                </div>
                 <% end %>
-            </span></ol>
+
+            </div>
             
         <% end %>

@@ -1,27 +1,10 @@
-<style>
-    .menu {
-        position: relative;
-        width: 70%;
-        height: 50px;
-        display: flex;
-        justify-content: flex-start;
-        will-change: height;
-    }
-    
-    a {
-        text-decoration: none;    
-    }
-    
-</style>
-<div class="menu">
-<% if @user.id == current_user.id %>
-<%= button_to "Create new post", new_admin_post_path, method: "get", class: "new-post-btn" %><br>
-<% end %>
-
-<% if logged_in? && current_user.admin && @user.id == current_user.id %>
-<%= button_to "Create new user", new_admin_user_path, method: "get", class: "new-user-btn" %><br>
-<%= button_to "See all users", admin_users_path, method: "get", class: "all-users-btn" %><br>
-<% end %>
-
-<%= button_to "Log out", admin_logout_path, method: "delete", class: "logout-btn" %>
+<div class="nav-menu">
+    <% if @user.id == current_user.id %>
+        <%= link_to "Create new post", new_admin_post_path, method: "get", class: "new-post-btn" %>
+    <% end %>
+    <% if logged_in? && current_user.admin && @user.id == current_user.id %>
+        <%= link_to "Create new user", new_admin_user_path, method: "get", class: "new-user-btn" %>
+        <%= link_to "See all users", admin_users_path, method: "get", class: "all-users-btn" %>
+    <% end %>
+        <%= link_to "Log out", admin_logout_path, method: "delete", class: "logout-btn" %>
 </div>
