@@ -1614,6 +1614,7 @@ function postMenuScroller() {
         scrollButton.style.transform = "translate3d(0, " + Math.max((((scrollButtonPrevScroll + delta)*scrollBarHeight/Math.abs(menuContainerHeight - sidebarHeight) + scrollButtonHeight)*-1 ), 0) +'px' + ", 0)";
         currentScrollButtonTransform = scrollButton.style.transform;
         //console.log(currentScrollButtonTransform)
+        return;
     } 
 }
 /**** /the function that actually moves the menu ***********************/
@@ -1748,13 +1749,107 @@ assignBlogMenuEventListener();
 
 /** /touch scrollbar handler   **/
 
-/* scrollbar click handler (click takes you to that part of scrollbar) */
+/* scrollbar click handler (click takes you to that part of scrollbar) - should also work for touch */
 
-scrollBar.addEventListener("click", function() {
+scrollBar.addEventListener("click", scrollClickHandler);
 
-});
+function scrollClickHandler(event) {
+
+  //  console.log(scrollBar);
+    //console.log("matrix", getComputedStyle(scrollButton).transform);
+   // console.log("offsetTop", scrollButton.offsetTop);
+
+   //ver diferencia entre transform top del boton y el click y luego ajustar
+/*    event.stopPropagation();
+    console.log("prevscroll", scrollButtonPrevScroll);
+
+    var clickedSpot = parseInt(event.clientY) || parseInt(event.changedTouches[0].clientY);
+    var blogContentTabHeight = parseInt(getComputedStyle(blogContent).height, 10);
+    //var determinedExtraHeight = 0; //parseInt((blogContentTabHeight - scrollBarHeight), 10);
+    var determinedExtraHeight = (function(){ //blogTab => bigger, will always be an extra, remove or add? =>
+
+        if(clickedSpot>parseInt(scrollButtonPos, 10)){ //if clickedSpot > scrollButtonPos it means it is below, then we have to add the extra distance
+            return parseInt((blogContentTabHeight - scrollBarHeight), 10);
+        }else {
+            return parseInt((blogContentTabHeight - scrollBarHeight), 10)*-1; //if it is above, we have to remove it
+        }
+
+    })()
+    //var adjustedClickedSpot = (clickedSpot - determinedExtraHeight);
+   // console.log("extraheight", determinedExtraHeight);
+    var scrollButtonPos = parseInt(getComputedStyle(scrollButton).transform.replace("matrix(1, 0, 0, 1, 0, ", "").replace(")", ''), 10) + scrollButtonHeight/2;// + scrollButtonHeight; //transform3d(0, <value>, 0) + btn height
+    //console.log("btnpos", scrollButtonPos);
 
 
+
+    var adjustedClickedSpot = (function() {
+        if((clickedSpot - determinedExtraHeight) >= parseInt(scrollButtonPos, 10)){
+          return (clickedSpot - determinedExtraHeight)*-1;  //higher than button pos => higher on the Y axis => need to substract it to buttonPos
+        } else {
+          return (clickedSpot - determinedExtraHeight); //lowerthan button pos => lower on Y axis => need to add it to button Pos
+        } 
+    })();
+    console.log("adj", adjustedClickedSpot);*/
+    //console.log("diff", -adjustedClickedSpot + scrollButtonPos + scrollButtonHeight);
+    //console.log("adjustedClick", adjustedClickedSpot)
+
+    //var diff = (parseInt(scrollButtonPos, 10) + parseInt(adjustedClickedSpot, 10) - scrollButtonHeight); //+ /*parseInt(scrollButtonHeight, 10)*/ + /*+ parseInt(adjustedClickedSpot, 10)*///); //+ scrollButtonHeight;
+    
+    //var diff = parseInt(adjustedClickedSpot, 10) + parseInt(scrollButtonPos, 10);
+
+
+event.stopPropagation();
+console.log(event);
+
+    var clickedSpot = parseInt(event.screenY) - 110; // <= have to see where these come from - I suspect its margins/paddings etc;
+    var blogTabHeight = parseInt(getComputedStyle(blogContent).height, 10);
+    var newScrollBarHeight = blogTabHeight;//parseInt(scrollBarHeight,10) + parseInt(blogTabHeight, 10);
+    var difference = parseInt((newScrollBarHeight - clickedSpot), 10);
+    console.log("clicked", clickedSpot);
+    console.log("scrollbarht", parseInt(scrollBarHeight, 10));
+    console.log("bloght", blogTabHeight);
+
+
+    scrollButtonPrevScroll = 0; //parseInt(getComputedStyle(scrollButton).transform.replace("matrix(1, 0, 0, 1, 0, ", "").replace(")", ''), 10)
+
+    var totalHeight = parseInt( getComputedStyle(document.getElementById('sitewrapper')).height, 10);
+    var minusFactor = totalHeight - scrollBarHeight; //640 - 480 = 160
+
+
+    var finalPos = clickedSpot - minusFactor;
+    console.log("scrollbarHT", scrollBarHeight);
+    console.log("totalHt", totalHeight);
+    console.log("finalPos", finalPos);
+
+
+
+
+
+
+    console.log("diff", difference)
+   /*var scrollButtonHeightAdjust = adjustedClickedSpot > scrollButtonPos ? scrollButtonHeightAdjust = scrollButtonHeight : scrollButtonHeightAdjust = -scrollButtonHeight;
+   
+    var distance = scrollButtonPos - adjustedClickedSpot; // + scrollButtonHeightAdjust;
+    console.log("distance", distance);
+
+    var finalDistance = -(adjustedClickedSpot) + scrollButtonHeightAdjust;
+
+    var anotherDist = -(adjustedClickedSpot) + scrollButtonPos;
+    scrollButtonPrevScroll = 0;*/
+
+    delta = -finalPos; //(parseInt(scrollButtonPos,10) + diff)*-1;
+    //console.log(event.clientY);
+    //console.log(delta);
+    //delta = "zzzzzzzzzzzzzzzzzzz";
+
+  //  scrollButtonPrevScroll = 0;//parseInt(scrollButtonPos, 10);
+    postMenuScroller();
+   // scrollButtonPrevScroll = parseInt(scrollButtonPos);  
+    scrollButtonPrevScroll = -parseInt(getComputedStyle(scrollButton).transform.replace("matrix(1, 0, 0, 1, 0, ", "").replace(")", ''), 10);
+    console.log("prevScroll", scrollButtonPrevScroll);
+    initialScrollButtonTransform = currentScrollButtonTransform;
+    return;
+}
 /* /scrollbar click handler */
 
 
