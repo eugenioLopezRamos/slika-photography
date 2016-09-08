@@ -6,18 +6,17 @@
 
 <div class="profile-main">
 <%= render 'admin/users/menu' %>
-<hr>
 
     <% if flash[:danger] %>
         <div class="notice" style="background-color:red;color:white"><%= flash[:danger] %></div>
     <% end %>
 
 <%= render 'admin/users/profile_info' %>
-
+<hr>
 <% if @user.posts.any? %>
     <%= render 'admin/users/own_posts' %>
 <% end %>
-
+<hr>
 <% if Post.count - @user.posts.count > 0  && @user == current_user %>
     <%= render 'admin/users/other_posts' %>
 <% end %>
