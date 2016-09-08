@@ -1609,7 +1609,7 @@ function postMenuScroller() {
             scrollButtonPrevScroll = 0;
             delta = 0;
         }
-        console.log("delta value", delta);
+      //  console.log("delta value", delta);
         document.getElementsByClassName("post-sidebar-menu")[0].style.transform = "translate3d(0," +  (scrollButtonPrevScroll + delta) + 'px' + ",0)" 
         scrollButton.style.transform = "translate3d(0, " + Math.max((((scrollButtonPrevScroll + delta)*scrollBarHeight/Math.abs(menuContainerHeight - sidebarHeight) + scrollButtonHeight)*-1 ), 0) +'px' + ", 0)";
         currentScrollButtonTransform = scrollButton.style.transform;
@@ -1643,7 +1643,7 @@ var blogMenuMouseHandler = (function(){
         mouseDownHandler: function(event) {
             mouseStartPositionY = event.clientY; 
             initialScrollButtonTransform = scrollButton.style.transform; 
-            console.log(event);     
+         //   console.log(event);     
             document.addEventListener("mousemove", mouseMoveHandler);
         },
 
@@ -1755,7 +1755,7 @@ scrollBar.addEventListener("click", scrollClickHandler);
 
 
 function scrollClickHandler(event) {
-
+//placeholder - should work just like the wheel handler but delta = click.eventY - difference from click.eventY to top of scrollbar
 }
 /* /scrollbar click handler */
 

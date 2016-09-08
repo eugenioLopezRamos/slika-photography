@@ -36,7 +36,6 @@ class Admin::PostsController < ApplicationController
     
     
     def show
-        debugger
         @post = Post.find_by(slug: params[:slug])
 
     end
