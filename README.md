@@ -38,6 +38,9 @@ A portfolio site with AJAX, pushstate, and an admin panel
 - Make scrollbar fadeout + disappear, then reappear when moved or its area clicked
 - add stop propagation to scrollbutton;
 
+
+-login page styling
+
 **DONE**
 
 - Styled users index, new/edit user, edit profile
