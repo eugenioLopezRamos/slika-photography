@@ -9,10 +9,10 @@
 		<% else %>
 			<% @post = Post.new %>
 			<% @post.title = "Post not found" %>
-			<% @post.created_at = Time.now %>
+			<% @post.created_at = Time.zone.now %>
 			<% @post.content = "Hi! the post you requested could not be found.
 	    	You can use our posts menu to select other posts to read." %>
-	    	<% @post.slug = "post-not-found" %>	
+	    	<% @post.slug = "post-not-found" %>
 		<% end %>
 	<% else %>
 		<% @post = @post %>

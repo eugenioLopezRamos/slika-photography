@@ -38,6 +38,13 @@
       margin: 5px;
     }
 
+    .password-reset-container {
+      display:flex;
+      flex-direction: column;
+      margin: auto;
+      text-align: center;
+    }
+
 
   @media screen and (max-width: 480px) {
 
@@ -85,8 +92,6 @@
     	flex-direction: column;
     	justify-content: center;
     }
-
-
 
     .user-name-container {
     	.user-name-text {
@@ -326,7 +331,14 @@
 	    	justify-content: center;
 	    }
     }
+    
+    .user-data-form-container {
+      display:flex;
+      margin: auto;
+      flex-direction: column;
+      justify-content: center;
 
+    }
  
 
       .action-title {

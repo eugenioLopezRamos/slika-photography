@@ -1,0 +1,13 @@
+<%= javascript_include_tag 'application'%> 
+<%= stylesheet_link_tag 'admin', media: 'all' %>
+
+<% provide(:reset_form_text, "Submit") %>
+<div class="password-reset-container">
+<div class="action-title">Reset your password</div>
+
+<%= form_for(:admin_password_reset, url: admin_password_resets_path) do |f| %>
+	<%= f.label 'Please enter your email address' %>
+	<%= f.email_field :email %>
+	<%= f.submit yield(:reset_form_text) %>
+<% end %>
+</div>
