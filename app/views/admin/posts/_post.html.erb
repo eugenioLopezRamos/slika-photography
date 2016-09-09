@@ -1,14 +1,49 @@
 
-<% if !@post then @post = Post.find_by(slug: params[:slug]) %>
-<% else @post = @post %>
+<% if !@post %> 
+<%# if @post is not given (that is, the site is loaded through typing the url in the web browser, check if the posts exists using the %>
+<%# :slug param from the URL %>
+<%# if it does, @post = the record that it found, otherwise creates a new Post object(so it doesn't break the front end javascript) %>
+	<% if Post.exists?(:slug => params[:slug]) %>
+
+		<% @post = Post.find_by(slug: params[:slug]) %>
+		<% else %>
+			<% @post = Post.new %>
+			<% @post.title = "Post not found" %>
+			<% @post.created_at = Time.now %>
+			<% @post.content = "Hi! the post you requested could not be found.
+	    	You can use our posts menu to select other posts to read." %>
+	    	<% @post.slug = "post-not-found" %>	
+		<% end %>
+	<% else %>
+		<% @post = @post %>
 <% end %>
+
+<% if User.exists?(@post.user_id) %>
+	<% author = User.find(@post.user_id).name %>
+	<% else %>
+		<% author = "404" %>
+<% end %>
+
+<%# the @post variable is given when the post is GET through an AJAX request (static#retrieve_posts) %>
 
 <div class="post" id="post-<%= @post.slug %>">
     
     <div class="post-title"><%= sanitize @post.title, tags: %w(strong em a div p img span style), attributes: %w(style font-style text-decoration color src font-family font-weight height width) %></div>
-    <span class="timestamp">Posted <%= time_ago_in_words(@post.created_at) %> ago</span>
+    <span class="timestamp">Posted <%= time_ago_in_words(@post.created_at) %> ago, by <%= author %></span>
     <div class="post-content"><%= sanitize @post.content, tags: %w(strong em a div p img span style), attributes: %w(style src font-style text-decoration color font-family font-weight height width float) %></div>
-
-    
 </div>  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

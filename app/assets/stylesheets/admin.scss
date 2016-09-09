@@ -144,6 +144,59 @@
     	margin: 10px auto 10px auto;
     }
 
+    .user-data-form-container {
+      display:flex;
+      margin: auto;
+      flex-direction: column;
+      justify-content: center;
+
+    }
+
+      .action-title {
+        display:flex;
+        text-align: justify;
+        font-weight: bold;
+        margin:auto;
+      }
+
+      .action-description {
+        display:flex;
+        justify-content: center;
+      }
+
+      .user-data-form {
+        display:flex;
+        flex-direction: column;
+        justify-content: center;
+        margin: auto;
+      }
+
+      .user-data-form > label {
+        margin:5px auto 5px auto;
+      }
+
+      .user-data-form > input {
+        margin: 5px;
+      }
+
+
+    .index-container {
+      display:flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .index-user-container {
+      display:flex;
+      flex-direction: column;
+      justify-content: center;
+      margin:auto;
+
+    }
+    
+
+    
+
   }
 
   @media screen and (min-width: 481px)  {
@@ -252,6 +305,49 @@
 	    	display:flex;
 	    	justify-content: center;
 	    }
+    }
+
+ 
+
+      .action-title {
+        display:flex;
+        text-align: justify;
+        font-weight: bold;
+      }
+
+      .action-description {
+        display:flex;
+        justify-content: center;
+
+      }
+
+      .user-data-form {
+        display:flex;
+        flex-direction: column;
+        justify-content: center;
+        margin: auto;
+      }
+
+      .user-data-form > label {
+        margin:5px auto 5px auto;
+      }
+
+      .user-data-form > input {
+        margin: 5px;
+      }
+    
+    .index-container {
+      display:flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .index-user-container {
+      display:flex;
+      flex-direction: column;
+      justify-content: center;
+      margin:auto;
+
     }
 
 

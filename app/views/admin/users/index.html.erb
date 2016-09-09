@@ -1,16 +1,22 @@
+
 <%= javascript_include_tag 'application'%> 
+<%= stylesheet_link_tag 'admin', media: 'all' %>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <%= csrf_meta_tag %>
 
-
-<h3>These are all of the site's users, excluding yourself</h3>    
+<div class="index-container">
+<span class="action-title">These are all of the site's users, excluding yourself</span>    
     <% User.all.each do |user| %>
-    
         <% if user.id != current_user.id %>
-            <h2><%= link_to user.name, admin_user_path(user) %>
-            <% if current_user.admin %>
-            <%= link_to "Delete this user", admin_user_path(user), method: "delete", 
-            data: {confirm: "Are you sure? This CANNOT be undone and will destroy the user AND his/her posts"} %>
-            <% end %></h2>
-        <% end %>
-        
+	    	<div class="index-user-container">        
+	            <h2>
+		            <%= link_to user.name, admin_user_path(user) %>
+		            <% if current_user.admin %>
+		            <%= link_to "Delete this user", admin_user_path(user), method: "delete", 
+		            data: {confirm: "Are you sure? This CANNOT be undone and will destroy the user AND his/her posts"} %>
+		            <% end %>
+	            </h2>
+	    	</div>
+        <% end %> 
     <% end %>
+ </div>
