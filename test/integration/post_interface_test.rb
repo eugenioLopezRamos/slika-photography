@@ -15,7 +15,7 @@ class PostInterfaceTest < ActionDispatch::IntegrationTest
   test "a non admin user is able to delete its own posts" do
     log_in_as(@notadmin)
     get admin_user_path(@notadmin)
-    assert_select 'span.userName'
+    assert_select 'div.user-name-text'
     assert_select 'a.post-delete'
     
     assert_difference 'Post.count', -1 do
@@ -26,7 +26,7 @@ class PostInterfaceTest < ActionDispatch::IntegrationTest
   test "an admin user can delete his own posts " do
     log_in_as(@admin)
     get admin_user_path(@admin)
-    assert_select 'span.userName'
+    assert_select 'div.user-name-text'
     assert_select 'a.post-delete'
     
     assert_difference 'Post.count', -1 do
@@ -37,7 +37,7 @@ class PostInterfaceTest < ActionDispatch::IntegrationTest
   test "a non admin should not be able to delete someone else's posts" do
     log_in_as(@notadmin)
     get admin_user_path(@notadmin)
-    assert_select 'span.userName'
+    assert_select 'div.user-name-text'
     
     assert_no_difference 'Post.count' do
       delete admin_post_path(@adminpost)

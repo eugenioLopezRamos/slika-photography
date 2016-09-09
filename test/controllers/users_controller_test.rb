@@ -33,7 +33,7 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     log_in_as(@admin)
     get admin_user_path(@admin)
     assert_template 'users/show'
-    assert_select 'input.all-users-btn'
+    assert_select 'a.all-users-link'
     get admin_users_path
     assert_template 'users/index'
     get admin_user_path(@admin)
