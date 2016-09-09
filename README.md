@@ -29,6 +29,7 @@ A portfolio site with AJAX, pushstate, and an admin panel
 
 
 ** IN PROGRESS **
+
 - I should probably make the touch evt listeners always work and just constrain the menu height modifications on the menuToggle() func to clWidth<481
 - Format the admin pages somewhat decently
 - Add the correct partial to display error messages to admin pages
@@ -36,11 +37,12 @@ A portfolio site with AJAX, pushstate, and an admin panel
 - Make AJAX request for active-post not fail
 - Use css height instead of the animation thingy on contact tab mobile
 - Make scrollbar fadeout + disappear, then reappear when moved or its area clicked
-
-
--add stop propagation to scrollbutton;
+- add stop propagation to scrollbutton;
 
 **DONE**
+
+- Styled users index, new/edit user, edit profile
+- Add blog post 404 message
 - Post previews on admin page  
 - Make URLs case insensitive
 - Add vanity URLs to blog posts (slugs are unique, and are automatically created from title (with tags stripped & w/ 	  parameterize)
@@ -62,8 +64,4 @@ These are "would be nice to have"s
 
 - Facebook comments on blog posts  
 - JSON based AJAX translations  
-- Polishing the new page, the inline editor looks weird and the normal editor looks too big
-
-
-
-
+- Polishing the new post page, the inline editor looks weird and the normal editor looks too big

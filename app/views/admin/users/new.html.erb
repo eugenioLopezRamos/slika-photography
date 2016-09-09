@@ -1,7 +1,16 @@
-<h2>Create new User</h2>
-<p>Here you can create new users to contribute</p>
+<% provide(:title, @user.name) %>
+<%= javascript_include_tag 'application'%> 
+<%= stylesheet_link_tag 'admin', media: 'all' %>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<%= csrf_meta_tag %>
 
-<% provide :submit_text, "Create new user" %>
+
+<div class="user-data-form-container">
+	<span class="action-title">Create new User</span>
+	<span class="action-description">Here you can create new users to contribute</span>
+
+	<% provide :submit_text, "Create new user" %>
 
 
-<%= render 'admin/users/user_data_form' %>
+	<%= render 'admin/users/user_data_form' %>
+</div>

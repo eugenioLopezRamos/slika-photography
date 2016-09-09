@@ -1,5 +1,16 @@
-<% provide :submit_text, "Submit new user data" %>
 
-<h2>Here you can edit your profile data</h2>
+<% provide(:title, @user.name) %>
+<%= javascript_include_tag 'application'%> 
+<%= stylesheet_link_tag 'admin', media: 'all' %>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<%= csrf_meta_tag %>
+
+
+
+<div class="user-data-form-container">
+<% provide :submit_text, "Submit new user data" %>
+<span class="action-title">Edit profile</span>
+<span class="action-description">Here you can edit your profile data</span>
 
 <%= render 'admin/users/user_data_form' %>
+</div>

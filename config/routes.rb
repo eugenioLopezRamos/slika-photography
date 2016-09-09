@@ -35,6 +35,6 @@ namespace :admin do
 end
 
 get '/(:tab)/(:id)', to: 'static#redirect' #if the user doesnt use downcase tab urls, downcases the URL. If 
-#route doesnt exist, redirect to 404
+# the route doesnt exist, redirect to 404
 
 end
