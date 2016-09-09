@@ -16,7 +16,6 @@ A portfolio site with AJAX, pushstate, and an admin panel
 **TO DO**
 
 
-
 - Add account activation and password forget to users
 - Add image uploading (given heroku's conditions, it might be best to use S3 from the start)
 - Related to ^, add SendGrid for mails, postgres for DB and whatever other production env changes are necessary to pass to production
@@ -64,4 +63,4 @@ These are "would be nice to have"s
 
 - Facebook comments on blog posts  
 - JSON based AJAX translations  
-- Polishing the new post page, the inline editor looks weird and the normal editor looks too big
+- Polishing the new post page, the inline editor looks weird and the normal editor looks too big.
