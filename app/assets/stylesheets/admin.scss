@@ -1,17 +1,27 @@
     $site-grey-light: #333;
     $site-grey-dark: #111;
     $font-stack: Calibri, Helvetica, Sans-serif;
-    $background-light-white: rgb(180,180,180);
+    $background-light-white: rgb(230,230,230);
+    $dark-blue: rgb(41, 57, 82);
 
     body {
         font-family: $font-stack;
         color: rgb(41, 57, 82);
-        background-color: rgb(230,230,230);
+        background-color: $background-light-white;
         margin:auto;
         display:flex;
         justify-content: center;
         height:auto;
 
+    }
+
+    .nav-menu {
+        background-color: $dark-blue;
+    }
+
+    .nav-menu a {
+    	text-decoration: none;
+    	color: white;
     }
 
 
@@ -39,22 +49,18 @@
     .nav-menu {
         position: relative;
         width: 100%;
-        height: 50px;
         margin: 0;
         display: flex;
         justify-content: flex-start;
-        background-color: rgb(41, 57, 82);
    
     }
 
     .nav-menu > a {
-    	padding-left: 5px;
-    	padding-right: 5px;
+    	padding: 20px 5px 20px 5px;
+    	text-align: center;
     	margin: 0;
     	border: 1px solid white;
-    	text-decoration: none;
-    	width: 25%;
-    	color: white;
+    	width: 25%;	
     }
     
     .user-name-container {
@@ -78,6 +84,10 @@
     		margin-left:auto;
 	    	margin-right:auto;
     	}
+    }
+
+    .posts-dashboard {
+    	/*not necessary in this media query*/
     }
 
     .own-posts-container {
@@ -131,9 +141,115 @@
     	margin: 10px auto 10px auto;
     }
 
+  }
 
+  @media screen and (min-width: 481px)  {
+    .profile-main {
+        width: 100%;
+        margin:auto;
+        display:flex;
+        flex-direction: column;
+        justify-content: center;
+    }
 
+    .profile-main hr {
+    	width: auto;
+    	margin:0;
+    }
 
+  	.nav-menu {
+
+  		width: 100%;
+  		display:flex;
+  		flex-direction: row;
+  		justify-content: center;
+
+  	}
+
+  	.nav-menu a {
+  		border:1px solid white;
+  		width: 25%;
+  		text-align: center;
+  		padding: 10px;
+  		display:flex;
+  		margin:auto;
+  	}
+
+  	.user-name-container {
+  		width: 100%;
+  		margin:auto;
+  		display:flex;
+  		justify-content: center;
+
+  	}
+
+  	.user-name-container {
+  		.user-name-text {
+  			margin: 5px;
+  		}
+  		.profile-edit {
+  			margin:5px;
+  		}
+  	}
+
+    .posts-dashboard {
+    	display:flex;
+    	flex-direction:row;
+
+    }
+
+    .posts-dashboard {
+	    .own-posts-dashboard {
+	    	display:flex;
+	    	flex-direction: column;
+	    	width:50%;
+	    }
+
+	    .user-posts-title {
+	    	display:flex;
+	    	justify-content: center;
+	    	margin: 5px auto 5px auto;
+	    }
+
+	    .own-posts-container {
+	    	width: auto;
+	    	margin: 0 10px 0 10px;
+	    }
+
+	    .own-post-link {
+	    	display:flex;
+	    	justify-content: center;
+	    	margin: 25px auto 5px auto;
+	    }
+
+	    .modify-post-links {
+	    	display:flex;
+	    	justify-content: center;
+	    	margin: 5px auto 25px auto;
+	    }
+
+	    .others-posts-dashboard {
+	    	display:flex;
+	    	flex-direction: column;
+	    	width:50%;
+
+	    }
+
+	    .other-posts-user-name {
+	    	display:flex;
+	    	justify-content: center;
+	    	margin: 5px auto 5px auto;
+	    }
+
+	    .other-posts-container {
+	    	width:auto;
+	    	margin: 0;
+	    }
+	    .others-post-link {
+	    	display:flex;
+	    	justify-content: center;
+	    }
+    }
 
 
 

@@ -13,13 +13,19 @@
 
 <%= render 'admin/users/profile_info' %>
 <hr>
-<% if @user.posts.any? %>
-    <%= render 'admin/users/own_posts' %>
-<% end %>
-<hr>
-<% if Post.count - @user.posts.count > 0  && @user == current_user %>
-    <%= render 'admin/users/other_posts' %>
-<% end %>
+    <div class="posts-dashboard">
+        <div class="own-posts-dashboard">
+            <% if @user.posts.any? %>
+                <%= render 'admin/users/own_posts' %>
+            <% end %>
+        </div>
+        <hr>
+        <div class="others-posts-dashboard">
+            <% if Post.count - @user.posts.count > 0  && @user == current_user %>
+                <%= render 'admin/users/other_posts' %>
+            <% end %>
+        </div>
+    </div>
 </div>
 
 

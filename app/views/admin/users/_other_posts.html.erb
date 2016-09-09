@@ -5,13 +5,10 @@
         <span class="other-posts-user-name"><%= user.name %></span>
             <div class="other-posts-container">
                 <% user.posts.by_date_desc.each do |post| %>
-                <% clean_post_title = sanitize post.title, tags: %w(strong em a div img) %>
-
-   
+                <% clean_post_title = sanitize post.title, tags: %w(strong em a div img) %>  
                     <div class="others-post-link">
                         <%= link_to clean_post_title,  admin_post_path(post) %>        
-                    </div>
-                                          
+                    </div>                                         
                     <div class="modify-post-links">
                         <%= link_to "Delete this post", admin_post_path(post),
                         method: 'delete', class: "post-delete", data: {confirm: "Are you sure? This action cannot be undone"} %>
