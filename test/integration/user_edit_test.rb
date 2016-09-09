@@ -36,7 +36,7 @@ class UserEditTest < ActionDispatch::IntegrationTest
   test "user cannot edit another user's profile" do
     log_in_as(@admin)
     get admin_user_path(@admin)
-    assert_select 'input.all-users-btn'
+    assert_select 'a.all-users-link'
     get admin_users_path
     get admin_user_path(@notadmin)
     assert_select 'a.profile-edit', 0
