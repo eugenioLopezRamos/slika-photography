@@ -11,6 +11,7 @@ class Admin::SessionsController < ApplicationController
         if @user && @user.authenticate(params[:session][:password]) #if user exists and authenticates
         log_in @user #log the user in
         params[:session][:remember_me] == "1" ? remember(@user) : forget(@user) #depending on the value of the remember me checkbox, either remember the user or forget him
+             
         redirect_to admin_user_url(@user)  #redirect him to his profile page
         else #otherwise
             #error
@@ -21,7 +22,7 @@ class Admin::SessionsController < ApplicationController
 
     def destroy #destroys a session
         log_out if logged_in? #logs out an user only if he's actually logged in. Necessary to avoid bugs when the user is logged in in multiple tabs
-        redirect_to '/home' #send the user to the /home portion of the site (that is, the user facing '/home' instead of the admin panel)
+        redirect_to '/admin' #send the user to the /home portion of the site (that is, the user facing '/home' instead of the admin panel)
     end
 
 

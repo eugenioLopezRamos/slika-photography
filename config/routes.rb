@@ -1,9 +1,4 @@
 Rails.application.routes.draw do
- 
-  #get 'static/home'
-
-
-
 
   root 'static#home', :tab => 'homeTab'
 
@@ -27,6 +22,8 @@ namespace :admin do
  
  resources :users #creates the REST routes for the users model
  resources :posts, param: :slug#creates the REST routes for the posts. These are under admin/post, and the contents will be displayed in root_path/blog for clients to see 
+ #resources :account_activation to be done
+ resources :password_resets, only: [:new, :create, :edit, :update]
  get '/', to: 'admin#login'
  get '/login', to: 'sessions#new'
  post '/login', to: 'sessions#create'

@@ -16,7 +16,7 @@ A portfolio site with AJAX, pushstate, and an admin panel
 **TO DO**
 
 
-- Add account activation and password forget to users
+
 - Add image uploading (given heroku's conditions, it might be best to use S3 from the start)
 - Related to ^, add SendGrid for mails, postgres for DB and whatever other production env changes are necessary to pass to production
 - Add error messages for AJAX requests
@@ -37,9 +37,13 @@ A portfolio site with AJAX, pushstate, and an admin panel
 - Use css height instead of the animation thingy on contact tab mobile
 - Make scrollbar fadeout + disappear, then reappear when moved or its area clicked
 - add stop propagation to scrollbutton;
+- make flashes respond to different messages (ok message, info, danger, etc) and style them appropiately
 
 
--login page styling
+
+- Add account activation and password forget to users + tests
+
+
 
 **DONE**
 
@@ -55,8 +59,9 @@ A portfolio site with AJAX, pushstate, and an admin panel
 - Add redirection tests for case insensitive URLs
 - Make scrollbar event listeners go to content-Tabs[0] instead of doc so they're taken out by the garbage collector when loading a different tab
 - Fix post-sidebar-link CSS (Needs to overflow and keep size instead of becoming smaller w/ every post)
-
-
+-login page styling
+- Make the checkbox on login modify the remember state
+- Fixed remember login related problems (now remembers/forgets as intended)
 
 
 ** OPTIONAL **
