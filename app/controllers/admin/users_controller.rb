@@ -52,7 +52,6 @@ class Admin::UsersController < ApplicationController
   end
   
 
-  
   private
   
     def user_params

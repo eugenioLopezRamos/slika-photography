@@ -1,26 +1,31 @@
-    <% if flash[:danger] %>
-    <div class="notice" style="background-color:red;color:white"><%= flash[:danger] %></div>
+<%= javascript_include_tag 'application'%> 
+<%= stylesheet_link_tag 'admin', media: 'all' %>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<%= csrf_meta_tag %>
+
+
+<div class="login-container">
+    <% if flash.now[:danger] %>
+    <div class="notice" style="background-color:red;color:white"><%= flash.now[:danger] %></div>
     <% end %>
 
+    <span class="action-title">Log In</span>
+    <span class="action-description">Please enter your credentials</span>
 
-<h2>Log In</h2>
-<p>Please enter your credentials</p>
+    <div class="container">
 
-<div class="container">
-
-    <div class="login-form">
-        <%= form_for(:session, url: admin_login_path) do |f| %>
-            <%= f.label :email %>
-            <%= f.email_field :email, class: 'input-field' %>
-            <%= f.label :password %>
-            <%= f.password_field :password, class: 'input-field' %>
-            <%= f.submit "Log In", class: 'submit-button' %>
-            <%= f.label "remember me", class: "checkbox inline" do %>
-            <%= f.check_box :remember_me %>
-            <span>Remember me on this computer</span>
+        <div class="login-form">
+            <%= form_for(:session, url: admin_login_path) do |f| %>
+                <%= f.label :email %>
+                <%= f.email_field :email, class: 'input-field' %>
+                <%= f.label :password %>
+                <%= f.password_field :password, class: 'input-field' %>
+                <%= f.submit "Log In", class: 'submit-button' %>
+                <%= f.label "remember me", class: "checkbox inline" do %>
+                <%= f.check_box :remember_me %>
+                <span>Remember me on this computer</span>
+                <% end %>
             <% end %>
-        <% end %>
-    
+        </div>
     </div>
-
 </div>
