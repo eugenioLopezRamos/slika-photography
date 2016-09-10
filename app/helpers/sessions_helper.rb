@@ -39,10 +39,7 @@ module SessionsHelper
        cookies.delete(:remember_token)
 
     end
-    
 
-    
-    
     #logs out
     def log_out
         forget(current_user)
