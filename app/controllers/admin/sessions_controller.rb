@@ -22,7 +22,7 @@ class Admin::SessionsController < ApplicationController
 
     def destroy #destroys a session
         log_out if logged_in? #logs out an user only if he's actually logged in. Necessary to avoid bugs when the user is logged in in multiple tabs
-        redirect_to '/admin' #send the user to the /home portion of the site (that is, the user facing '/home' instead of the admin panel)
+        redirect_to  admin_login_path 
     end
 
 

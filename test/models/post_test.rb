@@ -30,7 +30,7 @@ class PostTest < ActiveSupport::TestCase
   
   test "associated posts should be destroyed when user is deleted" do
     @user.save
-    @user.posts.create!(title:"hello", content: "loren ipsum")
+    @user.posts.create!(title:"hello v2 enhanced", content: "loren ipsum")
     assert_difference 'Post.count', -@user.posts.count do
       @user.destroy
     end

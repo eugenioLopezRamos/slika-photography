@@ -42,4 +42,12 @@ has_many :posts, dependent: :destroy
         update_attribute(:reset_sent_at, Time.zone.now)
     end
 
+    def send_password_reset_email
+        SiteMailer.password_reset(self).deliver_now
+    end
+
+    def password_reset_expired?
+        reset_sent_at < 2.hours.ago
+    end
+
 end

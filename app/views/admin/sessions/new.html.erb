@@ -1,13 +1,14 @@
+<% provide(:title, 'Log In') %>
 <%= javascript_include_tag 'application'%> 
 <%= stylesheet_link_tag 'admin', media: 'all' %>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <%= csrf_meta_tag %>
 
-
 <div class="login-container">
-    <% if flash.now[:danger] %>
-    <div class="notice" style="background-color:red;color:white"><%= flash.now[:danger] %></div>
-    <% end %>
+
+      <% flash.each do |message_type, message| %>
+        <div class="alert alert-<%= message_type %>"><%= message %></div>
+      <% end %>
 
     <span class="action-title">Log In</span>
     <span class="action-description">Please enter your credentials</span>

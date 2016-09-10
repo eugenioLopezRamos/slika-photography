@@ -7,9 +7,8 @@
 <div class="profile-main">
 <%= render 'admin/users/menu' %>
 
-    <% if flash[:danger] %>
-        <div class="notice" style="background-color:red;color:white"><%= flash[:danger] %></div>
-    <% end %>
+<%= render 'admin/flash_messages' %>
+
 
 <%= render 'admin/users/profile_info' %>
 <hr>

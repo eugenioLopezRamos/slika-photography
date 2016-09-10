@@ -43,6 +43,7 @@ A portfolio site with AJAX, pushstate, and an admin panel
 
 - Add account activation and password forget to users + tests
 
+-Chrome 54 beta has a weird bug with image height: auto when setting a width(should be proportional but is now setting height to the minimum) - Need to check if it happens on win Chrome 53 (doesnt on linux Chrome 53 nor firefox latest stable)
 
 
 **DONE**

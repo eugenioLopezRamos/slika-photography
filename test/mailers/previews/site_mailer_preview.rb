@@ -13,7 +13,9 @@ class SiteMailerPreview < ActionMailer::Preview
 
   # Preview this email at http://localhost:3000/rails/mailers/site_mailer/password_reset
   def password_reset
-    SiteMailer.password_reset
+    user = User.first
+    user.reset_token = User.new_token
+    SiteMailer.password_reset(user)
   end
 
 end

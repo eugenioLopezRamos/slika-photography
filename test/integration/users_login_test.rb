@@ -33,14 +33,14 @@ class UsersLoginTest < ActionDispatch::IntegrationTest
     
     delete admin_logout_path
     assert_not is_logged_in?
-    assert_redirected_to '/home'
+    assert_redirected_to admin_login_path
     follow_redirect!
-    assert_select 'div#sitewrapper'
+    assert_template 'sessions/new'
     
     #simulate logout on another window
     delete admin_logout_path
     follow_redirect!
-    assert_select 'div#sitewrapper'
+    assert_template 'sessions/new'
   end
   
   test "login w/ remember" do
