@@ -23,7 +23,11 @@ namespace :admin do
  resources :users #creates the REST routes for the users model
  resources :posts, param: :slug#creates the REST routes for the posts. These are under admin/post, and the contents will be displayed in root_path/blog for clients to see 
  #resources :account_activation to be done
- resources :password_resets, only: [:new, :create, :edit, :update]
+ resources :password_resets, only: [:new, :create, :edit]#, :update]
+ #put 'password_resets/:id/edit' => 'password_resets#update', :as => :update_password_reset
+ patch 'password_resets/:id/edit' => 'password_resets#update', :as => :password_reset
+
+
  get '/', to: 'admin#login'
  get '/login', to: 'sessions#new'
  post '/login', to: 'sessions#create'
