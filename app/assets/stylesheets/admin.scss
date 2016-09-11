@@ -37,11 +37,14 @@
       margin: auto;
     }
 
-    form > label {
+    form label {
+
+  
       margin:5px auto 5px auto;
     }
 
-    form > input {
+    form input {
+
       margin: 5px;
     }
 
@@ -50,6 +53,18 @@
       flex-direction: column;
       margin: auto;
       text-align: center;
+    }
+
+    .alert {
+      display: inherit;
+      text-align: center;
+    }
+
+    .field_with_errors{
+      background-color: #c82d28;
+      display:inherit;
+      color:white;
+      text-align: inherit;
     }
 
 
@@ -362,10 +377,10 @@
       }
 
       .user-data-form {
-       /* display:flex;
+        display:flex;
         flex-direction: column;
         justify-content: center;
-        margin: auto;*/
+        margin: auto;
       }
 
       .user-data-form > label {

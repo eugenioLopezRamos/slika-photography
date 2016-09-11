@@ -100,20 +100,22 @@ end
   end
 
   test "Password reset links become invalid two hours after creation" do
-#user creates a new password reset
+	#user creates a new password reset
 	get new_admin_password_reset_path
 	post admin_password_resets_path, 
   		params: { admin_password_reset: {email: @notadmin.email} }
 
 	user = assigns(:user)
 
+	#go forwards in time 3 hours
 	travel 3.hours do
+	#go to the edit password page when the token has expired
 	get edit_admin_password_reset_path(user.reset_token, email: user.email)
 	assert_redirected_to new_admin_password_reset_url
 
 	old_digest = @notadmin.password_digest
 
-	#send a patch request while the request is invvalid
+	#send a patch request while the request is invalid
   	patch admin_password_reset_path(user.reset_token),
   		params: {email: user.email,
   				 user: {password: 'newpassword',
