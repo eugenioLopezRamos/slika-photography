@@ -25,12 +25,11 @@ Rails.application.configure do
 
 
     
-  config.action_mailer.perform_deliveries = false
+  #config.action_mailer.perform_deliveries = false - Yup if this is on you cant test for ActionMailer::Base.deliveries.size (it's always zero)
   # Don't care if the mailer can't send.
   config.action_mailer.raise_delivery_errors = true
-  #config.action_mailer.delivery_method = :test
-  host = 'localhost:3000'
-  config.action_mailer.default_url_options = { host: host, protocol: 'http' }
+
+
 
 
   # Disable request forgery protection in test environment.
@@ -40,6 +39,8 @@ Rails.application.configure do
   # The :test delivery method accumulates sent emails in the
   # ActionMailer::Base.deliveries array.
   config.action_mailer.delivery_method = :test
+  host = 'example.com'
+  config.action_mailer.default_url_options = { host: host }
 
   # Randomize the order test cases are executed.
   config.active_support.test_order = :random
