@@ -1,12 +1,12 @@
 class Admin::PasswordResetsController < ApplicationController
 	before_action :get_user, only: [:edit, :update]
-	#before_action :valid_user, only: [:edit, :update]
+	before_action :valid_user, only: [:edit, :update]
 	before_action :check_expiration, only: [:edit, :update] #check if reset is 'young' enough
 
 def new
 end
 
-def edit
+def edit	
 end
 
 def create
@@ -44,13 +44,14 @@ private
 	#before actions
 
 	def get_user
-			@user = User.find_by(email: params[:email])
+		@user = User.find_by(email: params[:email])
 	end
 
-	#def valid_user
-	#	unless @user # && @user.activated? && @user.authenticated?(:reset, params[:id]) ) <- add left parens w/ activation
-		
-	#end
+	def valid_user
+		unless @user && @user.authenticated?(:reset, params[:id]) # && @user.activated? && @user.authenticated?(:reset, params[:id]) ) <- add left parens w/ activation
+		redirect_to admin_login_path
+		end
+	end
 
 	def check_expiration
 		if @user.password_reset_expired?

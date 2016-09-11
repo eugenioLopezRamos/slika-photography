@@ -4,21 +4,24 @@ michael:
   email: michael@example.com
   password_digest: <%= User.digest('password') %>
   admin: "1"
+  reset_digest: ""
   
 mary:
   name: Mary Example
   email: mary@example.com
   password_digest: <%= User.digest('password') %>
   admin: ""
+  reset_digest: ""
   
 peter:
   name: Peter Pahlowtéhs
   email: peter@example.com
   password_digest: <%= User.digest('password') %>
   admin: "1"
-  
+  reset_digest: ""  
 daniel:
   name: Daniel Ochoa
   email: daniel@example.com
   password_digest: <%= User.digest('password') %>
   admin: ""
+  reset_digest: ""
