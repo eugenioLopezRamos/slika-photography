@@ -10,7 +10,7 @@ Rails.application.routes.draw do
   get '/contact', to: 'static#show', :tab => 'contactTab'
   post '/contact', to: 'contact_mailer#create'#, :tab => 'contactTab'
 
-  get '/blog/' => redirect("/blog/#{Post.last.slug}")#, to: 'static#show', :tab => 'blogTab'#, :post_id => Post.last.id
+  get '/blog/' => redirect("/blog/:last")#, to: 'static#show', :tab => 'blogTab'#, :post_id => Post.last.id
   get '/blog/:slug', to: 'static#show', :tab => 'blogTab'
   
   get 'post_api', to: 'static#retrieve_posts'
