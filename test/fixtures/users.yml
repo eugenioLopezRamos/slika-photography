@@ -4,6 +4,8 @@ michael:
   email: michael@example.com
   password_digest: <%= User.digest('password') %>
   admin: "1"
+  activated: true
+  activated_at: <%= Time.zone.now %>
   reset_digest: ""
   
 mary:
@@ -11,6 +13,8 @@ mary:
   email: mary@example.com
   password_digest: <%= User.digest('password') %>
   admin: ""
+  activated: true
+  activated_at: <%= Time.zone.now %>
   reset_digest: ""
   
 peter:
@@ -18,10 +22,15 @@ peter:
   email: peter@example.com
   password_digest: <%= User.digest('password') %>
   admin: "1"
-  reset_digest: ""  
+  activated: false
+  activated_at: ""
+  reset_digest: "" 
+   
 daniel:
   name: Daniel Ochoa
   email: daniel@example.com
   password_digest: <%= User.digest('password') %>
   admin: ""
+  activated: false
+  activated_at: ""
   reset_digest: ""

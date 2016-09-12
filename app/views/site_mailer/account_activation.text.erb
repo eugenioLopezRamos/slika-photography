@@ -1,3 +1,10 @@
-Site#account_activation
+<%= @greeting %>  <%= @user.name %>,
 
-<%= @greeting %>, find me in app/views/site_mailer/account_activation.text.erb
+You have received an invitation to join Leonardo Antonio Photoart
+
+To activate your account, please click the following link:
+
+<%= edit_admin_account_activation_url(@user.activation_token, email: @user.email) %>
+
+
+Regards,

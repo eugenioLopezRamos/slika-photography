@@ -9,6 +9,7 @@ class UsersSignupTest < ActionDispatch::IntegrationTest
     @admin = users(:michael)
     @notadmin = users(:mary)
     @url = admin_users_path
+    ActionMailer::Base.deliveries.clear
   end
   
   test "valid creation info on non logged in user should fail" do
@@ -76,6 +77,10 @@ class UsersSignupTest < ActionDispatch::IntegrationTest
                                               password: "password",
                                               password_confirmation: "password"} }
     end
+
+    assert_redirected_to admin_user_path(@admin)
+    assert_equal 1, ActionMailer::Base.deliveries.size
+
   end
   
 end
