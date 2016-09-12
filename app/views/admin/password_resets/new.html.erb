@@ -10,7 +10,9 @@
 <div class="password-reset-container">
 <div class="action-title">Reset your password</div>
 
-<%= render 'admin/flash_messages' %>
+      <% flash.each do |message_type, message| %>
+        <div class="alert alert-<%= message_type %>"><%= message %></div>
+      <% end %>
 
 <%= form_for(:admin_password_reset, url: admin_password_resets_path) do |f| %>
 	<%= f.label 'Please enter your email address' %>
