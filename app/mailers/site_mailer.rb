@@ -1,12 +1,5 @@
 class SiteMailer < ApplicationMailer
 
-  # Subject can be set in your I18n file at config/locales/en.yml
-  # with the following lookup:
-  #
-  #   en.site_mailer.client_contact.subject
-  #
-
-
   def new_contact_email(name, email, subject, message)
     @greeting = "Hi!"
     @name = name
