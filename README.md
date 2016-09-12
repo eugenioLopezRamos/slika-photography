@@ -30,7 +30,7 @@ A portfolio site with AJAX, pushstate, and an admin panel
 ** IN PROGRESS **
 
 - I should probably make the touch evt listeners always work and just constrain the menu height modifications on the menuToggle() func to clWidth<481
-- Format the admin pages somewhat decently
+
 - Add the correct partial to display error messages to admin pages
 - Add checks for error messages display on tests
 - Make AJAX request for active-post not fail
@@ -39,10 +39,13 @@ A portfolio site with AJAX, pushstate, and an admin panel
 - add stop propagation to scrollbutton;
 - make flashes respond to different messages (ok message, info, danger, etc) and style them appropiately
 
-- contact mailer test
+
 - remove ability of non admins to see the delete psot button for other users' posts
+- center flash messages/error messages
 
 -Chrome 54 beta has a weird bug with image height: auto when setting a width(should be proportional but is now setting height to the minimum) - Need to check if it happens on win Chrome 53 (doesnt on linux Chrome 53 nor firefox latest stable)
+
+- Polish the formatting on the non admin user pages
 
 
 
@@ -65,6 +68,8 @@ A portfolio site with AJAX, pushstate, and an admin panel
 - Fixed remember login related problems (now remembers/forgets as intended
 
 - Add account activation and password forget to users + tests
+- contact mailer test
+- Format the admin pages somewhat decently
 
 ** OPTIONAL **
 
