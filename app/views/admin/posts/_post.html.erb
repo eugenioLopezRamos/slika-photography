@@ -28,9 +28,9 @@
 
 <div class="post" id="post-<%= @post.slug %>">
     
-    <div class="post-title"><%= sanitize @post.title, tags: %w(strong em a div p img span style), attributes: %w(style font-style text-decoration color src font-family font-weight height width) %></div>
+    <div class="post-title"><%= sanitize @post.title, tags: %w(h1 h2 h3 h4 h5 h6 strong em a div p img span style), attributes: %w(style font-style text-decoration color src font-family font-weight height width) %></div>
     <span class="timestamp">Posted <%= time_ago_in_words(@post.created_at) %> ago, by <%= author %></span>
-    <div class="post-content"><%= sanitize @post.content, tags: %w(strong em a div p img span style), attributes: %w(style src font-style text-decoration color font-family font-weight height width float) %></div>
+    <div class="post-content"><%= sanitize @post.content, tags: %w(h1 h2 h3 h4 h5 h6 strong em a div p img span style), attributes: %w(style src font-style text-decoration color font-family font-weight height width float) %></div>
 </div>  
 
 
