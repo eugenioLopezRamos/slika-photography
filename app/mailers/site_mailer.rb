@@ -13,27 +13,17 @@ class SiteMailer < ApplicationMailer
     @email = email   
     @subject = subject
     @cl_message = message
-   # debugger
     mail to: "eugenionlopez@gmail.com", subject: "You have been contacted"
 
   end
 
-  # Subject can be set in your I18n file at config/locales/en.yml
-  # with the following lookup:
-  #
-  #   en.site_mailer.account_activation.subject
-  #
-  def account_activation
+  def account_activation(user)
     @greeting = "Hi"
-
-    mail to: "to@example.org"
+    @user = user
+  
+    mail to: user.email, subject: 'Invitation to Leonardo Antonio PhotoArt'
   end
 
-  # Subject can be set in your I18n file at config/locales/en.yml
-  # with the following lookup:
-  #
-  #   en.site_mailer.password_reset.subject
-  #
   def password_reset(user)
     @greeting = "Hi"
     @user = user

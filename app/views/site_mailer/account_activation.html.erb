@@ -1,5 +1,8 @@
-<h1>Site#account_activation</h1>
+<h3><%= @greeting %>  <%= @user.name %>,<h3>
 
-<p>
-  <%= @greeting %>, find me in app/views/site_mailer/account_activation.html.erb
-</p>
+<p>You have received an invitation to join Leonardo Antonio Photoart</p>
+<p>To activate your account, please click the following link:</p>
+
+<%= link_to "Activate account",  edit_admin_account_activation_url(@user.activation_token, email: @user.email) %>
+
+<p>Regards,</p>

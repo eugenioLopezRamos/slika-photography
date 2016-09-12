@@ -1,9 +1,10 @@
 class User < ApplicationRecord
-    attr_accessor :remember_token, :reset_token
+    attr_accessor :remember_token, :reset_token, :activation_token
     
 VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
 
 before_save {email.downcase!}
+before_save :create_activation_digest
 validates :name, presence: true, length: {minimum: 5, maximum: 50}
 validates :email, presence: true, length: {maximum: 255}, format: {with: VALID_EMAIL_REGEX}, uniqueness: {case_sensitive: false}
 has_secure_password
@@ -50,5 +51,21 @@ has_many :posts, dependent: :destroy
     def password_reset_expired?
         reset_sent_at < 2.hours.ago
     end
+
+    def activate
+        update_attribute(:activated, true)
+        update_attribute(:activated_at, Time.zone.now)
+    end
+
+    def send_activation_email
+        SiteMailer.account_activation(self).deliver_now
+    end
+
+private
+    def create_activation_digest
+        self.activation_token = User.new_token
+        self.activation_digest = User.digest(activation_token)
+    end
+
 
 end

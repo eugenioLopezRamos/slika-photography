@@ -20,8 +20,9 @@ class Admin::UsersController < ApplicationController
   def create
     @user = User.new(user_params)
     if @user.save
+      @user.send_activation_email
       redirect_to admin_user_url(current_user)
-      flash[:success] = "User successfully created"
+      flash[:success] = "User successfully created, an invitation email has been sent to his/her email account"
     else
       @url = admin_users_path
       render 'new' 

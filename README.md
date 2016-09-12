@@ -39,10 +39,8 @@ A portfolio site with AJAX, pushstate, and an admin panel
 - add stop propagation to scrollbutton;
 - make flashes respond to different messages (ok message, info, danger, etc) and style them appropiately
 
-
-
-- Add account activation and password forget to users + tests
 - contact mailer test
+- remove ability of non admins to see the delete psot button for other users' posts
 
 -Chrome 54 beta has a weird bug with image height: auto when setting a width(should be proportional but is now setting height to the minimum) - Need to check if it happens on win Chrome 53 (doesnt on linux Chrome 53 nor firefox latest stable)
 
@@ -64,8 +62,9 @@ A portfolio site with AJAX, pushstate, and an admin panel
 - Fix post-sidebar-link CSS (Needs to overflow and keep size instead of becoming smaller w/ every post)
 -login page styling
 - Make the checkbox on login modify the remember state
-- Fixed remember login related problems (now remembers/forgets as intended)
+- Fixed remember login related problems (now remembers/forgets as intended
 
+- Add account activation and password forget to users + tests
 
 ** OPTIONAL **
 
