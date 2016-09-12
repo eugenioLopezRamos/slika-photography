@@ -1,0 +1,415 @@
+/* line 5, /home/eugenio/workspace/rails-app/app/assets/stylesheets/admin.scss */
+body {
+  font-family: Calibri, Helvetica, Sans-serif;
+  color: #293952;
+  background-color: #e6e6e6;
+  margin: auto;
+  display: flex;
+  justify-content: center;
+  height: auto;
+}
+
+/* line 16, /home/eugenio/workspace/rails-app/app/assets/stylesheets/admin.scss */
+.alert {
+  height: auto;
+  background-color: white;
+  border: 1px solid black;
+}
+
+/* line 23, /home/eugenio/workspace/rails-app/app/assets/stylesheets/admin.scss */
+.nav-menu {
+  background-color: #293952;
+}
+
+/* line 27, /home/eugenio/workspace/rails-app/app/assets/stylesheets/admin.scss */
+.nav-menu a {
+  text-decoration: none;
+  color: white;
+}
+
+/* line 32, /home/eugenio/workspace/rails-app/app/assets/stylesheets/admin.scss */
+form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: auto;
+}
+
+/* line 40, /home/eugenio/workspace/rails-app/app/assets/stylesheets/admin.scss */
+form label {
+  margin: 5px auto 5px auto;
+}
+
+/* line 46, /home/eugenio/workspace/rails-app/app/assets/stylesheets/admin.scss */
+form input {
+  margin: 5px;
+}
+
+/* line 51, /home/eugenio/workspace/rails-app/app/assets/stylesheets/admin.scss */
+.password-reset-container {
+  display: flex;
+  flex-direction: column;
+  margin: auto;
+  text-align: center;
+}
+
+/* line 58, /home/eugenio/workspace/rails-app/app/assets/stylesheets/admin.scss */
+.alert {
+  display: inherit;
+  text-align: center;
+}
+
+/* line 63, /home/eugenio/workspace/rails-app/app/assets/stylesheets/admin.scss */
+.field_with_errors {
+  background-color: #c82d28;
+  display: inherit;
+  color: white;
+  text-align: inherit;
+}
+
+@media screen and (max-width: 480px) {
+  /* line 73, /home/eugenio/workspace/rails-app/app/assets/stylesheets/admin.scss */
+  .profile-main {
+    width: 100%;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  /* line 81, /home/eugenio/workspace/rails-app/app/assets/stylesheets/admin.scss */
+  .profile-main a {
+    text-decoration: none;
+  }
+
+  /* line 85, /home/eugenio/workspace/rails-app/app/assets/stylesheets/admin.scss */
+  .profile-main hr {
+    width: 100%;
+    color: #293952;
+    height: 2px;
+  }
+
+  /* line 92, /home/eugenio/workspace/rails-app/app/assets/stylesheets/admin.scss */
+  .nav-menu {
+    position: relative;
+    width: 100%;
+    margin: 0;
+    display: flex;
+    justify-content: flex-start;
+  }
+
+  /* line 101, /home/eugenio/workspace/rails-app/app/assets/stylesheets/admin.scss */
+  .nav-menu > a {
+    padding: 20px 5px 20px 5px;
+    text-align: center;
+    margin: 0;
+    border: 1px solid white;
+    width: 25%;
+  }
+
+  /* line 109, /home/eugenio/workspace/rails-app/app/assets/stylesheets/admin.scss */
+  .user-name-container {
+    font-size: 2em;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  /* line 119, /home/eugenio/workspace/rails-app/app/assets/stylesheets/admin.scss */
+  .user-name-container .user-name-text {
+    margin-left: auto;
+    margin-right: auto;
+    position: relative;
+  }
+  /* line 124, /home/eugenio/workspace/rails-app/app/assets/stylesheets/admin.scss */
+  .user-name-container a {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* line 130, /home/eugenio/workspace/rails-app/app/assets/stylesheets/admin.scss */
+  .posts-dashboard {
+    /*not necessary in this media query*/
+  }
+
+  /* line 134, /home/eugenio/workspace/rails-app/app/assets/stylesheets/admin.scss */
+  .own-posts-container {
+    width: 100%;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+  }
+
+  /* line 142, /home/eugenio/workspace/rails-app/app/assets/stylesheets/admin.scss */
+  .user-posts-title {
+    margin-left: auto;
+    margin-right: auto;
+    font-size: 1.2em;
+  }
+
+  /* line 148, /home/eugenio/workspace/rails-app/app/assets/stylesheets/admin.scss */
+  .own-post-link {
+    width: auto;
+    display: flex;
+    justify-content: center;
+    margin: 10px auto 10px auto;
+  }
+
+  /* line 156, /home/eugenio/workspace/rails-app/app/assets/stylesheets/admin.scss */
+  .modify-post-links {
+    display: flex;
+    width: auto;
+    justify-content: center;
+    margin: auto auto 10px auto;
+  }
+
+  /* line 163, /home/eugenio/workspace/rails-app/app/assets/stylesheets/admin.scss */
+  .others-posts-dashboard {
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* line 168, /home/eugenio/workspace/rails-app/app/assets/stylesheets/admin.scss */
+  .other-posts-user-name {
+    display: flex;
+    justify-content: center;
+    margin: 5px auto 5px auto;
+  }
+
+  /* line 174, /home/eugenio/workspace/rails-app/app/assets/stylesheets/admin.scss */
+  .other-posts-container {
+    width: 100%;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+  }
+
+  /* line 182, /home/eugenio/workspace/rails-app/app/assets/stylesheets/admin.scss */
+  .others-post-link {
+    width: auto;
+    display: flex;
+    justify-content: center;
+    margin: 10px auto 10px auto;
+  }
+
+  /* line 190, /home/eugenio/workspace/rails-app/app/assets/stylesheets/admin.scss */
+  .user-data-form-container {
+    display: flex;
+    margin: auto;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  /* line 198, /home/eugenio/workspace/rails-app/app/assets/stylesheets/admin.scss */
+  .action-title {
+    display: flex;
+    text-align: justify;
+    font-weight: bold;
+    margin: auto;
+  }
+
+  /* line 205, /home/eugenio/workspace/rails-app/app/assets/stylesheets/admin.scss */
+  .action-description {
+    display: flex;
+    justify-content: center;
+  }
+
+  /* line 214, /home/eugenio/workspace/rails-app/app/assets/stylesheets/admin.scss */
+  .user-data-form > label {
+    margin: 5px auto 5px auto;
+  }
+
+  /* line 218, /home/eugenio/workspace/rails-app/app/assets/stylesheets/admin.scss */
+  .user-data-form > input {
+    margin: 5px;
+  }
+
+  /* line 223, /home/eugenio/workspace/rails-app/app/assets/stylesheets/admin.scss */
+  .index-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  /* line 229, /home/eugenio/workspace/rails-app/app/assets/stylesheets/admin.scss */
+  .index-user-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin: auto;
+  }
+}
+@media screen and (min-width: 481px) {
+  /* line 244, /home/eugenio/workspace/rails-app/app/assets/stylesheets/admin.scss */
+  .login-container {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+  }
+
+  /* line 250, /home/eugenio/workspace/rails-app/app/assets/stylesheets/admin.scss */
+  .profile-main {
+    width: 100%;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  /* line 258, /home/eugenio/workspace/rails-app/app/assets/stylesheets/admin.scss */
+  .profile-main hr {
+    width: auto;
+    margin: 0;
+  }
+
+  /* line 263, /home/eugenio/workspace/rails-app/app/assets/stylesheets/admin.scss */
+  .nav-menu {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+  }
+
+  /* line 272, /home/eugenio/workspace/rails-app/app/assets/stylesheets/admin.scss */
+  .nav-menu a {
+    border: 1px solid white;
+    width: 25%;
+    text-align: center;
+    padding: 10px;
+    display: flex;
+    margin: auto;
+  }
+
+  /* line 281, /home/eugenio/workspace/rails-app/app/assets/stylesheets/admin.scss */
+  .user-name-container {
+    width: 100%;
+    margin: auto;
+    display: flex;
+    justify-content: center;
+  }
+
+  /* line 290, /home/eugenio/workspace/rails-app/app/assets/stylesheets/admin.scss */
+  .user-name-container .user-name-text {
+    margin: 5px;
+  }
+  /* line 293, /home/eugenio/workspace/rails-app/app/assets/stylesheets/admin.scss */
+  .user-name-container .profile-edit {
+    margin: 5px;
+  }
+
+  /* line 298, /home/eugenio/workspace/rails-app/app/assets/stylesheets/admin.scss */
+  .posts-dashboard {
+    display: flex;
+    flex-direction: row;
+  }
+
+  /* line 305, /home/eugenio/workspace/rails-app/app/assets/stylesheets/admin.scss */
+  .posts-dashboard .own-posts-dashboard {
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+  }
+  /* line 311, /home/eugenio/workspace/rails-app/app/assets/stylesheets/admin.scss */
+  .posts-dashboard .user-posts-title {
+    display: flex;
+    justify-content: center;
+    margin: 5px auto 5px auto;
+  }
+  /* line 317, /home/eugenio/workspace/rails-app/app/assets/stylesheets/admin.scss */
+  .posts-dashboard .own-posts-container {
+    width: auto;
+    margin: 0 10px 0 10px;
+  }
+  /* line 322, /home/eugenio/workspace/rails-app/app/assets/stylesheets/admin.scss */
+  .posts-dashboard .own-post-link {
+    display: flex;
+    justify-content: center;
+    margin: 25px auto 5px auto;
+  }
+  /* line 328, /home/eugenio/workspace/rails-app/app/assets/stylesheets/admin.scss */
+  .posts-dashboard .modify-post-links {
+    display: flex;
+    justify-content: center;
+    margin: 5px auto 25px auto;
+  }
+  /* line 334, /home/eugenio/workspace/rails-app/app/assets/stylesheets/admin.scss */
+  .posts-dashboard .others-posts-dashboard {
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+  }
+  /* line 341, /home/eugenio/workspace/rails-app/app/assets/stylesheets/admin.scss */
+  .posts-dashboard .other-posts-user-name {
+    display: flex;
+    justify-content: center;
+    margin: 5px auto 5px auto;
+  }
+  /* line 347, /home/eugenio/workspace/rails-app/app/assets/stylesheets/admin.scss */
+  .posts-dashboard .other-posts-container {
+    width: auto;
+    margin: 0;
+  }
+  /* line 351, /home/eugenio/workspace/rails-app/app/assets/stylesheets/admin.scss */
+  .posts-dashboard .others-post-link {
+    display: flex;
+    justify-content: center;
+  }
+
+  /* line 357, /home/eugenio/workspace/rails-app/app/assets/stylesheets/admin.scss */
+  .user-data-form-container {
+    display: flex;
+    margin: auto;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  /* line 366, /home/eugenio/workspace/rails-app/app/assets/stylesheets/admin.scss */
+  .action-title {
+    display: flex;
+    text-align: justify;
+    font-weight: bold;
+    margin: auto;
+  }
+
+  /* line 373, /home/eugenio/workspace/rails-app/app/assets/stylesheets/admin.scss */
+  .action-description {
+    display: flex;
+    justify-content: center;
+  }
+
+  /* line 379, /home/eugenio/workspace/rails-app/app/assets/stylesheets/admin.scss */
+  .user-data-form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin: auto;
+  }
+
+  /* line 386, /home/eugenio/workspace/rails-app/app/assets/stylesheets/admin.scss */
+  .user-data-form > label {
+    /* margin:5px auto 5px auto;*/
+  }
+
+  /* line 390, /home/eugenio/workspace/rails-app/app/assets/stylesheets/admin.scss */
+  .user-data-form > input {
+    /*margin: 5px;*/
+  }
+
+  /* line 394, /home/eugenio/workspace/rails-app/app/assets/stylesheets/admin.scss */
+  .index-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  /* line 400, /home/eugenio/workspace/rails-app/app/assets/stylesheets/admin.scss */
+  .index-user-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin: auto;
+  }
+}

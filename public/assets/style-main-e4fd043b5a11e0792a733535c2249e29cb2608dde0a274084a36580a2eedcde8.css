@@ -1,0 +1,2193 @@
+* {
+	margin:0;
+	padding:0;
+/*height:100%;*/
+}
+
+html {
+height: 100%;
+
+
+}
+
+body {
+
+min-height:100%;
+
+  
+}
+
+/*need to find a way to play animations in reverse so I don't repeat myself so much - I tried but while it worked, it did without animation (the "animation" lasted 0 sec despite having set a duration of 2s) */
+@keyframes fadeOut {
+  from {
+    opacity: 0.6;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 0.6;
+  }
+}
+
+@keyframes fadeInFull {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes imgFadeIn {
+  from {
+    opacity:0.4;
+  } to
+  {
+    opacity: 1;
+  }
+}
+
+@keyframes menuContract {
+0%{
+height: 100vh;
+}
+100% {
+height: 15vh;
+}
+}
+
+
+
+/****************************************************************************** MOVING W/TRANSLATES **********************************************************************************************/
+
+@keyframes expand3d {
+from {
+  transform: translate3d(0, -3.25em, 0);
+  
+}  to {
+  
+  transform: translate3d(0, 0.5em, 0);
+} 
+  
+}
+
+@keyframes unexpand3d {
+  from{
+    transform: translate3d(0, 0.5em, 0);
+
+  }
+  to {
+    transform: translate3d(0, -3.25em, 0);
+
+  }
+}
+
+
+@keyframes contract-text3d {
+from {
+  transform: translate3d(0,0,0);
+
+  
+} 
+to {
+  transform: translate3d(0, -34.125em, 0);
+}  
+}
+
+@keyframes uncontract-text3d {
+from {
+  transform: translate3d(0, -34.125em, 0);
+} 
+to {
+  transform: translate3d(0, 0,0);
+
+}  
+}
+
+
+@keyframes contract-form3d {
+from {
+  transform:translate3d(0, 24.875em,0);
+
+}  to {
+  transform: translate3d(0, -12em,0); /*320px*/
+}
+}
+
+@keyframes uncontract-form3d {
+ from {
+   transform: translate3d(0,-11em,0);
+}  
+to {
+ transform: translate3d(0, 24.875em,0);
+}
+   
+  
+}
+
+@keyframes contract3d {
+from {
+  transform: translate3d(-50%,-24.875em,0);
+  
+} 
+to {
+  transform: translate3d(-50%, -35.125em,0);
+
+}
+  
+}
+
+
+@keyframes uncontract3d {
+  
+  from {
+    transform: translate3d(-50%,-35.125em,0);
+
+  }
+  to{
+    transform: translate3d(-50%, -24.875em,0);
+  }
+}
+
+@keyframes moveToLeft {
+from {
+  transform: translate3d(0px,0,0);
+} 
+to {
+  transform: translate3d(-700px, 0, 0);
+}
+}
+
+@keyframes moveToRightOut {
+from {
+  transform: translate3d(0,0,0);
+}  to{
+  transform: translate3d(700px,0,0);
+}
+}
+
+@keyframes moveToRightOutIn {
+from {
+  transform: translate3d(-700px,0,0);
+}  to{
+  transform: translate3d(0px,0,0);
+}
+}
+
+.scrollbar-scroll {
+  background: rgba(230,230,230, 0.3);
+  border: 1px solid black;
+  width: 1.5em;
+  box-sizing: border-box;
+  position: relative;
+  height: 100%;
+
+}
+
+.scrollbar-button {
+  background: #333;
+  height: 2.5em;
+  border: 1px solid white;
+  box-sizing: border-box;
+  width: 100%;
+  transform: translate3d(0px, 0px, 0px);
+}
+
+
+
+
+/* FULL HD CSS (ALSO WORKS AS DEFAULT */
+
+.sitewrapper {
+min-height: 100%;
+height: 100%;
+width: 100vw;
+overflow: hidden;
+}
+
+.headerBackground {
+  background-color: #333;
+  min-height: 3.7em;
+  height:3.8em;
+  width: 100%;
+  display: flex;
+  position:relative;
+}
+
+
+.header {
+  position: relative;
+min-width: 75em; /*1200px*/
+width: 64.7%;
+margin-left: auto;
+  margin-right: auto;
+  height: inherit;
+  display: flex;
+}
+
+
+.menu {
+  position: relative;
+  width: 70%;
+  height: inherit;
+  display: flex;
+  justify-content: flex-end;
+  will-change: height;
+
+}
+
+
+.menu .navMenu {
+  float: left;
+  font-family: 'Helvetica', sans-serif;
+  font-size: 1em;
+  font-weight: bold;
+  width: 14%;
+  height: inherit;
+    text-align: center;
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    
+}
+
+.navMenu span {
+
+  color: white;
+  font-style: italic;
+  font-weight: normal;
+display: flex;
+width: 100%;
+height: 1em;
+justify-content: center;
+margin: auto;
+pointer-events: none;
+
+}
+
+.navMenu a {
+  text-decoration: none;
+  height: 100%;
+  width: 100%;
+  display:flex;
+}
+
+.menu > li:hover {
+  background-color: #111 !important; /*:hover needs to be done with !important, otherwise the js styling overwrites it*/
+  opacity: 0.6;
+}
+
+.companyName {
+/*position: absolute*/
+ position: relative;
+  font-family: 'Stalemate', cursive;
+  list-style: none;
+  font-size: 2.6em;
+  font-style: italic;
+  color: white;
+  height: auto;
+  width: 30%;
+ /* transform: translateY(100%);*/
+  opacity: 1;
+  transition: opacity 1s;
+}
+
+.companyName a {
+    text-decoration: none;
+    color:white;
+    position: relative;
+}
+
+.companyName:hover {
+  opacity: 0.6;
+  transition: opacity 0.2s;
+}
+
+
+.jumbotron {
+
+height:calc(100vh - 3.8*2em - 4px);
+width: 100vw;
+position: relative;
+background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("/assets/background/camera-background.jpg");
+background-size: cover;
+overflow:hidden; /* this is used to hide the buttons that appear on mobile - if I use this prop on .jumbotron the design at load gets screwed up, need to see why that happens*/
+will-change: opacity;    /* browser optimizes the processes for opacity transitions - this makes the animations smoother on mobile*/
+    
+
+}
+
+/*DEFINES THE STYLING OF THE TABS CONTAINER*/
+
+.content-Tabs {
+height: 100%;
+margin-left: auto;
+margin-right: auto;
+width: 100%; /*64.21 was the original value, but it doesnt work on firefox*/
+max-width: 1233px;
+min-width: 75em; /*1200px*/
+min-height: 51em; /*816px*/
+will-change: opacity; 
+display: none;
+}
+
+.active-Tab {
+display: block;
+animation: imgFadeIn 0.45s forwards;
+}
+
+
+
+
+/*DEFINES THE STYLING OF THE HOME TAB*/
+#homeContent {
+  
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+ height: 100%;
+  text-align: center;
+  color: white;
+  
+}
+
+.homeTabTitle {
+font-family: 'Stalemate', cursive;
+font-style: italic;
+font-size: 3.5em;
+font-weight: normal;
+display: inline;
+
+  
+}
+
+.home-main-par {
+  text-align:left;
+  font-size: 1em;
+  width: 61.4%;
+  height: auto;
+  display: block;
+  color: white;
+  font-family: Helvetica, Calibri, Arial, Sans-serif;
+}
+
+.home-main-img {
+  display: block;
+  margin-top: 5px;
+  float:right;
+}
+
+.smallThumbnails {
+  display: flex;
+  position: relative;
+  width: 61.4%;
+  height: 50%;
+  margin-top: 3.125em;
+ 
+  
+}
+
+.smallThumbnailsContainer {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  position: relative;
+  justify-content:center;
+  height: 100%;
+
+}
+
+.smallThumbnailImgs {
+display: flex;
+border: 3px solid transparent;
+margin: 3px;
+padding: 0;
+height: auto; 
+width: 45%; /*have to account for margins - w/o margins it could be 50%*/
+font-family: Helvetica, Calibri, Arial, Sans-serif;
+vertical-align:top;
+font-size: 0px;
+}
+
+.smallThumbnailImgs:hover {
+ border: 3px double white;
+ border-radius: 3px;
+}
+
+.smallThumbnailImgs span {
+height: 16px;
+width: 1%;
+text-align: center;
+display: flex;
+justify-content: center;
+margin: auto;
+pointer-events: none;
+}
+
+
+#thumbnailPhoto1 {
+background: url("/assets/home/people.jpg"); 
+background-size: cover;
+background-repeat: no-repeat;
+}
+
+#thumbnailPhoto1:hover{
+background-image: linear-gradient(rgba(0,0,0, 0.3), rgba(0,0,0, 0.3)), url("/assets/home/people.jpg");
+background-size: cover;
+background-repeat: no-repeat;  
+font-size: 1em;
+font-style: italic;
+font-weight: bold;
+}
+
+
+#thumbnailPhoto2{
+background: url("/assets/home/models.jpg"); 
+background-size: cover;
+background-repeat: no-repeat;  
+}
+
+#thumbnailPhoto2:hover {
+background-image: linear-gradient(rgba(0,0,0, 0.3), rgba(0,0,0, 0.3)), url("/assets/home/models.jpg");
+background-size: cover;
+background-repeat: no-repeat;  
+font-size: 1em;
+font-style: italic;
+font-weight: bold;
+
+}
+
+#thumbnailPhoto3{
+background: url("/assets/home/urban.jpg"); 
+background-size: cover;
+background-repeat: no-repeat;  
+  
+}
+
+#thumbnailPhoto3:hover{
+background: linear-gradient(rgba(0,0,0, 0.3), rgba(0,0,0, 0.3)), url("/assets/home/urban.jpg"); 
+background-size: cover;
+background-repeat: no-repeat;  
+font-size: 1em;
+font-style: italic;
+font-weight: bold;
+  
+}
+
+#thumbnailPhoto4{
+background: url("/assets/home/events.jpg"); 
+background-size: cover;
+background-repeat: no-repeat;  
+  
+}
+
+#thumbnailPhoto4:hover {
+background: linear-gradient(rgba(0,0,0, 0.3), rgba(0,0,0, 0.3)), url("/assets/home/events.jpg"); 
+background-size: cover;
+background-repeat: no-repeat;  
+font-size: 1em;
+font-style: italic;
+font-weight: bold;
+  
+}
+
+.bigThumbnails {
+display: none;
+position: absolute;
+height: 100%;
+width: 100%;
+background-color: rgba(51, 51, 51, 0.6);
+top:0;
+left:0;
+animation: fadeInFull 0.45s forwards;
+  
+}
+
+.bigThumbnailsContainer {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    margin: auto;
+    justify-content: center;
+}
+
+.bigThumbnailImgs {
+display: none;  
+ max-width: 1233px;
+ max-height: 100%;
+margin: auto;
+justify-content: center;
+ 
+}
+
+
+
+/*********** STYLING OF THE BUTTONS TO MOVE SLIDER IMGS ***/
+.slider-nav-next {
+  position: relative;
+  float: right;
+  height:  inherit;
+ width: 50%;
+  opacity: 0.6;
+  animation: fadeOut 3s;
+  animation-fill-mode: forwards;
+
+}
+
+.slider-nav-next:hover {
+  opacity: 0.6;
+  animation: fadeIn 1s;
+}
+
+.nextArrow {
+top: calc(50% - 128px);
+left: calc(100% - 128px);
+position: absolute;
+height: 128px;
+width: 128px;
+background-color: rgba(255, 255, 255, 0.6);
+border: 3px solid black;
+border-radius: 65px 65px 65px 65px;  
+}
+
+.nextArrowHead {
+width: 50px; 
+height: 50px;
+position: absolute;
+top: 50%;
+left: 50%;
+background-color: rgba(255, 255, 255, 0.0);
+border-bottom: 5px solid black;
+border-right: 5px solid black;
+transform: rotate(-45deg) translate(-75%, -75%);
+transform-origin: top left;  
+  
+}
+
+.slider-nav-prev {
+  position: relative;
+  float: left;
+  height: inherit; /* 79.8465%*/
+ width: 50%;
+  opacity: 0.6;
+  animation: fadeOut 3s;
+  animation-fill-mode: forwards;
+
+}
+
+.slider-nav-prev:hover {
+  opacity: 0.6;
+  animation: fadeIn 1s;
+}
+
+.prevArrow {
+top: calc(50% - 128px);
+left: 0%;
+position: absolute;
+height: 128px;
+width: 128px;
+background-color: rgba(255, 255, 255, 0.6);
+border: 3px solid black;
+border-radius: 65px 65px 65px 65px;  
+}
+
+.prevArrowHead {
+width: 50px; 
+height: 50px;
+position: absolute;
+top: 50%;
+left: calc(50% + 12.5px);
+background-color: rgba(255, 255, 255, 0.0);
+border-top: 5px solid black;
+border-left: 5px solid black;
+transform: rotate(-45deg) translateY(-75%);
+transform-origin: center;
+  
+}
+
+/*** SLIDES COUNTER ****/
+
+.slideCounter {
+height: 50px;
+width: 100px;
+background-color: rgba(255, 255, 255, 0.6);
+color: black;
+left: calc(50% - 50px);
+top: calc(100% - 55px);
+position: absolute;
+z-index: 2;
+box-sizing: border-box;
+border: 1px solid black;
+border-radius: 3px;
+animation: fadeOut 3s forwards;
+text-align: center;
+display: flex;
+}
+
+.slideCounter:hover {
+opacity: 1;
+animation: fadeInFull 0.6s;
+
+}
+
+.sliderValue {
+margin: auto;  
+font-family: Helvetica, Calibri, Arial, Sans-serif;
+font-size: 1em;
+display:flex;
+height: 1em;
+}
+
+.slidePicker {
+width: 15px;
+max-width: 15px;
+font-family: Helvetica, Calibri, Arial, sans-serif;
+font-size: 0.8em;
+margin-right: 3px;
+height: 1.2em;
+
+
+
+}
+
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+  -webkit-appearance: none; 
+  margin: 0; 
+}
+
+.counterTotal {
+width: 20px;
+font-family: Helvetica, Calibri, Arial, sans-serif;
+font-size: 0.9em;
+height: 1em; 
+margin-left: 3px;
+margin-top: auto;
+margin-bottom: auto;
+}
+
+
+/*DEFINES THE STYLING OF THE PEOPLE TAB*/
+
+
+.peopleSlider {
+position: absolute;
+width: 100%;
+max-width: 1233px;
+margin: 0 auto 0 auto;
+top: 50%;
+transform: translateY(-50%);
+}
+
+.peopleSlider img {
+ max-width: 1233px;
+ position: relative;
+ display: flex;
+}
+
+
+.peopleSlide {
+
+  display: none;
+  position: absolute;
+  text-align: center;
+  width: 100%;
+}
+
+.peopleSlider .active-slide {
+ display: flex; /*this is useful for the first image that shows, the next ones to be shown with .show() need to have this specified on the jQuery .show() or they default to display: block (since they were display: none)*/ 
+  align-items: center;
+  justify-content: center;
+ animation: imgFadeIn 0.6s forwards;
+    position: relative;
+ width: 100%;
+ height: 100%;
+
+
+ 
+  
+}
+
+
+
+/*DEFINES THE STYLING OF THE MODELS TAB*/
+
+.modelsSlider {
+  margin: 0 auto 0 auto;
+  position: absolute;
+ /* height: 100vh;*/
+  /*width: 64.21%;*/
+  width: 100%;
+   max-width: 1233px;
+   top: 50%;
+transform: translateY(-50%);
+}
+
+.modelsSlider img {
+     max-width: 1233px;
+     position: relative;
+     display: flex;
+}
+
+.modelsSlide {
+  width: 100%;
+  display: none;
+  position: absolute;
+  text-align: center;
+
+}
+
+.modelsSlider .active-slide {
+display: flex; /*this is useful for the first image that shows, the next ones to be shown with .show() need to have this specified on the jQuery .show() or they default to display: block (since they were display: none)*/ 
+align-items: center;
+justify-content: center;
+position: relative;
+width: 100%;
+height: 100%;
+animation: imgFadeIn 0.6s forwards;
+  
+}
+
+
+
+
+
+/*DEFINES THE STYLING OF THE URBAN TAB*/
+
+.urbanSlider {
+margin: 0 auto 0 auto;
+position: absolute;
+/*  width: 64.21%;*/
+width: 100%;
+max-width: 1233px;
+top: 50%;
+transform: translateY(-50%);
+}
+
+
+
+.urbanSlider img {
+     max-width: 1233px;
+     position: relative;
+}
+
+.urbanSlide {
+  width: 100%;
+  display: none;
+  position: absolute;
+  text-align: center;
+
+}
+
+.urbanSlider .active-slide {
+display: flex; /*this is useful for the first image that shows, the next ones to be shown with .show() need to have this specified on the jQuery .show() or they default to display: block (since they were display: none)*/ 
+align-items: center;
+justify-content: center;
+position: relative;
+width: 100%;
+height: 100%;
+animation: imgFadeIn 0.6s forwards;
+}
+
+/*DEFINES THE STYLING OF THE EVENTS  TAB*/
+
+
+.eventsSlider {
+position: absolute; 
+width:  100%;
+max-width: 1233px;
+margin: 0 auto 0 auto;
+   top: 50%;
+transform: translateY(-50%);
+}
+
+.eventsSlider img {
+max-width: 1233px;
+position: relative;
+}
+
+.eventsSlide {
+
+display: none;
+position: absolute;
+text-align: center;
+width: 100%;
+
+}
+
+.eventsSlider .active-slide {
+display: flex; /*this is useful for the first image that shows, the next ones to be shown with .show() need to have this specified on the jQuery .show() or they default to display: block (since they were display: none)*/ 
+align-items: center;
+justify-content: center;
+position: relative;
+width: 100%;
+height: 100%;
+animation: imgFadeIn 0.6s forwards;
+
+}
+
+
+/*DEFINES THE STYLING OF THE CONTACT TAB*/
+
+.contactBackground {
+  padding-top: 5px;
+  position: absolute;
+}
+
+
+
+#contactContent {
+
+  width: 50%;
+  margin-left: auto;
+  margin-right: auto;
+
+}
+
+.photographerTitle {
+color: white;  
+text-align: center;
+float: none;
+width: 71.8125%;
+display: inline-block;
+font-family: 'Stalemate', cursive;
+font-weight: normal;
+font-style: italic;
+font-size: 3.5em;
+  
+}
+
+.leoPhoto {
+  margin-top: 5px;
+  padding-right: 5px;
+  float: left;
+  height:auto;
+  width: auto;
+}
+
+.contactText {
+  color: white;
+  display: block;
+text-align: justify;
+margin-bottom: 10px;
+font-family: 'Helvetica', sans-serif;
+  
+}
+
+.contactFormContainer {
+position: relative;
+display: flex;
+justify-content: center;
+
+
+
+}
+
+#emailForm {
+
+height: 400px;
+width: 300px;
+display: inline-block;
+justify-content: center;
+/*background-color: #333;*/
+border: 3px double white;
+text-align: center;
+color: white;
+padding: 0.5em 0 0.5em 0;
+/*overflow: hidden;*/
+
+}
+
+.aboutButton {
+height: 0px;
+background-color: green;
+display: none;
+animation: none;
+transform: none;
+
+}
+
+.contactButton {
+display: none;
+height: 50px;
+width: 100px;
+background-color: yellow;
+margin-top: -58px;
+margin-bottom: 8px;
+animation: none;
+transform: none;
+  
+}
+
+#emailForm input {
+margin: 0.5em;
+width: 200px;
+font-family: Calibri, Helvetica, Arial, sans-serif;
+font-size: 16px;
+box-sizing: border-box; 
+line-height: 20px;
+
+}
+
+
+textarea[name="clientMessage"]{
+height: 100px;  
+width: 200px;
+/*margin: 0.5em 0.5em 1em 0.5em;*/
+margin: 0.5em 0.5em 0.25em 0.5em;
+resize: vertical;
+max-height:150px;
+font-family: Calibri, Helvetica, Arial, sans-serif;
+font-size: 1em;
+/*text-rendering: geometricPrecision;
+-webkit-appearance: textfield;*/
+box-sizing: border-box; 
+padding-left: 3px;
+line-height: 16px;
+
+
+}
+
+input[name="submit"] {
+  margin-top: 0px;
+  background-color: #333;
+  height: 2.1875em; /*50 px*/
+  font-family:  Calibri, Helvetica, Arial, sans-serif;
+  color: white;
+  border: 0.0625em solid white; /*1px*/
+  font-style: italic;
+  
+}
+
+input[name="submit"]:hover {
+background-color: #1e1e1e;
+}
+
+input[name="submit"]:active{
+  background-color: #111;
+}
+
+#fbMessageBox{ /* no point in using classes here since there will be only one point where we'll show the FB message box*/
+display: none;
+}
+
+
+
+.contactFormText {
+  font-family:  Calibri, Helvetica, Arial, sans-serif;
+  color: white;
+  font-style: italic;
+  font-size: 1em;
+  
+  
+  
+}
+
+.contactFormText.top {
+  width: 12.5em;
+  text-align: left;
+  margin: 0 auto 0 auto;
+}
+
+.contactFormText.bottom img {
+  padding: 0.3125em;
+  border: none;
+
+}
+
+.contactFormText.bottom img:hover {
+  box-shadow: inset 0px 0px 15px 5px rgba(224,224,224,0.8);
+opacity: 0.5;
+}
+
+.socialMessageBox {
+width: 275px;
+height: 325px;
+background-color: #333;
+box-sizing: border-box;
+border:1px double white;
+text-align: center;
+vertical-align: middle;
+top:12px;
+left:calc(50% - 138px);
+
+  
+}
+.closeButton {
+height: 20px;
+width: 23px;
+margin: auto;
+background-color: #FF4200;
+color: white;
+font-size: 1em;
+font-family: Helvetica, Calibri, Arial, sans-serif;
+font-style: bold;
+position: absolute;
+z-index: 2;
+left: 250px;
+text-align: center;
+box-sizing: border-box;
+border-left: 1px solid white;
+border-bottom: 1px solid white;
+cursor: default;
+}
+
+
+.contactImages {
+margin: 0 auto 0 auto;
+height: 2.5em; /*40px*/
+}
+
+
+.fb-page.fb_iframe_widget {
+
+top: 50%;
+transform: translateY(-50%); /*top + transform combined seem to be the same as transform: translateY(16%) - in this particular case at least*/
+
+
+}
+
+
+
+
+/*DEFINES THE STYLING OF THE BLOG TAB*/
+
+#blogContents {
+  width: 64.21%;
+  color: white;
+  margin:auto;
+  display: flex;
+}
+
+.post-container {
+  height: 96%;
+  width: 60%;
+  margin: auto;
+  display:flex;
+  overflow: auto;
+}
+
+.post {
+  width: 100%;
+  animation: imgFadeIn 0.45s forwards;
+}
+.post-title {
+  margin: 5px;
+  height: auto;
+  width: calc(100% - 10px);
+  max-width: calc(100% - 10px);
+  word-break: break-word;
+}
+.timestamp {
+  font-family: Helvetica, Calibri, Sans-serif;
+  font-size: 14px;
+  font-style: italic;
+  margin: 5px;
+
+}
+
+.post-content {
+  display: block;
+  margin: 5px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  max-width: 100%;
+  word-break: break-word;
+}
+
+.post-content img {
+box-sizing: border-box;
+}
+
+
+.post-sidebar {
+    height: 95%;
+    width: 35%;
+    overflow-x: hidden;
+    overflow-y: hidden;
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+    justify-content: flex-start;
+    border-left: 1px solid white;
+    border-right: 1px solid white;
+}
+
+.post-sidebar-title {
+  display: flex;
+  height: 10%;
+  width: 100%;
+  position: relative;
+
+
+}
+
+.post-sidebar-title > span {
+  height: 100%;
+  font-family: Stalemate;
+  font-size: 3.5em;
+  font-style: italic;
+  margin: auto;  
+  
+}
+
+.post-sidebar-menu-container {
+  height: 100%;
+  margin-top: 5%;
+  width:100%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: row;
+}
+
+.post-sidebar-menu {
+  height: auto;
+  width: 100%;
+  margin: 0 auto auto auto; 
+  display: flex;
+  flex-direction: column;
+  font-family: Helvetica, Calibri, sans-serif;
+  font-size: 16px;
+  color: white;
+
+}
+
+.post-sidebar-menu li {
+  height: 12.5%;
+  min-height: 12.5%;
+  width: 90%;
+  margin: auto;
+  display:flex;
+
+}
+
+.post-sidebar-menu li:hover {
+
+  background-color: rgb(51,51,51);
+  background-color: rgba(200,200,200, 0.2);
+}
+
+.post-sidebar-menu a {
+
+  text-decoration: none;
+  color:white;
+  height: 100%;
+  min-height: 10vmin;
+  width: 100%;
+  display:flex;
+  position:relative;
+}
+
+.active-post{
+  border: 1px solid white;
+  box-sizing: border-box;
+
+}
+
+
+.post-sidebar-menu a > span {
+  margin: auto auto auto 5px;
+  pointer-events: none;
+}
+
+
+/*DEFINES THE STYLING OF THE BOTTOM BAR */
+
+.bottomBackground {
+  background-color: #333;
+  height:100%;
+}
+
+.bottomBar {
+
+  margin: auto;
+  min-width: 37.5em;
+  width: 37.5em; /*600px;*/
+  height: 3.8em;
+  position: relative;
+}
+.socialMedia {
+
+  text-align: center;
+  width: 600px;
+  height: 35px;
+  position: relative;
+  display: flex;
+  justify-content: center;
+}
+.socialMedia a {
+display: flex;
+flex-direction: row;
+height: 30px;
+width: 30px;
+text-decoration: none;
+border: 0px;
+padding-left: 15px;
+padding-right: 15px;
+  
+}
+
+.socialMedia img {
+ padding-top: 10px;
+  display: block;
+  height: 30px;
+  width: 30px;
+  border: 0px;
+
+}
+
+.madeBy {
+  margin-top: 7px;
+  text-align: center;
+  font-family: Calibri;
+  font-size: 12px;
+  color: white;
+  font-style: italic;
+}
+
+
+
+/* MOBILE CSS 480PX WIDTH */
+
+@media screen and (max-width: 480px) {
+/**** SITE WRAPPER ****/
+
+body {
+  overflow-y: hidden; /*prevents chrome pulldown to reload, which I cant allow if the site has scrolling overflow*/
+}
+
+.sitewrapper {
+ /* height: 100vh;
+  width: 100vw;*/
+  min-height: 100%;
+  height: 100%;
+  display:flex;
+  flex-direction: column;
+  position: absolute;
+
+}
+
+/**** NAV BAR - HEADER ****/ 
+
+.headerBackground {
+height: auto;
+min-height: 2.2em;
+  display: flex;
+ flex-direction: column;
+ position: relative;
+ min-width: 0;
+}
+
+
+
+.header {
+display: flex;
+flex-direction: column;
+height: 2.2em;
+width:100%;
+ min-width: 0;
+ position: absolute; /*needed to make the slide down menu work*/
+  
+}
+
+.companyName {
+
+background-color: #333;
+width: 100%;
+display: flex;
+justify-content: center;
+position: relative;
+margin-bottom: 0;
+font-size: 2em;
+
+
+}
+
+.companyName:hover {
+opacity: 1;  
+}
+
+.companyName .leoName {
+  background-color: #333;
+  height: 100%;
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+
+
+}
+.companyName a {
+  background-color: #333;
+width: 100%;  
+height:1.1em;
+margin: 0;
+    text-align: center;
+display: flex;
+
+}
+.menu {
+  background-color: #333;
+ /* margin-top: 3.8em;*/
+/*display: none;*/
+flex-direction: column;
+height: calc(100% - 2.2em);
+width: 100%;
+text-align: center;
+color: white;
+font-family: Helvetica;
+max-height: calc(100vh - 4.4em);
+will-change: height;
+
+}
+
+.menu .navMenu {
+height: 100%;
+width: 100%;
+color:white;
+
+}
+
+
+
+.menu li {
+
+  /*border-color: #333;*/
+  height: 100%;
+ /* color: white;*/
+}
+
+.bigImgs {
+display: none;  
+}
+
+
+
+
+/**** BEGINNING OF CONTENT STYLING ****/ 
+
+
+
+.jumbotron {
+/* THIS IS THE WRAPPER FOR ALL THE CONTENT */
+
+display: block;
+position: relative;
+height: auto;
+min-height: calc(inherit - 4.15em - 4px);
+max-height: calc(inherit - 4.15em - 4px);
+/*height: calc(100% - 4.15em - 4px); /* 2px =  <hr> */
+width: 100vw;
+overflow: hidden;
+
+
+
+}
+
+
+/* THE FORMATTING OF THE SLIDER BUTTONS */
+
+.slider-nav-prev {
+  display: none; /*no longer needed since touch sliding was implemented*/
+  animation: none;
+  position: relative;
+  height: auto;
+ width: 50%;
+  opacity: 1;
+
+  
+}
+
+.arrowPrev {
+  margin: 0;
+  height: auto;
+  float: left; /*porque esto hace que se cambie el tamaño de la imagen? investigar! (none: img 90x90, left: 64x64)  */
+}
+
+.slider-nav-prev:hover {
+animation: none;  
+}
+
+.slider-nav-next {
+  display: none; /*no longer needed since touch sliding was implemented*/
+animation: none;
+ position: relative;
+ height: auto;
+ width: 50%;
+ opacity: 1;
+
+
+}
+
+.arrowNext {
+margin: 0;
+height: auto;
+float: right;
+
+
+}
+
+
+
+.slider-nav-next:hover {
+  animation: none;
+}
+
+.counterTotal {
+width: 20px;
+font-family: Helvetica, Calibri, Arial, sans-serif;
+font-size: 1em;
+height: 1em; 
+margin-left: 3px;
+margin-top: auto;
+margin-bottom: auto;
+}
+
+/* END OF FORMATTING OF THE SLIDER BUTTONS */
+
+
+
+
+.content-Tabs {
+/* THIS IS WHAT CONTAINS EACH OF THE TABS */ 
+height:calc(100vh - 4.15em - 4px);
+min-height: calc(100vh - 4.15em - 4px);
+max-height: calc(100vh - 4.15em - 4px);
+display: block;
+min-width: 0;
+width: 100%;
+
+}
+
+.content-Tabs img {
+/*margin: 0px 0px 0px 0px;*/
+text-align: center;
+max-height: calc(100vh - 3.8em - 1em);
+max-width: calc(100vw - 1em);
+
+}
+
+#homeContent {
+/* THIS IS THE HOME TAB */
+height: 100%;
+width: auto;
+overflow: scroll;
+
+
+}
+
+.homeTabTitle {
+font-size: 2em;  
+}
+
+.home-main-par {
+width: 100%;  
+height: 100%;
+font-size: 0.66em;
+position: relative;
+display: block;
+}
+
+.home-main-img {
+margin: 3.2em 2px 2px 2px;
+height: 30%;
+width: 30%;
+    
+}
+
+.smallThumbnails {
+width: 100%; 
+height: 50%;
+margin-top: 0.3em;
+    
+}
+
+.smallThumbnailsContainer {
+width: 100%;
+margin: auto;
+    
+}
+
+#thumbnailPhoto1, #thumbnailPhoto2, #thumbnailPhoto3, #thumbnailPhoto4{
+min-height: 22vmax;
+max-height: 22vmax;
+background-size: cover;
+}
+
+
+#thumbnailPhoto1:hover, #thumbnailPhoto2:hover, #thumbnailPhoto3:hover, #thumbnailPhoto4:hover {
+font-size: 0px;
+min-height: 22vmax;
+max-height: 22vmax;
+background-size: cover;
+}
+
+
+.bigThumbnailImgs {
+width: 100%;
+ 
+}
+
+
+
+
+
+
+
+/* THE CONTENT OF THE PEOPLE TAB*/
+
+.peopleContent {
+
+width: 100%;
+
+}
+
+
+.peopleSlider .active-slide {
+margin: 5px auto 5px auto;  
+display: flex;
+align-items: center;
+justify-content: center;
+text-align: center;
+/*min-height: 21.15em;*/
+height: 100%;
+width: 100%;
+}
+
+
+.modelsSlider .active-slide {
+  margin: 5px auto 5px auto;  
+  display: flex;
+align-items: center;
+justify-content: center;
+text-align: center;
+height: 100%;
+/*min-height: 21.15em;*/
+width: 100%;
+}
+
+
+/*END OF THE MODELS TAB FORMATTING*/
+
+/* FORMATTING OF THE URBAN TAB */
+
+.urbanSlider .active-slide {
+margin: 5px auto 5px auto;  
+display: flex;
+align-items: center;
+text-align: center;
+height: 100%;
+/*min-height: 21.15em;*/
+width: 100%;
+}
+
+
+.eventsSlider .active-slide {
+margin: 5px auto 5px auto;  
+display: flex;
+align-items: center;
+text-align: center;
+height: 100%;
+/*min-height: 21.15em;*/
+width: 100%;
+}
+
+/* END OF EVENTS TAB FORMATTING */
+
+/* CONTACT TAB FORMATTING */
+
+#contactContent {
+
+width: calc(100% - 10px);
+height: 100%;
+max-height: 100vh;
+display: flex;
+flex-direction: column;
+margin: 0px 5px 0px 5px;
+overflow: hidden;
+}
+
+.leoPhoto {
+
+float: left;
+width: 30%; 
+position: relative; 
+padding-left: 5px;
+max-height: 10.125em; /* 210px*/
+max-width: 6.625em; /*154px*/
+}
+
+.leoPhoto img {
+padding-top: 5px;
+margin: 0;
+height: 100%;
+width: 100%;
+max-height: 10.125em; /* 210px*/
+max-width: 6.625em; /*154px*/
+display: inline-block;
+
+}
+
+.contactText {
+max-width: 100vw;
+width: 100%;
+margin-left:auto;
+margin-right: auto;
+}
+
+.textBlock {
+width: auto;
+display: block;
+text-align: justify;
+}
+
+.photographerTitle {
+width: auto;
+margin-left: auto;
+margin-right: auto;
+font-size: 2em;
+}
+
+#contactPar {
+font-size: 0.95em;
+display: block;
+width: 100%;
+
+}
+
+.contactFormOuterBorder {
+margin: 0 -5px 0 -5px;
+height: auto;
+width: auto;
+}
+
+.contactFormContainer {
+transform: translate3d(0, 24.875em, 0); /*350px*/
+height: auto;
+width: 100%;
+overflow: visible;
+text-align: center;
+justify-content: center;
+  
+}
+
+#emailForm {
+position: relative;
+height: 20em;
+}
+
+textarea[name="clientMessage"]{
+resize: none;
+height:60px;
+}
+
+.contactButton {
+
+margin-top: 0;
+transform: translate3d(-50%, -24.875em, 0); /* */
+margin-bottom: 0;
+display: flex;
+justify-content: center;
+background-color: #333;
+height: 3.125em; /*50 px*/
+font-family:  Calibri, Helvetica, Arial, sans-serif;
+color: white;
+border: 0.0625em solid white; /*1px*/
+font-style: italic;
+position: absolute; /*tiene que ser absolute al principio*/
+left: 50%;
+
+}
+
+
+.contactButtonText {
+position: relative;
+top: 50%;
+transform: translateY(-25%);
+vertical-align: middle;
+}
+
+.aboutButton {
+
+transform: translate3d(0, -3.25em, 0);  /*3.125em height + 2*0.0625em borders*/
+left: calc(50% - 50px);
+display: flex;
+justify-content: center;
+text-align: center;
+background-color: #333;
+height: 3.125em; /*50 px*/
+width: 100px; /**/
+font-family:  Calibri, Helvetica, Arial, sans-serif;
+color: white;
+border: 0.0625em solid white; /*1px*/
+font-style: italic;
+position: absolute;
+
+}
+
+.socialMessageBox {
+left:12px;
+height: 325px;  
+}
+
+
+.fb-page.fb_iframe_widget {
+top: 12px;
+
+}
+
+
+
+/*END OF CONTACT TAB FORMATTING */
+
+
+
+/* BEGINNING OF BLOG TAB FORMATTING*/
+
+#blogContents {
+max-width: 175%;
+width: 155%;
+
+margin: auto;
+}
+
+.post-container {
+    width: 60%;
+    margin: auto;
+}
+
+.post-sidebar {
+    
+    width:40%;
+  
+
+}
+.post-sidebar-title > span{
+font-size: 2.2em;
+}
+
+.post-sidebar-menu li > a {
+  min-height: 20vmin;
+}
+
+.post-sidebar .post-link {
+word-break: break-word;
+}
+
+
+
+
+
+/* END OF BLOG TAB FORMATTING*/
+
+/*BOTTOM BAR WITH LINKS TO SOCIAL MEDIA */  
+.bottomBackground {
+height: auto;  
+}
+
+.bottomBar {
+
+width: 100vw;
+min-width:100vw;
+max-width: 100vw;
+height: 1.95em;
+padding-top: 0;
+position: relative;
+}
+
+.socialMedia {
+height: 32px;
+width: 100%; 
+}
+
+.socialMedia img {
+padding-top: 0;
+height: 30px;
+width: 30px;
+
+}
+
+.madeBy {
+display: none;
+}
+}
+
+
+/****       HD CSS       ***/
+
+@media screen and (min-width: 1201px) and (max-width: 1599px) {
+
+.sitewrapper {
+height: calc(100vh + 2 * 3.8em + 4px);
+width: 98.7vw; /*probably need to supplement with javascript since scrollbar width may vary*/
+
+}
+
+.jumbotron {
+height: 100vh;
+min-height: 31.25em; /*min=500px*/
+width: 100%;
+
+}
+
+.content-Tabs {
+min-height: 31.25em; /*min=500px*/
+height: 100%;
+width: 100vw;
+max-width: 100%;
+}
+
+#homeContent {
+  
+  width: 95%;
+  font-size: 0.8em;
+  
+}
+
+.smallThumbnailImgs {
+height: 50%;
+width: 40%;
+}
+
+
+.peopleSlider {
+max-width: 100%;
+}
+
+.peopleSlider .active-slide {
+max-width: 100%;  
+}
+
+.modelsSlider {
+max-width: 100%;  
+}
+
+.modelsSlider .active-slide {
+max-width: 100%;  
+}
+
+.urbanSlider {
+max-width: 100%;  
+}
+
+.urbanSlider .active-slide {
+max-width: 100%;  
+}
+
+.eventsSlider {
+max-width: 100%;
+}
+
+.eventsSlider .active-slide {
+max-width: 100%;
+}
+  
+.bottomBackground {
+height: auto;  
+}  
+  
+}
+
+/*TABLET CSS */
+@media screen and (min-width: 481px) and (max-width: 1200px) {
+
+.sitewrapper {
+width: calc(100vw + 0px); /* the 2 extra pixels on width on both sitewrapper and jumbotron are needed to compensate for the scrollbar appearing and disappearing when rotating*/
+max-width: calc(100vw + 0px);
+height: 100vh;
+padding: 0;
+margin: 0;
+
+
+}
+
+.headerBackground {
+min-height: 0;
+height: 2.5em;
+width: 100%;
+
+}
+
+.header {
+min-width: 0;
+width: 100%;
+height: 2.5em;
+}
+
+.companyName {
+font-size: 1.625em; /*26px*/
+text-align: center;
+vertical-align: middle;
+margin: auto;
+}
+
+.companyName:hover {
+opacity: 1;  
+}
+
+.navMenu a {
+font-size: 0.8em;
+height: auto;
+  
+}
+
+
+.counterTotal {
+width: 20px;
+font-family: Helvetica, Calibri, Arial, sans-serif;
+font-size: 1em;
+height: 1em; 
+margin-left: 3px;
+margin-top: auto;
+margin-bottom: auto;
+}
+
+
+.jumbotron {
+height:calc(100vh - 4.7em - 0.1875em);
+width: 100vw;
+max-width: 100vw;
+overflow: hidden;
+min-height: 0;
+min-width: 0;
+background-size: cover;
+background-repeat: no-repeat;
+
+}
+
+.content-Tabs {
+min-height: 0; /*min=500px*/
+min-width: 0;
+height: 100%;
+width: 100%;
+max-width: 100%;
+}
+
+#homeContent {
+  min-width: 0;
+  width: 100vw;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+  color: white;
+  overflow: scroll;
+  
+}
+
+#homeContent h1 {
+width: 50%;
+font-size: 2.6em;  
+}
+
+
+.home-main-par {
+width: auto; /* needs to be auto instead of 100% - with 100% it overflows*/  
+height: 100%;
+margin: 5px;
+font-size: 0.8em;
+position: relative;
+display: block;
+
+}
+
+
+.home-main-img {
+display: inline-block;
+height: auto;
+width: 30%;
+margin-right: 5px;
+}
+
+.smallThumbnails {
+width: 100%; 
+height: 50%;
+margin-top: 0.3em;
+    
+}
+
+.smallThumbnailsContainer {
+width: 100%;
+margin: auto;
+    
+}
+
+#thumbnailPhoto1, #thumbnailPhoto2, #thumbnailPhoto3, #thumbnailPhoto4{
+min-height: 22vmax;
+max-height: 22vmax;
+background-size: cover;
+}
+
+
+#thumbnailPhoto1:hover, #thumbnailPhoto2:hover, #thumbnailPhoto3:hover, #thumbnailPhoto4:hover {
+font-size: 0px;
+}
+
+
+.bigThumbnailImgs {
+width: auto;
+height: 80%;
+
+ 
+}
+
+
+
+
+
+
+.peopleSlider {
+max-height: 100%;
+max-width: 100%;
+}
+
+.slider-nav-prev {
+display: none;
+}
+
+.slider-nav-next {
+display: none;
+}
+
+.peopleSlider img {
+max-width: 100vw;
+max-height: 100vh;
+}
+
+.peopleSlider .active-slide {
+max-height: 100%;
+max-width: 100%;  
+}
+
+.modelsSlider {
+max-height: 100%; 
+max-width: 100%;  
+}
+
+.modelsSlider .active-slide {
+max-height: 100%;
+max-width: 100%;  
+}
+
+.modelsSlider img {
+max-width: 100vw;
+max-height: 100vh;
+}
+
+.urbanSlider {
+max-height: 100%;
+max-width: 100%;  
+}
+
+.urbanSlider .active-slide {
+max-height: 100%;
+max-width: 100%;  
+}
+
+.urbanSlider img {
+max-width: 100vw;
+max-height: 100vh;  
+}
+
+.eventsSlider {
+max-height: 100%;
+max-width: 100%;
+}
+
+.eventsSlider .active-slide {
+max-height: 100%;
+max-width: 100%;
+} 
+
+.eventsSlider img {
+max-width: 100vw;
+max-height: 100vh;  
+}
+
+#contactContent {
+max-width: 100vw;
+width: 100vw;
+display: flex;
+flex-direction: column;
+overflow: scroll;
+}
+
+.leoPhoto {
+display: flex;
+width: 30%;
+margin-top: 5px;
+max-height: 13.125em; /* 210px*/
+max-width: 9.625em; /*154px*/
+}
+
+.leoPhoto img {
+height: 30%;
+width: 100%;
+max-height: 13.125em; /* 210px*/
+max-width: 9.625em; /*154px*/
+}
+
+.contactText {
+max-width: 100vw;
+width: 85%;
+margin-left:auto;
+margin-right: auto;
+}
+
+.textBlock {
+width: 68%;
+display: flex;
+flex-direction: column;
+text-align: justify;
+}
+
+.photographerTitle {
+width: auto;
+margin-left: auto;
+margin-right: auto;
+font-size: 1.625em;
+float:left;
+}
+
+#contactPar {
+font-size: 0.95em;
+width: 100%;
+display: flex;
+
+}
+
+.contactFormContainer {
+display: flex;
+}
+
+#emailForm {
+height: 360px;
+}
+
+.bottomBar {
+height: 2.2em;  
+}
+
+.socialMedia {
+
+height: 32px;
+
+}
+
+.socialMedia img {
+  height: 30px;
+  width: 30px;
+padding-top: 2px;
+}
+
+.madeBy {
+display: none;
+}
+
+}
+
