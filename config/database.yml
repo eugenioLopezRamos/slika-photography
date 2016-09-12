@@ -24,7 +24,5 @@ production:
   <<: *default
   adapter: postgresql
   encoding: unicode
-  database: production
+  database: rails-app
   pool: 5
-  username: blog
-  password:
