@@ -23,6 +23,6 @@ test:
 production:
   <<: *default
   adapter: postgresql
-  encoding: unicode
-  database: rails-app
-  pool: 5
+  host: localhost
+  username: user
+  database: app-dev
