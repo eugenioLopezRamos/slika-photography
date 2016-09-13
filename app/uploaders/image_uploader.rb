@@ -10,11 +10,11 @@ class ImageUploader < CarrierWave::Uploader::Base
  # uploader = ImageUploader.new
 
   # In prod stores files with fog, else on local files
-  #if Rails.env.production?
-  #  storage :fog
-  #else
+  if Rails.env.production?
+    storage :fog
+  else
     storage :file
-  #end
+  end
 
   # Override the directory where uploaded files will be stored.
   # This is a sensible default for uploaders that are meant to be mounted:
@@ -22,7 +22,7 @@ class ImageUploader < CarrierWave::Uploader::Base
     'public/uploads'
   end
 
-  def 
+  #def 
 
   # Provide a default URL as a default if there hasn't been a file uploaded:
   # def default_url
