@@ -16,9 +16,19 @@
 
 <%= form_for(:image, url: admin_upload_path, html: {multipart: true}) do |f| %>
 <br>
-<%= f.label :image %>
-<%= f.file_field :image %>
-<%= f.hidden_field :image_cache %>
-<%= f.submit "Upload image" %>
+	<%= f.label :image %>
+	<%= f.file_field :image, class: 'upload-btn', accept: 'image/jpeg, image/gif, image/png' %>
+	<%= f.hidden_field :image_cache %>
+	<%= f.submit "Upload image" %>
+
+<script>
+	document.getElementsByClassName('upload-btn')[0].addEventListener('change', function() {
+		var size_megabytes = this.files[0].size/1024/1024
+		if(size_megabytes > 5){
+			alert('Maximum file size is 5 MB. Please choose a smaller file')
+			}
+	});
+	// add clear input later
+</script> 
 <% end %>
 </div>
