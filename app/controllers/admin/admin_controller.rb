@@ -22,14 +22,8 @@ class Admin::AdminController < ApplicationController
 	    	flash.now[:info] = "Your file has been uploaded"
 	    	render 'admin/upload/upload_show'
     	end
+
     end
 
-    private 
-
-    def image_size
-    	if img.size > 5.megabytes
-    		errors.add(:image, "should be less than 5MB")
-    	end
-    end
 
 end
