@@ -10,7 +10,7 @@
         <div class="content-Tabs" id="blogContents">
 
             <div class="post-container" id="post-container">
-                <%= form_for(:post, url: admin_posts_path) do |f| %>
+                <%= form_for(:post, url: admin_posts_path, html: {multipart: true}) do |f| %>
                 <%= f.text_area :title, :id => 'post-title', class: "post-title", :contenteditable => "true", :value => "POST TITLE" %>
                     <script>
                         CKEDITOR.disableAutoInline = true;
@@ -24,10 +24,19 @@
                         CKEDITOR.inline( 'post-content' );
                     </script>
                 <hr>
-                <%= f.button "Upload image" %>
+                <%= f.file_field :image, accept: 'image/jpeg, image/gif, image/png', class:'upload-btn' %>
                 <%= f.submit "Submit Post", class: "submit-button" %>
                         
-                <% end %>  
+                <% end %> 
+                <script>
+                    document.getElementsByClassName('upload-btn')[0].addEventListener('change', function() {
+                        var size_megabytes = this.files[0].size/1024/1024
+                        if(size_megabytes > 5){
+                            alert('Maximum file size is 5 MB. Please choose a smaller file')
+                        }
+                    });
+                        // add clear input later
+                </script> 
             </div>
             
             <div class="post-sidebar">

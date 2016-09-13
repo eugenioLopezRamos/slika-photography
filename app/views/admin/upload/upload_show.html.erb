@@ -1,0 +1,24 @@
+
+<%= javascript_include_tag 'jquery'%>
+<%= javascript_include_tag 'jquery_ujs'%>
+<%= stylesheet_link_tag 'admin', media: 'all' %>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<%= csrf_meta_tag %>
+<div class="user-data-form-container">
+
+
+      <% flash.each do |message_type, message| %>
+        <div class="alert alert-<%= message_type %>"><%= message %></div>
+      <% end %>
+
+<div class="action-title">Upload images</div>
+<div class="action-description">These will be saved to your Amazon S3 bucket</div>
+
+<%= form_for(:image, url: admin_upload_path, html: {multipart: true}) do |f| %>
+<br>
+<%= f.label :image %>
+<%= f.file_field :image %>
+<%= f.hidden_field :image_cache %>
+<%= f.submit "Upload image" %>
+<% end %>
+</div>
