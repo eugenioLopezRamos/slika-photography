@@ -17,8 +17,7 @@ A portfolio site with AJAX, pushstate, and an admin panel
 
 
 
-- Add image uploading (given heroku's conditions, it might be best to use S3 from the start)
-- Related to ^, add SendGrid for mails, postgres for DB and whatever other production env changes are necessary to pass to production
+
 - Add error messages for AJAX requests
 - Slide picker numbers after load
 - scrollbar click to take to that point
@@ -48,6 +47,9 @@ A portfolio site with AJAX, pushstate, and an admin panel
 - Polish the formatting on the non admin user pages
 
 
+- Add image uploading (given heroku's conditions, it might be best to use S3 from the start)
+- Related to ^, add SendGrid for mails, postgres for DB and whatever other production env changes are necessary to pass to production
+- reassemble the manifest files for the asset pipeline into 2 files: main and admin
 
 **DONE**
 

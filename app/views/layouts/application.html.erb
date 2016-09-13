@@ -2,6 +2,7 @@
 <html>
 <head>
 <title><%= full_title(yield(:title)) %></title>
+
 <%= csrf_meta_tags %>
 
 </head>
@@ -14,7 +15,6 @@
 <%= yield %>
 
 
-  <%= javascript_include_tag 'application'%>
-  <%= javascript_include_tag 'script-main'%> 
+
 </body>
 </html>

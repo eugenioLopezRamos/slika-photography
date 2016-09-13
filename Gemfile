@@ -13,6 +13,12 @@ gem 'coffee-rails', '~> 4.1.0'
 
 # See https://github.com/rails/execjs#readme for more supported runtimes
 # gem 'therubyracer', platforms: :ruby
+#carrier wave for image uploads
+gem 'carrierwave',             '0.11.2'
+#mini magick for img resizing
+gem 'mini_magick',             '4.5.1'
+#fog as cloud library
+gem 'fog',                     '1.38.0'
 
 # Use jquery as the JavaScript library
 gem 'jquery-rails'

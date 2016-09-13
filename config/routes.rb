@@ -15,10 +15,10 @@ Rails.application.routes.draw do
   
   get 'post_api', to: 'static#retrieve_posts'
   get '/tab_getter', to: 'static#retrieve_tabs'
- 
+
 
   
-namespace :admin do
+namespace :admin do #maybe I should move this to resources: instead of namespace but I'm not sure
  
  resources :users #creates the REST routes for the users model
  resources :posts, param: :slug#creates the REST routes for the posts. These are under admin/post, and the contents will be displayed in root_path/blog for clients to see 
@@ -27,6 +27,8 @@ namespace :admin do
  #put 'password_resets/:id/edit' => 'password_resets#update', :as => :put_password_reset
  match 'password_resets/:id/edit' => 'password_resets#update', via: [:put, :patch], :as => :password_reset
 
+ get '/upload', to: 'admin#upload_show'
+ post '/upload', to: 'admin#upload_save'
 
  get '/', to: 'admin#login'
  get '/login', to: 'sessions#new'
