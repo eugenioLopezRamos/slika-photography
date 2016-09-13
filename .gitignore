@@ -19,3 +19,9 @@
 #ignore secrets
 
 /config/secrets.yml
+
+#ignore public uploads
+public/uploads/*
+
+#ignore carrierwave initializer
+config/initializers/carrierwave.rb
