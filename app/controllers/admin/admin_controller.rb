@@ -10,20 +10,18 @@ class Admin::AdminController < ApplicationController
     	render 'admin/upload/upload_show'
     end
 
-    def upload_save
-
-    	img = Image.new
-    	img.image = (params[:image][:image])
-    	if img.image.size > 5.megabytes
-    		flash.now[:danger] = "Max file size is 5 megabytes, please use another file"
-    		render 'admin/upload/upload_show'
-    	else
-	    	img.image.store!(img.image)# => will save the file
-	    	flash.now[:info] = "Your file has been uploaded"
-	    	render 'admin/upload/upload_show'
-    	end
-
-    end
-
+  def upload_save
+  	@img = Image.new
+   	@img.image = (params[:image][:image])
+    	if @img.image.size > 5.megabytes
+     		flash.now[:danger] = "Max file size is 5 megabytes, please use another file"
+     		render 'admin/upload/upload_show'
+     	else
+    		@img.key = "attempt2"
+	    	@img.image.store! # => will save the file
+	    	flash.now[:info] = "Your file has been uploaded! address: #{@img.image.url}"
+ 	    	render 'admin/upload/upload_show'
+     	end
+     end
 
 end
