@@ -35,7 +35,7 @@ Rails.application.configure do
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED***
+#    :password       => 'niasdadsdsa
 ***REMOVED***
 #}
 
