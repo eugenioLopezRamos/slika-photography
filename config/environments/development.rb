@@ -31,12 +31,13 @@ Rails.application.configure do
 
 #config.action_mailer.delivery_method = :smtp
 #config.action_mailer.smtp_settings = {
+
 #    :address        => 'smtp.gmail.com',
 #    :domain         => 'rails-implementation-e0plus.c9users.io',
 #    :port           => 587,
-#    :user_name      => 'eugenionlopez@gmail.com',
-#    :password       => 'niasdadsdsa
-#    :authentication => "login"
+#    :user_name      => EMAIL
+#    :password       => PASSWORD
+#    :authentication => AUTH
 #}
 
 #### /ACTIVATE MAIL HERE
