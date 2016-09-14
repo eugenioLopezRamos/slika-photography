@@ -23,5 +23,8 @@
 #ignore public uploads
 public/uploads/*
 
-#ignore carrierwave initializer
-config/initializers/carrierwave.rb
+#ignore .env
+.env
+
+#ignore database.yml
+config/database.yml

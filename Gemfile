@@ -11,8 +11,12 @@ gem 'uglifier', '>= 1.3.0'
 # Use CoffeeScript for .coffee assets and views
 gem 'coffee-rails', '~> 4.1.0'
 
+#Installs the AWS-SDK for ruby
+gem 'aws-sdk'
+
 # See https://github.com/rails/execjs#readme for more supported runtimes
 # gem 'therubyracer', platforms: :ruby
+
 #carrier wave for image uploads
 gem 'carrierwave',             '0.11.2'
 #mini magick for img resizing

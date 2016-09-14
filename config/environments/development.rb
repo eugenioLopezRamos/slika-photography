@@ -31,12 +31,13 @@ Rails.application.configure do
 
 #config.action_mailer.delivery_method = :smtp
 #config.action_mailer.smtp_settings = {
+
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED***
-#    :password       => 'niasdadsdsa
-***REMOVED***
+#    :user_name      => EMAIL
+#    :password       => PASSWORD
+#    :authentication => AUTH
 #}
 
 #### /ACTIVATE MAIL HERE
