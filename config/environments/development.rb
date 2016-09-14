@@ -61,6 +61,11 @@ Rails.application.configure do
   # Raises helpful error messages.
   config.assets.raise_runtime_errors = true
 
+
+  # Enable serving of images, stylesheets, and JavaScripts from an asset server.
+  #config.action_controller.asset_host = 'd1883h5a08woka.cloudfront.net'
+
+
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
 end
