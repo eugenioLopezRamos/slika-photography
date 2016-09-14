@@ -35,7 +35,7 @@ Rails.application.configure do
 #    :domain         => 'rails-implementation-e0plus.c9users.io',
 #    :port           => 587,
 #    :user_name      => 'eugenionlopez@gmail.com',
-#    :password       => 'nikolaz7',
+#    :password       => 'niasdadsdsa
 #    :authentication => "login"
 #}
 
