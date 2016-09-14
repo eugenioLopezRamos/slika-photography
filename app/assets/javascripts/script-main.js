@@ -1,6 +1,5 @@
 var main = function() {
-//sets up the default presentation of the site. Most of these should probably be done on the css - will see later.  
-  //$('#homeTab').css("background-color", "#111");
+
 console.log(window.location.pathname);
 console.log(window.location.pathname.replace('/', ''));
 console.log("tabname " + window.location.pathname.replace('/', '').split("/")[0]);//.replace(/\/\*+\/+/, ''))
