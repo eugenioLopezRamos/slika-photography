@@ -316,7 +316,7 @@ pointer-events: none;
 height:calc(100vh - 3.8*2em - 4px);
 width: 100vw;
 position: relative;
-background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(<%= asset_path "/images/background/camera-background.jpg" %>);
+background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(<%= asset_path "/images/background/camera-background.jpg");
 background-size: cover;
 overflow:hidden; /* this is used to hide the buttons that appear on mobile - if I use this prop on .jumbotron the design at load gets screwed up, need to see why that happens*/
 will-change: opacity;    /* browser optimizes the processes for opacity transitions - this makes the animations smoother on mobile*/
@@ -433,13 +433,13 @@ pointer-events: none;
 
 
 #thumbnailPhoto1 {
-background: url("/assets/home/people.jpg"); 
+background: url(<%= asset_path 'images/home/people.jpg' %>); 
 background-size: cover;
 background-repeat: no-repeat;
 }
 
 #thumbnailPhoto1:hover{
-background-image: linear-gradient(rgba(0,0,0, 0.3), rgba(0,0,0, 0.3)), url("/assets/home/people.jpg");
+background-image: linear-gradient(rgba(0,0,0, 0.3), rgba(0,0,0, 0.3)), url(<%= asset_path 'images/home/people.jpg' %>);
 background-size: cover;
 background-repeat: no-repeat;  
 font-size: 1em;
@@ -449,13 +449,13 @@ font-weight: bold;
 
 
 #thumbnailPhoto2{
-background: url("/assets/home/models.jpg"); 
+background: url(<%= asset_path 'images/home/models.jpg' %>); 
 background-size: cover;
 background-repeat: no-repeat;  
 }
 
 #thumbnailPhoto2:hover {
-background-image: linear-gradient(rgba(0,0,0, 0.3), rgba(0,0,0, 0.3)), url("/assets/home/models.jpg");
+background-image: linear-gradient(rgba(0,0,0, 0.3), rgba(0,0,0, 0.3)), url(<%= asset_path 'images/home/models.jpg' %>);
 background-size: cover;
 background-repeat: no-repeat;  
 font-size: 1em;
@@ -465,14 +465,14 @@ font-weight: bold;
 }
 
 #thumbnailPhoto3{
-background: url("/assets/home/urban.jpg"); 
+background: url(<%= asset_path 'images/home/urban.jpg' %>); 
 background-size: cover;
 background-repeat: no-repeat;  
   
 }
 
 #thumbnailPhoto3:hover{
-background: linear-gradient(rgba(0,0,0, 0.3), rgba(0,0,0, 0.3)), url("/assets/home/urban.jpg"); 
+background: linear-gradient(rgba(0,0,0, 0.3), rgba(0,0,0, 0.3)), url(<%= asset_path 'images/home/urban.jpg' %>); 
 background-size: cover;
 background-repeat: no-repeat;  
 font-size: 1em;
@@ -482,14 +482,14 @@ font-weight: bold;
 }
 
 #thumbnailPhoto4{
-background: url("/assets/home/events.jpg"); 
+background: url(<%= asset_path 'images/home/events.jpg' %>); 
 background-size: cover;
 background-repeat: no-repeat;  
   
 }
 
 #thumbnailPhoto4:hover {
-background: linear-gradient(rgba(0,0,0, 0.3), rgba(0,0,0, 0.3)), url("/assets/home/events.jpg"); 
+background: linear-gradient(rgba(0,0,0, 0.3), rgba(0,0,0, 0.3)), url(<%= asset_path 'images/home/events.jpg' %>); 
 background-size: cover;
 background-repeat: no-repeat;  
 font-size: 1em;
