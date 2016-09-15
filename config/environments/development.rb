@@ -34,7 +34,7 @@ Rails.application.configure do
 
 #    :address        => 'smtp.gmail.com',
 #    :domain         => 'rails-implementation-e0plus.c9users.io',
-#    :port           => 587,
+#    :port           => PORT
 #    :user_name      => EMAIL
 #    :password       => PASSWORD
 #    :authentication => AUTH
@@ -64,7 +64,7 @@ Rails.application.configure do
 
 
   # Enable serving of images, stylesheets, and JavaScripts from an asset server.
-  #config.action_controller.asset_host = 'd1883h5a08woka.cloudfront.net'
+  config.action_controller.asset_host = 'd1883h5a08woka.cloudfront.net'
 
 
   # Raises error for missing translations
