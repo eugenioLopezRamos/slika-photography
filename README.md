@@ -47,12 +47,16 @@ A portfolio site with AJAX, pushstate, and an admin panel
 - Polish the formatting on the non admin user pages
 
 
-- Add image uploading (given heroku's conditions, it might be best to use S3 from the start)
+
 - Related to ^, add SendGrid for mails, postgres for DB and whatever other production env changes are necessary to pass to production
 - reassemble the manifest files for the asset pipeline into 2 files: main and admin
 
+
+- Add image uploading (given heroku's conditions, it might be best to use S3 from the start) <- To do now
+
 **DONE**
 
+- Now the app serves CSS/JS from the uglified compiled assets in the repo and image files from an S3 bucket.Both cases use CloudFront as CDN
 - Styled users index, new/edit user, edit profile
 - Add blog post 404 message
 - Post previews on admin page  
