@@ -17,6 +17,7 @@ Rails.application.routes.draw do
   get '/tab_getter', to: 'static#retrieve_tabs'
 
 
+
   
 namespace :admin do #maybe I should move this to resources: instead of namespace but I'm not sure
  
@@ -34,6 +35,9 @@ namespace :admin do #maybe I should move this to resources: instead of namespace
  get '/login', to: 'sessions#new'
  post '/login', to: 'sessions#create'
  delete '/logout', to: 'sessions#destroy'
+
+ get 'download_file', to: 'admin#download_file'
+ delete 'delete_file', to: 'admin#delete_file'
 
 end
 
