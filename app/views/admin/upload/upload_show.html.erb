@@ -20,10 +20,6 @@
 
 <% files_in_bucket = s3.list_objects(bucket: ENV['AWS_S3_BUCKET'], encoding_type: 'url').contents.map(&:key) %>
 
-<%#= content_tag(:div, class: 'bucket-folder')  %>
-
-<%# si el valor de index[n] es "xxxxxxxxxxxxxxxx/" (terminado en slash), crear un nuevo div class="folder" id="#{index[n].value}"
-y luego while index[n+1..-1].value contenga index[n].value -> mandarlo a <li> dentro del div folder.Si index[n+1..-1].value != index[n].value && index[n+1..-1].value termina en /, crear div class="folder" y repetir hasta q no haya mas %>
 <style>
 li {
 margin-left: 100px;
@@ -42,114 +38,177 @@ background-color: rgb(200, 200, 200);
 text-decoration: underline blue;
 
 }
+
+.selected {
+background-color: blue;
+color: white;
+font-weight: bold;
+font-style: italic;
+
+}
 </style>
 
-
+<span class="action-title">File Manager</span>
+<span class="action-description">Here you can browse the files currently in your S3 bucket</span>
+<p class='action-description'>Notes:<br>Ctrl + left click (or long touch on mobile devices) selects/unselects files</p>
 <div class="upload-dir-container", id="root">
 </div>
 
-
+<%= button_to "Download file", admin_upload_path, class: 'file-manager-button', :id => "download-file" %>
+<%= button_to "Delete files", admin_upload_path,  class: 'file-manager-button', :id => "delete-files" %>
 
 <script>
-var currentFolder;
-var root = document.getElementById("root");
-currentFolder = root;
-<%# debugger %>
-var myArray = <%= raw files_in_bucket %>; //["assets/", "images/", "images/background/", "images/background/camera-background.jpg", "images/contact/", "images/contact/leoPhoto.jpg", "images/eventsSlides/", "images/eventsSlides/1.jpg", "images/eventsSlides/10.jpg", "images/eventsSlides/2.jpg", "images/eventsSlides/3.jpg", "images/eventsSlides/4.jpg", "images/eventsSlides/5.jpg", "images/eventsSlides/6.jpg", "images/eventsSlides/7.jpg", "images/eventsSlides/8.jpg", "images/eventsSlides/9.jpg", "images/home/", "images/home/events.jpg", "images/home/gato.png", "images/home/models.jpg", "images/home/people.jpg", "images/home/urban.jpg", "images/modelsSlides/", "images/modelsSlides/1.jpg", "images/modelsSlides/10.jpg", "images/modelsSlides/2.jpg", "images/modelsSlides/3.jpg", "images/modelsSlides/4.jpg", "images/modelsSlides/5.jpg", "images/modelsSlides/6.jpg", "images/modelsSlides/7.jpg", "images/modelsSlides/8.jpg", "images/modelsSlides/9.jpg", "images/peopleSlides/", "images/peopleSlides/1.jpg", "images/peopleSlides/10.jpg", "images/peopleSlides/2.jpg", "images/peopleSlides/3.jpg", "images/peopleSlides/4.jpg", "images/peopleSlides/5.jpg", "images/peopleSlides/6.jpg", "images/peopleSlides/7.jpg", "images/peopleSlides/8.jpg", "images/peopleSlides/9.jpg", "images/urbanSlides/", "images/urbanSlides/1.jpg", "images/urbanSlides/10.jpg", "images/urbanSlides/2.jpg", "images/urbanSlides/3.jpg", "images/urbanSlides/4.jpg", "images/urbanSlides/5.jpg", "images/urbanSlides/6.jpg", "images/urbanSlides/7.jpg", "images/urbanSlides/8.jpg", "images/urbanSlides/9.jpg"];
 
-var currentIndex = 0;
-var fileREGEX = /([\w]+[.]*[\w]+\/)*([\w]+[.]*[\w]+.*\-*)/; //  gets all directories + filenames with . and -
-var folderREGEX = /([\w]+[.]*[\w]+\/)*/; // all directories, excludes files
+	var currentFolder;
+	var root = document.getElementById("root");
+	currentFolder = root;
 
-var counter = 0;
-var parentFolder = root;
+	var myArray = <%= raw files_in_bucket %>; 
 
-function createFolder(object, currIndex){
-	if(counter > myArray.length*2) { //a counter twice the length of the array's, just so the browser doesn't crash in cases of errors.
-		return
-	}
-	else {
-		var newFolder = document.createElement("ul");//.classList.add("folder");
-		newFolder.classList.add("folder");
-		var folderSpan = document.createElement("span");
-		var folderSpanText = document.createTextNode(object.replace(parentFolder.id, ''));
-		folderSpan.appendChild(folderSpanText);
-		newFolder.appendChild(folderSpan);
-		parentFolder.appendChild(newFolder);
+	var currentIndex = 0;
+	var fileREGEX = /([\w]+[.]*[\w]+\/)*([\w]+[.]*[\w]+.*\-*)/; //  gets all directories + filenames with . and -
+	var folderREGEX = /([\w]+[.]*[\w]+\/)*/; // all directories, excludes files
 
-		currentFolder = parentFolder.lastElementChild;
-		currentFolder.id = object;			//"<div class="folder" id=(currentFolder.id + "/" + object)></div>");
+	var counter = 0;
+	var parentFolder = root;
 
-		var subArray = myArray.slice(currIndex+1);
-		if(subArray[0].split(currentFolder.id)[0] === subArray[0]) {
-			parentFolder = currentFolder === root ? root : currentFolder.parentElement;
-			//next array item does not contain the name of the folder, therefore it is another folder.
+	function createFolder(object, currIndex){
+		if(counter > myArray.length*2) { //a counter twice the length of the array's, just so the browser doesn't crash in cases of errors.
 			return;
 		}
 		else {
-			parentFolder = currentFolder;
-			counter = counter + 1;
-			subArray.length>0 ? directorize(subArray) : "";
-			return;
+			var newFolder = document.createElement("ul");//.classList.add("folder");
+			newFolder.classList.add("folder");
+			var folderSpan = document.createElement("span");
+			var folderSpanText = document.createTextNode(object.replace(parentFolder.id, ''));
+			folderSpan.appendChild(folderSpanText);
+			newFolder.appendChild(folderSpan);
+			parentFolder.appendChild(newFolder);
+
+			currentFolder = parentFolder.lastElementChild;
+			currentFolder.id = object;			//"<div class="folder" id=(currentFolder.id + "/" + object)></div>");
+
+			var subArray = myArray.slice(currIndex+1);
+			if(subArray[0].split(currentFolder.id)[0] === subArray[0]) {
+				parentFolder = currentFolder === root ? root : currentFolder.parentElement;
+				//next array item does not contain the name of the folder, therefore it is another folder.
+				return;
+			}
+			else {
+				parentFolder = currentFolder;
+				counter = counter + 1;
+				var folderEmptyMsg = document.createTextNode("Folder is empty");
+				subArray.length>0 ? directorize(subArray) : ""; //need to add empty folder message to empty folders later
+				return;
+			}
 		}
 	}
-}
 
-function createFile(object) {
-	var file = document.createElement("li");
-	file.classList.add("file");
-	var fileName = document.createTextNode(object.replace(folderREGEX, ''));//<li class="file">object.value</li>"
-	console.log(file);
-	file.appendChild(fileName);
-	currentFolder.appendChild(file)
-	return;
-}
+	function createFile(object) {
+		var file = document.createElement("li");
+		file.classList.add("file");
+		var fileName = document.createTextNode(object.replace(folderREGEX, ''));//<li class="file">object.value</li>"
+		file.appendChild(fileName);
+		file.id = object.replace(folderREGEX, '');
+		currentFolder.appendChild(file)
+		return;
+	}
 
-function directorize(array) {
+	function directorize(array) {
 
-	array.map(function(element, index, array) {
-		if(counter > myArray.length) {
-			return
+		array.map(function(element, index, array) {
+			if(counter > myArray.length) {
+				return;
+			}
+			else {
+				if(element.match(folderREGEX).input === element.match(folderREGEX)[0]){
+					//if element value == '*/' (that is, whatever value that ends in a slash), then the element is a folder
+					currentIndex = index;
+					counter = counter + 1;
+					createFolder(element, currentIndex);
+					return;
+				}
+				if(element.match(fileREGEX).input === element.match(fileREGEX)[0]){
+					//element name is *, without a slash at the end, then it is a file.
+					createFile(element);
+					counter = counter + 1;
+					return;
+				}
+				if(index+1>array.length) {
+					return;
+				}
+			}
+		});
+
+	}
+
+	directorize(myArray);
+
+
+	function toggleSelectedState(event) {
+		if(event.ctrlKey ===  true){
+			event.target.classList.toggle('selected');
+			return false;
 		}
-		else {
-			if(element.match(folderREGEX).input === element.match(folderREGEX)[0]){
-				//if element value == '*/' (that is, whatever value that ends in a slash), then the element is a folder
-				console.log("folder elem", element);
-				currentIndex = index;
-				counter = counter + 1;
-				createFolder(element, currentIndex);
-				return;
-			}
-			if(element.match(fileREGEX).input === element.match(fileREGEX)[0]){
-				//element name is *, without a slash at the end, then it is a file.
-				console.log("file elem", element);
-				createFile(element);
-				counter = counter + 1;
-				return;
-			}
-			if(index+1>array.length) {
-				return;
-			}
+		else{
+			return true;
 		}
-	});
+	}
 
-}
-
-directorize(myArray);
-
-[].slice.call(document.getElementsByTagName("li")).map(function(element, index, array) {
-	element.style.display = "none";
-});
-
-[].slice.call(document.getElementsByTagName("span")).map(function(element, index, array) {
-
-	element.addEventListener("click", function(event) {
-		[].slice.call(element.parentElement.children).slice(1).map(function(element,index, array) {
-			element.style.display === "none" ? element.style.display = "" : element.style.display = "none";
+	[].slice.call(document.getElementsByTagName("li")).map(function(element, index, array) { // hides all <li> by default...
+		element.style.display = "none";
+		element.addEventListener("click", function(event) {		
+			toggleSelectedState(event);	
 		});
 	});
 
-});
+	[].slice.call(document.getElementsByTagName("span")).map(function(element, index, array) { //but toggles them when you click the folder's <span>
+
+		element.addEventListener("click", function(event) {
+			var continueFunction = toggleSelectedState(event);
+			if(!continueFunction) {return}
+				else {""};
+
+
+			[].slice.call(element.parentElement.children).slice(1).map(function(element,index, array) {
+				element.style.display === "none" ? element.style.display = "" : element.style.display = "none";
+			});
+
+		});
+
+	});
+
+	$('#download-file').click(function(event) {
+		event.preventDefault();
+		
+		$.ajax({url: "download_file", data: {tab: "kek", id: "lul"}, type: 'GET', dataType: 'html'})
+		//AJAX request sending the array of stuff to download (or just 1 thing)
+
+	});
+
+	$('#delete-files').click(function(event){
+		event.preventDefault();
+		console.log("kek");
+
+		var deleteArray = (function() {
+								var selected = []
+								selected = [].slice.call(document.getElementsByClassName('selected')).map(function(element, index, array) {
+									console.log("elem ID", element.id);
+									selected.push(element.id);
+									console.log(selected);
+								});
+								return selected;
+
+							})();
+							console.log(deleteArray);
+		$.ajax({url: "delete_file", data: {files: deleteArray}, type: 'DELETE', dataType: 'html', processData: false})
+		//AJAX sending the array/method to use to delete the files we need to delete
+
+
+
+
+	});
+
 
 
 </script>
@@ -159,17 +218,45 @@ directorize(myArray);
 
 
 
+<%# 
+Useful links to do this:
+
+
+http://docs.aws.amazon.com/sdkforruby/api/Aws/S3/Client.html
+
+	#delete_object(options = {}) ⇒ Types::DeleteObjectOutput
+	Removes the null version (if there is one) of an object and inserts a delete marker, which becomes the latest version of the object.
+
+
+	#delete_objects(options = {}) ⇒ Types::DeleteObjectsOutput
+	#abort_multipart_upload(options = {}) ⇒ Types::AbortMultipartUploadOutput
+	Aborts a multipart upload.
+	To verify that all parts have been removed, so you don't get charged for the part storage, you should call the List Parts operation and ensure the parts list is empty.
+	#get_object(options = {}) ⇒ Types::GetObjectOutput
+	Retrieves objects from Amazon S3.
+#head_bucket(options = {}) ⇒ Struct
+This operation is useful to determine if a bucket exists and you have permission to access it.
+
+#copy_object(options = {}) ⇒ Types::CopyObjectOutput
+Creates a copy of an object that is already stored in Amazon S3.
 
 
 
 
 
+#put_object(options = {}) ⇒ Types::PutObjectOutput
+Adds an object to a bucket.
+
+#downloads
+https://ruby.awsblog.com/post/Tx354Y6VTZ421PJ/Downloading-Objects-from-Amazon-S3-using-the-AWS-SDK-for-Ruby
+
+%>
 <%= form_for(:image, url: admin_upload_path, html: {multipart: true}) do |f| %>
-<br>
+	<%= f.submit "Upload image" %>
 	<%= f.label :image %>
 	<%= f.file_field :image, class: 'upload-btn', accept: 'image/jpeg, image/gif, image/png' %>
 	<%= f.hidden_field :image_cache %>
-	<%= f.submit "Upload image" %>
+
 
 <script>
 	document.getElementsByClassName('upload-btn')[0].addEventListener('change', function() {

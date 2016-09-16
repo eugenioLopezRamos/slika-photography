@@ -5,6 +5,7 @@ VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
 
 before_save {email.downcase!}
 before_save :create_activation_digest
+before_save :create_auth_digest
 validates :name, presence: true, length: {minimum: 5, maximum: 50}
 validates :email, presence: true, length: {maximum: 255}, format: {with: VALID_EMAIL_REGEX}, uniqueness: {case_sensitive: false}
 has_secure_password
@@ -66,6 +67,12 @@ private
         self.activation_token = User.new_token
         self.activation_digest = User.digest(activation_token)
     end
+
+    def create_auth_digest
+        self.auth_token = User.new_token
+        self.activation_digest = User.digest(auth_token)
+    end
+
 
 
 end

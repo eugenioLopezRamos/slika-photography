@@ -24,4 +24,25 @@ class Admin::AdminController < ApplicationController
      	end
      end
 
+  def download_file
+    #verify origin of the GET request (could also generate a hash on the user, and verify that the hash is for that user) -> call to AWS SDK -> determine how to download the file
+    
+
+
+  end
+
+  def delete_file
+    flash.now[:info] = "File successfully deleted"
+    render 'admin/upload/upload_show'
+  end
+
+  private
+
+  def authenticate_request
+    #To be implemented - request authentication with tokens
+      authenticate_or_request_with_http_token do |token, options|
+      User.find_by(auth_token: token)
+    end
+  end
+
 end
