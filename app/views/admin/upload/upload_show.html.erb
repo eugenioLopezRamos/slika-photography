@@ -14,6 +14,156 @@
 <div class="action-title">Upload images</div>
 <div class="action-description">These will be saved to your Amazon S3 bucket</div>
 
+<% s3 = Aws::S3::Client.new %>
+
+<%# s3::list_objects(bucket:ENV['AWS_S3_BUCKET'], prefix: full_dir).contents.map(&:key).slice(1..-1).count %>
+
+<% files_in_bucket = s3.list_objects(bucket: ENV['AWS_S3_BUCKET'], encoding_type: 'url').contents.map(&:key) %>
+
+<%#= content_tag(:div, class: 'bucket-folder')  %>
+
+<%# si el valor de index[n] es "xxxxxxxxxxxxxxxx/" (terminado en slash), crear un nuevo div class="folder" id="#{index[n].value}"
+y luego while index[n+1..-1].value contenga index[n].value -> mandarlo a <li> dentro del div folder.Si index[n+1..-1].value != index[n].value && index[n+1..-1].value termina en /, crear div class="folder" y repetir hasta q no haya mas %>
+<style>
+li {
+margin-left: 100px;
+margin-top: 20px;
+margin-bottom: 20px;
+
+}
+ul, span {
+cursor: pointer;
+
+}
+
+.upload-dir-container {
+border: 1px solid blue;
+background-color: rgb(200, 200, 200);
+text-decoration: underline blue;
+
+}
+</style>
+
+
+<div class="upload-dir-container", id="root">
+</div>
+
+
+
+<script>
+var currentFolder;
+var root = document.getElementById("root");
+currentFolder = root;
+<%# debugger %>
+var myArray = <%= raw files_in_bucket %>; //["assets/", "images/", "images/background/", "images/background/camera-background.jpg", "images/contact/", "images/contact/leoPhoto.jpg", "images/eventsSlides/", "images/eventsSlides/1.jpg", "images/eventsSlides/10.jpg", "images/eventsSlides/2.jpg", "images/eventsSlides/3.jpg", "images/eventsSlides/4.jpg", "images/eventsSlides/5.jpg", "images/eventsSlides/6.jpg", "images/eventsSlides/7.jpg", "images/eventsSlides/8.jpg", "images/eventsSlides/9.jpg", "images/home/", "images/home/events.jpg", "images/home/gato.png", "images/home/models.jpg", "images/home/people.jpg", "images/home/urban.jpg", "images/modelsSlides/", "images/modelsSlides/1.jpg", "images/modelsSlides/10.jpg", "images/modelsSlides/2.jpg", "images/modelsSlides/3.jpg", "images/modelsSlides/4.jpg", "images/modelsSlides/5.jpg", "images/modelsSlides/6.jpg", "images/modelsSlides/7.jpg", "images/modelsSlides/8.jpg", "images/modelsSlides/9.jpg", "images/peopleSlides/", "images/peopleSlides/1.jpg", "images/peopleSlides/10.jpg", "images/peopleSlides/2.jpg", "images/peopleSlides/3.jpg", "images/peopleSlides/4.jpg", "images/peopleSlides/5.jpg", "images/peopleSlides/6.jpg", "images/peopleSlides/7.jpg", "images/peopleSlides/8.jpg", "images/peopleSlides/9.jpg", "images/urbanSlides/", "images/urbanSlides/1.jpg", "images/urbanSlides/10.jpg", "images/urbanSlides/2.jpg", "images/urbanSlides/3.jpg", "images/urbanSlides/4.jpg", "images/urbanSlides/5.jpg", "images/urbanSlides/6.jpg", "images/urbanSlides/7.jpg", "images/urbanSlides/8.jpg", "images/urbanSlides/9.jpg"];
+
+var currentIndex = 0;
+var fileREGEX = /([\w]+[.]*[\w]+\/)*([\w]+[.]*[\w]+.*\-*)/; //  gets all directories + filenames with . and -
+var folderREGEX = /([\w]+[.]*[\w]+\/)*/; // all directories, excludes files
+
+var counter = 0;
+var parentFolder = root;
+
+function createFolder(object, currIndex){
+	if(counter > myArray.length*2) { //a counter twice the length of the array's, just so the browser doesn't crash in cases of errors.
+		return
+	}
+	else {
+		var newFolder = document.createElement("ul");//.classList.add("folder");
+		newFolder.classList.add("folder");
+		var folderSpan = document.createElement("span");
+		var folderSpanText = document.createTextNode(object.replace(parentFolder.id, ''));
+		folderSpan.appendChild(folderSpanText);
+		newFolder.appendChild(folderSpan);
+		parentFolder.appendChild(newFolder);
+
+		currentFolder = parentFolder.lastElementChild;
+		currentFolder.id = object;			//"<div class="folder" id=(currentFolder.id + "/" + object)></div>");
+
+		var subArray = myArray.slice(currIndex+1);
+		if(subArray[0].split(currentFolder.id)[0] === subArray[0]) {
+			parentFolder = currentFolder === root ? root : currentFolder.parentElement;
+			//next array item does not contain the name of the folder, therefore it is another folder.
+			return;
+		}
+		else {
+			parentFolder = currentFolder;
+			counter = counter + 1;
+			subArray.length>0 ? directorize(subArray) : "";
+			return;
+		}
+	}
+}
+
+function createFile(object) {
+	var file = document.createElement("li");
+	file.classList.add("file");
+	var fileName = document.createTextNode(object.replace(folderREGEX, ''));//<li class="file">object.value</li>"
+	console.log(file);
+	file.appendChild(fileName);
+	currentFolder.appendChild(file)
+	return;
+}
+
+function directorize(array) {
+
+	array.map(function(element, index, array) {
+		if(counter > myArray.length) {
+			return
+		}
+		else {
+			if(element.match(folderREGEX).input === element.match(folderREGEX)[0]){
+				//if element value == '*/' (that is, whatever value that ends in a slash), then the element is a folder
+				console.log("folder elem", element);
+				currentIndex = index;
+				counter = counter + 1;
+				createFolder(element, currentIndex);
+				return;
+			}
+			if(element.match(fileREGEX).input === element.match(fileREGEX)[0]){
+				//element name is *, without a slash at the end, then it is a file.
+				console.log("file elem", element);
+				createFile(element);
+				counter = counter + 1;
+				return;
+			}
+			if(index+1>array.length) {
+				return;
+			}
+		}
+	});
+
+}
+
+directorize(myArray);
+
+[].slice.call(document.getElementsByTagName("li")).map(function(element, index, array) {
+	element.style.display = "none";
+});
+
+[].slice.call(document.getElementsByTagName("span")).map(function(element, index, array) {
+
+	element.addEventListener("click", function(event) {
+		[].slice.call(element.parentElement.children).slice(1).map(function(element,index, array) {
+			element.style.display === "none" ? element.style.display = "" : element.style.display = "none";
+		});
+	});
+
+});
+
+
+</script>
+
+
+
+
+
+
+
+
+
+
+
 <%= form_for(:image, url: admin_upload_path, html: {multipart: true}) do |f| %>
 <br>
 	<%= f.label :image %>
