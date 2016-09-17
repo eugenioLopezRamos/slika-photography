@@ -166,8 +166,10 @@ font-style: italic;
 
 		element.addEventListener("click", function(event) {
 			var continueFunction = toggleSelectedState(event);
-			if(!continueFunction) {return}
-				else {""};
+			if(!continueFunction) {
+				return
+			}
+			else {""};
 
 
 			[].slice.call(element.parentElement.children).slice(1).map(function(element,index, array) {
@@ -192,16 +194,21 @@ font-style: italic;
 
 		var deleteArray = (function() {
 								var selected = []
+
 								selected = [].slice.call(document.getElementsByClassName('selected')).map(function(element, index, array) {
 									console.log("elem ID", element.id);
 									selected.push(element.id);
 									console.log(selected);
+									
 								});
+								console.log("selected", selected);
+					
 								return selected;
-
 							})();
-							console.log(deleteArray);
-		$.ajax({url: "delete_file", data: {files: deleteArray}, type: 'DELETE', dataType: 'html', processData: false})
+
+							console.log("final array", deleteArray);
+
+		$.ajax({url: "delete_file", data: {files: JSON.stringify(deleteArray)}, type: 'DELETE', dataType: 'html', processData: false})
 		//AJAX sending the array/method to use to delete the files we need to delete
 
 
