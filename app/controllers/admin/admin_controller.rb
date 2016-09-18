@@ -32,6 +32,13 @@ class Admin::AdminController < ApplicationController
   end
 
   def delete_file
+    #need to add some sort of authentication so not everybody can delete files
+
+    files_array = params[:files]
+    debugger
+
+    #here I should use a call to the AWS SDK to delete files
+    
     flash.now[:info] = "File successfully deleted"
     render 'admin/upload/upload_show'
   end
