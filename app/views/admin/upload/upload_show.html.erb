@@ -193,29 +193,24 @@ font-style: italic;
 		console.log("kek");
 
 		var deleteArray = (function() {
-								var selected = []
-
-								selected = [].slice.call(document.getElementsByClassName('selected')).map(function(element, index, array) {
-									console.log("elem ID", element.id);
-									selected.push(element.id);
-									console.log(selected);
-									
+								var selected = [];
+								[].slice.call(document.getElementsByClassName('selected')).map(function(element, index, array) {							
+									selected.push(element.id.replace('"', ''));
 								});
-								console.log("selected", selected);
-					
 								return selected;
 							})();
 
 							console.log("final array", deleteArray);
+							console.log("jq", $('.selected'));
+							console.log("stringify", JSON.stringify(deleteArray));
 
-		$.ajax({url: "delete_file", data: {files: JSON.stringify(deleteArray)}, type: 'DELETE', dataType: 'html', processData: false})
+		$.ajax({url: "delete_file", data: JSON.stringify({files: deleteArray}) , type: 'DELETE', contentType: 'application/json', dataType: 'json'})
 		//AJAX sending the array/method to use to delete the files we need to delete
 
 
 
 
 	});
-
 
 
 </script>
