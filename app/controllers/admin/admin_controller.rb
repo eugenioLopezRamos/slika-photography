@@ -1,6 +1,7 @@
 class Admin::AdminController < ApplicationController
-
+  ##require 'aws-sdk'
   require 'image.rb'
+  require 'open-uri'
 
     def login
         redirect_to '/admin/login'
@@ -22,23 +23,33 @@ class Admin::AdminController < ApplicationController
 	    	flash.now[:info] = "Your file has been uploaded! address: #{@img.image.url}"
  	    	render 'admin/upload/upload_show'
      	end
-     end
-
-  def download_file
-    #verify origin of the GET request (could also generate a hash on the user, and verify that the hash is for that user) -> call to AWS SDK -> determine how to download the file
-    
-
 
   end
 
+  def download_file
+    selected_file = 'leoPhoto.jpg'
+    get_file(selected_file)
+  end
+
+
+  def get_file(selected_file)
+      s3 = Aws::S3::Client.new
+      gotten_file = File.open('filename', 'wb') do |file|
+                      resp = s3.get_object({bucket: 'lap-files', key:'images/home/events.jpg'}, target: file)
+                      File.open(file)
+                    end
+      send_file(gotten_file, type: 'image/jpg', disposition: 'attachment', filename: 'leoPhoto.jpg')
+  end
+
+
   def delete_file
-    #need to add some sort of authentication so not everybody can delete files
+    #need to add somesort of authentication so not everybody can delete files
 
     files_array = params[:files]
-    debugger
+
 
     #here I should use a call to the AWS SDK to delete files
-    
+
     flash.now[:info] = "File successfully deleted"
     render 'admin/upload/upload_show'
   end
