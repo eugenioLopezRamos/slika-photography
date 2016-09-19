@@ -54,7 +54,7 @@ font-style: italic;
 <div class="upload-dir-container", id="root">
 </div>
 
-<%= button_to "Download file", admin_upload_path, class: 'file-manager-button', :id => "download-file" %>
+<%= button_to "Download file", admin_upload_path, class: 'file-manager-button', :id => "download-file", :remote => false %>
 <%= button_to "Delete files", admin_upload_path,  class: 'file-manager-button', :id => "delete-files" %>
 
 <script>
@@ -183,27 +183,42 @@ font-style: italic;
 	$('#download-file').click(function(event) {
 		event.preventDefault();
 		
-		$.ajax({url: "download_file", data: {tab: "kek", id: "lul"}, type: 'GET', dataType: 'html'})
+		//$.ajax({url: "download_file", data: {tab: "kek", id: "lul"}, type: 'GET', dataType: 'html'}).done(function(response) {
+		//	console.log(response);
+		//	$('#root').html(response); });
 		//AJAX request sending the array of stuff to download (or just 1 thing)
+		  var req = new XMLHttpRequest();
+		  req.open("GET", "/admin/download_file", true);
+		  req.responseType = "blob";
+
+		  req.onload = function (event) {
+		    var blob = req.response;
+		    console.log(blob.size);
+		    var link=document.createElement('a');
+		    link.href=window.URL.createObjectURL(blob);
+		    link.download="Dossier_" + ".jpg";
+		    link.click();
+		  };
+
+		  req.send();
+
+
+
+
+
+
 
 	});
 
 	$('#delete-files').click(function(event){
 		event.preventDefault();
-		console.log("kek");
-
 		var deleteArray = (function() {
 								var selected = [];
 								[].slice.call(document.getElementsByClassName('selected')).map(function(element, index, array) {							
-									selected.push(element.id.replace('"', ''));
+									selected.push(element.id);
 								});
 								return selected;
 							})();
-
-							console.log("final array", deleteArray);
-							console.log("jq", $('.selected'));
-							console.log("stringify", JSON.stringify(deleteArray));
-
 		$.ajax({url: "delete_file", data: JSON.stringify({files: deleteArray}) , type: 'DELETE', contentType: 'application/json', dataType: 'json'})
 		//AJAX sending the array/method to use to delete the files we need to delete
 
@@ -214,11 +229,6 @@ font-style: italic;
 
 
 </script>
-
-
-
-
-
 
 <%# 
 Useful links to do this:
@@ -231,11 +241,17 @@ http://docs.aws.amazon.com/sdkforruby/api/Aws/S3/Client.html
 
 
 	#delete_objects(options = {}) ⇒ Types::DeleteObjectsOutput
+
+
 	#abort_multipart_upload(options = {}) ⇒ Types::AbortMultipartUploadOutput
 	Aborts a multipart upload.
+
+
 	To verify that all parts have been removed, so you don't get charged for the part storage, you should call the List Parts operation and ensure the parts list is empty.
+	
 	#get_object(options = {}) ⇒ Types::GetObjectOutput
 	Retrieves objects from Amazon S3.
+
 #head_bucket(options = {}) ⇒ Struct
 This operation is useful to determine if a bucket exists and you have permission to access it.
 
