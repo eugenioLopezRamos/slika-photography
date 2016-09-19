@@ -27,8 +27,9 @@ class Admin::AdminController < ApplicationController
   end
 
   def download_file
-    selected_file = 'leoPhoto.jpg'
-   
+
+    selected_file = params[:file]
+  # debugger
       get_file(selected_file)
     
    # File.delete(@file)
@@ -50,7 +51,7 @@ class Admin::AdminController < ApplicationController
   def get_file(selected_file)
       s3 = Aws::S3::Client.new
       gotten_file = Tempfile.open(['filename', '.jpg'], :encoding => 'binary') do |file|
-                      resp = s3.get_object({bucket: 'lap-files', key:'images/home/events.jpg'}, target: file)
+                      resp = s3.get_object({bucket: ENV['AWS_S3_BUCKET'], key: selected_file}, target: file)
                       File.open(file)
 
                     end
