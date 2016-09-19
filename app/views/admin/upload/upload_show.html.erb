@@ -188,15 +188,34 @@ font-style: italic;
 		//	$('#root').html(response); });
 		//AJAX request sending the array of stuff to download (or just 1 thing)
 		  var req = new XMLHttpRequest();
-		  req.open("GET", "/admin/download_file", true);
+		  
+		  var fullFileRoute = (function() {
+		  					var selectedFile = document.getElementsByClassName('selected')[0];
+		  					var routeToFile = document.getElementsByClassName('selected')[0].id;
+		  					//console.log(selectedFile);
+
+		  					while (selectedFile.parentElement.parentElement.id != root.id) {
+		  						routeToFile = selectedFile.parentElement.id + routeToFile;
+		  						selectedFile = selectedFile.parentElement;
+		  					}
+
+		  					return routeToFile;
+
+							})();
+		  var params = '?file=' + fullFileRoute;
+
+		  req.open("GET", 'download_file' + params, true);
+		  //console.log("open", req.open("GET", 'download_file' + params, true))
 		  req.responseType = "blob";
+		 
 
 		  req.onload = function (event) {
 		    var blob = req.response;
 		    console.log(blob.size);
 		    var link=document.createElement('a');
 		    link.href=window.URL.createObjectURL(blob);
-		    link.download="Dossier_" + ".jpg";
+		    var fileName = document.getElementsByClassName('selected')[0].id.split('.')
+		    link.download= fileName[0] + "." + fileName[1];
 		    link.click();
 		  };
 
