@@ -1,7 +1,7 @@
 class Admin::AdminController < ApplicationController
   ##require 'aws-sdk'
   require 'image.rb'
-  require 'open-uri'
+ # require 'open-uri'
 
     def login
         redirect_to '/admin/login'
@@ -28,17 +28,37 @@ class Admin::AdminController < ApplicationController
 
   def download_file
     selected_file = 'leoPhoto.jpg'
-    get_file(selected_file)
+   
+      get_file(selected_file)
+    
+   # File.delete(@file)
+
   end
 
 
+
+#file = File.open(Rails.root.join('public', 'uploads', filename), "rb")
+#contents = file.read
+#file.close
+
+#File.delete(filepath) if File.exist?(filepath)
+
+#send_data(contents, :filename => filename)
+
+
+#http://stackoverflow.com/questions/18232088/in-ruby-on-rails-after-send-file-method-delete-the-file-from-server
   def get_file(selected_file)
       s3 = Aws::S3::Client.new
-      gotten_file = File.open('filename', 'wb') do |file|
+      gotten_file = Tempfile.open(['filename', '.jpg'], :encoding => 'binary') do |file|
                       resp = s3.get_object({bucket: 'lap-files', key:'images/home/events.jpg'}, target: file)
                       File.open(file)
+
                     end
+
+
+          
       send_file(gotten_file, type: 'image/jpg', disposition: 'attachment', filename: 'leoPhoto.jpg')
+               # File.delete(gotten_file) if File.exist?(gotten_file)
   end
 
 

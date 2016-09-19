@@ -53,6 +53,7 @@ A portfolio site with AJAX, pushstate, and an admin panel
 
 
 - Add image uploading (given heroku's conditions, it might be best to use S3 from the start) <- To do now
+- need to check what's up with the post model requests in admin pages
 
 **DONE**
 
