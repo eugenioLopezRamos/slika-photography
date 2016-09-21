@@ -165,7 +165,7 @@ font-style: italic;
 
 	function createFolder(object, currIndex) {
 			var object = object;
-			console.log("object is ", object);
+			//console.log("object is ", object);
 
 			var newFolder = (function createTheFolder() {
 				var newFolder = document.createElement("ul");//.classList.add("folder");
@@ -177,20 +177,25 @@ font-style: italic;
 				newFolder.id = object;
 				return newFolder;
 			})();
-			console.log("new folder id", newFolder.id);
-			console.log("next array obj", myArray[currIndex+1]);
+		//	console.log("new folder id", newFolder.id);
+		//	console.log("next array obj", myArray[currIndex+1]);
 
 
 		currentFolder.appendChild(newFolder);
 
 
 
-		if (myArray[currIndex+1]<myArray.length && myArray[currIndex+1].includes(newFolder.id)) {
-			currentFolder = newFolder;
+		if ((currIndex+1)<myArray.length && myArray[currIndex+1].includes(newFolder.id)) {// && newFolder.id.replace(myArray[currIndex+1], '') != "")  {
+			//currentFolder = newFolder.parentElement;
+		//	console.log("big calc");
+			currentFolder = newFolder; //document.getElementById(currentFolder.id.split(myArray[currIndex+1].split(currentFolder.id)));
 		}
-		else {
-			currentFolder = newFolder.parentElement;
-		}
+		else if(currIndex+1<myArray.length){
+			//currentFolder = root;
+
+//currentFolder = document.getElementById(currentFolder.parentElement.id.split(currentFolder.id.split(currentFolder.parentElement.id))) || root;
+currentFolder = document.getElementById(currentFolder.id.split(myArray[currIndex+1].split(currentFolder.id))) || root;
+		} 
 
 
 
@@ -248,8 +253,8 @@ test/ //currentFolder = root -> append (test/)
 		//	parentFolder = currentFolder.parentElement;
 
 
-			console.log(newFolder);
-			console.log("newfolder id is ", newFolder.id);
+		//	console.log(newFolder);
+		//	console.log("newfolder id is ", newFolder.id);
 
 
 return;
@@ -263,13 +268,39 @@ return;
 		file.appendChild(fileName);
 		file.id = object.replace(folderREGEX, '');
 		currentFolder.appendChild(file);
+		console.log("OBJECT FILE", object);
+		console.log("CURRENT FOLDER FILE", currentFolder);
+
 		if (myArray[currIndex+1]<myArray.length && myArray[currIndex+1].includes(currentFolder.id)) {
-			currentFolder = currentFolder;
-		}
-		else {
-			currentFolder = root;
+
+			//currentFolder = currentFolder.parentElement.parentElement; // document.getElementById(currentFolder.parentElement.id.split(currentFolder.id.split(currentFolder.parentElement.id)));
+			currentFolder = document.getElementById(currentFolder.id.split(myArray[currIndex+1].split(currentFolder.id))) || root;
 		}
 
+
+
+
+
+
+
+
+
+
+
+
+
+		else if(myArray[currIndex+1].includes(currentFolder.id)){
+			currentFolder = currentFolder === root ? currentFolder = root : currentFolder.parentElement;
+		}
+
+
+
+
+
+
+
+
+		console.log("FOLDER AFTER MODIF", currentFolder);
 		return;
 	}
 
