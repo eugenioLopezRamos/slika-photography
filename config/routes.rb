@@ -29,7 +29,7 @@ namespace :admin do #maybe I should move this to resources: instead of namespace
  match 'password_resets/:id/edit' => 'password_resets#update', via: [:put, :patch], :as => :password_reset
 
  get '/upload', to: 'admin#upload_show'
- post '/upload', to: 'admin#upload_save'
+ post '/upload', to: 'admin#upload_file'
 
  get '/', to: 'admin#login'
  get '/login', to: 'sessions#new'
