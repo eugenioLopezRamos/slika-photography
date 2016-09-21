@@ -79,7 +79,7 @@ font-style: italic;
 			return;
 		}
 		else {
-			//console.log("else object", object)
+		
 			var newFolder = document.createElement("ul");//.classList.add("folder");
 			newFolder.classList.add("folder");
 			var folderSpan = document.createElement("span");
@@ -99,131 +99,26 @@ font-style: italic;
 
 		if(subArray[0].split(currentFolder.id)[0] === subArray[0]) { // esta condicion esta mala, si son distintos igual van a ser 
 				//iguales porq el split simplemente no tendra efecto
-		//		console.log("subarray zero", subArray[0]);
-		//		console.log("split 0 ", subArray[0].split(currentFolder.id)[0], "split 1", subArray[0]);
-		//		console.log("currentfolder id", currentFolder.id);
-
-
-//				console.log(document.getElementById('assets/').parentElement);
-		//		console.log("long route", root.id + "/" + object);
-
-			//	currentFolder = (function() {while(root.id + '/' + currentFolder.id != root.id + '/' + object) {
-		//			console.log("object", object);
-		//			console.log("while currentfolder", currentFolder);
-
-
-
-
-
-
-
-
-
-
-
-
 
 		currentFolder = (function() {while(currentFolder.id != object) {
 					currentFolder = currentFolder.parentElement;
 				
 				}
-		//		console.log("my returned parentFolder", currentFolder.parentElement);
-									return currentFolder.parentElement;
+
+					return currentFolder.parentElement;
 			})();
 					parentFolder = (currentFolder === root ? root : currentFolder.parentElement);
-				//parentFolder = document.getElementById(parentFolder.id.replace(currentFolder.id, '')) || root ;
-
-
-				//parentFolder = (currentFolder === root ? root : currentFolder.parentElement);
-				console.log("curr folder", currentFolder, "parent", parentFolder);
-				//debugger
-	//	subArray.length>0 ? directorize(subArray) : ""; //need to add empty folder message to empty folders later
-
-				//next array item does not contain the name of the folder, therefore it is another folder.
-
-
-
-
-
-
-
-
-
-
 				return;
 			}
 
 			else {
-				//currentFolder = parentFolder
-				//current
-			//	parentFolder = currentFolder.parentElement;
-
-		//	if(currentFolder.id.replace(parentFolder.id) != "" ) {
-		//		currentFolder = currentFolder.parentElement;
-		//	}else {
-
-//				if (currentFolder.id.includes(parentFolder.id) && parentFolder.id + currentFolder.id === object ){
-
-//				}
-
-			/*		currentFolder = (function() {while((currentFolder.id).replace("root", '') !=  object) {
-					console.log("else object", object);
-					console.log("else while currentfolder", currentFolder);
-					console.log("calc", parentFolder.id  + currentFolder.id);
-					console.log("calc compar", object)
-					currentFolder = currentFolder.parentElement;
-	
-			}
-				console.log("while currentfolder id", currentFolder.id);
-				console.log("while object", object);
-				console.log("while my returned currentFolder", currentFolder);
-				return currentFolder;
-			})(); */
-//}
-				//currentFolder = document.getElementsByClassName('folder')[document.getElementsByClassName('folder').length-1];
-
-			//	console.log("last child", document.getElementsByClassName('folder')[document.getElementsByClassName('folder').length -1]);
-				//	parentFolder = (currentFolder === root ? currentFolder : currentFolder.parentElement);
-				console.log("base replce", currentFolder.id.replace(parentFolder.id, ''));
-				console.log("swapped", parentFolder.id.replace(currentFolder.id, ''));
-			//	parentFolder = document.getElementById(parentFolder.id.replace(currentFolder.id, ''));
-			//	console.log("replace", currentFolder.id.replace(parentFolder.id, ''));
-					console.log("final parentFolder", parentFolder);
-
-
-
-
-
-
-
-
-
-
-
-
+			
 				counter = counter + 1;
 				var folderEmptyMsg = document.createTextNode("Folder is empty");
-
-
-
-
-
-
-
-
-
-
-
 				currentFolder = parentFolder.lastElementChild;
 				parentFolder = currentFolder.parentElement === root ? currentFolder : currentFolder.parentElement;
-		//subArray.length>0 ? directorize(subArray) : ""; //need to add empty folder message to empty folders later
 				return;
 			}
-
-
-
-
-
 			console.log("amihere"); // UNREACHABLE
 		subArray.length>0 ? directorize(subArray) : ""; //need to add empty folder message to empty folders later
 		}
@@ -233,12 +128,9 @@ font-style: italic;
 
 		var file = document.createElement("li");
 		file.classList.add("file");
-		var fileName = document.createTextNode(object.replace(folderREGEX, ''));//<li class="file">object.value</li>"
+		var fileName = document.createTextNode(object.replace(folderREGEX, ''));
 		file.appendChild(fileName);
 		file.id = object.replace(folderREGEX, '');
-		//console.log("curr folder file", currentFolder);
-			//	console.log("curr fold", currentFolder);
-			//	console.log("file id", file.id);
 		currentFolder.appendChild(file);
 		return;
 	}
