@@ -51,6 +51,7 @@ font-style: italic;
 <span class="action-title">File Manager</span>
 <span class="action-description">Here you can browse the files currently in your S3 bucket</span>
 <p class='action-description'>Notes:<br>Ctrl + left click (or long touch on mobile devices) selects/unselects files</p>
+
 <div class="upload-dir-container", id="root">
 </div>
 
@@ -74,7 +75,7 @@ font-style: italic;
 	var currentFolder = root;
 	var parentFolder = root;
 
-	function createFolder(object, currIndex){
+	/*function createFolder(object, currIndex){
 		if(counter > myArray.length*2) { //a counter twice the length of the array's, just so the browser doesn't crash in cases of errors.
 			return;
 		}
@@ -91,7 +92,7 @@ font-style: italic;
 
 			currentFolder = parentFolder.lastElementChild;
 			currentFolder.id = object;			//"<div class="folder" id=(currentFolder.id + "/" + object)></div>");
-	console.log("long route", root.id + "/" + object);
+	//console.log("long route", root.id + "/" + object);
 			var subArray = myArray.slice(currIndex+1);
 			if(subArray.length<1) { 
 				return;
@@ -107,7 +108,11 @@ font-style: italic;
 
 					return currentFolder.parentElement;
 			})();
+
+
 					parentFolder = (currentFolder === root ? root : currentFolder.parentElement);
+					parentFolder = currentFolder;
+					console.log("top parent", parentFolder);
 				return;
 			}
 
@@ -116,12 +121,138 @@ font-style: italic;
 				counter = counter + 1;
 				var folderEmptyMsg = document.createTextNode("Folder is empty");
 				currentFolder = parentFolder.lastElementChild;
-				parentFolder = currentFolder.parentElement === root ? currentFolder : currentFolder.parentElement;
+
+
+
+
+			//	parentFolder = currentFolder.parentElement === root ? currentFolder : currentFolder.parentElement;
+
+				parentFolder = (function() {
+					console.log("parent " + parentFolder.id);
+					console.log("curr " + currentFolder.id);
+					console.log("object " +  object);
+					if(parentFolder.id.replace("root", '') + currentFolder.id.replace(parentFolder.id, '') === object){
+						// si parentFolder.id + currentFolder.id === object -> 
+						// parentFolder === currentFolder.parentElement
+						// ELSE
+						// si parentFolder.id + currentFolder.id != object
+						//parentFolder = root
+
+						parentFolder = currentFolder.parentElement;
+
+
+					} else if(parentFolder.id + currentFolder.id != object) {
+
+						parentFolder = currentFolder;
+					}
+
+					return parentFolder;
+				})();
+
+
+
+			console.log("parent2 " + parentFolder.id);
+					console.log("curr 2" + currentFolder.id);
+					console.log("object 2" +  object);
+
+
 				return;
 			}
 			console.log("amihere"); // UNREACHABLE
 		subArray.length>0 ? directorize(subArray) : ""; //need to add empty folder message to empty folders later
 		}
+	}*/
+
+	function createFolder(object, currIndex) {
+			var object = object;
+			console.log("object is ", object);
+
+			var newFolder = (function createTheFolder() {
+				var newFolder = document.createElement("ul");//.classList.add("folder");
+				newFolder.classList.add("folder");
+				var folderSpan = document.createElement("span");
+				var folderSpanText = document.createTextNode(object.replace(parentFolder.id, ''));
+				folderSpan.appendChild(folderSpanText);
+				newFolder.appendChild(folderSpan);
+				newFolder.id = object;
+				return newFolder;
+			})();
+			console.log("new folder id", newFolder.id);
+			console.log("next array obj", myArray[currIndex+1]);
+
+
+		currentFolder.appendChild(newFolder);
+
+
+
+		if (myArray[currIndex+1]<myArray.length && myArray[currIndex+1].includes(newFolder.id)) {
+			currentFolder = newFolder;
+		}
+		else {
+			currentFolder = newFolder.parentElement;
+		}
+
+
+
+
+
+
+
+		//	currentFolder = if(myArray[currIndex+1]<myArray.length && myArray[currIndex+1].split())
+
+/*
+assets/ //currentFolder append assets. Sgte inclute assets ? NO! -> currentFolder = root; currentFolder.parentElement (o root)
+images/ //currentFolder append images. Sgte incluye images? SI -> currentFolder = images/, parentFolder = root;
+images/background // currentFolder (images/) append images/background. Siguiente incluye images/background/? SI -> currentFOlder = images/background
+images/background/camera-background.jpg // deberia chequear q siguiente incluye CURRENTFOLDER y de lo contrario volver un nivel para no cagar
+// siguiente incluye CURRENTFOLDER? NO! -> currentFolder = currentFolder.parentElement (/images)
+
+
+
+images/contact //currentFolder(images/) append images/contact. Sgte incluye images/contact? SI! -> currentFolder = images/contact
+
+
+
+images/contact/leoPhoto.jpg //images/contact/ append leophoto.... 
+// SGTE incluye currentFolder (images/contact/) ? NO -> SGTE incluye parentElement? NO -> currentFolder = root, de lo contrario currentFolder = currentFolder.parentElement
+
+// el siguiente incluye currentFolder (images/contact) ? NO -> currentFolder = root ///////////// cF.parentElement(images/). siguinte incluye newCurrentFolder (images/) ?|| currentFolder = root?  NO! -> currentFolder = cF.parentElement... hasta llegar a root.
+
+
+
+
+
+
+test/ //currentFolder = root -> append (test/)
+*/
+
+			
+			//currentFolder = newFolder;
+			//parentFolder = currentFolder.parentElement;
+
+		//	var fullRoute = newFolder.id.split(singleFolderREGEX);
+		//	fullRoute[fullRoute.length-1].match(singleFolderREGEX) ? currentFolder = document.getElementById(fullRoute[fullRoute.length-1]) : currentFolder = document.getElementById(fullRoute[0]);
+
+
+
+
+
+
+
+
+
+
+
+		//	currentFolder.appendChild(newFolder);
+		//	currentFolder = currentFolder.lastElementChild;
+		//	parentFolder = currentFolder.parentElement;
+
+
+			console.log(newFolder);
+			console.log("newfolder id is ", newFolder.id);
+
+
+return;
 	}
 
 	function createFile(object, currIndex) {
@@ -132,6 +263,13 @@ font-style: italic;
 		file.appendChild(fileName);
 		file.id = object.replace(folderREGEX, '');
 		currentFolder.appendChild(file);
+		if (myArray[currIndex+1]<myArray.length && myArray[currIndex+1].includes(currentFolder.id)) {
+			currentFolder = currentFolder;
+		}
+		else {
+			currentFolder = root;
+		}
+
 		return;
 	}
 
