@@ -56,6 +56,9 @@ A portfolio site with AJAX, pushstate, and an admin panel
 - need to check what's up with the post model requests in admin pages
 
 - verify that :slug params are safe (or if they need sanitization/parameterization)
+- implement multi file downloads? (maybe with zipping)
+- correct bug with going back to root dir on directorize script
+- añadir requisito login a file manager
 
 **DONE**
 
