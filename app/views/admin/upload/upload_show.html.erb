@@ -385,10 +385,15 @@ return;
 		}
 	}
 
-	/*
+	
 
 	[].slice.call(document.getElementsByTagName("li")).map(function(element, index, array) { // hides all <li> by default...
+		
+		if(element.parentElement != root) {
+
 		element.style.display = "none";
+		}
+
 		element.addEventListener("click", function(event) {		
 			toggleSelectedState(event);	
 		});
@@ -411,7 +416,7 @@ return;
 		});
 
 	});
-*/
+
 	$('#download-file').click(function(event) {
 		event.preventDefault();
 
@@ -461,7 +466,7 @@ return;
 								});
 								return selected;
 							})();
-		$.ajax({url: "delete_file", data: JSON.stringify({files: deleteArray}) , type: 'DELETE', contentType: 'application/json', dataType: 'json'})
+		$.ajax({url: "delete_file", data: JSON.stringify({files:deleteArray}) , type: 'DELETE', contentType: 'application/json', dataType: 'json'})
 		//AJAX sending the array/method to use to delete the files we need to delete
 
 
