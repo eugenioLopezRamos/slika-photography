@@ -1,7 +1,4 @@
 class Admin::AdminController < ApplicationController
-  ##require 'aws-sdk'
-  #require 'image.rb'
- # require 'open-uri'
 
     def login
         redirect_to '/admin/login'
