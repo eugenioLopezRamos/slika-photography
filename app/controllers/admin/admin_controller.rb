@@ -10,6 +10,9 @@ class Admin::AdminController < ApplicationController
 
 
   def upload_file
+    if params[:image][:image].nil?
+      return
+    else
      s3 = Aws::S3::Client.new
      image_file = params[:image][:image].open
      image_file_name = params[:image][:image].original_filename
@@ -26,6 +29,7 @@ class Admin::AdminController < ApplicationController
 
     flash.now[:info] = "File successfully uploaded. Address: #{uploaded_file_route.to_s.gsub(/\"*\[*\]*/, '')}"
     render 'admin/upload/upload_show'
+    end
 
   end
 
@@ -52,11 +56,6 @@ class Admin::AdminController < ApplicationController
       to_delete.push string_to_add
 
     end
-
-    to_delete = to_delete #to_delete.reduce Hash.new, :merge
-
-    #files_array = files_array.to_s
-    #need to see how to do this for multiple files! - I think it allows you to delete multiple files in one request, else need to loop through the array which might be slow and "requesty"
 
     s3 = Aws::S3::Client.new
     s3.delete_objects({

@@ -11,14 +11,12 @@
         <div class="alert alert-<%= message_type %>"><%= message %></div>
       <% end %>
 
-<div class="action-title">Upload images</div>
-<div class="action-description">These will be saved to your Amazon S3 bucket</div>
-
 <% s3 = Aws::S3::Client.new %>
 
-<%# s3::list_objects(bucket:ENV['AWS_S3_BUCKET'], prefix: full_dir).contents.map(&:key).slice(1..-1).count %>
-
 <% files_in_bucket = s3.list_objects(bucket: ENV['AWS_S3_BUCKET'], encoding_type: 'url').contents.map(&:key) %>
+
+
+
 
 <style>
 li {
@@ -55,14 +53,20 @@ font-style: italic;
 <div class="upload-dir-container", id="root">
 </div>
 
-<%= button_to "Download file", admin_upload_path, class: 'file-manager-button', :id => "download-file", :remote => false %>
+<%= button_to "Download file", admin_upload_path, class: 'file-manager-button', :id => "download-file", :remote => false %> 
 <%= button_to "Delete files", admin_upload_path,  class: 'file-manager-button', :id => "delete-files" %>
+
+<%= form_for(:image, url: admin_upload_path, html: {multipart: true, id: 'upload-file-form'}) do |f| %>
+	<%= f.submit "Upload image", :id =>'upload-file' %>
+	<%= f.label :image %>
+	<%= f.file_field :image, class: 'upload-btn', accept: 'image/jpeg, image/gif, image/png', :id =>'file_input_field' %>
+	<%= f.hidden_field :image_cache %>
+<% end %>
 
 <script>
 
 
 	var root = document.getElementById("root");
-
 
 	var myArray = <%= raw files_in_bucket %>
 
@@ -75,97 +79,8 @@ font-style: italic;
 	var currentFolder = root;
 	var parentFolder = root;
 
-	/*function createFolder(object, currIndex){
-		if(counter > myArray.length*2) { //a counter twice the length of the array's, just so the browser doesn't crash in cases of errors.
-			return;
-		}
-		else {
-		
-			var newFolder = document.createElement("ul");//.classList.add("folder");
-			newFolder.classList.add("folder");
-			var folderSpan = document.createElement("span");
-			var folderSpanText = document.createTextNode(object.replace(parentFolder.id, ''));
-			folderSpan.appendChild(folderSpanText);
-			newFolder.appendChild(folderSpan);
-												//parentFolder = currentFolder === root ? root : currentFolder.parentElement;
-			parentFolder.appendChild(newFolder);
-
-			currentFolder = parentFolder.lastElementChild;
-			currentFolder.id = object;			//"<div class="folder" id=(currentFolder.id + "/" + object)></div>");
-	//console.log("long route", root.id + "/" + object);
-			var subArray = myArray.slice(currIndex+1);
-			if(subArray.length<1) { 
-				return;
-			};
-
-		if(subArray[0].split(currentFolder.id)[0] === subArray[0]) { // esta condicion esta mala, si son distintos igual van a ser 
-				//iguales porq el split simplemente no tendra efecto
-
-		currentFolder = (function() {while(currentFolder.id != object) {
-					currentFolder = currentFolder.parentElement;
-				
-				}
-
-					return currentFolder.parentElement;
-			})();
-
-
-					parentFolder = (currentFolder === root ? root : currentFolder.parentElement);
-					parentFolder = currentFolder;
-					console.log("top parent", parentFolder);
-				return;
-			}
-
-			else {
-			
-				counter = counter + 1;
-				var folderEmptyMsg = document.createTextNode("Folder is empty");
-				currentFolder = parentFolder.lastElementChild;
-
-
-
-
-			//	parentFolder = currentFolder.parentElement === root ? currentFolder : currentFolder.parentElement;
-
-				parentFolder = (function() {
-					console.log("parent " + parentFolder.id);
-					console.log("curr " + currentFolder.id);
-					console.log("object " +  object);
-					if(parentFolder.id.replace("root", '') + currentFolder.id.replace(parentFolder.id, '') === object){
-						// si parentFolder.id + currentFolder.id === object -> 
-						// parentFolder === currentFolder.parentElement
-						// ELSE
-						// si parentFolder.id + currentFolder.id != object
-						//parentFolder = root
-
-						parentFolder = currentFolder.parentElement;
-
-
-					} else if(parentFolder.id + currentFolder.id != object) {
-
-						parentFolder = currentFolder;
-					}
-
-					return parentFolder;
-				})();
-
-
-
-			console.log("parent2 " + parentFolder.id);
-					console.log("curr 2" + currentFolder.id);
-					console.log("object 2" +  object);
-
-
-				return;
-			}
-			console.log("amihere"); // UNREACHABLE
-		subArray.length>0 ? directorize(subArray) : ""; //need to add empty folder message to empty folders later
-		}
-	}*/
-
 	function createFolder(object, currIndex) {
 			var object = object;
-			//console.log("object is ", object);
 
 			var newFolder = (function createTheFolder() {
 				var newFolder = document.createElement("ul");//.classList.add("folder");
@@ -177,8 +92,6 @@ font-style: italic;
 				newFolder.id = object;
 				return newFolder;
 			})();
-		//	console.log("new folder id", newFolder.id);
-		//	console.log("next array obj", myArray[currIndex+1]);
 
 
 		currentFolder.appendChild(newFolder);
@@ -196,66 +109,6 @@ font-style: italic;
 //currentFolder = document.getElementById(currentFolder.parentElement.id.split(currentFolder.id.split(currentFolder.parentElement.id))) || root;
 currentFolder = document.getElementById(currentFolder.id.split(myArray[currIndex+1].split(currentFolder.id))) || root;
 		} 
-
-
-
-
-
-
-
-		//	currentFolder = if(myArray[currIndex+1]<myArray.length && myArray[currIndex+1].split())
-
-/*
-assets/ //currentFolder append assets. Sgte inclute assets ? NO! -> currentFolder = root; currentFolder.parentElement (o root)
-images/ //currentFolder append images. Sgte incluye images? SI -> currentFolder = images/, parentFolder = root;
-images/background // currentFolder (images/) append images/background. Siguiente incluye images/background/? SI -> currentFOlder = images/background
-images/background/camera-background.jpg // deberia chequear q siguiente incluye CURRENTFOLDER y de lo contrario volver un nivel para no cagar
-// siguiente incluye CURRENTFOLDER? NO! -> currentFolder = currentFolder.parentElement (/images)
-
-
-
-images/contact //currentFolder(images/) append images/contact. Sgte incluye images/contact? SI! -> currentFolder = images/contact
-
-
-
-images/contact/leoPhoto.jpg //images/contact/ append leophoto.... 
-// SGTE incluye currentFolder (images/contact/) ? NO -> SGTE incluye parentElement? NO -> currentFolder = root, de lo contrario currentFolder = currentFolder.parentElement
-
-// el siguiente incluye currentFolder (images/contact) ? NO -> currentFolder = root ///////////// cF.parentElement(images/). siguinte incluye newCurrentFolder (images/) ?|| currentFolder = root?  NO! -> currentFolder = cF.parentElement... hasta llegar a root.
-
-
-
-
-
-
-test/ //currentFolder = root -> append (test/)
-*/
-
-			
-			//currentFolder = newFolder;
-			//parentFolder = currentFolder.parentElement;
-
-		//	var fullRoute = newFolder.id.split(singleFolderREGEX);
-		//	fullRoute[fullRoute.length-1].match(singleFolderREGEX) ? currentFolder = document.getElementById(fullRoute[fullRoute.length-1]) : currentFolder = document.getElementById(fullRoute[0]);
-
-
-
-
-
-
-
-
-
-
-
-		//	currentFolder.appendChild(newFolder);
-		//	currentFolder = currentFolder.lastElementChild;
-		//	parentFolder = currentFolder.parentElement;
-
-
-		//	console.log(newFolder);
-		//	console.log("newfolder id is ", newFolder.id);
-
 
 return;
 	}
@@ -424,22 +277,18 @@ return;
 		  var req = new XMLHttpRequest();
 		  
 		  var fullFileRoute = (function() {
-		  					var selectedFile = document.getElementsByClassName('selected')[0];
-		  					var routeToFile = document.getElementsByClassName('selected')[0].id;
-		  					//console.log(selectedFile);
+				  					var selectedFile = document.getElementsByClassName('selected')[0];
+				  					var routeToFile = document.getElementsByClassName('selected')[0].id;
 
-		  					while (selectedFile.parentElement.parentElement.id != root.id) {
-		  						routeToFile = selectedFile.parentElement.id + routeToFile;
-		  						selectedFile = selectedFile.parentElement;
-		  					}
+				  					routeToFile = (selectedFile.parentElement.id + routeToFile).replace(root.id, '')
 
-		  					return routeToFile;
-
+				  					return routeToFile;
 							})();
+
 		  var params = '?file=' + fullFileRoute;
 
 		  req.open("GET", 'download_file' + params, true);
-		  //console.log("open", req.open("GET", 'download_file' + params, true))
+
 		  req.responseType = "blob";
 		 
 
@@ -471,6 +320,44 @@ return;
 
 
 
+
+	});
+
+
+
+
+	document.getElementsByClassName('upload-btn')[0].addEventListener('change', function() {
+		var size_megabytes = this.files[0].size/1024/1024
+		if(size_megabytes > 5){
+			alert('Maximum file size is 5 MB. Please choose a smaller file')
+			}
+	});
+
+
+
+	$('#upload-file-form').submit(function(event){
+		event.preventDefault();
+
+		uploadRoute = document.getElementsByClassName('selected')[0].id === root.id ? "" : document.getElementsByClassName('selected')[0].id;
+
+		var filesToUpload = $('#file_input_field').files
+		var formData = new formData();
+
+		filesToUpload.map(function(element, index, array) {
+
+			if(!element.type.match('image.*')) {
+				return;
+			}
+			else {
+				formData.append("image", element.name);
+			}
+
+		});
+
+
+		$.ajax({url: 'upload_file', data: formData, type: 'POST'});
+
+		
 
 	});
 
@@ -518,21 +405,5 @@ Adds an object to a bucket.
 https://ruby.awsblog.com/post/Tx354Y6VTZ421PJ/Downloading-Objects-from-Amazon-S3-using-the-AWS-SDK-for-Ruby
 
 %>
-<%= form_for(:image, url: admin_upload_path, html: {multipart: true}) do |f| %>
-	<%= f.submit "Upload image" %>
-	<%= f.label :image %>
-	<%= f.file_field :image, class: 'upload-btn', accept: 'image/jpeg, image/gif, image/png' %>
-	<%= f.hidden_field :image_cache %>
 
-
-<script>
-	document.getElementsByClassName('upload-btn')[0].addEventListener('change', function() {
-		var size_megabytes = this.files[0].size/1024/1024
-		if(size_megabytes > 5){
-			alert('Maximum file size is 5 MB. Please choose a smaller file')
-			}
-	});
-	// add clear input later
-</script> 
-<% end %>
 </div>
