@@ -59,6 +59,7 @@ A portfolio site with AJAX, pushstate, and an admin panel
 - implement multi file downloads? (maybe with zipping)
 - correct bug with going back to root dir on directorize script
 - añadir requisito login a file manager
+- clean up the file manager javascript, it looks awful right now
 
 **DONE**
 

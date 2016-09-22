@@ -27,7 +27,7 @@ class Admin::AdminController < ApplicationController
      s3 = Aws::S3::Client.new
      image_file = params[:image][:image].open
      image_file_name = params[:image][:image].original_filename
-     image_file_route = ""
+     image_file_route = "" #To be implemented, should also come from the front end
 
 
     File.open(image_file, 'rb', :encoding => 'binary') do |file|
@@ -40,9 +40,6 @@ class Admin::AdminController < ApplicationController
 
     flash.now[:info] = "File successfully uploaded. Address: #{uploaded_file_route.to_s.gsub(/\"*\[*\]*/, '')}"
     render 'admin/upload/upload_show'
-
-
-#   debugger
 
   end
 
@@ -58,7 +55,14 @@ class Admin::AdminController < ApplicationController
   def delete_file
     #need to add somesort of authentication so not everybody can delete files
 
+
     files_array = params[:files]
+    #files_array = files_array.to_s
+    #need to see how to do this for multiple files! - I think it allows you to delete multiple files in one request, else need to loop through the array which might be slow and "requesty"
+
+
+    s3 = Aws::S3::Client.new
+    s3.delete_object({bucket: ENV['AWS_S3_BUCKET'], key: files_array[0]})
 
 
     #here I should use a call to the AWS SDK to delete files
