@@ -60,6 +60,9 @@ A portfolio site with AJAX, pushstate, and an admin panel
 - correct bug with going back to root dir on directorize script
 - añadir requisito login a file manager
 - clean up the file manager javascript, it looks awful right now
+- Add file manager mobile controls
+- Fix weird symbols on the file names (CGI escape/whatever is needed)
+- Unselect files after a download/deletion is done
 
 **DONE**
 

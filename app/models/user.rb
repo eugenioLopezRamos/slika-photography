@@ -70,7 +70,7 @@ private
 
     def create_auth_digest
         self.auth_token = User.new_token
-        self.activation_digest = User.digest(auth_token)
+        self.auth_digest = User.digest(auth_token)
     end
 
 
