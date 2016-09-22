@@ -45,6 +45,7 @@ A portfolio site with AJAX, pushstate, and an admin panel
 -Chrome 54 beta has a weird bug with image height: auto when setting a width(should be proportional but is now setting height to the minimum) - Need to check if it happens on win Chrome 53 (doesnt on linux Chrome 53 nor firefox latest stable)
 
 - Polish the formatting on the non admin user pages
+- URI decode los valores del array files in bucket
 
 
 
