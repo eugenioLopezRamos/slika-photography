@@ -13,17 +13,6 @@ class Admin::AdminController < ApplicationController
 
 
   def upload_file
-  #	@img = Image.new
-  # 	@img.image = (params[:image][:image])
-  #  	if @img.image.size > 5.megabytes
-  #   		flash.now[:danger] = "Max file size is 5 megabytes, please use another file"
-  #   		render 'admin/upload/upload_show'
-  #  	else
-   # 		@img.key = "attempt2"
-	 #   	@img.image.store! # => will save the file
-	 #   	flash.now[:info] = "Your file has been uploaded! address: #{@img.image.url}"
- 	 #   	render 'admin/upload/upload_show'
-   #  	end
      s3 = Aws::S3::Client.new
      image_file = params[:image][:image].open
      image_file_name = params[:image][:image].original_filename
@@ -57,12 +46,29 @@ class Admin::AdminController < ApplicationController
 
 
     files_array = params[:files]
+
+    to_delete = []
+
+    files_array.each do |file|
+
+      string_to_add = {key: file}
+      to_delete.push string_to_add
+
+    end
+
+    to_delete = to_delete #to_delete.reduce Hash.new, :merge
+
     #files_array = files_array.to_s
     #need to see how to do this for multiple files! - I think it allows you to delete multiple files in one request, else need to loop through the array which might be slow and "requesty"
 
-
     s3 = Aws::S3::Client.new
-    s3.delete_object({bucket: ENV['AWS_S3_BUCKET'], key: files_array[0]})
+    s3.delete_objects({
+      bucket: ENV['AWS_S3_BUCKET'],
+      delete: {
+        objects: to_delete,
+      },
+
+      })
 
 
     #here I should use a call to the AWS SDK to delete files
