@@ -99,19 +99,17 @@ font-style: italic;
 
 
 
-		if ((currIndex+1)<myArray.length && myArray[currIndex+1].includes(newFolder.id)) {// && newFolder.id.replace(myArray[currIndex+1], '') != "")  {
-			//currentFolder = newFolder.parentElement;
-		//	console.log("big calc");
-			currentFolder = newFolder; //document.getElementById(currentFolder.id.split(myArray[currIndex+1].split(currentFolder.id)));
+		if ((currIndex+1)<myArray.length && myArray[currIndex+1].includes(newFolder.id)) {
+			currentFolder = newFolder;
 		}
 		else if(currIndex+1<myArray.length){
-			//currentFolder = root;
+			var currentFolderValue = currentFolder.id;
+			var nextItemValue = myArray[currIndex+1];
 
-//currentFolder = document.getElementById(currentFolder.parentElement.id.split(currentFolder.id.split(currentFolder.parentElement.id))) || root;
-currentFolder = document.getElementById(currentFolder.id.split(myArray[currIndex+1].split(currentFolder.id))) || root;
+			currentFolder = document.getElementById(currentFolderValue.split(nextItemValue.split(currentFolderValue))) || root;
 		} 
 
-return;
+		return;
 	}
 
 	function createFile(object, currIndex) {
@@ -122,31 +120,18 @@ return;
 		file.appendChild(fileName);
 		file.id = object.replace(folderREGEX, '');
 		currentFolder.appendChild(file);
-		console.log("OBJECT FILE", object);
-		console.log("CURRENT FOLDER FILE", currentFolder);
 
-	/*	if (myArray[currIndex+1]<myArray.length && myArray[currIndex+1].includes(currentFolder.id)) {
-
-			//currentFolder = currentFolder.parentElement.parentElement; // document.getElementById(currentFolder.parentElement.id.split(currentFolder.id.split(currentFolder.parentElement.id)));
-			currentFolder = document.getElementById(currentFolder.id.split(myArray[currIndex+1].split(currentFolder.id))) || root;
-		}*/
-
-		//else 
 		if(currIndex+1<myArray.length){
 
 			if(myArray[currIndex+1].includes(currentFolder.id)) {
-					console.log("next index", myArray[currIndex+1]);
 
 					if(myArray[currIndex+1].match(folderREGEX).input === myArray[currIndex+1].match(folderREGEX)[0]){
 						currentFolder = currentFolder.parentElement;// === root ? currentFolder = root: currentFolder.parentElement;
 						return;
-
 					}
 
 
 					else if(myArray[currIndex+1].match(fileREGEX).input === myArray[currIndex+1].match(fileREGEX)[0]) {
-					//currentFolder = currentFolder === root ? currentFolder = root : currentFolder.parentElement;
-					console.log("POPPIN");
 						currentFolder = currentFolder;
 						return;
 
@@ -159,17 +144,7 @@ return;
 					}
 			}
 			else {
-
-				//currentFolder = currentFolder === root? root : currentFolder.parentElement;
-				console.log("THE NEW FUNC");
-				console.log("next", myArray[currIndex+1]);
-
-				// do parentElement until currIndex+1 includes currentFolder, then currentFolder = currentFolder
 				currentFolder = (function() {
-
-				/*	while(root.id + myArray[currIndex+1] != root.id + currentFolder.parentElement + myArray[currIndex+1] && currentFolder != root){
-						currentFolder = currentFolder.parentElement;
-					}*/
 
 					while(!myArray[currIndex+1].includes(currentFolder.id) && currentFolder != root) {
 						currentFolder = currentFolder.parentElement;
@@ -177,24 +152,10 @@ return;
 
 					return currentFolder;
 
-				})();
-
-
-
-				// loop parentElement until parentElement + object === root + object;
-				
+				})();			
 			}
 
 		}
-
-
-
-
-
-
-
-		console.log("FOLDER AFTER MODIF", currentFolder);
-
 		return;
 	}
 
