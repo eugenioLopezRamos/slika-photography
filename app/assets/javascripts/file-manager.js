@@ -5,13 +5,9 @@ var fileManager = function(arrayOfFiles) {
 	var root = document.getElementById("root");
 	//alert(root.innerHTML);
 	//console.log("rootie");
-	console.log("arr", arrayOfFiles);
+
 	var myArray = arrayOfFiles;
 	initialArray = "";
-
-	//root.innerHTML = "";
-	console.log(myArray);
-	console.log(typeof myArray);
 
 	var currentIndex = 0;
 	var fileREGEX = /([\w]+[.]*[\w]+\/)*([\w]+[.]*[\w]+.*\-*)/; //  gets all directories + filenames with . and -
@@ -230,9 +226,9 @@ var fileManager = function(arrayOfFiles) {
 								});
 								return selected;
 							})();
-		$.ajax({url: "delete_file", data: JSON.stringify({files:deleteArray}) , type: 'DELETE', contentType: 'application/json'}).done(function() {
+		$.ajax({url: "delete_file", data: JSON.stringify({files:deleteArray}) , type: 'DELETE', contentType: 'application/json'}).done(function(response) {
 			
-			location.reload();
+			$('#messages').HTML(response);
 		});
 		//AJAX sending the array/method to use to delete the files we need to delete
 
@@ -258,6 +254,7 @@ var fileManager = function(arrayOfFiles) {
 		console.log("selected", document.getElementsByClassName('selected'));
 		console.log("sel length", document.getElementsByClassName('selected').length);
 		var uploadRoute;
+		
 		if(document.getElementsByClassName('selected').length > 0) {
 			uploadRoute = document.getElementsByClassName('selected')[0].innerText;
 		}
@@ -294,15 +291,15 @@ var fileManager = function(arrayOfFiles) {
 		var xhr = new XMLHttpRequest();
 		xhr.open('POST', 'upload', true);
 		xhr.setRequestHeader('X-CSRF-TOKEN', document.querySelectorAll('meta[name="csrf-token"]')[0].getAttribute("content"));
-		//console.log("metatag",$('input[name="authenticity-token"]'));
-		//$('textarea[name="clientMessage"]')
+
 		xhr.send(formData);
 
 		xhr.onload = function() {
 
 			if(xhr.status === 200) {
 				console.log(xhr.response)
-				location.reload();
+				document.getElementById("messages").innerHTML = xhr.response;
+				//location.reload();
 
 			}
 

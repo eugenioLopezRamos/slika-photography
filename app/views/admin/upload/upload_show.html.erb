@@ -7,7 +7,7 @@
 <%= csrf_meta_tag %>
 <div class="user-data-form-container">
 
-
+<div id="messages"></div>
       <% flash.each do |message_type, message| %>
         <div class="alert alert-<%= message_type %>"><%= message %></div>
       <% end %>
@@ -18,7 +18,6 @@
 
 <script>
 initialArray = <%= raw files_in_bucket %> // a global to be deleted on document.ready
-console.log(initialArray);
 </script>
 
 
