@@ -1,7 +1,7 @@
 
 <%= javascript_include_tag 'jquery'%>
 <%= javascript_include_tag 'jquery_ujs'%>
-<%= javascript_include_tag 'file-manager' %>
+
 <%= stylesheet_link_tag 'admin', media: 'all' %>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <%= csrf_meta_tag %>
@@ -16,7 +16,10 @@
 
 <% files_in_bucket = s3.list_objects(bucket: ENV['AWS_S3_BUCKET']).contents.map(&:key) %>
 
-
+<script>
+initialArray = <%= raw files_in_bucket %> // a global to be deleted on document.ready
+console.log(initialArray);
+</script>
 
 
 <style>
@@ -52,7 +55,8 @@ font-style: italic;
 <span class="action-description">Here you can browse the files currently in your S3 bucket</span>
 <p class='action-description'>Notes:<br>Ctrl + left click (or long touch on mobile devices) selects/unselects files</p>
 
-<div class="upload-dir-container", id="root">
+<div class="upload-dir-container" id="root">
+
 </div>
 
 <%= button_to "Download file", admin_upload_path, class: 'file-manager-button', :id => "download-file", :remote => false %> 
@@ -108,3 +112,4 @@ https://ruby.awsblog.com/post/Tx354Y6VTZ421PJ/Downloading-Objects-from-Amazon-S3
 %>
 
 </div>
+<%= javascript_include_tag 'file-manager' %>
