@@ -64,6 +64,13 @@ A portfolio site with AJAX, pushstate, and an admin panel
 - Add file manager mobile controls
 - Fix weird symbols on the file names (CGI escape/whatever is needed)
 - Unselect files after a download/deletion is done
+- See permission stuff for buckets (ACL, IIRC)
+- multi file uploads?
+- deselect all but one folder when uploading?
+- AJAX reaction on upload success
+
+
+
 
 **DONE**
 

@@ -13,7 +13,7 @@
 
 <% s3 = Aws::S3::Client.new %>
 
-<% files_in_bucket = s3.list_objects(bucket: ENV['AWS_S3_BUCKET'], encoding_type: 'url').contents.map(&:key) %>
+<% files_in_bucket = s3.list_objects(bucket: ENV['AWS_S3_BUCKET']).contents.map(&:key) %>
 
 
 
@@ -105,6 +105,13 @@ font-style: italic;
 		else if(currIndex+1<myArray.length){
 			var currentFolderValue = currentFolder.id;
 			var nextItemValue = myArray[currIndex+1];
+
+			//so, for example -> currentFolderValue = images/
+			//					 nextItemValue = images/background/
+
+			//					nextItemValue.split(currentFolderValue) = background/
+			//	and then you resolve the outer .split() -> images/.split(background/) = images/ is the common parent of these 2 folders
+
 
 			currentFolder = document.getElementById(currentFolderValue.split(nextItemValue.split(currentFolderValue))) || root;
 		} 
@@ -273,8 +280,11 @@ font-style: italic;
 		event.preventDefault();
 		var deleteArray = (function() {
 								var selected = [];
-								[].slice.call(document.getElementsByClassName('selected')).map(function(element, index, array) {							
-									selected.push(element.id);
+								[].slice.call(document.getElementsByClassName('selected')).map(function(element, index, array) {
+								console.log("el", element);
+								console.log("parel", element.parentElement);				
+									var routeToFile = element.parentElement.id;
+									selected.push(routeToFile + element.id);
 								});
 								return selected;
 							})();

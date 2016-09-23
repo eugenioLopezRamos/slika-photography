@@ -48,6 +48,7 @@ class Admin::AdminController < ApplicationController
 
 
     files_array = params[:files]
+    
 
     to_delete = []
 
