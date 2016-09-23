@@ -1,10 +1,17 @@
 
 
+var fileManager = function(arrayOfFiles) {
 
 	var root = document.getElementById("root");
-	alert(root);
-	console.log("rootie");
-	var myArray = <%= raw files_in_bucket %>
+	//alert(root.innerHTML);
+	//console.log("rootie");
+	console.log("arr", arrayOfFiles);
+	var myArray = arrayOfFiles;
+	initialArray = "";
+
+	//root.innerHTML = "";
+	console.log(myArray);
+	console.log(typeof myArray);
 
 	var currentIndex = 0;
 	var fileREGEX = /([\w]+[.]*[\w]+\/)*([\w]+[.]*[\w]+.*\-*)/; //  gets all directories + filenames with . and -
@@ -218,12 +225,15 @@
 								[].slice.call(document.getElementsByClassName('selected')).map(function(element, index, array) {
 								console.log("el", element);
 								console.log("parel", element.parentElement);				
-									var routeToFile = element.parentElement.id;
+									var routeToFile = element.parentElement.id.replace("root", '');
 									selected.push(routeToFile + element.id);
 								});
 								return selected;
 							})();
-		$.ajax({url: "delete_file", data: JSON.stringify({files:deleteArray}) , type: 'DELETE', contentType: 'application/json', dataType: 'json'})
+		$.ajax({url: "delete_file", data: JSON.stringify({files:deleteArray}) , type: 'DELETE', contentType: 'application/json'}).done(function() {
+			
+			location.reload();
+		});
 		//AJAX sending the array/method to use to delete the files we need to delete
 
 
@@ -291,6 +301,7 @@
 		xhr.onload = function() {
 
 			if(xhr.status === 200) {
+				console.log(xhr.response)
 				location.reload();
 
 			}
@@ -314,5 +325,6 @@
 	});
 
 
+} // end file-manager function
 
-
+$(document).ready(fileManager(initialArray));

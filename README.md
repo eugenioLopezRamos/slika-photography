@@ -68,7 +68,7 @@ A portfolio site with AJAX, pushstate, and an admin panel
 - multi file uploads?
 - deselect all but one folder when uploading?
 - AJAX reaction on upload success
-
+- fix posts slug redirecter, it always queries the posts model
 
 
 

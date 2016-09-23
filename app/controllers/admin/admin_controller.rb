@@ -29,7 +29,7 @@ class Admin::AdminController < ApplicationController
     uploaded_file_route = uploaded_file_route.select{ |entry| entry.key === "#{image_file_name}" }.map(&:key)
 
 
-    flash.now[:info] = "File successfully uploaded. Address: #{uploaded_file_route.to_s.gsub(/\"*\[*\]*/, '')}"
+    flash[:info] = "File successfully uploaded. Location: #{uploaded_file_route.to_s.gsub(/\"*\[*\]*/, '')}"
     render 'admin/upload/upload_show'
     end
 
@@ -46,18 +46,12 @@ class Admin::AdminController < ApplicationController
 
   def delete_file
     #need to add somesort of authentication so not everybody can delete files
-
-
     files_array = params[:files]
-
-
     to_delete = []
 
     files_array.each do |file|
-
       string_to_add = {key: file}
       to_delete.push string_to_add
-
     end
 
     s3 = Aws::S3::Client.new
@@ -69,10 +63,7 @@ class Admin::AdminController < ApplicationController
 
       })
 
-
-    #here I should use a call to the AWS SDK to delete files
-
-    flash.now[:info] = "File successfully deleted"
+    flash[:info] = "File successfully deleted"
     render 'admin/upload/upload_show'
   end
 
