@@ -12,6 +12,7 @@ class Admin::AdminController < ApplicationController
   def upload_file
    # debugger
     if params[:image].nil?
+    
       return
     else
      s3 = Aws::S3::Client.new
