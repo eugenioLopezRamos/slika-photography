@@ -21,14 +21,14 @@ class Admin::AdminController < ApplicationController
 
 
     File.open(image_file, 'rb', :encoding => 'binary') do |file|
-      s3.put_object(bucket: ENV['AWS_S3_BUCKET'], key: "#{image_file_route}#{URI.encode(image_file_name)}", body: file)
+      s3.put_object(bucket: ENV['AWS_S3_BUCKET'], key: "#{image_file_route}#{image_file_name}", body: file)
     end
 
     uploaded_file_route = s3.list_objects(bucket: ENV['AWS_S3_BUCKET'], delimiter: image_file_route).contents
-    uploaded_file_route = uploaded_file_route.select{ |entry| entry.key === "#{URI.encode(image_file_name)}" }.map(&:key)
+    uploaded_file_route = uploaded_file_route.select{ |entry| entry.key === "#{image_file_name}" }.map(&:key)
 
 
-    flash.now[:info] = "File successfully uploaded. Address: #{URI.decode(uploaded_file_route.to_s.gsub(/\"*\[*\]*/, '') )}"
+    flash.now[:info] = "File successfully uploaded. Address: #{uploaded_file_route.to_s.gsub(/\"*\[*\]*/, '')}"
     render 'admin/upload/upload_show'
     end
 
@@ -48,7 +48,7 @@ class Admin::AdminController < ApplicationController
 
 
     files_array = params[:files]
-    
+
 
     to_delete = []
 
