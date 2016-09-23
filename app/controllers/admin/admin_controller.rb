@@ -19,18 +19,19 @@ class Admin::AdminController < ApplicationController
      image_file = params[:image].open
      image_file_name = params[:image].original_filename
      image_file_route = params[:file_route] #To be implemented, should also come from the front end
-
+ 
 
     File.open(image_file, 'rb', :encoding => 'binary') do |file|
       s3.put_object(bucket: ENV['AWS_S3_BUCKET'], key: "#{image_file_route}#{image_file_name}", body: file)
     end
 
-    uploaded_file_route = s3.list_objects(bucket: ENV['AWS_S3_BUCKET'], delimiter: image_file_route).contents
-    uploaded_file_route = uploaded_file_route.select{ |entry| entry.key === "#{image_file_name}" }.map(&:key)
+    uploaded_file_route = s3.list_objects(bucket: ENV['AWS_S3_BUCKET'], marker: image_file_route).contents
+
+    uploaded_file_route = uploaded_file_route.select{ |entry| entry.key === "#{image_file_route}#{image_file_name}"  }.map(&:key)
 
 
     flash[:info] = "File successfully uploaded. Location: #{uploaded_file_route.to_s.gsub(/\"*\[*\]*/, '')}"
-    render 'admin/upload/upload_show'
+    render partial: '/admin/flash_messages'
     end
 
   end
@@ -63,8 +64,8 @@ class Admin::AdminController < ApplicationController
 
       })
 
-    flash[:info] = "File successfully deleted"
-    render 'admin/upload/upload_show'
+    flash.now[:info] = "File successfully deleted"
+    render partial: '/admin/flash_messages'
   end
 
   private
