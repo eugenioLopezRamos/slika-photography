@@ -46,6 +46,7 @@ A portfolio site with AJAX, pushstate, and an admin panel
 
 - Polish the formatting on the non admin user pages
 - URI decode los valores del array files in bucket
+- stop hiding non active-Tab -> its not necessary anymore and can help with perceived load times
 
 
 

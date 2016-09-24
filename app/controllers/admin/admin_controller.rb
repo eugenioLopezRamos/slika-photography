@@ -66,12 +66,14 @@ class Admin::AdminController < ApplicationController
         end
 
       else 
-      string_to_add = {key: file} #adds each file to the "to_delete" array
-      to_delete.push string_to_add
-    end
+        string_to_add = {key: file} #adds each file to the "to_delete" array
+        to_delete.push string_to_add
+      end
   end
 
     to_delete.uniq! #eliminates duplicates, thanks ruby!
+
+    #change objects: to_delete
 
     resp = s3.delete_objects({ #delete the files in the bucket
         bucket: ENV['AWS_S3_BUCKET'],
@@ -81,10 +83,11 @@ class Admin::AdminController < ApplicationController
 
         })
 
+
       flash.now[:info] = "#{to_delete.length} file(s) deleted.<br />Files:<br /> #{resp.deleted.map(&:key).join("<br/>")}".html_safe 
 
       if resp.errors.length > 0 
-        flash.now[:danger] = "Errors: #{resp.errors.map(&:key)}"
+        flash.now[:danger] = "An error has happened, please check server logs"
       end
 
       render partial: '/admin/flash_messages'
@@ -128,9 +131,10 @@ class Admin::AdminController < ApplicationController
                 rescue Aws::S3::Errors::ServiceError => e
                  # raise e.message, :status => 404
                   #render :json => {"message" => e.message}, :status => 404
-                  flash.now[:danger] = e.message
+                  flash.now[:danger] = e.message.gsub('key', 'file');
             
                   render partial: 'admin/flash_messages', :status => 404
+                  # this should have more :status codes according to the possible errors S3 can throw
 
                 end
 
@@ -144,6 +148,7 @@ class Admin::AdminController < ApplicationController
 #debugger
 
     if !gotten_file.nil?
+
       send_file(gotten_file, type: 'image/jpg', disposition: 'attachment', filename: 'leoPhoto.jpg') 
     end
 
