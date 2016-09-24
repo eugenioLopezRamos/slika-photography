@@ -50,7 +50,8 @@ var fileManager = function(arrayOfFiles) {
 			//					nextItemValue.split(currentFolderValue) = background/
 			//	and then you resolve the outer .split() -> images/.split(background/) = images/ is the common parent of these 2 folders
 
-
+			console.log("currFolderID", currentFolderValue);
+			console.log("next val", myArray[currIndex+1]);
 			currentFolder = document.getElementById(currentFolderValue.split(nextItemValue.split(currentFolderValue))) || root;
 		} 
 
@@ -71,7 +72,25 @@ var fileManager = function(arrayOfFiles) {
 			if(myArray[currIndex+1].includes(currentFolder.id)) {
 
 					if(myArray[currIndex+1].match(folderREGEX).input === myArray[currIndex+1].match(folderREGEX)[0]){
-						currentFolder = currentFolder.parentElement;// === root ? currentFolder = root: currentFolder.parentElement;
+						console.log(myArray[currIndex+1]);
+						console.log("is folder, is included", currentFolder);
+						//currentFolder = currentFolder.parentElement;// === root ? currentFolder = root: currentFolder.parentElement;
+						currentFolder = (function() {
+
+							while(!myArray[currIndex+1].includes(currentFolder.id) && currentFolder != root) {
+								
+								currentFolder = currentFolder.parentElement;
+							}
+
+							return currentFolder;
+
+						})();
+
+
+
+
+
+						console.log("after...", currentFolder);
 						return;
 					}
 
@@ -82,22 +101,27 @@ var fileManager = function(arrayOfFiles) {
 
 					}
 
-					else {
+				/*	else {
 						currentFolder = currentFolder.parentElement;
 						return;
 
-					}
+					}*/
 			}
 			else {
 				currentFolder = (function() {
 
 					while(!myArray[currIndex+1].includes(currentFolder.id) && currentFolder != root) {
+						
 						currentFolder = currentFolder.parentElement;
 					}
 
 					return currentFolder;
 
-				})();			
+				})();
+
+
+
+
 			}
 
 		}
@@ -182,37 +206,43 @@ var fileManager = function(arrayOfFiles) {
 		event.preventDefault();
 
 		//AJAX request sending the array of stuff to download (or just 1 thing)
-		  var req = new XMLHttpRequest();
+		 var req = new XMLHttpRequest();
 		  
-		  var fullFileRoute = (function() {
-				  					var selectedFile = document.getElementsByClassName('selected')[0];
-				  					var routeToFile = document.getElementsByClassName('selected')[0].id;
+		 var fullFileRoute = (function() {
+				  				var selectedFile = document.getElementsByClassName('selected')[0];
+				  				var routeToFile = document.getElementsByClassName('selected')[0].id;
 
-				  					routeToFile = (selectedFile.parentElement.id + routeToFile).replace(root.id, '')
+				  				routeToFile = (selectedFile.parentElement.id + routeToFile).replace(root.id, '')
 
-				  					return routeToFile;
+				  				return routeToFile;
 							})();
 
-		  var params = '?file=' + fullFileRoute;
+		var params = '?file=' + fullFileRoute;
 
-		  req.open("GET", 'download_file' + params, true);
+		req.open("GET", 'download_file' + params, true);
 
-		  req.responseType = "blob";
+		req.responseType = "blob";
 		 
 
-		  req.onload = function (event) {
-		    var blob = req.response;
-		    console.log(blob.size);
-		    var link=document.createElement('a');
-		    link.href=window.URL.createObjectURL(blob);
-		    var fileName = document.getElementsByClassName('selected')[0].id.split('.')
-		    link.download= fileName[0] + "." + fileName[1];
-		    link.click();
-		  };
+		req.onload = function (event) {
+		  	if(req.status === 200) {
 
-		  req.send();
+				var blob = req.response;
+				var link=document.createElement('a');
+				link.href=window.URL.createObjectURL(blob);
+				var fileName = document.getElementsByClassName('selected')[0].id.split('.')
+				link.download= fileName[0] + "." + fileName[1];
+				link.click();
+		
+			}
+			else{
+				document.getElementById("messages").innerHTML = JSON.parse(req.response);
+			}
+		};
 
-	});
+			req.send();
+
+		});
 
 	$('#delete-files').click(function(event){
 		event.preventDefault();
@@ -228,7 +258,8 @@ var fileManager = function(arrayOfFiles) {
 							})();
 		$.ajax({url: "delete_file", data: JSON.stringify({files:deleteArray}) , type: 'DELETE', contentType: 'application/json'}).done(function(response) {
 			
-			$('#messages').HTML(response);
+				document.getElementById("messages").innerHTML = response;
+				//also need to remove the selected items from the tree
 		});
 		//AJAX sending the array/method to use to delete the files we need to delete
 
@@ -254,7 +285,7 @@ var fileManager = function(arrayOfFiles) {
 		console.log("selected", document.getElementsByClassName('selected'));
 		console.log("sel length", document.getElementsByClassName('selected').length);
 		var uploadRoute;
-		
+
 		if(document.getElementsByClassName('selected').length > 0) {
 			uploadRoute = document.getElementsByClassName('selected')[0].innerText;
 		}
