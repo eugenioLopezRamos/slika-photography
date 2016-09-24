@@ -1,38 +1,40 @@
 class Admin::AdminController < ApplicationController
 
-    def login
-        redirect_to '/admin/login'
-    end
+  def login
+      redirect_to '/admin/login'
+  end
 
-    def upload_show
-    	render 'admin/upload/upload_show'
-    end
+  def upload_show
+    render 'admin/upload/upload_show'
+  end
 
 
   def upload_file
-   # debugger
+   
     if params[:image].nil?
-    
+      flash.now[:error] = "No files selected!"
+      render partial: '/admin/flash_messages'
       return
     else
-     s3 = Aws::S3::Client.new
-     image_file = params[:image].open
-     image_file_name = params[:image].original_filename
-     image_file_route = params[:file_route] #To be implemented, should also come from the front end
+
+      s3 = Aws::S3::Client.new
+      image_file = params[:image].open
+      image_file_name = params[:image].original_filename
+      image_file_route = params[:file_route] 
  
 
-    File.open(image_file, 'rb', :encoding => 'binary') do |file|
-      s3.put_object(bucket: ENV['AWS_S3_BUCKET'], key: "#{image_file_route}#{image_file_name}", body: file)
-    end
+      File.open(image_file, 'rb', :encoding => 'binary') do |file|
+        s3.put_object(bucket: ENV['AWS_S3_BUCKET'], key: "#{image_file_route}#{image_file_name}", body: file)
+      end
 
-    uploaded_file_route = s3.list_objects(bucket: ENV['AWS_S3_BUCKET'], marker: image_file_route).contents
+      uploaded_file_route = s3.list_objects(bucket: ENV['AWS_S3_BUCKET'], marker: image_file_route).contents
 
-    uploaded_file_route = uploaded_file_route.select{ |entry| entry.key === "#{image_file_route}#{image_file_name}"  }.map(&:key)
+      uploaded_file_route = uploaded_file_route.select{ |entry| entry.key === "#{image_file_route}#{image_file_name}"  }.map(&:key)
 
 
-    flash[:info] = "File successfully uploaded. Location: #{uploaded_file_route.to_s.gsub(/\"*\[*\]*/, '')}"
-    render partial: '/admin/flash_messages'
-    end
+      flash.now[:info] = "File successfully uploaded. Location: #{uploaded_file_route.to_s.gsub(/\"*\[*\]*/, '')}"
+      render partial: '/admin/flash_messages'
+      end
 
   end
 
@@ -49,24 +51,60 @@ class Admin::AdminController < ApplicationController
     #need to add somesort of authentication so not everybody can delete files
     files_array = params[:files]
     to_delete = []
+    s3 = Aws::S3::Client.new
+    #this controller needs to detect whether the selected item is a folder or a file, and if it's a folder,
+    #delete the folder item and all of its children
+
 
     files_array.each do |file|
-      string_to_add = {key: file}
+      if is_folder?(file)
+        all_children = s3.list_objects(bucket: ENV['AWS_S3_BUCKET'], marker: file).contents.map(&:key) #gets all of the folder's children
+
+        all_children.each do |child| #and adds them in key: value pairs to the "to_delete" array
+          child_to_add = {key: child}
+          to_delete.push child_to_add
+        end
+
+      else 
+      string_to_add = {key: file} #adds each file to the "to_delete" array
       to_delete.push string_to_add
     end
-
-    s3 = Aws::S3::Client.new
-    s3.delete_objects({
-      bucket: ENV['AWS_S3_BUCKET'],
-      delete: {
-        objects: to_delete,
-      },
-
-      })
-
-    flash.now[:info] = "File successfully deleted"
-    render partial: '/admin/flash_messages'
   end
+
+    to_delete.uniq! #eliminates duplicates, thanks ruby!
+
+    resp = s3.delete_objects({ #delete the files in the bucket
+        bucket: ENV['AWS_S3_BUCKET'],
+        delete: {
+          objects: to_delete,
+        },
+
+        })
+
+      flash.now[:info] = "#{to_delete.length} file(s) deleted.<br />Files:<br /> #{resp.deleted.map(&:key).join("<br/>")}".html_safe 
+
+      if resp.errors.length > 0 
+        flash.now[:danger] = "Errors: #{resp.errors.map(&:key)}"
+      end
+
+      render partial: '/admin/flash_messages'
+  end
+
+
+
+  def is_folder?(file)
+    if file.match(/([\w]+[.]*[\w]+\/)*/) && file.gsub(/(\w*[.]*[\w]+\/)*/, '') === '' # file matches the Folder Regex AND if you replace the
+      #folder regex with "" it becomes "" -> its a folder route instead of a file route
+      #gsub is intentionally different, else there's problems when you input, for example file = "2/".gsub(/([\w]+[.]*[\w]+\/)*/) => "2/" => is_folder? => false
+      #when it's actually a folder.
+      true
+    else #Any other case is assumed to be a file
+      false
+    end
+
+  end
+
+
 
   private
 
@@ -84,13 +122,35 @@ class Admin::AdminController < ApplicationController
       s3 = Aws::S3::Client.new
       #need to test for unexisting files and give an error message if file is not found
       gotten_file = Tempfile.open(['filename'], :encoding => 'binary') do |file|
-                      resp = s3.get_object({bucket: ENV['AWS_S3_BUCKET'], key: selected_file}, target: file)
-                      File.open(file)
 
-                    end
+                begin 
+                  resp = s3.get_object({bucket: ENV['AWS_S3_BUCKET'], key: selected_file}, target: file)
+                rescue Aws::S3::Errors::ServiceError => e
+                 # raise e.message, :status => 404
+                  render :json => {"message" => e.message}, :status => 404
+                #  flash.now[:danger] = e.message
+            
+                #  render partial: 'admin/flash_messages'
 
-      send_file(gotten_file, type: 'image/jpg', disposition: 'attachment', filename: 'leoPhoto.jpg')
+                end
+
+                if !resp.nil?
+                  File.open(file)
+                end
+                
+      end
+#test/pruebaimages/2%20(1).jpg
+
+#debugger
+
+    if !gotten_file.nil?
+      send_file(gotten_file, type: 'image/jpg', disposition: 'attachment', filename: 'leoPhoto.jpg') 
+    end
 
   end
+
+
+
+
 
 end
