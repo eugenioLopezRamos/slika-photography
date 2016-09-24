@@ -3,8 +3,6 @@
 var fileManager = function(arrayOfFiles) {
 
 	var root = document.getElementById("root");
-	//alert(root.innerHTML);
-	//console.log("rootie");
 
 	var myArray = arrayOfFiles;
 	initialArray = "";
@@ -14,7 +12,7 @@ var fileManager = function(arrayOfFiles) {
 	var folderREGEX = /([\w]+[.]*[\w]+\/)*/; // all directories, excludes files
 	var singleFolderREGEX = /([\w]+[.]*[\w]+\/)/; //get just a single folder
 
-	var counter = 0;
+	var counter = 0; //only needed for testing (it prevents infinite loops with if counter > myArray.length)
 	var currentFolder = root;
 	var parentFolder = root;
 
@@ -34,8 +32,6 @@ var fileManager = function(arrayOfFiles) {
 
 
 		currentFolder.appendChild(newFolder);
-
-
 
 		if ((currIndex+1)<myArray.length && myArray[currIndex+1].includes(newFolder.id)) {
 			currentFolder = newFolder;
@@ -64,17 +60,15 @@ var fileManager = function(arrayOfFiles) {
 		file.classList.add("file");
 		var fileName = document.createTextNode(object.replace(folderREGEX, ''));
 		file.appendChild(fileName);
-		file.id = object.replace(folderREGEX, '');
+		file.id = object;
 		currentFolder.appendChild(file);
 
 		if(currIndex+1<myArray.length){
 
 			if(myArray[currIndex+1].includes(currentFolder.id)) {
 
-					if(myArray[currIndex+1].match(folderREGEX).input === myArray[currIndex+1].match(folderREGEX)[0]){
-						console.log(myArray[currIndex+1]);
-						console.log("is folder, is included", currentFolder);
-						//currentFolder = currentFolder.parentElement;// === root ? currentFolder = root: currentFolder.parentElement;
+					if(myArray[currIndex+1].match(folderREGEX).input === myArray[currIndex+1].match(folderREGEX)[0]){		
+					
 						currentFolder = (function() {
 
 							while(!myArray[currIndex+1].includes(currentFolder.id) && currentFolder != root) {
@@ -86,11 +80,6 @@ var fileManager = function(arrayOfFiles) {
 
 						})();
 
-
-
-
-
-						console.log("after...", currentFolder);
 						return;
 					}
 
@@ -101,11 +90,6 @@ var fileManager = function(arrayOfFiles) {
 
 					}
 
-				/*	else {
-						currentFolder = currentFolder.parentElement;
-						return;
-
-					}*/
 			}
 			else {
 				currentFolder = (function() {
@@ -118,10 +102,6 @@ var fileManager = function(arrayOfFiles) {
 					return currentFolder;
 
 				})();
-
-
-
-
 			}
 
 		}
@@ -205,17 +185,12 @@ var fileManager = function(arrayOfFiles) {
 	$('#download-file').click(function(event) {
 		event.preventDefault();
 
-		//AJAX request sending the array of stuff to download (or just 1 thing)
-		 var req = new XMLHttpRequest();
+		//AJAX request sending the array of stuff to download (or just 1 thing) - Currently just one thing
+		var req = new XMLHttpRequest();
 		  
-		 var fullFileRoute = (function() {
-				  				var selectedFile = document.getElementsByClassName('selected')[0];
-				  				var routeToFile = document.getElementsByClassName('selected')[0].id;
+		var fullFileRoute = document.getElementsByClassName('selected')[0].id;
 
-				  				routeToFile = (selectedFile.parentElement.id + routeToFile).replace(root.id, '')
-
-				  				return routeToFile;
-							})();
+							//could also use multiple file downloads with rubyzip or something
 
 		var params = '?file=' + fullFileRoute;
 
@@ -230,7 +205,7 @@ var fileManager = function(arrayOfFiles) {
 				var blob = req.response;
 				var link=document.createElement('a');
 				link.href=window.URL.createObjectURL(blob);
-				var fileName = document.getElementsByClassName('selected')[0].id.split('.')
+				var fileName = document.getElementsByClassName('selected')[0].id.replace(folderREGEX, '').split('.');
 				link.download= fileName[0] + "." + fileName[1];
 				link.click();
 		
@@ -244,15 +219,15 @@ var fileManager = function(arrayOfFiles) {
 
 				newReader.onload = function(event) {
 					document.getElementById("messages").innerHTML = newReader.result;
-				
-
 				}
 	
 			}
 
-		};
+			[].slice.call(document.getElementsByClassName('selected')).map(function(element, index, array) {
+				element.classList.toggle('selected');
+			});
 
-// var bloob = new Blob(["<div class='alert alert-danger'>The specified key does not exist.</div>"])
+		};
 
 			req.send();
 
@@ -263,16 +238,24 @@ var fileManager = function(arrayOfFiles) {
 		var deleteArray = (function() {
 								var selected = [];
 								[].slice.call(document.getElementsByClassName('selected')).map(function(element, index, array) {
-								console.log("el", element);
-								console.log("parel", element.parentElement);				
-									var routeToFile = element.parentElement.id.replace("root", '');
-									selected.push(routeToFile + element.id);
+
+									selected.push(element.id);
 								});
 								return selected;
 							})();
 		$.ajax({url: "delete_file", data: JSON.stringify({files:deleteArray}) , type: 'DELETE', contentType: 'application/json'}).done(function(response) {
 			
 				document.getElementById("messages").innerHTML = response;
+
+
+
+				[].slice.call(document.getElementsByClassName('selected')).map(function(element, index, array) {
+					var currentChildToRemove = document.getElementById(element.id);
+					element.parentElement.removeChild(currentChildToRemove);
+				});
+
+
+			//	selected.parentElement.removeChild(selected.id)
 				//also need to remove the selected items from the tree
 		});
 		//AJAX sending the array/method to use to delete the files we need to delete
@@ -296,8 +279,7 @@ var fileManager = function(arrayOfFiles) {
 
 	$('#upload-file').click(function(event){
 		event.preventDefault();
-		console.log("selected", document.getElementsByClassName('selected'));
-		console.log("sel length", document.getElementsByClassName('selected').length);
+
 		var uploadRoute;
 
 		if(document.getElementsByClassName('selected').length > 0) {
@@ -306,11 +288,18 @@ var fileManager = function(arrayOfFiles) {
 		else {
 			uploadRoute = "";
 		}
-		console.log("royte", uploadRoute);
+		
 
 
-		var filesToUpload = document.getElementById("file_input_field").files
-		console.log("files to up", filesToUpload);
+		var filesToUpload = document.getElementById('file_input_field').files
+
+		if(filesToUpload.length<1) {
+			alert("No files selected for upload");
+			return;
+		}
+
+		document.getElementById('upload-file').disabled = true;
+
 		var formData = new FormData();
 		var utf = document.querySelectorAll("input[name='utf8']")[0].getAttribute("value");
 		var authenticityToken = document.querySelectorAll("input[name='authenticity_token']")[0].getAttribute("value");
@@ -329,22 +318,20 @@ var fileManager = function(arrayOfFiles) {
 			}
 
 		});
-		console.log("form data", formData);
-
-		//$.ajax({url: 'upload', data: formData, type: 'POST'});
 
 		var xhr = new XMLHttpRequest();
 		xhr.open('POST', 'upload', true);
 		xhr.setRequestHeader('X-CSRF-TOKEN', document.querySelectorAll('meta[name="csrf-token"]')[0].getAttribute("content"));
 
 		xhr.send(formData);
-
 		xhr.onload = function() {
 
 			if(xhr.status === 200) {
-				console.log(xhr.response)
+			
 				document.getElementById("messages").innerHTML = xhr.response;
-				//location.reload();
+				[].slice.call(document.getElementsByClassName('selected')).map(function(element, index, array) {
+					element.classList.toggle('selected');
+				});
 
 			}
 
@@ -352,12 +339,13 @@ var fileManager = function(arrayOfFiles) {
 				alert("woops! an error has occurred");
 			}
 
-
+		document.getElementById('upload-file').disabled = false;
+		document.getElementById('file_input_field').value = "";
 
 		}
 
 
-	
+
 
 	});
 
