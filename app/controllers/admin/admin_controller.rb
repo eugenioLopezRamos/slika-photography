@@ -127,10 +127,10 @@ class Admin::AdminController < ApplicationController
                   resp = s3.get_object({bucket: ENV['AWS_S3_BUCKET'], key: selected_file}, target: file)
                 rescue Aws::S3::Errors::ServiceError => e
                  # raise e.message, :status => 404
-                  render :json => {"message" => e.message}, :status => 404
-                #  flash.now[:danger] = e.message
+                  #render :json => {"message" => e.message}, :status => 404
+                  flash.now[:danger] = e.message
             
-                #  render partial: 'admin/flash_messages'
+                  render partial: 'admin/flash_messages', :status => 404
 
                 end
 
