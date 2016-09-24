@@ -235,10 +235,24 @@ var fileManager = function(arrayOfFiles) {
 				link.click();
 		
 			}
-			else{
-				document.getElementById("messages").innerHTML = JSON.parse(req.response);
+			else if(req.status != 200) {
+
+				var newReader = new FileReader();
+				var incomingBlob = new Blob([req.response]);
+
+				newReader.readAsText(incomingBlob);
+
+				newReader.onload = function(event) {
+					document.getElementById("messages").innerHTML = newReader.result;
+				
+
+				}
+	
 			}
+
 		};
+
+// var bloob = new Blob(["<div class='alert alert-danger'>The specified key does not exist.</div>"])
 
 			req.send();
 
