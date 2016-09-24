@@ -30,51 +30,42 @@ A portfolio site with AJAX, pushstate, and an admin panel
 
 - I should probably make the touch evt listeners always work and just constrain the menu height modifications on the menuToggle() func to clWidth<481
 
-- Add the correct partial to display error messages to admin pages
+
 - Add checks for error messages display on tests
 - Make AJAX request for active-post not fail
 - Use css height instead of the animation thingy on contact tab mobile
 - Make scrollbar fadeout + disappear, then reappear when moved or its area clicked
 - add stop propagation to scrollbutton;
-- make flashes respond to different messages (ok message, info, danger, etc) and style them appropiately
-
-
 - remove ability of non admins to see the delete psot button for other users' posts
-- center flash messages/error messages
-
--Chrome 54 beta has a weird bug with image height: auto when setting a width(should be proportional but is now setting height to the minimum) - Need to check if it happens on win Chrome 53 (doesnt on linux Chrome 53 nor firefox latest stable)
-
+- Chrome 54 beta has a weird bug with image height: auto when setting a width(should be proportional but is now setting height to the minimum) - Need to check if it happens on win Chrome 53 (doesnt on linux Chrome 53 nor firefox latest stable) -> probably happens in IE/edge too, better set explicit minheight
 - Polish the formatting on the non admin user pages
-- URI decode los valores del array files in bucket
 - stop hiding non active-Tab -> its not necessary anymore and can help with perceived load times
-
-
-
+- Add 100% minheight to content-Tab CSS and explicit 100% height to slide images
+- lazy load images
 - Related to ^, add SendGrid for mails, postgres for DB and whatever other production env changes are necessary to pass to production
 - reassemble the manifest files for the asset pipeline into 2 files: main and admin
-
-
-- Add image uploading (given heroku's conditions, it might be best to use S3 from the start) <- To do now
-- need to check what's up with the post model requests in admin pages
-
 - verify that :slug params are safe (or if they need sanitization/parameterization)
 - implement multi file downloads? (maybe with zipping)
-- correct bug with going back to root dir on directorize script
 - añadir requisito login a file manager
 - clean up the file manager javascript, it looks awful right now
 - Add file manager mobile controls
-- Fix weird symbols on the file names (CGI escape/whatever is needed)
-- Unselect files after a download/deletion is done
 - See permission stuff for buckets (ACL, IIRC)
-- multi file uploads?
 - deselect all but one folder when uploading?
-- AJAX reaction on upload success
 - fix posts slug redirecter, it always queries the posts model
 
 
 
 **DONE**
 
+- center flash messages/error messages
+- need to check what's up with the post model requests in admin pages (it was the Post model reference in the routes file)
+- Add image uploading (given heroku's conditions, it might be best to use S3 from the start) 
+- make flashes respond to different messages (ok message, info, danger, etc) and style them appropiately
+- Add the correct partial to display error messages to admin pages
+- Unselect files after a download/deletion is done
+- correct bug with going back to root dir on directorize script
+- Fix weird symbols on the file names (CGI escape/whatever is needed)
+- AJAX reaction on upload success
 - Now the app serves CSS/JS from the uglified compiled assets in the repo and image files from an S3 bucket.Both cases use CloudFront as CDN
 - Styled users index, new/edit user, edit profile
 - Add blog post 404 message
