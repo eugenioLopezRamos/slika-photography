@@ -10,7 +10,7 @@ class Admin::AdminController < ApplicationController
 
 
   def upload_file
-   
+
     if params[:image].nil?
       flash.now[:error] = "No files selected!"
       render partial: '/admin/flash_messages'
@@ -18,25 +18,65 @@ class Admin::AdminController < ApplicationController
     else
 
       s3 = Aws::S3::Client.new
-      image_file = params[:image].open
-      image_file_name = params[:image].original_filename
-      image_file_route = params[:file_route] 
- 
+      #image_file = params[:image].open
+     # image_file_name = params[:image].original_filename
+     # image_file_route = params[:file_route]
 
-      File.open(image_file, 'rb', :encoding => 'binary') do |file|
-        s3.put_object(bucket: ENV['AWS_S3_BUCKET'], key: "#{image_file_route}#{image_file_name}", body: file)
+     response_message = "File(s) successfully uploaded. Location(s):<br />" 
+ 
+      params[:image].each do |image|
+        image_file = image.open
+        image_file_name = image.original_filename
+        image_file_route = params[:file_route] #The route is unique anyways, can't upload to 2 folders at once
+
+        File.open(image_file, 'rb', :encoding => 'binary') do |file|
+          s3.put_object(bucket: ENV['AWS_S3_BUCKET'], key: "#{image_file_route}#{image_file_name}", body: file)
+        end
+        
+        uploaded_file_route = s3.list_objects(bucket: ENV['AWS_S3_BUCKET'], marker: image_file_route).contents
+        uploaded_file_route = uploaded_file_route.select{ |entry| entry.key === "#{image_file_route}#{image_file_name}"  }.map(&:key)
+
+        response_message << uploaded_file_route.to_s.gsub(/\"*\[*\]*/, '') << "<br />"
+
       end
 
-      uploaded_file_route = s3.list_objects(bucket: ENV['AWS_S3_BUCKET'], marker: image_file_route).contents
-
-      uploaded_file_route = uploaded_file_route.select{ |entry| entry.key === "#{image_file_route}#{image_file_name}"  }.map(&:key)
 
 
-      flash.now[:info] = "File successfully uploaded. Location: #{uploaded_file_route.to_s.gsub(/\"*\[*\]*/, '')}"
+
+      flash.now[:info] = response_message.html_safe #{}"File successfully uploaded. Location: #{uploaded_file_route.to_s.gsub(/\"*\[*\]*/, '')}".html_safe
       render partial: '/admin/flash_messages'
       end
 
   end
+
+
+#<ActionController::Parameters {"utf-8"=>"✓", "authenticity-token"=>"daR+aUgj/g3MB8SYWgH0tjsd5Of7pZGUlyjVTUBok1KNnvMs2AFt2N89ZOLf2vCnh8Z9cOz7LQveLyzB8U5/MA==",
+# "file_route"=>"", 
+#"image"=>[#<ActionDispatch::Http::UploadedFile:0x00557e27d87cc8 @tempfile=#<Tempfile:/tmp/RackMultipart20160925-26687-1jsr303.jpg>, @original_filename="camera-background.jpg", @content_type="image/jpeg", @headers="Content-Disposition: 
+#form-data; name=\"image[]\"; filename=\"camera-background.jpg\"\r\nContent-Type: image/jpeg\r\n">, 
+
+
+
+#<ActionDispatch::Http::UploadedFile:0x00557e27d87a20 @tempfile=#<Tempfile:/tmp/RackMultipart20160925-26687-1p9izov.jpg>, @original_filename="camera-background2.jpg", @content_type="image/jpeg", @headers="Content-Disposition: form-data; name=\"image[]\"; filename=\"camera-background2.jpg\"\r\nContent-Type: image/jpeg\r\n">, #<ActionDispatch::Http::UploadedFile:0x00557e27d87228 @tempfile=#<Tempfile:/tmp/RackMultipart20160925-26687-7htwr6.jpg>, @original_filename="camera-background (1).jpg", @content_type="image/jpeg", @headers="Content-Disposition: form-data; name=\"image[]\"; filename=\"camera-background (1).jpg\"\r\nContent-Type: image/jpeg\r\n">, #<ActionDispatch::Http::UploadedFile:0x00557e27d87138 @tempfile=#<Tempfile:/tmp/RackMultipart20160925-26687-1qk07u2.jpg>, @original_filename="camera-background (2).jpg", @content_type="image/jpeg", @headers="Content-Disposition: form-data; name=\"image[]\"; filename=\"camera-background (2).jpg\"\r\nContent-Type: image/jpeg\r\n">, #<ActionDispatch::Http::UploadedFile:0x00557e27d86990 @tempfile=#<Tempfile:/tmp/RackMultipart20160925-26687-97g570.jpg>, @original_filename="camera-background (5).jpg", @content_type="image/jpeg", @headers="Content-Disposition: form-data; name=\"image[]\"; filename=\"camera-background (5).jpg\"\r\nContent-Type: image/jpeg\r\n">], "controller"=>"admin/admin", "action"=>"upload_file"}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   def download_file
 

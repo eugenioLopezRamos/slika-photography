@@ -8,9 +8,16 @@ var fileManager = function(arrayOfFiles) {
 	initialArray = "";
 
 	var currentIndex = 0;
-	var fileREGEX = /([\w]+[.]*[\w]+\/)*([\w]+[.]*[\w]+.*\-*)/; //  gets all directories + filenames with . and -
-	var folderREGEX = /([\w]+[.]*[\w]+\/)*/; // all directories, excludes files
-	var singleFolderREGEX = /([\w]+[.]*[\w]+\/)/; //get just a single folder
+//	var fileREGEX = /([\w]+[.]*[\w]+\/)*([\w]+[.]*[\w]+.*\-*)/; //  gets all directories + filenames with . and -
+//	var folderREGEX = /([\w]+[.]*[\w]+\/)*/; // all directories, excludes files - original regexes, changed for the current one
+
+
+	var fileREGEX = /([\w*]+[.]*[\w]+\/)*(\w*[.]*[\w]+.*\-*\(*\)*\+*)/; //  gets all directories + filenames with . and -, (, ), +
+	var folderREGEX = /([\w]+[.]*[\w]+\/\(*\)*\+*\-*)*/; // all directories, excludes files, incl chars -, (, ), +
+	// var singleFolderREGEX = /([\w]+[.]*[\w]+\/)/; //get just a single folder - this one was never used
+
+
+	//file.gsub(/(\w*[.]*[\w]+\/)*/, '') modified regex from the controller as reference
 
 	var counter = 0; //only needed for testing (it prevents infinite loops with if counter > myArray.length)
 	var currentFolder = root;
@@ -292,6 +299,7 @@ var fileManager = function(arrayOfFiles) {
 
 
 		var filesToUpload = document.getElementById('file_input_field').files
+		console.log("files", filesToUpload);
 
 		if(filesToUpload.length<1) {
 			alert("No files selected for upload");
@@ -314,7 +322,7 @@ var fileManager = function(arrayOfFiles) {
 			return;
 			}
 			else {
-				formData.append("image", element, element.name);
+				formData.append("image[]", element, element.name);
 			}
 
 		});
