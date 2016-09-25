@@ -22,7 +22,7 @@ class Admin::AdminController < ApplicationController
      # image_file_name = params[:image].original_filename
      # image_file_route = params[:file_route]
 
-     response_message = "File(s) successfully uploaded. Location(s):<br />" 
+     response_message = "#{"File".pluralize(params[:image].length)} successfully uploaded. #{"Location".pluralize(params[:image].length)}:<br />" 
  
       params[:image].each do |image|
         image_file = image.open
@@ -124,7 +124,7 @@ class Admin::AdminController < ApplicationController
         })
 
 
-      flash.now[:info] = "#{to_delete.length} file(s) deleted.<br />Files:<br /> #{resp.deleted.map(&:key).join("<br/>")}".html_safe 
+      flash.now[:info] = "#{to_delete.length} #{"file".pluralize(to_delete.length)} deleted.<br />#{"file".pluralize(to_delete.length)}:<br /> #{resp.deleted.map(&:key).join("<br/>")}".html_safe 
 
       if resp.errors.length > 0 
         flash.now[:danger] = "An error has happened, please check server logs"
