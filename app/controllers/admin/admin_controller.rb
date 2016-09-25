@@ -18,13 +18,11 @@ class Admin::AdminController < ApplicationController
     else
 
       s3 = Aws::S3::Client.new
-      #image_file = params[:image].open
-     # image_file_name = params[:image].original_filename
-     # image_file_route = params[:file_route]
 
-     response_message = "#{"File".pluralize(params[:image].length)} successfully uploaded. #{"Location".pluralize(params[:image].length)}:<br />" 
+      response_message = "#{"File".pluralize(params[:image].length)} successfully uploaded. #{"Location".pluralize(params[:image].length)}:<br />" 
  
       params[:image].each do |image|
+
         image_file = image.open
         image_file_name = image.original_filename
         image_file_route = params[:file_route] #The route is unique anyways, can't upload to 2 folders at once
@@ -40,9 +38,6 @@ class Admin::AdminController < ApplicationController
 
       end
 
-
-
-
       flash.now[:info] = response_message.html_safe #{}"File successfully uploaded. Location: #{uploaded_file_route.to_s.gsub(/\"*\[*\]*/, '')}".html_safe
       render partial: '/admin/flash_messages'
       end
@@ -50,38 +45,14 @@ class Admin::AdminController < ApplicationController
   end
 
 
-#<ActionController::Parameters {"utf-8"=>"✓", "authenticity-token"=>"daR+aUgj/g3MB8SYWgH0tjsd5Of7pZGUlyjVTUBok1KNnvMs2AFt2N89ZOLf2vCnh8Z9cOz7LQveLyzB8U5/MA==",
-# "file_route"=>"", 
-#"image"=>[#<ActionDispatch::Http::UploadedFile:0x00557e27d87cc8 @tempfile=#<Tempfile:/tmp/RackMultipart20160925-26687-1jsr303.jpg>, @original_filename="camera-background.jpg", @content_type="image/jpeg", @headers="Content-Disposition: 
-#form-data; name=\"image[]\"; filename=\"camera-background.jpg\"\r\nContent-Type: image/jpeg\r\n">, 
-
-
-
-#<ActionDispatch::Http::UploadedFile:0x00557e27d87a20 @tempfile=#<Tempfile:/tmp/RackMultipart20160925-26687-1p9izov.jpg>, @original_filename="camera-background2.jpg", @content_type="image/jpeg", @headers="Content-Disposition: form-data; name=\"image[]\"; filename=\"camera-background2.jpg\"\r\nContent-Type: image/jpeg\r\n">, #<ActionDispatch::Http::UploadedFile:0x00557e27d87228 @tempfile=#<Tempfile:/tmp/RackMultipart20160925-26687-7htwr6.jpg>, @original_filename="camera-background (1).jpg", @content_type="image/jpeg", @headers="Content-Disposition: form-data; name=\"image[]\"; filename=\"camera-background (1).jpg\"\r\nContent-Type: image/jpeg\r\n">, #<ActionDispatch::Http::UploadedFile:0x00557e27d87138 @tempfile=#<Tempfile:/tmp/RackMultipart20160925-26687-1qk07u2.jpg>, @original_filename="camera-background (2).jpg", @content_type="image/jpeg", @headers="Content-Disposition: form-data; name=\"image[]\"; filename=\"camera-background (2).jpg\"\r\nContent-Type: image/jpeg\r\n">, #<ActionDispatch::Http::UploadedFile:0x00557e27d86990 @tempfile=#<Tempfile:/tmp/RackMultipart20160925-26687-97g570.jpg>, @original_filename="camera-background (5).jpg", @content_type="image/jpeg", @headers="Content-Disposition: form-data; name=\"image[]\"; filename=\"camera-background (5).jpg\"\r\nContent-Type: image/jpeg\r\n">], "controller"=>"admin/admin", "action"=>"upload_file"}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   def download_file
 
-    selected_file = params[:file]
-    get_file(selected_file)
+    selected_files = params[:files]
+    selected_files = selected_files.split("%")
+    
+    selected_files.each do |file|
+      get_file(file)
+    end
 
   end
 
@@ -97,7 +68,7 @@ class Admin::AdminController < ApplicationController
 
 
     files_array.each do |file|
-      if is_folder?(file)
+      if is_folder?(file) #checks if |file| is a folder - if it is, adds all of its children to the array to be deleted
         all_children = s3.list_objects(bucket: ENV['AWS_S3_BUCKET'], marker: file).contents.map(&:key) #gets all of the folder's children
 
         all_children.each do |child| #and adds them in key: value pairs to the "to_delete" array
@@ -112,8 +83,6 @@ class Admin::AdminController < ApplicationController
   end
 
     to_delete.uniq! #eliminates duplicates, thanks ruby!
-
-    #change objects: to_delete
 
     resp = s3.delete_objects({ #delete the files in the bucket
         bucket: ENV['AWS_S3_BUCKET'],
