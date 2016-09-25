@@ -83,7 +83,7 @@ width: 100%;
 <%= form_for(:image, url: admin_upload_path, html: {multipart: true, id: 'upload-file-form'}) do |f| %>
 	<%= f.submit "Upload image", :id =>'upload-file' %>
 	<%= f.label :image %>
-	<%= f.file_field :image, class: 'upload-btn', accept: 'image/jpeg, image/gif, image/png', :id =>'file_input_field' %>
+	<%= f.file_field :image, class: 'upload-btn', accept: 'image/jpeg, image/gif, image/png', :id =>'file_input_field', :multiple => true %>
 	<%= f.hidden_field :image_cache %>
 <% end %>
 

@@ -15,15 +15,10 @@ A portfolio site with AJAX, pushstate, and an admin panel
 
 **TO DO**
 
-
-
-
 - Add error messages for AJAX requests
 - Slide picker numbers after load
 - scrollbar click to take to that point
 - There's a bug with blog tab JS where it incorrectly goes remembers the first post that you load - probably has something to do with replaceState, but haven't taken the time to look at it more closely
-
-
 
 
 ** IN PROGRESS **
