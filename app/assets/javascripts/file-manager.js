@@ -194,12 +194,34 @@ var fileManager = function(arrayOfFiles) {
 
 		//AJAX request sending the array of stuff to download (or just 1 thing) - Currently just one thing
 		var req = new XMLHttpRequest();
+		var params = '?files=';// + fullFileRoute;
 		  
-		var fullFileRoute = document.getElementsByClassName('selected')[0].id;
+		var fullFileRoute = (function() {
+								var route = [];
+							
+								var selectedFiles = [];
 
+								selectedFiles = [].slice.call(document.getElementsByClassName('selected'));
+
+								selectedFiles.map(function(element, index, array) {
+									var currentId = element.id;
+									
+									route.push(currentId);
+								});
+								console.log("route", route);
+
+
+								route = route.reduce(function(previousValue, currentValue, index, array) {
+									return previousValue + "&" + currentValue;
+								});
+
+								return encodeURIComponent(route);
+							})();
+
+		console.log("fullfile route", fullFileRoute);
 							//could also use multiple file downloads with rubyzip or something
 
-		var params = '?file=' + fullFileRoute;
+		params = params + fullFileRoute
 
 		req.open("GET", 'download_file' + params, true);
 

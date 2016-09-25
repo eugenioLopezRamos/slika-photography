@@ -48,10 +48,12 @@ A portfolio site with AJAX, pushstate, and an admin panel
 - deselect all but one folder when uploading?
 - fix posts slug redirecter, it always queries the posts model
 
+- Multi file downloads?
 
 
 **DONE**
 
+- Multiple files uploads added
 - center flash messages/error messages
 - need to check what's up with the post model requests in admin pages (it was the Post model reference in the routes file)
 - Add image uploading (given heroku's conditions, it might be best to use S3 from the start) 

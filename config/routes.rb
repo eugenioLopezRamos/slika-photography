@@ -36,7 +36,7 @@ namespace :admin do #maybe I should move this to resources: instead of namespace
  post '/login', to: 'sessions#create'
  delete '/logout', to: 'sessions#destroy'
 
- get 'download_file', to: 'admin#download_file'
+ post 'download_file', to: 'admin#download_file'
  delete 'delete_file', to: 'admin#delete_file'
 
 end
