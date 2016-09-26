@@ -6,8 +6,8 @@ require 'zip'
       redirect_to '/admin/login'
   end
 
-  def upload_show
-    render 'admin/upload/upload_show'
+  def files_show
+    render 'admin/files/files'
   end
 
 
@@ -22,8 +22,7 @@ require 'zip'
       render partial: '/admin/flash_messages'
       return
     else
-
-     debugger
+    
       s3 = Aws::S3::Client.new
 
       response_message = "#{"File".pluralize(params[:image].length)} successfully uploaded. #{"Location".pluralize(params[:image].length)}:<br />" 
@@ -57,6 +56,9 @@ require 'zip'
 
   def download_file
 
+    @operation_results = []
+    uploaded_file_count = 0
+
     selected_files = ActiveSupport::JSON.decode params[:files]
     s3 = Aws::S3::Client.new
 
@@ -72,8 +74,8 @@ require 'zip'
             rescue Aws::S3::Errors::ServiceError => e
             # raise e.message, :status => 404
             #render :json => {"message" => e.message}, :status => 404
-            flash.now[:danger] = e.message.gsub('key', 'file');  
-            render partial: 'admin/flash_messages', :status => 404
+            @operation_results.push "#{file.name}: #{e.message.gsub('key', 'file')}<br />";  
+           # render partial: 'admin/flash_messages', :status => 404
             # this should have more :status codes according to the possible errors S3 can throw
             end #begin close
 
@@ -82,6 +84,7 @@ require 'zip'
             File.open(file) do |file|
               Zip::File.open(temp_zip.path, Zip::File::CREATE) do |zipfile|
                 zipfile.add(sel_file, file.path)
+                uploaded_file_count++
               end #zip block close
             end #file open close
             
@@ -96,13 +99,45 @@ require 'zip'
       File.open(temp_zip.path, 'r') do |zip|
         send_data(zip.read, disposition: 'attachment', filename: "download#{Time.zone.now}")
       end
+      @operation_results.push "#{uploaded_file_count} 'file'.pluralize(uploaded_file_count) zipped and sent"
+
       temp_zip.close
       temp_zip.unlink
+
     end
+
+    req_download_file_info(@operation_results, true)
 
   end
 
-  def req_download_file_info(message, order_to_send)
+  def req_download_file_info(message="", send_message? = false)
+    timeouts_counter = 0
+    final_message = message
+
+    if send_message? === false
+      while(!send_message? || timeouts_counter < 21)
+        timeouts_counter++
+        sleep(0.5) #until send_message? === true || timeouts_counter = 20
+      end
+
+    if timeouts_counter > 20
+      flash.now[:danger] = "Request timed out"
+      render 'admin/flash_messages'
+      return
+    else
+      message.each do |message|
+        
+        final_message << message
+
+      end
+    end
+
+      flash.now[:info] = final_message
+      render 'admin/flash_messages'
+
+    end
+
+
 
   end
 

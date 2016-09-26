@@ -86,48 +86,5 @@ width: 100%;
 	<%= f.file_field :image, class: 'upload-btn', accept: 'image/jpeg, image/gif, image/png', :id =>'file_input_field', :multiple => true %>
 	<%= f.hidden_field :image_cache %>
 <% end %>
-
-
-
-<%# 
-Useful links to do this:
-
-
-http://docs.aws.amazon.com/sdkforruby/api/Aws/S3/Client.html
-
-	#delete_object(options = {}) ⇒ Types::DeleteObjectOutput
-	Removes the null version (if there is one) of an object and inserts a delete marker, which becomes the latest version of the object.
-
-
-	#delete_objects(options = {}) ⇒ Types::DeleteObjectsOutput
-
-
-	#abort_multipart_upload(options = {}) ⇒ Types::AbortMultipartUploadOutput
-	Aborts a multipart upload.
-
-
-	To verify that all parts have been removed, so you don't get charged for the part storage, you should call the List Parts operation and ensure the parts list is empty.
-	
-	#get_object(options = {}) ⇒ Types::GetObjectOutput
-	Retrieves objects from Amazon S3.
-
-#head_bucket(options = {}) ⇒ Struct
-This operation is useful to determine if a bucket exists and you have permission to access it.
-
-#copy_object(options = {}) ⇒ Types::CopyObjectOutput
-Creates a copy of an object that is already stored in Amazon S3.
-
-
-
-
-
-#put_object(options = {}) ⇒ Types::PutObjectOutput
-Adds an object to a bucket.
-
-#downloads
-https://ruby.awsblog.com/post/Tx354Y6VTZ421PJ/Downloading-Objects-from-Amazon-S3-using-the-AWS-SDK-for-Ruby
-
-%>
-
 </div>
 <%= javascript_include_tag 'file-manager' %>
