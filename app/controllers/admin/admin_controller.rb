@@ -67,14 +67,14 @@ require 'zip'
   #zip file create....
 
 
-temp_zip = Tempfile.open(['temp.zip'])
+temp_zip = Tempfile.new('temp.zip', "#{Rails.root}/tmp")
 
 Zip::OutputStream.open(temp_zip) {|zos|}
 
 
     selected_files.each do |sel_file|
 
-      gotten_file = Tempfile.open(['filename'], :encoding => 'binary') do |file|
+      gotten_file = Tempfile.open(sel_file, "#{Rails.root}/tmp", :encoding => 'binary') do |file|
 
         begin 
           resp = s3.get_object({bucket: ENV['AWS_S3_BUCKET'], key: sel_file}, target: file)
@@ -88,16 +88,37 @@ Zip::OutputStream.open(temp_zip) {|zos|}
           end
 
         if !resp.nil?
-           File.open(file)
-        end
+     
+         File.open(file) do |file|
+
+            Zip::File.open(temp_zip.path, Zip::File::CREATE) do |zipfile|
+              #need to check for empty files so I dont add rubbish to the zip
+         
+                zipfile.add(sel_file, file.path)
+
+            end #zip block close
+
+         end #file open close
+        
+         file.close
+         file.unlink
+        end # Tempfile.open close.
 
 
 
-      end
 
-      Zip::File.open(temp_zip.path, Zip::File::CREATE) do |zipfile|
-        zipfile.add(sel_file, gotten_file.path)
-      end
+
+
+
+      end #selected_files.each close
+       
+    #  if !gotten_file.nil?
+    #    File.open("#{gotten_file.path}#{File.basename(gotten_file)}")
+     # end
+
+
+
+
 
 
       #zipfile add...
@@ -117,9 +138,19 @@ Zip::OutputStream.open(temp_zip) {|zos|}
    #   send_file(gotten_file, disposition: 'attachment', filename: 'Requested-Files.zip') 
    # end
 
+
+ ensure
    if !temp_zip.nil?
-    send_file(temp_zip, disposition: 'attachment', filename: "download#{Time.zone.now}")
+    File.open(temp_zip.path, 'r') do |zip|
+      send_data(zip.read, disposition: 'attachment', filename: "download#{Time.zone.now}")
+    end
+    temp_zip.close
+    temp_zip.unlink
    end
+
+
+#ensure temp_zip unlink, delete...
+#ensure gotten_file unlink, delete....
 
 
   end
