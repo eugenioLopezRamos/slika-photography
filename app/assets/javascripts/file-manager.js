@@ -268,9 +268,10 @@ var fileManager = function(arrayOfFiles) {
 		};
 
 			req.send(formData);
-			$.ajax({url: 'download_file', type: 'GET', contentType: 'application/json'}).done(function(response){
+		
+		/*	$.ajax({url: 'download_file', type: 'GET', contentType: 'application/json'}).done(function(response){
 				alert(response);
-			});
+			});*/
 
 		});
 

@@ -56,8 +56,8 @@ require 'zip'
 
   def download_file
 
-    @operation_results = []
-    uploaded_file_count = 0
+   # @operation_results = []
+   # uploaded_file_count = 0
 
     selected_files = ActiveSupport::JSON.decode params[:files]
     s3 = Aws::S3::Client.new
@@ -66,7 +66,7 @@ require 'zip'
 
     Zip::OutputStream.open(temp_zip) {|zos|}
 
-      selected_files.each do |sel_file|
+      selected_files.each do |sel_file| #need to fix this on folders.
         Tempfile.open(sel_file, "#{Rails.root}/tmp", :encoding => 'binary') do |file|
           begin 
             resp = s3.get_object({bucket: ENV['AWS_S3_BUCKET'], key: sel_file}, target: file)
@@ -74,7 +74,7 @@ require 'zip'
             rescue Aws::S3::Errors::ServiceError => e
             # raise e.message, :status => 404
             #render :json => {"message" => e.message}, :status => 404
-            @operation_results.push "#{file.name}: #{e.message.gsub('key', 'file')}<br />" 
+         #   @operation_results.push "#{file.name}: #{e.message.gsub('key', 'file')}<br />" 
            # render partial: 'admin/flash_messages', :status => 404
             # this should have more :status codes according to the possible errors S3 can throw
             end #begin close
@@ -84,7 +84,7 @@ require 'zip'
             File.open(file) do |file|
               Zip::File.open(temp_zip.path, Zip::File::CREATE) do |zipfile|
                 zipfile.add(sel_file, file.path)
-             #   uploaded_file_count++
+              #  uploaded_file_count = uploaded_file_count + 1
               end #zip block close
             end #file open close
             
@@ -99,14 +99,14 @@ require 'zip'
       File.open(temp_zip.path, 'r') do |zip|
         send_data(zip.read, disposition: 'attachment', filename: "download#{Time.zone.now}")
       end
-      @operation_results.push "#{uploaded_file_count} 'file'.pluralize(uploaded_file_count) zipped and sent"
+  #    @operation_results.push "#{uploaded_file_count} 'file'.pluralize(uploaded_file_count) zipped and sent"
 
       temp_zip.close
       temp_zip.unlink
 
     end
 
-    req_download_file_info(@operation_results, true)
+  #  req_download_file_info(@operation_results, true)
 
   end
 
