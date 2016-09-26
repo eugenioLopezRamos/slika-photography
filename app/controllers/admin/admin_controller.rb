@@ -47,16 +47,62 @@ class Admin::AdminController < ApplicationController
 
   def download_file
 
-    selected_files = params[:files]
-    selected_files = selected_files.split("%")
-    
-    selected_files.each do |file|
-      get_file(file)
+    selected_files = ActiveSupport::JSON.decode params[:files]
+    s3 = Aws::S3::Client.new
+   # selected_files = selected_files.split("%")
+
+  #  selected_files.each do |file|
+ #     get_file(file)
+ #   end
+
+#lo q hay q hacer es crear un zip, iterar x el array, tirar cada uno de los archivos encontrados al zip
+#enviarlo, y luego ensure q se deslinkee y se borre
+
+#adicionalmente, es probable q tenga q hacer un req POST -> para pedir los archivos
+#y conjuntamente un request GET para obtener los mensajes de error. <- Sip, no se puede enviar las 2 cosas
+# a la vez :(
+
+      #need to test for unexisting files and give an error message if file is not found
+
+    selected_files.each do |sel_file|
+
+      gotten_file = Tempfile.open(['filename'], :encoding => 'binary') do |file|
+
+        begin 
+          resp = s3.get_object({bucket: ENV['AWS_S3_BUCKET'], key: sel_file}, target: file)
+
+          rescue Aws::S3::Errors::ServiceError => e
+          # raise e.message, :status => 404
+          #render :json => {"message" => e.message}, :status => 404
+          flash.now[:danger] = e.message.gsub('key', 'file');  
+          render partial: 'admin/flash_messages', :status => 404
+          # this should have more :status codes according to the possible errors S3 can throw
+          end
+
+
+
+        if !resp.nil?
+           File.open(file)
+        end
+
+      end
+      #zipfile add...
+    end
+
+## here i need to zip the files
+
+
+    if !gotten_file.nil?
+
+     # send_file(gotten_file, type: 'image/jpg', disposition: 'attachment', filename: 'leoPhoto.jpg') 
+      send_file(gotten_file, disposition: 'attachment', filename: 'Requested-Files.zip') 
     end
 
   end
 
+  def req_download_file_info(message, order_to_send)
 
+  end
 
   def delete_file
     #need to add somesort of authentication so not everybody can delete files
@@ -131,35 +177,14 @@ class Admin::AdminController < ApplicationController
 #http://stackoverflow.com/questions/18232088/in-ruby-on-rails-after-send-file-method-delete-the-file-from-server
 
   def get_file(selected_file)
-      s3 = Aws::S3::Client.new
-      #need to test for unexisting files and give an error message if file is not found
-      gotten_file = Tempfile.open(['filename'], :encoding => 'binary') do |file|
 
-                begin 
-                  resp = s3.get_object({bucket: ENV['AWS_S3_BUCKET'], key: selected_file}, target: file)
-                rescue Aws::S3::Errors::ServiceError => e
-                 # raise e.message, :status => 404
-                  #render :json => {"message" => e.message}, :status => 404
-                  flash.now[:danger] = e.message.gsub('key', 'file');
-            
-                  render partial: 'admin/flash_messages', :status => 404
-                  # this should have more :status codes according to the possible errors S3 can throw
-
-                end
-
-                if !resp.nil?
-                  File.open(file)
-                end
                 
-      end
+    #  end
 #test/pruebaimages/2%20(1).jpg
 
 #debugger
 
-    if !gotten_file.nil?
 
-      send_file(gotten_file, type: 'image/jpg', disposition: 'attachment', filename: 'leoPhoto.jpg') 
-    end
 
   end
 
