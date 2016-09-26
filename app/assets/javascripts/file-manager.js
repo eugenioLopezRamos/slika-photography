@@ -194,8 +194,10 @@ var fileManager = function(arrayOfFiles) {
 
 		//AJAX request sending the array of stuff to download (or just 1 thing) - Currently just one thing
 		var req = new XMLHttpRequest();
-		var params = '?files=';// + fullFileRoute;
-		  
+	//	var params = '?files=';// + fullFileRoute;
+		  // param is [:files]
+
+
 		var fullFileRoute = (function() {
 								var route = [];
 							
@@ -211,19 +213,26 @@ var fileManager = function(arrayOfFiles) {
 								console.log("route", route);
 
 
-								route = route.reduce(function(previousValue, currentValue, index, array) {
+								/*route = route.reduce(function(previousValue, currentValue, index, array) {
 									return previousValue + "&" + currentValue;
-								});
+								});*/
 
-								return encodeURIComponent(route);
+								return route;
 							})();
 
-		console.log("fullfile route", fullFileRoute);
 							//could also use multiple file downloads with rubyzip or something
 
-		params = params + fullFileRoute
+		var formData = new FormData();
+		var utf = document.querySelectorAll("input[name='utf8']")[0].getAttribute("value");
+		var authenticityToken = document.querySelectorAll("input[name='authenticity_token']")[0].getAttribute("value");
+		formData.append("utf-8", utf);
+		formData.append("authenticity-token", authenticityToken);
+		formData.append("files", JSON.stringify(fullFileRoute));
 
-		req.open("GET", 'download_file' + params, true);
+
+
+		req.open("POST", 'download_file', true);
+		req.setRequestHeader('X-CSRF-TOKEN', document.querySelectorAll('meta[name="csrf-token"]')[0].getAttribute("content"));
 
 		req.responseType = "blob";
 		 
@@ -258,7 +267,7 @@ var fileManager = function(arrayOfFiles) {
 
 		};
 
-			req.send();
+			req.send(formData);
 
 		});
 
