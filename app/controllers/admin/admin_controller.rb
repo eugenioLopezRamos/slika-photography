@@ -74,7 +74,7 @@ require 'zip'
             rescue Aws::S3::Errors::ServiceError => e
             # raise e.message, :status => 404
             #render :json => {"message" => e.message}, :status => 404
-            @operation_results.push "#{file.name}: #{e.message.gsub('key', 'file')}<br />";  
+            @operation_results.push "#{file.name}: #{e.message.gsub('key', 'file')}<br />" 
            # render partial: 'admin/flash_messages', :status => 404
             # this should have more :status codes according to the possible errors S3 can throw
             end #begin close
@@ -84,7 +84,7 @@ require 'zip'
             File.open(file) do |file|
               Zip::File.open(temp_zip.path, Zip::File::CREATE) do |zipfile|
                 zipfile.add(sel_file, file.path)
-                uploaded_file_count++
+             #   uploaded_file_count++
               end #zip block close
             end #file open close
             
@@ -110,12 +110,12 @@ require 'zip'
 
   end
 
-  def req_download_file_info(message="", send_message? = false)
+  def req_download_file_info(message="", send_message="")
     timeouts_counter = 0
     final_message = message
 
-    if send_message? === false
-      while(!send_message? || timeouts_counter < 21)
+    if send_message === ""
+      while(!send_message || timeouts_counter < 21)
         timeouts_counter++
         sleep(0.5) #until send_message? === true || timeouts_counter = 20
       end
@@ -126,16 +126,17 @@ require 'zip'
       return
     else
       message.each do |message|
-        
+
         final_message << message
 
       end
-    end
+   
 
       flash.now[:info] = final_message
       render 'admin/flash_messages'
 
     end
+  end
 
 
 
