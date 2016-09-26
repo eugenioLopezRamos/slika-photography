@@ -1,6 +1,7 @@
 class Admin::AdminController < ApplicationController
 
 require 'zip'
+
   def login
       redirect_to '/admin/login'
   end
@@ -15,11 +16,14 @@ require 'zip'
     # need to add server side check for image sizes. Probably best to check for total > 100mb
 
     if params[:image].nil?
+
+
       flash.now[:error] = "No files selected!"
       render partial: '/admin/flash_messages'
       return
     else
 
+     debugger
       s3 = Aws::S3::Client.new
 
       response_message = "#{"File".pluralize(params[:image].length)} successfully uploaded. #{"Location".pluralize(params[:image].length)}:<br />" 
@@ -111,7 +115,6 @@ require 'zip'
     #this controller needs to detect whether the selected item is a folder or a file, and if it's a folder,
     #delete the folder item and all of its children
 
-
     files_array.each do |file|
       if is_folder?(file) #checks if |file| is a folder - if it is, adds all of its children to the array to be deleted
         all_children = s3.list_objects(bucket: ENV['AWS_S3_BUCKET'], marker: file).contents.map(&:key) #gets all of the folder's children
@@ -137,7 +140,6 @@ require 'zip'
 
         })
 
-
       flash.now[:info] = "#{to_delete.length} #{"file".pluralize(to_delete.length)} deleted.<br />#{"file".pluralize(to_delete.length)}:<br /> #{resp.deleted.map(&:key).join("<br/>")}".html_safe 
 
       if resp.errors.length > 0 
@@ -146,8 +148,6 @@ require 'zip'
 
       render partial: '/admin/flash_messages'
   end
-
-
 
   def is_folder?(file)
     if file.match(/([\w]+[.]*[\w]+\/)*/) && file.gsub(/(\w*[.]*[\w]+\/)*/, '') === '' # file matches the Folder Regex AND if you replace the
