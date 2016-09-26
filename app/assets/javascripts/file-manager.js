@@ -268,6 +268,9 @@ var fileManager = function(arrayOfFiles) {
 		};
 
 			req.send(formData);
+			$.ajax({url: 'download_file', type: 'GET', contentType: 'application/json'}).done(function(response){
+				alert(response);
+			});
 
 		});
 
@@ -298,20 +301,15 @@ var fileManager = function(arrayOfFiles) {
 		});
 		//AJAX sending the array/method to use to delete the files we need to delete
 
-
-
-
 	});
 
 
-
-
-	document.getElementsByClassName('upload-btn')[0].addEventListener('change', function() {
+	/*document.getElementsByClassName('upload-btn')[0].addEventListener('change', function() {
 		var size_megabytes = this.files[0].size/1024/1024
 		if(size_megabytes > 5){
 			alert('Maximum file size is 5 MB. Please choose a smaller file')
 			}
-	});
+	});*/ //need to edit, probably will set a max size of 50mb per mass upload, then verify on the backend so I dont have trouble with disk space
 
 
 

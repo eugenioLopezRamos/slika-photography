@@ -16,8 +16,8 @@ class AdminControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "User is shown the upload show page when requesting it" do
-    get '/admin/upload'
-    assert_template 'admin/upload/upload_show'
+    get admin_files_path
+    assert_template 'admin/files/files'
 
   end
 

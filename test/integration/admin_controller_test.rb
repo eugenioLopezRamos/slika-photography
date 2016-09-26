@@ -1,4 +1,6 @@
 require 'test_helper'
+require 'aws-sdk'
+require 'zip'
 
 class AdminControllerTest < ActionDispatch::IntegrationTest
   # test "the truth" do

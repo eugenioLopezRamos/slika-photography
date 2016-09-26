@@ -28,16 +28,18 @@ namespace :admin do #maybe I should move this to resources: instead of namespace
  #put 'password_resets/:id/edit' => 'password_resets#update', :as => :put_password_reset
  match 'password_resets/:id/edit' => 'password_resets#update', via: [:put, :patch], :as => :password_reset
 
- get '/upload', to: 'admin#upload_show'
+#file manager routes
+ get '/files', to: 'admin#files_show'
  post '/upload', to: 'admin#upload_file'
+ post '/download_file', to: 'admin#download_file'
+ delete '/delete_file', to: 'admin#delete_file'
+
 
  get '/', to: 'admin#login'
  get '/login', to: 'sessions#new'
  post '/login', to: 'sessions#create'
  delete '/logout', to: 'sessions#destroy'
 
- post 'download_file', to: 'admin#download_file'
- delete 'delete_file', to: 'admin#delete_file'
 
 end
 

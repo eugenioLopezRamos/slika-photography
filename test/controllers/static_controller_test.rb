@@ -16,7 +16,7 @@ class StaticControllerTest < ActionDispatch::IntegrationTest
   	assert_redirected_to '/404'
   end
 
-  test "redirect to lowercase url in /id's too" do
+  test "redirect to lowercase url in /:id's too" do
   	get '/bLoG/A-NEW-FANTaSTIC-POST'
   	assert_redirected_to '/blog/a-new-fantastic-post'
   end
