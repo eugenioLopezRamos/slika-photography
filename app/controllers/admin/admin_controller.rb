@@ -11,6 +11,8 @@ require 'zip'
 
 
   def upload_file
+    
+    # need to add server side check for image sizes. Probably best to check for total > 100mb
 
     if params[:image].nil?
       flash.now[:error] = "No files selected!"
@@ -24,24 +26,27 @@ require 'zip'
  
       params[:image].each do |image|
 
-        image_file = image.open
+        image_file = image.tempfile #("#{Rails.root}/tmp")
         image_file_name = image.original_filename
         image_file_route = params[:file_route] #The route is unique anyways, can't upload to 2 folders at once
 
         File.open(image_file, 'rb', :encoding => 'binary') do |file|
           s3.put_object(bucket: ENV['AWS_S3_BUCKET'], key: "#{image_file_route}#{image_file_name}", body: file)
-        end
+        end #file open end
+
+        image.tempfile.close
+        image.tempfile.unlink
         
         uploaded_file_route = s3.list_objects(bucket: ENV['AWS_S3_BUCKET'], marker: image_file_route).contents
         uploaded_file_route = uploaded_file_route.select{ |entry| entry.key === "#{image_file_route}#{image_file_name}"  }.map(&:key)
 
         response_message << uploaded_file_route.to_s.gsub(/\"*\[*\]*/, '') << "<br />"
 
-      end
+      end # params[:image].each end
 
       flash.now[:info] = response_message.html_safe #{}"File successfully uploaded. Location: #{uploaded_file_route.to_s.gsub(/\"*\[*\]*/, '')}".html_safe
       render partial: '/admin/flash_messages'
-      end
+      end #else end
 
   end
 
@@ -50,108 +55,46 @@ require 'zip'
 
     selected_files = ActiveSupport::JSON.decode params[:files]
     s3 = Aws::S3::Client.new
-   # selected_files = selected_files.split("%")
 
-  #  selected_files.each do |file|
- #     get_file(file)
- #   end
+    temp_zip = Tempfile.new('temp.zip', "#{Rails.root}/tmp")
 
-#lo q hay q hacer es crear un zip, iterar x el array, tirar cada uno de los archivos encontrados al zip
-#enviarlo, y luego ensure q se deslinkee y se borre
+    Zip::OutputStream.open(temp_zip) {|zos|}
 
-#adicionalmente, es probable q tenga q hacer un req POST -> para pedir los archivos
-#y conjuntamente un request GET para obtener los mensajes de error. <- Sip, no se puede enviar las 2 cosas
-# a la vez :(
+      selected_files.each do |sel_file|
+        Tempfile.open(sel_file, "#{Rails.root}/tmp", :encoding => 'binary') do |file|
+          begin 
+            resp = s3.get_object({bucket: ENV['AWS_S3_BUCKET'], key: sel_file}, target: file)
 
-      #need to test for unexisting files and give an error message if file is not found
-  #zip file create....
+            rescue Aws::S3::Errors::ServiceError => e
+            # raise e.message, :status => 404
+            #render :json => {"message" => e.message}, :status => 404
+            flash.now[:danger] = e.message.gsub('key', 'file');  
+            render partial: 'admin/flash_messages', :status => 404
+            # this should have more :status codes according to the possible errors S3 can throw
+            end #begin close
 
-
-temp_zip = Tempfile.new('temp.zip', "#{Rails.root}/tmp")
-
-Zip::OutputStream.open(temp_zip) {|zos|}
-
-
-    selected_files.each do |sel_file|
-
-      gotten_file = Tempfile.open(sel_file, "#{Rails.root}/tmp", :encoding => 'binary') do |file|
-
-        begin 
-          resp = s3.get_object({bucket: ENV['AWS_S3_BUCKET'], key: sel_file}, target: file)
-
-          rescue Aws::S3::Errors::ServiceError => e
-          # raise e.message, :status => 404
-          #render :json => {"message" => e.message}, :status => 404
-          flash.now[:danger] = e.message.gsub('key', 'file');  
-      #    render partial: 'admin/flash_messages', :status => 404
-          # this should have more :status codes according to the possible errors S3 can throw
-          end
-
-        if !resp.nil?
-     
-         File.open(file) do |file|
-
-            Zip::File.open(temp_zip.path, Zip::File::CREATE) do |zipfile|
-              #need to check for empty files so I dont add rubbish to the zip
+          if !resp.nil?
          
+            File.open(file) do |file|
+              Zip::File.open(temp_zip.path, Zip::File::CREATE) do |zipfile|
                 zipfile.add(sel_file, file.path)
-
-            end #zip block close
-
-         end #file open close
-        
-         file.close
-         file.unlink
-        end # Tempfile.open close.
-
-
-
-
-
-
-
+              end #zip block close
+            end #file open close
+            
+          file.close
+          file.unlink
+        end # Tempfile.open close
       end #selected_files.each close
-       
-    #  if !gotten_file.nil?
-    #    File.open("#{gotten_file.path}#{File.basename(gotten_file)}")
-     # end
-
-
-
-
-
-
-      #zipfile add...
-
-      #zip add gotten_file
-
     end #end Zip::OS
 
-#zip file ensure unlink & delete
-
-#end
-
-
- #   if !gotten_file.nil?
-
-     # send_file(gotten_file, type: 'image/jpg', disposition: 'attachment', filename: 'leoPhoto.jpg') 
-   #   send_file(gotten_file, disposition: 'attachment', filename: 'Requested-Files.zip') 
-   # end
-
-
- ensure
-   if !temp_zip.nil?
-    File.open(temp_zip.path, 'r') do |zip|
-      send_data(zip.read, disposition: 'attachment', filename: "download#{Time.zone.now}")
+    ensure
+     if !temp_zip.nil?
+      File.open(temp_zip.path, 'r') do |zip|
+        send_data(zip.read, disposition: 'attachment', filename: "download#{Time.zone.now}")
+      end
+      temp_zip.close
+      temp_zip.unlink
     end
-    temp_zip.close
-    temp_zip.unlink
-   end
-
-
-#ensure temp_zip unlink, delete...
-#ensure gotten_file unlink, delete....
-
 
   end
 
@@ -160,6 +103,7 @@ Zip::OutputStream.open(temp_zip) {|zos|}
   end
 
   def delete_file
+
     #need to add somesort of authentication so not everybody can delete files
     files_array = params[:files]
     to_delete = []
