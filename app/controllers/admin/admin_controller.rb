@@ -1,5 +1,6 @@
 class Admin::AdminController < ApplicationController
 
+require 'zip'
   def login
       redirect_to '/admin/login'
   end
@@ -63,6 +64,13 @@ class Admin::AdminController < ApplicationController
 # a la vez :(
 
       #need to test for unexisting files and give an error message if file is not found
+  #zip file create....
+
+
+temp_zip = Tempfile.open(['temp.zip'])
+
+Zip::OutputStream.open(temp_zip) {|zos|}
+
 
     selected_files.each do |sel_file|
 
@@ -75,28 +83,44 @@ class Admin::AdminController < ApplicationController
           # raise e.message, :status => 404
           #render :json => {"message" => e.message}, :status => 404
           flash.now[:danger] = e.message.gsub('key', 'file');  
-          render partial: 'admin/flash_messages', :status => 404
+      #    render partial: 'admin/flash_messages', :status => 404
           # this should have more :status codes according to the possible errors S3 can throw
           end
-
-
 
         if !resp.nil?
            File.open(file)
         end
 
+
+
       end
+
+      Zip::File.open(temp_zip.path, Zip::File::CREATE) do |zipfile|
+        zipfile.add(sel_file, gotten_file.path)
+      end
+
+
       #zipfile add...
-    end
 
-## here i need to zip the files
+      #zip add gotten_file
+
+    end #end Zip::OS
+
+#zip file ensure unlink & delete
+
+#end
 
 
-    if !gotten_file.nil?
+ #   if !gotten_file.nil?
 
      # send_file(gotten_file, type: 'image/jpg', disposition: 'attachment', filename: 'leoPhoto.jpg') 
-      send_file(gotten_file, disposition: 'attachment', filename: 'Requested-Files.zip') 
-    end
+   #   send_file(gotten_file, disposition: 'attachment', filename: 'Requested-Files.zip') 
+   # end
+
+   if !temp_zip.nil?
+    send_file(temp_zip, disposition: 'attachment', filename: "download#{Time.zone.now}")
+   end
+
 
   end
 
