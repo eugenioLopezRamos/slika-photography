@@ -3,8 +3,6 @@ class Admin::AdminController < ApplicationController
 require 'zip'
 
 before_action :create_download_log, only: :download_file
-before_action :create_upload_log, only: :upload_file
-
 
   def login
     redirect_to '/admin/login'
@@ -214,41 +212,23 @@ before_action :create_upload_log, only: :upload_file
   end
 
   def create_download_log
-
+    #remove all "/" characters from the authenticity token, they cause the system to believe it's a new directory(and thus, file creation fails).
+    #Without the "/" this string is still unique enough for us to use as a name for our pseudo temp file, especially since it will be
+    #deleted shortly after anyways.
     token_param = params[:'authenticity-token'].gsub(/(\/+)*/, '')
-    #deletes an existing file with the same auth token, just in case.
-    if File.exist?("download_log-#{token_param}.txt")
-      File.open("download_log-#{token_param}.txt") do |file|
-        file.close
+
+    #Just in case, checks for a file with the same name and deletes it.
+    if File.exist?("#{Rails.root}/tmp/download_log-#{token_param}.txt")
+      File.open("#{Rails.root}/tmp/download_log-#{token_param}.txt") do |file|
+        file.closes
         File.unlink(file)
       end
     end
+
     #create a new log file to be used by #download_file to store messages
     @download_log = File.open("#{Rails.root}/tmp/download_log-#{token_param}.txt", "w+t")
         
   end
-
-  def create_upload_log
- ###   @download_log = Tempfile.open("upload_log-#{params[:'authenticity-token']}.txt")
-  end
-
-
-#http://stackoverflow.com/questions/18232088/in-ruby-on-rails-after-send-file-method-delete-the-file-from-server
-
-  def get_file(selected_file)
-
-                
-    #  end
-#test/pruebaimages/2%20(1).jpg
-
-#debugger
-
-
-
-  end
-
-
-
 
 
 end
