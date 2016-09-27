@@ -97,7 +97,7 @@ require 'zip'
     ensure
      if !temp_zip.nil?
       File.open(temp_zip.path, 'r') do |zip|
-        send_data(zip.read, disposition: 'attachment', filename: "download#{Time.zone.now}")
+        send_data(zip.read, disposition: 'attachment')
       end
       @@operation_results.push "#{uploaded_file_count} #{'file'.pluralize(uploaded_file_count)} zipped and sent"
 
@@ -114,13 +114,16 @@ require 'zip'
     final_message = ""
 
       @@operation_results.each do |message|
-
         final_message << message
-
       end
-  
-      flash.now[:info] = "#{final_message}"
+
+    if final_message != ""
+      flash.now[:info] = "#{final_message}".html_safe
       render partial: '/admin/flash_messages'
+    else
+      render html: 'Nothing to say'
+    end
+
   end
 
   def delete_file

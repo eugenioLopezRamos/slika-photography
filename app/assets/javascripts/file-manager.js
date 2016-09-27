@@ -243,8 +243,9 @@ var fileManager = function(arrayOfFiles) {
 				var blob = req.response;
 				var link=document.createElement('a');
 				link.href=window.URL.createObjectURL(blob);
-				var fileName = document.getElementsByClassName('selected')[0].id.replace(folderREGEX, '').split('.');
-				link.download= fileName[0] + "." + fileName[1];
+				//var currentDate = new Date().toDateString();
+				var fileName = "download.zip"; //document.getElementsByClassName('selected')[0].id.replace(folderREGEX, '').split('.');
+				link.download = fileName; //[0] + "." + fileName[1];
 				link.click();
 		
 			}
