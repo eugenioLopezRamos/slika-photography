@@ -40,19 +40,21 @@ A portfolio site with AJAX, pushstate, and an admin panel
 - Related to ^, add SendGrid for mails, postgres for DB and whatever other production env changes are necessary to pass to production
 - reassemble the manifest files for the asset pipeline into 2 files: main and admin
 - verify that :slug params are safe (or if they need sanitization/parameterization)
-- implement multi file downloads? (maybe with zipping)
-- añadir requisito login a file manager
+
+
 - clean up the file manager javascript, it looks awful right now
 - Add file manager mobile controls
 - See permission stuff for buckets (ACL, IIRC)
 - deselect all but one folder when uploading?
 - fix posts slug redirecter, it always queries the posts model
-
-- Multi file downloads?
-
+- Add friendly forwarding on admin pages
+- Add size limit on uploads/downloads client side and server side
+- Current work => testing the admin controller (that is, the file manager) 
+- Server side verification of file -> image
 
 **DONE**
 
+- añadir requisito login a file manager
 - Multiple files uploads added
 - center flash messages/error messages
 - need to check what's up with the post model requests in admin pages (it was the Post model reference in the routes file)
