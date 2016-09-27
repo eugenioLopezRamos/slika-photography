@@ -42,6 +42,8 @@ class PostInterfaceTest < ActionDispatch::IntegrationTest
     assert_no_difference 'Post.count' do
       delete admin_post_path(@adminpost)
     end
+
+    
   end
   
   test "an admin should be able to delete anyone else's posts" do
