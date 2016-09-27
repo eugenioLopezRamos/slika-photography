@@ -2,8 +2,12 @@ class Admin::AdminController < ApplicationController
 
 require 'zip'
 
+before_action :create_download_log, only: :download_file
+before_action :create_upload_log, only: :upload_file
+
+
   def login
-      redirect_to '/admin/login'
+    redirect_to '/admin/login'
   end
 
   def files_show
@@ -56,7 +60,8 @@ require 'zip'
 
   def download_file
 
-    @@operation_results = []
+  #  download_messages_log = Tempfile.new("download_log.txt", "#{Rails.root}/tmp")
+    @operation_results = []
     uploaded_file_count = 0
 
     selected_files = ActiveSupport::JSON.decode params[:files]
@@ -74,7 +79,7 @@ require 'zip'
             rescue Aws::S3::Errors::ServiceError => e
             # raise e.message, :status => 404
             #render :json => {"message" => e.message}, :status => 404
-            @@operation_results.push "#{file.name}: #{e.message.gsub('key', 'file')}<br />" 
+            @operation_results.push "#{file.name}: #{e.message.gsub('key', 'file')}<br />" 
            # render partial: 'admin/flash_messages', :status => 404
             # this should have more :status codes according to the possible errors S3 can throw
             end #begin close
@@ -99,11 +104,17 @@ require 'zip'
       File.open(temp_zip.path, 'r') do |zip|
         send_data(zip.read, disposition: 'attachment')
       end
-      @@operation_results.push "#{uploaded_file_count} #{'file'.pluralize(uploaded_file_count)} zipped and sent"
-
+      @operation_results.push "#{uploaded_file_count} #{'file'.pluralize(uploaded_file_count)} zipped and sent"
+   
       temp_zip.close
       temp_zip.unlink
 
+      @operation_results.each do |message|
+        @download_log.write("#{message}") 
+      end
+
+      @download_log.rewind
+      @download_log.close
     end
 
 
@@ -111,18 +122,28 @@ require 'zip'
   end
 
   def req_download_file_info
-    final_message = ""
 
-      @@operation_results.each do |message|
-        final_message << message
-      end
+    token_param = params[:'authenticity-token'].gsub(/(\/+)*/, '')
 
-    if final_message != ""
-      flash.now[:info] = "#{final_message}".html_safe
-      render partial: '/admin/flash_messages'
+    download_log = File.open("#{Rails.root}/tmp/download_log-#{token_param}.txt", "r")
+ 
+    download_log.rewind
+
+    if download_log.read != ""
+      download_log.rewind
+      flash.now[:info] = "#{download_log.read}"
+      render partial: 'admin/flash_messages'
+    elsif download_log.read === ""
+      flash.now[:info] = "There are no messages"
+      render partial: 'admin/flash_messages'
     else
-      render html: 'Nothing to say'
+      flash.now[:danger] = "Sorry, we could not access the messages log"
+      render partial: 'admin/flash_messages'
     end
+
+      download_log.close
+    ensure
+      File.unlink(download_log)
 
   end
 
@@ -190,6 +211,25 @@ require 'zip'
       authenticate_or_request_with_http_token do |token, options|
         User.find_by(auth_token: token)
       end
+  end
+
+  def create_download_log
+
+    token_param = params[:'authenticity-token'].gsub(/(\/+)*/, '')
+    #deletes an existing file with the same auth token, just in case.
+    if File.exist?("download_log-#{token_param}.txt")
+      File.open("download_log-#{token_param}.txt") do |file|
+        file.close
+        File.unlink(file)
+      end
+    end
+    #create a new log file to be used by #download_file to store messages
+    @download_log = File.open("#{Rails.root}/tmp/download_log-#{token_param}.txt", "w+t")
+        
+  end
+
+  def create_upload_log
+ ###   @download_log = Tempfile.open("upload_log-#{params[:'authenticity-token']}.txt")
   end
 
 

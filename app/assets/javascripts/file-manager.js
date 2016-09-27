@@ -267,9 +267,9 @@ var fileManager = function(arrayOfFiles) {
 				element.classList.toggle('selected');
 			});
 				//get messages from the server
-				$.ajax({url: 'download_file', type: 'GET', contentType: 'application/json'}).done(function(response){
+				$.ajax({url: 'download_file', type: 'GET', data: {"authenticity-token": authenticityToken}}).done(function(response){
 					$('#messages').html(response);
-				});
+				}).fail(function(response) {$('#messages').html("Woops, couldn't retrieve messages from the server")});
 	
 
 		};
