@@ -258,20 +258,24 @@ var fileManager = function(arrayOfFiles) {
 				newReader.onload = function(event) {
 					document.getElementById("messages").innerHTML = newReader.result;
 				}
-	
+
+
 			}
 
 			[].slice.call(document.getElementsByClassName('selected')).map(function(element, index, array) {
 				element.classList.toggle('selected');
 			});
+				//get messages from the server
+				$.ajax({url: 'download_file', type: 'GET', contentType: 'application/json'}).done(function(response){
+					$('#messages').html(response);
+				});
+	
 
 		};
 
 			req.send(formData);
 		
-		/*	$.ajax({url: 'download_file', type: 'GET', contentType: 'application/json'}).done(function(response){
-				alert(response);
-			});*/
+
 
 		});
 

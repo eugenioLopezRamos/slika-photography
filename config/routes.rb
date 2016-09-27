@@ -30,7 +30,7 @@ namespace :admin do #maybe I should move this to resources: instead of namespace
 
 #file manager routes
  get '/files', to: 'admin#files_show'
- #get 'download_file', to: 'req_admin#download_file_info'
+ get 'download_file', to: 'admin#req_download_file_info'
  post '/upload', to: 'admin#upload_file'
  post 'download_file', to: 'admin#download_file'
  delete 'delete_file', to: 'admin#delete_file'
