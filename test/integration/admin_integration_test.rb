@@ -78,6 +78,11 @@ class AdminIntegrationTest < ActionDispatch::IntegrationTest
 
   	#START TEST => DOWNLOADS
 
+  		#some ideas to consider: 
+  		# I should probably do the same tests with file_route != ''
+  		# Add check for div.info
+  		# Add a third nonexistant file to check for errors.
+
   		#POST from the view, requesting the files to download.
   		files_array = "[\"TestImage1.jpg\", \"TestImage2.jpg\"]"
   		mock_auth_token = "12345/678"
@@ -85,32 +90,29 @@ class AdminIntegrationTest < ActionDispatch::IntegrationTest
 
   		original_directory_file_count = Dir["#{Rails.root}/tmp/*"].length
 
-
-  		#assert_difference 'original_directory_file_count', (JSON.parse(files_array).length + 1) do #That is, length of files_array (each downloaded file,
-  																			   #plus the download_log)
-  																			   #this one goes at the end of the test
-	#assert_difference 'original_directory_file_count', (files_array.length + 2) do  # amount of downloaded files (files_array.length)
-																					# + zipfile  
-																					# + download_log = files_array.length +2
-
 		  	post admin_download_file_path(@admin), params: {'authenticity-token': mock_auth_token, files: files_array}
-		  	files_array = JSON.parse(files_array) #Need to parse it to compare, otherwise I'd need to JSON.parse every time I need to compare...
+		  	files_array = JSON.parse(files_array) #Need to parse it, otherwise I'd need to JSON.parse every time I need to compare...
 
 	  		#GET_OBJECT is done by the controller. Our job is to check that the controller actions are having no errors.
 
 		  	files_array.each do |file|
 		  	
-		  		#Test if download_log exists
+		  		#Test if the download_log exists
 		  		assert File.file?("#{Rails.root}/tmp/download_log-#{mock_auth_token_to_file}.txt")
+
+		  		#create the location of the temp.zip file.
 		  		zip_file_location = ""
 		  			
-		  		#Need to flush all zipfiles from the temp folder before testing - Otherwise I'll get errors when using Find.find
+		  		#TODO: Need to flush all zipfiles from the temp folder before testing - Otherwise I'll get errors when using Find.find
+
+		  		#locate the temp.zip tempfile and store its location in zip_file_location
 		  		Find.find("#{Rails.root}/tmp") do |path|
 
 			  		if File.basename(path) =~ /temp\.zip(\-*\w*\-*)*/
 
 			  			zip_file_location = "#{Rails.root}/tmp/#{File.path(File.basename(path))}" #This looks very very ugly, needs a bit of prettifying
-			  			puts "zip file loc: #{zip_file_location}"
+			  			puts "zip file loc: #{zip_file_location}" #There seems to be a small bug where tests will sometimes not detect the zip file
+			  													  #As far as I've seen it is not related to the regex
 						Find.prune       # Don't look any further into this directory.
 					else
 						next
@@ -118,33 +120,35 @@ class AdminIntegrationTest < ActionDispatch::IntegrationTest
 		
 				end
 
+				# create an empty array that will contain the names of the files that were added to the zip file.
 				zip_file_contents = []
-			
+				#open the zip file
 		  		Zip::File.open(zip_file_location) do |zip_file|
-
+		  			#check that the size of the zip file entry is equal to the original file size of the fixture
+		  			# #size is the correct method, as #compressed_size is the final size of the zipped entry.
 		  			zip_file.each do |zip_entry|
 
-		  				uploaded_images_array.each do |file| #This block compares the original size of the file in the zip archive to its 
-		  													#corresponding fixture uploaded tempfile.
+		  				uploaded_images_array.each do |file| #This block searches the name of the
+		  													 #compares the original size of the file in the zip archive to its 
+		  													 #corresponding fixture uploaded tempfile.
 
 		  					if file.original_filename === zip_entry.name
 		  						assert_equal zip_entry.size, file.size
 		  					end
 
 		  				end
-
-
+		  				#push the entry name to the previously created array for comparison purposes
 		  				zip_file_contents.push zip_entry.name
 		  			end
 
 		  		end
-
+		  		# Does the zip file contain the same files as the files requested in the POST request?
 		  		assert_equal zip_file_contents, files_array
 		  
 		 	
 		  	end
-		  	
-		  	#Test that the files still exist.
+
+		  	#Test that the files still exist. 
 		  	assert_equal (original_directory_file_count + files_array.length + 2), Dir["#{Rails.root}/tmp/*"].length	
 
 	  	
@@ -153,7 +157,7 @@ class AdminIntegrationTest < ActionDispatch::IntegrationTest
 	#START TEST => DOWNLOADS_INFO
 
 
-  	#CLEANUP - delete the downloaded files after success
+
 
 
 
@@ -169,7 +173,7 @@ class AdminIntegrationTest < ActionDispatch::IntegrationTest
      #   #Unexistant file key returns [] (empty array) - Therefore should_be_empty should be equal to empty array.
      #   assert should_be_empty.empty?
 
-
+  	#CLEANUP - delete the downloaded files after success
 
 
  end
