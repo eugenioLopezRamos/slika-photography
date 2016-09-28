@@ -29,7 +29,7 @@ before_action :create_download_log, only: :download_file
 
       response_message = "#{"File".pluralize(params[:image].length)} successfully uploaded. #{"Location".pluralize(params[:image].length)}:<br />" 
       #need to change that message, not always will all files be successfully uploaded
-      
+
       params[:image].each do |image|
 
         image_file = image.tempfile #("#{Rails.root}/tmp")
@@ -61,7 +61,7 @@ before_action :create_download_log, only: :download_file
 
   #  download_messages_log = Tempfile.new("download_log.txt", "#{Rails.root}/tmp")
     @operation_results = []
-    uploaded_file_count = 0
+    downloaded_file_count = 0
 
     selected_files = ActiveSupport::JSON.decode params[:files]
     s3 = Aws::S3::Client.new
@@ -88,12 +88,14 @@ before_action :create_download_log, only: :download_file
             File.open(file) do |file|
               Zip::File.open(temp_zip.path, Zip::File::CREATE) do |zipfile|
                 zipfile.add(sel_file, file.path)
-                uploaded_file_count = uploaded_file_count + 1
+                downloaded_file_count = downloaded_file_count + 1
               end #zip block close
             end #file open close
-            
-          file.close
-          file.unlink
+          
+          if Rails.env != "test" #Don't delete the files when testing!
+            file.close
+            file.unlink
+          end
         end # Tempfile.open close
       end #selected_files.each close
     end #end Zip::OS
@@ -103,10 +105,12 @@ before_action :create_download_log, only: :download_file
       File.open(temp_zip.path, 'r') do |zip|
         send_data(zip.read, disposition: 'attachment')
       end
-      @operation_results.push "#{uploaded_file_count} #{'file'.pluralize(uploaded_file_count)} zipped and sent"
-   
-      temp_zip.close
-      temp_zip.unlink
+      @operation_results.push "#{downloaded_file_count} #{'file'.pluralize(downloaded_file_count)} zipped and sent"
+      
+      if Rails.env != "test" #Don't delete the files when testing!
+        temp_zip.close
+        temp_zip.unlink
+      end
 
       @operation_results.each do |message|
         @download_log.write("#{message}") 
@@ -142,7 +146,10 @@ before_action :create_download_log, only: :download_file
 
       download_log.close
     ensure
-      File.unlink(download_log)
+
+    #  if Rails.env != "test"
+        File.unlink(download_log)
+   #   end
 
   end
 
@@ -221,7 +228,7 @@ before_action :create_download_log, only: :download_file
     #Just in case, checks for a file with the same name and deletes it.
     if File.exist?("#{Rails.root}/tmp/download_log-#{token_param}.txt")
       File.open("#{Rails.root}/tmp/download_log-#{token_param}.txt") do |file|
-        file.closes
+        file.close
         File.unlink(file)
       end
     end
