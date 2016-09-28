@@ -12,7 +12,7 @@ gem 'uglifier', '>= 1.3.0'
 gem 'coffee-rails', '~> 4.1.0'
 
 #Use rubyzip to create zip files
-gem 'rubyzip'
+gem 'rubyzip', '1.2.0'
 
 #Installs the AWS-SDK for ruby
 gem 'aws-sdk'
