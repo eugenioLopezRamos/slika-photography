@@ -28,7 +28,8 @@ before_action :create_download_log, only: :download_file
       s3 = Aws::S3::Client.new
 
       response_message = "#{"File".pluralize(params[:image].length)} successfully uploaded. #{"Location".pluralize(params[:image].length)}:<br />" 
- 
+      #need to change that message, not always will all files be successfully uploaded
+      
       params[:image].each do |image|
 
         image_file = image.tempfile #("#{Rails.root}/tmp")

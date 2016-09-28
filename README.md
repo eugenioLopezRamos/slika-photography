@@ -51,6 +51,7 @@ A portfolio site with AJAX, pushstate, and an admin panel
 - Add size limit on uploads/downloads client side and server side
 - Current work => testing the admin controller (that is, the file manager) 
 - Server side verification of file -> image
+- Disable upload button for 1sec or so to avoid double clicks
 
 **DONE**
 

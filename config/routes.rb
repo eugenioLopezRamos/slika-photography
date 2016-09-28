@@ -11,6 +11,8 @@ Rails.application.routes.draw do
   post '/contact', to: 'contact_mailer#create'#, :tab => 'contactTab'
 
   #get '/blog/' => redirect("/blog/"), :slug => "#{Post.last.slug}" #, to: 'static#show', :tab => 'blogTab'#, :post_id => Post.last.id
+  #need to fix this one so I don't need to have a model reference here, it causes problems when deploying on empty databases and
+  #queries the post model even on unrelated routes
   get '/blog/:slug', to: 'static#show', :tab => 'blogTab'
   
   get 'post_api', to: 'static#retrieve_posts'
@@ -30,7 +32,7 @@ namespace :admin do #maybe I should move this to resources: instead of namespace
 
 #file manager routes
  get '/files', to: 'admin#files_show'
- get 'download_file', to: 'admin#req_download_file_info'
+ get 'download_file', to: 'admin#req_download_file_info' #gets messages from the download (N° of files downloaded, errors)
  post '/upload', to: 'admin#upload_file'
  post 'download_file', to: 'admin#download_file'
  delete 'delete_file', to: 'admin#delete_file'
@@ -45,6 +47,6 @@ namespace :admin do #maybe I should move this to resources: instead of namespace
 end
 
 get '/(:tab)/(:id)', to: 'static#redirect' #if the user doesnt use downcase tab urls, downcases the URL. If 
-# the route doesnt exist, redirect to 404
+# the route doesnt exist, redirects to 404
 
 end
