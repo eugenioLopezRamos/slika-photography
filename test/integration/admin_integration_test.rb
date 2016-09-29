@@ -31,7 +31,11 @@ class AdminIntegrationTest < ActionDispatch::IntegrationTest
 # Find "#START TEST => DOWNLOADS" (WITHOUT the quotation marks) to go to the beginning of the downloads test
 # Find "#START TEST => DOWNLOADS_INFO" (WITHOUT the quotation marks) to go to the beginning of the req_download_info test
 # Find "#START TEST => DELETIONS" (WITHOUT the quotation marks) to go to the beginning of the file delete test
- test "Files uploaded from the file manager are correctly sent to S3" do
+ test "Tests full file manager flow -> Uploads files from disk to S3, downloads them from S3 to disk while generating logs, then deletes them" do
+ 		#maybe add a second upload with an actual file_route instead of just empty and refactor the loop code
+	  	#to loop over arrays and them over images? sounds slow but is more thorough.
+
+
  	#log in.
  	log_in_as(@admin)
  	get admin_files_path
@@ -48,8 +52,7 @@ class AdminIntegrationTest < ActionDispatch::IntegrationTest
 	 	file_route = ''
 	 	uploaded_images_array = [@uploaded_image_1, @uploaded_image_2]
 	  	post admin_upload_path(@admin), params: {file_route: file_route, image: uploaded_images_array}
-	  	#maybe add a second upload with an actual file_route instead of just empty and refactor the loop code
-	  	#to loop over arrays and them over images.
+
 
 
 	  	uploaded_images_array.each do |image|
@@ -188,53 +191,29 @@ class AdminIntegrationTest < ActionDispatch::IntegrationTest
 		assert_equal element.inner_text, flash_value.html_safe
 	end
 
-
-
-
-	#results of the download_log should be: 2 files zipped and sent \n doesnt_exist.lol The specified file does not exist.
-	#assert_equal
-
-
-
-
-
     #START TEST => DELETIONS
+
     	#DELETE request from the view, detailing files to delete.
 
-        #delete the test objects - Need to adapt it to be delete_objects with an array as objects
-      #  s3.delete_object(bucket: ENV['AWS_S3_BUCKET'], key: "#{image_file_route}#{image_file_name}")
+    	delete admin_delete_file_path, params: {files: files_array}
 
-     #   should_be_empty = s3.list_objects(bucket: ENV['AWS_S3_BUCKET'], marker: '#{image_file_route}').contents ## key: "#{image_file_route}#{image_file_name}").contents
-    #    should_be_empty = should_be_empty.select{|entry| entry.key === "#{image_file_route}#{image_file_name}"}.map(&:key)
+      #Asserts whether or not the files we uploaded on the first test were actually deleted.
+    	uploaded_images_array.each do |image|
 
-     #   #Unexistant file key returns [] (empty array) - Therefore should_be_empty should be equal to empty array.
-     #   assert should_be_empty.empty?
+	  		#same variables as the upload
+	        image_file = image.tempfile 
+	        image_file_name = image.original_filename
+	        image_file_route = file_route 
 
-  	#CLEANUP - delete the downloaded files after success
+       		should_be_empty = s3.list_objects(bucket: ENV['AWS_S3_BUCKET'], marker: '#{image_file_route}').contents ## key: "#{image_file_route}#{image_file_name}").contents
+    		should_be_empty = should_be_empty.select{|entry| entry.key === "#{image_file_route}#{image_file_name}"}.map(&:key)
+    		assert should_be_empty.empty?
 
-
- end
-
-
-
- test "Files deleted through the file manager view are correctly removed from the S3 bucket" do
-
-
+    	end
 
 
 
  end
-
-
-
-
- test "Files downloaded from S3 through the file manager are correctly sent to the client" do
-
-
-
-
- end
-
 
 
 end
