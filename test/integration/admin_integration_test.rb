@@ -18,6 +18,7 @@ class AdminIntegrationTest < ActionDispatch::IntegrationTest
 	@uploaded_image_2 = Rack::Test::UploadedFile.new(@image_2, "image/jpeg")
 
 	#Skips the tests if any of these ENV variables is nil, since they are required to correctly test the controller.
+	
 	if ENV['AWS_S3_BUCKET'].nil? || ENV['AWS_SECRET_ACCESS_KEY'].nil? || ENV['AWS_S3_REGION'].nil? || ENV['AWS_S3_BUCKET'].nil?
 		skip "At least one of these ENV variables is nil:\n  
 		ENV['AWS_S3_BUCKET'], \n
