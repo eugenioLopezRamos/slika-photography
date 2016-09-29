@@ -62,17 +62,19 @@ before_action :create_download_log, only: :download_file
   #  download_messages_log = Tempfile.new("download_log.txt", "#{Rails.root}/tmp")
     @operation_results = []
     downloaded_file_count = 0
-
-    selected_files = ActiveSupport::JSON.decode params[:files]
+   
+      selected_files = ActiveSupport::JSON.decode params[:files]
+ 
     s3 = Aws::S3::Client.new
 
-    temp_zip = Tempfile.new('temp.zip', "#{Rails.root}/tmp")
+    @temp_zip = Tempfile.new('temp.zip', "#{Rails.root}/tmp")
 
-    Zip::OutputStream.open(temp_zip) {|zos|}
+    Zip::OutputStream.open(@temp_zip) {|zos|}
 
       selected_files.each do |sel_file| #need to fix this on folders.
         Tempfile.open("tmpfile", "#{Rails.root}/tmp", :encoding => 'binary') do |file|
           begin 
+
             resp = s3.get_object({bucket: ENV['AWS_S3_BUCKET'], key: sel_file}, target: file)
 
             rescue Aws::S3::Errors::ServiceError => e
@@ -86,7 +88,7 @@ before_action :create_download_log, only: :download_file
           if !resp.nil?
          
             File.open(file) do |file|
-              Zip::File.open(temp_zip.path, Zip::File::CREATE) do |zipfile|
+              Zip::File.open(@temp_zip.path, Zip::File::CREATE) do |zipfile|
                 zipfile.add(sel_file, file.path)
                 downloaded_file_count = downloaded_file_count + 1
               end #zip block close
@@ -101,15 +103,15 @@ before_action :create_download_log, only: :download_file
     end #end Zip::OS
 
     ensure
-     if !temp_zip.nil?
-      File.open(temp_zip.path, 'r') do |zip|
+     if !@temp_zip.nil?
+      File.open(@temp_zip.path, 'r') do |zip|
         send_data(zip.read, disposition: 'attachment')
       end
       @operation_results.push "#{downloaded_file_count} #{'file'.pluralize(downloaded_file_count)} zipped and sent"
       
       if Rails.env != "test" #Don't delete the files when testing!
-        temp_zip.close
-        temp_zip.unlink
+        @temp_zip.close
+        @temp_zip.unlink
       end
 
       @operation_results.each do |message|
@@ -223,6 +225,7 @@ before_action :create_download_log, only: :download_file
     #remove all "/" characters from the authenticity token, they cause the system to believe it's a new directory(and thus, file creation fails).
     #Without the "/" this string is still unique enough for us to use as a name for our pseudo temp file, especially since it will be
     #deleted shortly after anyways.
+
     token_param = params[:'authenticity-token'].gsub(/(\/+)*/, '')
 
     #Just in case, checks for a file with the same name and deletes it.

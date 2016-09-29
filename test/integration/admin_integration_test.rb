@@ -39,8 +39,11 @@ class AdminIntegrationTest < ActionDispatch::IntegrationTest
  	#log in.
  	log_in_as(@admin)
  	get admin_files_path
+
  	#create a S3 client instance to use with tests.
 	s3 = Aws::S3::Client.new
+
+	 	file_routes_array = ['', 'another/route/here/'] #tests the root and a nested directory
 
  	#START TEST => UPLOADS
 	 	#POST request with no images, should render the "No files" message in admin/flash_messages and return
@@ -49,7 +52,8 @@ class AdminIntegrationTest < ActionDispatch::IntegrationTest
 	 	assert_select 'div.alert'
 
 	 	#POST files from the view - The most important part is an array of files under param image
-	 	file_route = ''
+	file_routes_array.each do |file_route|
+		puts "mY FILE ROUTE #{file_route}"
 	 	uploaded_images_array = [@uploaded_image_1, @uploaded_image_2]
 	  	post admin_upload_path(@admin), params: {file_route: file_route, image: uploaded_images_array}
 
@@ -69,12 +73,12 @@ class AdminIntegrationTest < ActionDispatch::IntegrationTest
 	        test_uploaded_file_listing = test_uploaded_file_listing.select{ |entry| entry.key === "#{image_file_route}#{image_file_name}"  }.map(&:key)
 
 	        #Test filenames being the same - image_file_name is in an array because the result from S3 is also an array (in this case, of one item.)
-	        assert_equal [image_file_name], test_uploaded_file_listing
+	        assert_equal ["#{file_route}#{image_file_name}"], test_uploaded_file_listing
 
 	        #Should give back only one item.
 	        assert_equal test_uploaded_file_listing.length, 1
 	        #Test route on the bucket being same to params[:file_route] + image_file_name.      
-	        assert_equal "#{image_file_route}#{image_file_name}", "#{image_file_route}#{test_uploaded_file_listing[0]}"
+	        assert_equal "#{image_file_route}#{image_file_name}", "#{test_uploaded_file_listing[0]}"
 
 	        #tests same file size - I'm doing this comparison instead of downloading the file with get_object then comparing them.
 	        test_uploaded_file_size = s3.list_objects(bucket: ENV['AWS_S3_BUCKET'], marker: image_file_route).contents
@@ -90,12 +94,23 @@ class AdminIntegrationTest < ActionDispatch::IntegrationTest
   		# Add a third nonexistant file to check for errors <- Done, now check for the error messages
 
   		#POST from the view, requesting the files to download.
-  		files_array = "[\"TestImage1.jpg\", \"TestImage2.jpg\", \"doesnt_exist.lol\" ]" #Prob. need to change this to param style later, 
+
+  		#files_array = "[\"#{file_route}TestImage1.jpg\", \"TestImage2.jpg\", \"doesnt_exist.lol\" ]" #Prob. need to change this to param style later, 
   																						# can't get variable strings to escape quotation marks...
+
+
+  		files_array = ["#{file_route}TestImage1.jpg", "#{file_route}TestImage2.jpg", "#{file_route}doesnt_exist.lol"]
+
 
   		mock_auth_token = "12345/678"
   		mock_auth_token_to_file = mock_auth_token.gsub(/(\/+)*/, '')
 
+  		#debugger
+
+
+		#my_params = ActiveSupport::JSON.encode({"authenticity-token" => mock_auth_token, "files" => ActiveSupport::JSON.encode(files_array)})
+
+		# {'authenticity-token' => mock_auth_token, 'files' => files_array}
   		#Same code as Admin_controller#create_download_log, deletes existing download_log to avoid false errors on tests
   		# when comparing original_directory_file_count as set below to the one at the end of the whole process
 
@@ -109,55 +124,43 @@ class AdminIntegrationTest < ActionDispatch::IntegrationTest
 
   		original_directory_file_count = Dir["#{Rails.root}/tmp/*"].length
 
-		  	post admin_download_file_path(@admin), params: {'authenticity-token': mock_auth_token, files: files_array}# files: files_array}
-		  	files_array = JSON.parse(files_array) #Need to parse it, otherwise I'd need to JSON.parse every time I need to compare...
+		  	post admin_download_file_path(@admin), params: {'authenticity-token': mock_auth_token, files: ActiveSupport::JSON.encode(files_array)}, xhr: true #{'authenticity-token': mock_auth_token, files: files_array}# files: files_array}
+		  #	files_array = JSON.parse(files_array) #Need to parse it, otherwise I'd need to JSON.parse every time I need to compare...
 		  	assigns(:operation_results)
+		  	assigns(:temp_zip)
 	  		#GET_OBJECT is done by the controller. Our job is to check that the controller actions are having no errors.
 
-		  	files_array.each do |file|
+		  	#files_array.each do |file|
 		  	
 		  		#Test if the download_log exists
 		  		assert File.file?("#{Rails.root}/tmp/download_log-#{mock_auth_token_to_file}.txt")
 
 		  		#create the location of the temp.zip file.
-		  		zip_file_location = ""
-		  			
+		  		
 		  		#TODO: Need to flush all zipfiles from the temp folder before testing - Otherwise I'll get errors when using Find.find
-
-		  		#locate the temp.zip tempfile and store its location in zip_file_location
-		  		Find.find("#{Rails.root}/tmp") do |path|
-
-			  		if File.basename(path) =~ /(temp\.zip(\-*\w*\-*)*)/ #/temp\.zip(\-*\w*\-*)*/
-
-			  			zip_file_location = "#{Rails.root}/tmp/#{File.path(File.basename(path))}" #This looks very very ugly, needs a bit of prettifying
-			  			puts "zip file loc: #{zip_file_location}" #There seems to be a small bug where tests will sometimes not detect the zip file
-			  													  #maybe the regex needs to be perfected still.
-						Find.prune       # Don't look any further into this directory.
-					else
-						next
-					end
-		
-				end
+	  	#	debugger
 
 				# create an empty array that will contain the names of the files that were added to the zip file.
 				zip_file_contents = []
 				#open the zip file
-		  		Zip::File.open(zip_file_location) do |zip_file|
+		  		Zip::File.open(assigns(:temp_zip)) do |zip_file|
 		  			#check that the size of the zip file entry is equal to the original file size of the fixture
 		  			# #size is the correct method, as #compressed_size is the final size of the zipped entry.
 		  			zip_file.each do |zip_entry|
-
+	
 		  				uploaded_images_array.each do |file| #This block searches the name of the
 		  													 #compares the original size of the file in the zip archive to its 
 		  													 #corresponding fixture uploaded tempfile.
+		  										
+		  					if "#{file_route}#{file.original_filename}" === zip_entry.name
 
-		  					if file.original_filename === zip_entry.name
 		  						assert_equal zip_entry.size, file.size
+		  						zip_file_contents << zip_entry.name
 		  					end
 
 		  				end
 		  				#push the entry name to the previously created array for comparison purposes
-		  				zip_file_contents.push zip_entry.name
+		  			
 		  			end
 
 		  		end
@@ -165,7 +168,7 @@ class AdminIntegrationTest < ActionDispatch::IntegrationTest
 		  		assert_equal zip_file_contents, files_array.slice(0..-2) #Has to exclude the unexistant download! chop off the last one.
 		  
 		 	
-		  	end
+		  #	end
 
 		  	#Test that the files still exist. 
 
@@ -212,6 +215,7 @@ class AdminIntegrationTest < ActionDispatch::IntegrationTest
     	end
 
 
+	end
 
  end
 
