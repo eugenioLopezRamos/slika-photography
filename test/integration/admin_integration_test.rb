@@ -10,10 +10,13 @@ class AdminIntegrationTest < ActionDispatch::IntegrationTest
 
   def setup
   	@admin = users(:michael)
+  	@image_1_name = 'TestImage1.jpg'
+  	@image_2_name = 'TestImage2.jpg'
   	@image_1 = file_fixture('TestImage1.jpg')
  	@image_2 = file_fixture('TestImage2.jpg')
  	@uploaded_image_1 = Rack::Test::UploadedFile.new(@image_1, "image/jpeg")
 	@uploaded_image_2 = Rack::Test::UploadedFile.new(@image_2, "image/jpeg")
+	#@nonexistant_file = 'doesnt_exist.lol' #cant get to make it to "param" format
 
 	#AWS setup is done controller side. It could be useful to have a "test" bucket though, just for tests.
 
@@ -81,18 +84,31 @@ class AdminIntegrationTest < ActionDispatch::IntegrationTest
   		#some ideas to consider: 
   		# I should probably do the same tests with file_route != ''
   		# Add check for div.info
-  		# Add a third nonexistant file to check for errors.
+  		# Add a third nonexistant file to check for errors <- Done, now check for the error messages
 
   		#POST from the view, requesting the files to download.
-  		files_array = "[\"TestImage1.jpg\", \"TestImage2.jpg\"]"
+  		files_array = "[\"TestImage1.jpg\", \"TestImage2.jpg\", \"doesnt_exist.lol\" ]" #Prob. need to change this to param style later, 
+  																						# can't get variable strings to escape quotation marks...
+
   		mock_auth_token = "12345/678"
   		mock_auth_token_to_file = mock_auth_token.gsub(/(\/+)*/, '')
 
+  		#Same code as Admin_controller#create_download_log, deletes existing download_log to avoid false errors on tests
+  		# when comparing original_directory_file_count as set below to the one at the end of the whole process
+
+
+	  	if File.exist?("#{Rails.root}/tmp/download_log-#{mock_auth_token_to_file}.txt")
+	      File.open("#{Rails.root}/tmp/download_log-#{mock_auth_token_to_file}.txt", "w+t") do |file|
+	        file.close
+	        File.unlink(file)
+	      end
+	    end
+
   		original_directory_file_count = Dir["#{Rails.root}/tmp/*"].length
 
-		  	post admin_download_file_path(@admin), params: {'authenticity-token': mock_auth_token, files: files_array}
+		  	post admin_download_file_path(@admin), params: {'authenticity-token': mock_auth_token, files: files_array}# files: files_array}
 		  	files_array = JSON.parse(files_array) #Need to parse it, otherwise I'd need to JSON.parse every time I need to compare...
-
+		  	assigns(:operation_results)
 	  		#GET_OBJECT is done by the controller. Our job is to check that the controller actions are having no errors.
 
 		  	files_array.each do |file|
@@ -108,11 +124,11 @@ class AdminIntegrationTest < ActionDispatch::IntegrationTest
 		  		#locate the temp.zip tempfile and store its location in zip_file_location
 		  		Find.find("#{Rails.root}/tmp") do |path|
 
-			  		if File.basename(path) =~ /temp\.zip(\-*\w*\-*)*/
+			  		if File.basename(path) =~ /(temp\.zip(\-*\w*\-*)*)/ #/temp\.zip(\-*\w*\-*)*/
 
 			  			zip_file_location = "#{Rails.root}/tmp/#{File.path(File.basename(path))}" #This looks very very ugly, needs a bit of prettifying
 			  			puts "zip file loc: #{zip_file_location}" #There seems to be a small bug where tests will sometimes not detect the zip file
-			  													  #As far as I've seen it is not related to the regex
+			  													  #maybe the regex needs to be perfected still.
 						Find.prune       # Don't look any further into this directory.
 					else
 						next
@@ -143,19 +159,40 @@ class AdminIntegrationTest < ActionDispatch::IntegrationTest
 
 		  		end
 		  		# Does the zip file contain the same files as the files requested in the POST request?
-		  		assert_equal zip_file_contents, files_array
+		  		assert_equal zip_file_contents, files_array.slice(0..-2) #Has to exclude the unexistant download! chop off the last one.
 		  
 		 	
 		  	end
 
 		  	#Test that the files still exist. 
-		  	assert_equal (original_directory_file_count + files_array.length + 2), Dir["#{Rails.root}/tmp/*"].length	
+
+		  	assert_equal (original_directory_file_count + files_array.length + 2), Dir["#{Rails.root}/tmp/*"].length
+
+		  	#Test that the download_log has the correct information.
+
+		    download_log = File.open("#{Rails.root}/tmp/download_log-#{mock_auth_token_to_file}.txt", "r")
+  			download_log.rewind
+  			assert_equal download_log.read, assigns(:operation_results).join
 
 	  	
 
 
 	#START TEST => DOWNLOADS_INFO
 
+	#operation_result is not usable on the get request.
+	flash_value = assigns(:operation_results).join
+
+	get admin_download_file_path, params: {'authenticity-token': mock_auth_token}
+
+	assert_select 'div.alert' do |element|
+		assert_equal element.inner_text, flash_value.html_safe
+	end
+
+
+
+
+	#results of the download_log should be: 2 files zipped and sent \n doesnt_exist.lol The specified file does not exist.
+	#assert_equal
 
 
 
