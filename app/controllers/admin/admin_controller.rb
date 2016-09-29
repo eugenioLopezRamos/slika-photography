@@ -78,7 +78,7 @@ before_action :create_download_log, only: :download_file
             rescue Aws::S3::Errors::ServiceError => e
             # raise e.message, :status => 404
             #render :json => {"message" => e.message}, :status => 404
-            @operation_results.push "#{file.name}: #{e.message.gsub('key', 'file')}<br />" 
+            @operation_results.push "<br />#{sel_file}: #{e.message.gsub('key', 'file')}<br />" 
            # render partial: 'admin/flash_messages', :status => 404
             # this should have more :status codes according to the possible errors S3 can throw
             end #begin close
@@ -227,7 +227,7 @@ before_action :create_download_log, only: :download_file
 
     #Just in case, checks for a file with the same name and deletes it.
     if File.exist?("#{Rails.root}/tmp/download_log-#{token_param}.txt")
-      File.open("#{Rails.root}/tmp/download_log-#{token_param}.txt") do |file|
+      File.open("#{Rails.root}/tmp/download_log-#{token_param}.txt", "w+t") do |file|
         file.close
         File.unlink(file)
       end
