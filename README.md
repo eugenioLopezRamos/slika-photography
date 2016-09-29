@@ -49,12 +49,14 @@ A portfolio site with AJAX, pushstate, and an admin panel
 - fix posts slug redirecter, it always queries the posts model
 - Add friendly forwarding on admin pages
 - Add size limit on uploads/downloads client side and server side
-- Current work => testing the admin controller (that is, the file manager) 
+
 - Server side verification of file -> image
 - Disable upload button for 1sec or so to avoid double clicks
 
 **DONE**
 
+
+- File manager done (includes unit & live integration tests)
 - añadir requisito login a file manager
 - Multiple files uploads added
 - center flash messages/error messages
