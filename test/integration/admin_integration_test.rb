@@ -16,9 +16,19 @@ class AdminIntegrationTest < ActionDispatch::IntegrationTest
  	@image_2 = file_fixture('TestImage2.jpg')
  	@uploaded_image_1 = Rack::Test::UploadedFile.new(@image_1, "image/jpeg")
 	@uploaded_image_2 = Rack::Test::UploadedFile.new(@image_2, "image/jpeg")
-	#@nonexistant_file = 'doesnt_exist.lol' #cant get to make it to "param" format
 
-	#AWS setup is done controller side. It could be useful to have a "test" bucket though, just for tests.
+	#Skips the tests if any of these ENV variables is nil, since they are required to correctly test the controller.
+	if ENV['AWS_S3_BUCKET'].nil? || ENV['AWS_SECRET_ACCESS_KEY'].nil? || ENV['AWS_S3_REGION'].nil? || ENV['AWS_S3_BUCKET'].nil?
+		skip "At least one of these ENV variables is nil:\n  
+		ENV['AWS_S3_BUCKET'], \n
+		ENV['AWS_SECRET_ACCESS_KEY'], \n
+		ENV['AWS_S3_REGION']\n
+		ENV['AWS_S3_BUCKET'],\n 
+		Can't test S3 integration -> skipping AdminIntegrationTest"
+		
+	end
+
+
 
   end
 
@@ -51,9 +61,10 @@ class AdminIntegrationTest < ActionDispatch::IntegrationTest
 	 	assert_response :success
 	 	assert_select 'div.alert'
 
-	 	#POST files from the view - The most important part is an array of files under param image
+	 
 	file_routes_array.each do |file_route|
-		puts "mY FILE ROUTE #{file_route}"
+
+	#POST files from the view - The most important part is an array of files under param image
 	 	uploaded_images_array = [@uploaded_image_1, @uploaded_image_2]
 	  	post admin_upload_path(@admin), params: {file_route: file_route, image: uploaded_images_array}
 
@@ -88,32 +99,11 @@ class AdminIntegrationTest < ActionDispatch::IntegrationTest
 
   	#START TEST => DOWNLOADS
 
-  		#some ideas to consider: 
-  		# I should probably do the same tests with file_route != ''
-  		# Add check for div.info
-  		# Add a third nonexistant file to check for errors <- Done, now check for the error messages
-
-  		#POST from the view, requesting the files to download.
-
-  		#files_array = "[\"#{file_route}TestImage1.jpg\", \"TestImage2.jpg\", \"doesnt_exist.lol\" ]" #Prob. need to change this to param style later, 
-  																						# can't get variable strings to escape quotation marks...
-
-
   		files_array = ["#{file_route}TestImage1.jpg", "#{file_route}TestImage2.jpg", "#{file_route}doesnt_exist.lol"]
 
 
   		mock_auth_token = "12345/678"
   		mock_auth_token_to_file = mock_auth_token.gsub(/(\/+)*/, '')
-
-  		#debugger
-
-
-		#my_params = ActiveSupport::JSON.encode({"authenticity-token" => mock_auth_token, "files" => ActiveSupport::JSON.encode(files_array)})
-
-		# {'authenticity-token' => mock_auth_token, 'files' => files_array}
-  		#Same code as Admin_controller#create_download_log, deletes existing download_log to avoid false errors on tests
-  		# when comparing original_directory_file_count as set below to the one at the end of the whole process
-
 
 	  	if File.exist?("#{Rails.root}/tmp/download_log-#{mock_auth_token_to_file}.txt")
 	      File.open("#{Rails.root}/tmp/download_log-#{mock_auth_token_to_file}.txt", "w+t") do |file|
@@ -123,6 +113,8 @@ class AdminIntegrationTest < ActionDispatch::IntegrationTest
 	    end
 
   		original_directory_file_count = Dir["#{Rails.root}/tmp/*"].length
+
+  			#POST from the view, requesting the files to download.
 
 		  	post admin_download_file_path(@admin), params: {'authenticity-token': mock_auth_token, files: ActiveSupport::JSON.encode(files_array)}, xhr: true #{'authenticity-token': mock_auth_token, files: files_array}# files: files_array}
 		  
@@ -166,7 +158,7 @@ class AdminIntegrationTest < ActionDispatch::IntegrationTest
 		  #	end
 
 		  	#Test that the files still exist. 
-		  	
+
 		  	# This test fails randomly, probably has to do with timing. Leaving it commented until I figure out a way to make it
 		  	# consistent
 
