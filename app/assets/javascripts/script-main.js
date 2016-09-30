@@ -1,8 +1,9 @@
 var main = function() {
+    console.log("CHANGEEEEE");
 
-console.log(window.location.pathname);
-console.log(window.location.pathname.replace('/', ''));
-console.log("tabname " + window.location.pathname.replace('/', '').split("/")[0]);//.replace(/\/\*+\/+/, ''))
+//console.log(window.location.pathname);
+//console.log(window.location.pathname.replace('/', ''));
+//console.log("tabname " + window.location.pathname.replace('/', '').split("/")[0]);//.replace(/\/\*+\/+/, ''))
 var getTabFromUrl = window.location.pathname.replace('/', '').split("/")[0];//.replace(/(\/\w+|\/)/, '');
 
 var activeTabValue = getTabFromUrl + 'Tab'; //used to manage the state of the different tabs
@@ -26,8 +27,6 @@ typeof stateObject[activeTabValue] == "undefined" ? stateObject[activeTabValue] 
 var scheduled = false; // this is used to delay applying the state changes so the page doesnt get messed up - src= http://eloquentjavascript.net/14_event.html  - Thanks! 
 
 history.replaceState(stateObject, "Leonardo Antonio PhotoArt", ""); //The page uses the history API for the tabs. This line of code is used for consistency, I wanted to declare the initial state of the page instead of using the browser's default.
-
-
 
 updateState(stateObject, false);
 
@@ -72,134 +71,134 @@ if (!Array.prototype.findIndex) { //findIndex polyfill for IE source: MDN - http
 }  
 
 window.setTimeout(function() {
-window.addEventListener("resize", function() { //handles resizing when changing screen orientation
-  document.getElementById("menu").removeAttribute("style");
-  document.getElementById("header").removeAttribute("style");
-  document.getElementsByClassName("active-Tab")[0].removeAttribute("style");
-if(currentOrientation !== window.orientation) { //if this evaluates to true, it means there's been a resize with no orientation change made, which means
-//that the user is focus-ing on an input/textarea in the "Contact Us" tab, and that is handled differently, in the contactFormHandler function
+    window.addEventListener("resize", function() { //handles resizing when changing screen orientation
+        document.getElementById("menu").removeAttribute("style");
+        document.getElementById("header").removeAttribute("style");
+        document.getElementsByClassName("active-Tab")[0].removeAttribute("style");
+        if(currentOrientation !== window.orientation) { //if this evaluates to true, it means there's been a resize with no orientation change made, which means
+        //that the user is focus-ing on an input/textarea in the "Contact Us" tab, and that is handled differently, in the contactFormHandler function
 
-var header = document.getElementById("headerBackground");
-var jumbotron = document.getElementById("jumbotron");
-var bottomBackground = document.getElementById("bottomBackground");
-var contactButton = document.getElementById("contactButton"); 
-var contactText = document.getElementById("contactText");
-var aboutButton = document.getElementById("aboutButton");
-var contactForm = document.getElementById("contactForm");
-var topHr = document.getElementById("topHr");
-var bottomHr = document.getElementById("bottomHr");
-
-
-currentOrientation = window.orientation;   
-
-var contentTabs = (function() { //array with all elements with class "content-Tabs" - works kind of like $('.content-Tabs')
-    var allContentTabs = [];
-    allContentTabs = Array.prototype.slice.call(document.getElementsByClassName("content-Tabs")); //array with all elements with the 
-    // "content-Tabs" class
-    return allContentTabs;
-})();//contentTabs close
-
-if(currentOrientation !== 0 && clientWidth < 641) { //orientation = landscape and width < 641px which represents all phones http://mydevice.io/devices/
+            var header = document.getElementById("headerBackground");
+            var jumbotron = document.getElementById("jumbotron");
+            var bottomBackground = document.getElementById("bottomBackground");
+            var contactButton = document.getElementById("contactButton"); 
+            var contactText = document.getElementById("contactText");
+            var aboutButton = document.getElementById("aboutButton");
+            var contactForm = document.getElementById("contactForm");
+            var topHr = document.getElementById("topHr");
+            var bottomHr = document.getElementById("bottomHr");
 
 
-[header, topHr, bottomHr, bottomBackground].map(function(index) {
-index.style.display = "none";    
-});
+            currentOrientation = window.orientation;   
 
-jumbotron.style.height = "100vh";
-jumbotron.style.width = "100vw";
-jumbotron.style.maxHeight = "100vh";
-jumbotron.style.maxWidth = "100vw";
+            var contentTabs = (function() { //array with all elements with class "content-Tabs" - works kind of like $('.content-Tabs')
+                var allContentTabs = [];
+                allContentTabs = Array.prototype.slice.call(document.getElementsByClassName("content-Tabs")); //array with all elements with the 
+                // "content-Tabs" class
+                return allContentTabs;
+            })();//contentTabs close
+
+            if(currentOrientation !== 0 && clientWidth < 641) { //orientation = landscape and width < 641px which represents all phones http://mydevice.io/devices/
 
 
-contentTabs.map(function(element, array, index) { //if this is not done, bad things happen to the contact tab.
-element.style.height = "100vh";  
-element.style.width = "100vw";
-});
+            [header, topHr, bottomHr, bottomBackground].map(function(index) {
+            index.style.display = "none";    
+            });
 
-document.getElementById("contactContent").removeAttribute("style");
-contactButton.style.animation = "none"; //this makes the Contact Us tab layout return to the css default when changing screen orientation
-contactText.style.animation = "none";
-aboutButton.style.animation = "none";
-contactForm.style.animation = "none"; 
+            jumbotron.style.height = "100vh";
+            jumbotron.style.width = "100vw";
+            jumbotron.style.maxHeight = "100vh";
+            jumbotron.style.maxWidth = "100vw";
 
- 
-}
 
-if(currentOrientation == 0 && clientWidth < 641) {
-document.getElementById("contactContent").scrollTop = 0;
-[header,topHr, jumbotron, bottomHr, bottomBackground].map(function(index) {
-window.scrollTo(0,0);
-index.removeAttribute("style");
-});
+            contentTabs.map(function(element, array, index) { //if this is not done, bad things happen to the contact tab.
+            element.style.height = "100vh";  
+            element.style.width = "100vw";
+            });
 
-contentTabs.map(function(element, array, index) { //if this is not done, bad things happen to the contact tab.
-element.removeAttribute("style");    
+            document.getElementById("contactContent").removeAttribute("style");
+            contactButton.style.animation = "none"; //this makes the Contact Us tab layout return to the css default when changing screen orientation
+            contactText.style.animation = "none";
+            aboutButton.style.animation = "none";
+            contactForm.style.animation = "none"; 
 
-});
+             
+            }
 
-//updateState(stateObject.state, 0); //shows the current tab
+            if(currentOrientation == 0 && clientWidth < 641) {
+                document.getElementById("contactContent").scrollTop = 0;
+                [header,topHr, jumbotron, bottomHr, bottomBackground].map(function(index) {
+                window.scrollTo(0,0);
+                index.removeAttribute("style");
+            });
 
-initialFormat(); //sets the initial styling.
+            contentTabs.map(function(element, array, index) { //if this is not done, bad things happen to the contact tab.
+                element.removeAttribute("style");    
 
-} //closes if == portrait
+            });
 
-}    
+            //updateState(stateObject.state, 0); //shows the current tab
 
-});
+            initialFormat(); //sets the initial styling.
+
+            } //closes if == portrait
+
+        }    
+
+    });
 }, 200);
 
 
 function homeTabHandler(){ 
     
-var setBigThumbEvtHandler = 1;  
+    var setBigThumbEvtHandler = 1;  
 
-function stopScroll(event) {
-    event.stopPropagation();
-    event.preventDefault();
-}
-
-function bigThumbEvtHandler() {
-
-setBigThumbEvtHandler = 0; 
-
-document.getElementById("bigThumbnails").style.animation = "fadeOut 0.45s forwards";
-window.setTimeout(function() {document.getElementById("bigThumbnails").removeAttribute("style")}, 460);
-
-document.getElementsByClassName("active-Tab")[0].removeEventListener("touchmove", stopScroll);
-
-}    //end of bigThumbEvtHandler
-
-
-
-
-    
-function smallThumbnailHandler(event) {
-
-var clickedImageIndex = [].slice.call(document.getElementsByClassName("smallThumbnailImgs")).findIndex(function(element) { //index of the element whose id is equal to the id of the target of the smallThumbnails click event
-    if(element.id == event.target.id){
-        return element.id;    
-    } 
-    else {
-        return;
+    function stopScroll(event) {
+        event.stopPropagation();
+        event.preventDefault();
     }
-}, 0);
 
-[].slice.call(document.getElementsByClassName("bigThumbnailImgs")).map(function(element){element.style.display = "none";}); //makes all big imgs have display = "none"
-document.getElementsByClassName("bigThumbnailImgs")[clickedImageIndex].style.display = "flex"; //this makes visible the img with the same index as the one we clicked. Since these are just the big versions of the small thumbnails, they make visible the same index of bigimgs
-document.getElementById("bigThumbnails").style.display = "block"; //makes the container visible.
+    function bigThumbEvtHandler() {
+
+    setBigThumbEvtHandler = 0; 
+
+    document.getElementById("bigThumbnails").style.animation = "fadeOut 0.45s forwards";
+    window.setTimeout(function() {document.getElementById("bigThumbnails").removeAttribute("style")}, 460);
+
+    document.getElementsByClassName("active-Tab")[0].removeEventListener("touchmove", stopScroll);
+
+    }    //end of bigThumbEvtHandler
 
 
-document.getElementsByClassName("active-Tab")[0].addEventListener("touchmove", stopScroll); //this way the evt listener is dumped by JS garbage collection on tab change, and it stops a bug where
-//if you change tabs while a big thumbnail is open, when coming back the stopScroll function would still be in memory  and thus the homeTab becomes un-scrollable (because of event.preventDefault)
-(setBigThumbEvtHandler==1) ? document.getElementById("bigThumbnails").addEventListener("click", bigThumbEvtHandler) : ""; //sets an event listener for the big imgs container (if it has not been set yet)
 
 
-}    //end of smallThumbnailHandler
+        
+    function smallThumbnailHandler(event) {
 
-[].slice.call(document.getElementsByClassName("smallThumbnailImgs")).map(function(element, array, index) { //adds a click event listener to each element with the class "smallThumbnail"
-element.addEventListener("click", smallThumbnailHandler);
-});
+    var clickedImageIndex = [].slice.call(document.getElementsByClassName("smallThumbnailImgs")).findIndex(function(element) { //index of the element whose id is equal to the id of the target of the smallThumbnails click event
+        if(element.id == event.target.id){
+            return element.id;    
+        } 
+        else {
+            return;
+        }
+    }, 0);
+
+    [].slice.call(document.getElementsByClassName("bigThumbnailImgs")).map(function(element){element.style.display = "none";}); //makes all big imgs have display = "none"
+    document.getElementsByClassName("bigThumbnailImgs")[clickedImageIndex].style.display = "flex"; //this makes visible the img with the same index as the one we clicked. Since these are just the big versions of the small thumbnails, they make visible the same index of bigimgs
+    document.getElementById("bigThumbnails").style.display = "block"; //makes the container visible.
+
+
+    document.getElementsByClassName("active-Tab")[0].addEventListener("touchmove", stopScroll); //this way the evt listener is dumped by JS garbage collection on tab change, and it stops a bug where
+    //if you change tabs while a big thumbnail is open, when coming back the stopScroll function would still be in memory  and thus the homeTab becomes un-scrollable (because of event.preventDefault)
+    (setBigThumbEvtHandler==1) ? document.getElementById("bigThumbnails").addEventListener("click", bigThumbEvtHandler) : ""; //sets an event listener for the big imgs container (if it has not been set yet)
+
+
+    }    //end of smallThumbnailHandler
+
+    [].slice.call(document.getElementsByClassName("smallThumbnailImgs")).map(function(element, array, index) { //adds a click event listener to each element with the class "smallThumbnail"
+    element.addEventListener("click", smallThumbnailHandler);
+    });
 
 }
 
@@ -207,193 +206,191 @@ element.addEventListener("click", smallThumbnailHandler);
 
 (function menuToggle() { //toggle is a misnomer really, this makes the menu slidable down/up
     
-var menuSlideStartY; //starting Y coordinate of the touch event
-var menuSlideStartX; //starting X coordinate of the touch event
-var newY; //new value of the Y coordinate of the touch event after sliding down or up
-var newX;//new value of the X coordinate of the touch event after sliding down or up
-var header = document.getElementById("header"); //the header that contains the "logo" and menu
-var menu = document.getElementById("menu"); //the menu, with links
-var oneEm = parseInt(getComputedStyle(document.body).fontSize, 10); //size of one em as defined in body. Since I dont define it in css it should adapt the site to custom default font sizes.
-var clHeight = document.documentElement.clientHeight; //usable height of client
-var clWidth = document.documentElement.clientWidth;   //usable width of client
-var minimumMenuHeight = 80; //min menu height in px
-var maxMenuHeight = clHeight - 4.25 * oneEm; //in px as integer (no 'px' after)
+    var menuSlideStartY; //starting Y coordinate of the touch event
+    var menuSlideStartX; //starting X coordinate of the touch event
+    var newY; //new value of the Y coordinate of the touch event after sliding down or up
+    var newX;//new value of the X coordinate of the touch event after sliding down or up
+    var header = document.getElementById("header"); //the header that contains the "logo" and menu
+    var menu = document.getElementById("menu"); //the menu, with links
+    var oneEm = parseInt(getComputedStyle(document.body).fontSize, 10); //size of one em as defined in body. Since I dont define it in css it should adapt the site to custom default font sizes.
+    var clHeight = document.documentElement.clientHeight; //usable height of client
+    var clWidth = document.documentElement.clientWidth;   //usable width of client
+    var minimumMenuHeight = 80; //min menu height in px
+    var maxMenuHeight = clHeight - 4.25 * oneEm; //in px as integer (no 'px' after)
 
 
 
 
-if(document.documentElement.clientWidth<=480) {
-(function initialMenuAnimation() {
+    if(document.documentElement.clientWidth<=480) {
+        (function initialMenuAnimation() {
 
 
-header.style.height = "auto";  
-menu.style.zIndex = "1";
-menu.style.borderBottom = "2px solid rgb(230,230,230)";
-
-menu.style.height = maxMenuHeight + 'px';
-prevHeight = maxMenuHeight;
-//while(prevHeight>minimumMenuHeight) {
-
-window.setTimeout(function() {
-menu.style.animation = "menuContract 1s forwards";
- //closes if<minHeight
-prevHeight = 0;
-}, 1000);
-    
-//} //closes while loop
-window.setTimeout(function(){
-if(prevHeight<minimumMenuHeight) {
-    prevHeight = 0;
-    menu.removeAttribute("style");
-    header.removeAttribute("style"); 
-
-}   
-    
-}, 1850); 
-
-})(); //closes function
-
-}
-
-
-function touchStartHandler(event) { //handles touching the screen
-    event.stopPropagation();
-    menuToggleHandler.touchStart(event);    
-}
-
-function touchEndHandler(event) { //handles lifting the finger up
-    event.stopPropagation();
-    menuToggleHandler.touchEnd(event);    
-}
-
-function slideDownHandler(event) { //handles sliding finger up/down
-    menuToggleHandler.touchMove(event);
-}
-
-var menuToggleHandler = (function() {
-    
-return {
-touchStart: function(event) {
-menuSlideStartY = event.changedTouches[0].clientY;
-menuSlideStartX = event.changedTouches[0].clientX;
-document.addEventListener("touchmove", slideDownHandler);  
-},
-
-touchMove: function(event) {
-
-
-if(clWidth>480) {
-document.removeEventListener("touchmove", slideDownHandler);    
-}
-
-var originalPosY = menuSlideStartY;
-var originalPosX = menuSlideStartX;
-newY = event.changedTouches[0].clientY;
-newX = event.changedTouches[0].clientX;
-var deltaY = newY - originalPosY;
-var deltaX = newX - originalPosX;
-//I really need to make this code more readable, right now the 9001 ifs are awful for anyone to try to understand
-
-
-
-
-var isSlideAttempt = (function() { //is user trying to change slides? evaluates to true/false
-if(Math.abs(clHeight/clWidth * deltaX)>Math.abs(deltaY)) { //checks if the pointer has moved farther to the right/left than up/down. Not perfect since height/width are different
-//assuming 640 height, 360 width (for example. clientHeight/width are smaller since they dont consider OS/browser UI)
-// 640/360 = ratio of height to width is 1.7 height is 1.7 times width
-// 360/640 = ratio of width to height is 0.56 (width is 0.56 times height)
-//So, assuming we move the touch 50% on deltaX and 50% on deltaY:
-// 360 * 50%  = 180px on deltaX, 640 * 50% = 320px on deltaY
-// then we multiply by the factors: for deltaX = 180*1.7 = 153px, for deltaY = 320 * 0.56 = 179.2
-//so we end up with a small difference that favors deltaY, but remember, we are moving (in pixels) the deltaY axis way more, since it is bigger in size. Testing the site live to me it "feels" appropiate. YMMV though.
-
-return true;    
-} else {
-return false;
-}
-})();
- 
-var isScrollable = (function() {
-return {
-    topScroll: (function() {
-                            if(document.getElementsByClassName("content-Tabs")[0].scrollTop < 5) {
-                            return false;    
-                            }
-                            else {
-                            return true;    
-                            }
-                            })()
-            };
-
-})();
-var menuHeightCalculator = (function() {
-   return prevHeight + deltaY;
-})();
-
-
-if(Math.abs(deltaY)>0) {
-
-if(isScrollable.topScroll) {
-document.removeEventListener("touchmove", slideDownHandler);    
-}
-
-if(deltaY>0 && !isSlideAttempt) { //user moves his/her finger down, and it is not deemed to be a slide attempt (as defined above)
-    
-    if(deltaY+prevHeight<=minimumMenuHeight) { //without this, it bugs out when you slide the menu out and then slide back up (it doesnt disappear)
-      
-        menu.removeAttribute("style");
-        header.removeAttribute("style");  
-        document.getElementsByClassName("content-Tabs")[0].style.pointerEvents = "auto";
- 
-}   
-    if(deltaY>minimumMenuHeight && menu.style.height.replace('px', '')<0.9*maxMenuHeight) { //if deltaY>minHeight, menu appears
-        document.getElementsByClassName("content-Tabs")[0].style.pointerEvents = "none";
         header.style.height = "auto";  
         menu.style.zIndex = "1";
         menu.style.borderBottom = "2px solid rgb(230,230,230)";
-        menu.style.height = menuHeightCalculator + 'px';
-    }
-    
-    if(menu.style.height.replace('px', '')>=0.9*maxMenuHeight) { //if menuHeight >= 90% of the max menu height, it becomes maxMenuHeight AND removes the evt listener. This also triggers the touchend event that records the
-    //current menuHeight to prevHeight, to be used with either of the menu slide functions
+
         menu.style.height = maxMenuHeight + 'px';
-        document.getElementsByClassName("content-Tabs")[0].style.pointerEvents = "auto";
-        document.removeEventListener("touchmove", slideDownHandler);
+        prevHeight = maxMenuHeight;
+        //while(prevHeight>minimumMenuHeight) {
+
+        window.setTimeout(function() {
+        menu.style.animation = "menuContract 1s forwards";
+         //closes if<minHeight
+        prevHeight = 0;
+        }, 1000);
+            
+        //} //closes while loop
+        window.setTimeout(function(){
+        if(prevHeight<minimumMenuHeight) {
+            prevHeight = 0;
+            menu.removeAttribute("style");
+            header.removeAttribute("style"); 
+
+        }   
+            
+        }, 1850); 
+
+        })(); //closes function
+
     }
 
-}
+
+    function touchStartHandler(event) { //handles touching the screen
+        event.stopPropagation();
+        menuToggleHandler.touchStart(event);    
+    }
+
+    function touchEndHandler(event) { //handles lifting the finger up
+        event.stopPropagation();
+        menuToggleHandler.touchEnd(event);    
+    }
+
+    function slideDownHandler(event) { //handles sliding finger up/down
+        menuToggleHandler.touchMove(event);
+    }
+
+    var menuToggleHandler = (function() {
+        
+        return {
+        touchStart: function(event) {
+            menuSlideStartY = event.changedTouches[0].clientY;
+            menuSlideStartX = event.changedTouches[0].clientX;
+            document.addEventListener("touchmove", slideDownHandler);  
+        },
+
+        touchMove: function(event) {
+            
+        if(document.documentElement.clientWidth>480) {
+            return;
+        }
+            var originalPosY = menuSlideStartY;
+            var originalPosX = menuSlideStartX;
+            newY = event.changedTouches[0].clientY;
+            newX = event.changedTouches[0].clientX;
+            var deltaY = newY - originalPosY;
+            var deltaX = newX - originalPosX;
+            //I really need to make this code more readable, right now the 9001 ifs are awful for anyone to try to understand
 
 
-if(deltaY<0 && !isSlideAttempt) {
-    menu.style.height = menuHeightCalculator + 'px';
-    document.getElementsByClassName("content-Tabs")[0].style.pointerEvents = "none";
-    
-    if(menu.style.height.replace('px', '')<=minimumMenuHeight){
-        menu.removeAttribute("style");
-        header.removeAttribute("style");
-        document.getElementsByClassName("content-Tabs")[0].style.pointerEvents = "auto";
-        document.removeEventListener("touchmove", slideDownHandler);
-    }   
-    
-    
-}
-    
-}
 
-}, //closes .touchMove
 
-touchEnd: function(event) {
-prevHeight = isNaN(parseInt(menu.style.height, 10)) ? 0 : parseInt(menu.style.height, 10);
+            var isSlideAttempt = (function() { //is user trying to change slides? evaluates to true/false
+            if(Math.abs(clHeight/clWidth * deltaX)>Math.abs(deltaY)) { //checks if the pointer has moved farther to the right/left than up/down. Not perfect since height/width are different
+            //assuming 640 height, 360 width (for example. clientHeight/width are smaller since they dont consider OS/browser UI)
+            // 640/360 = ratio of height to width is 1.7 height is 1.7 times width
+            // 360/640 = ratio of width to height is 0.56 (width is 0.56 times height)
+            //So, assuming we move the touch 50% on deltaX and 50% on deltaY:
+            // 360 * 50%  = 180px on deltaX, 640 * 50% = 320px on deltaY
+            // then we multiply by the factors: for deltaX = 180*1.7 = 153px, for deltaY = 320 * 0.56 = 179.2
+            //so we end up with a small difference that favors deltaY, but remember, we are moving (in pixels) the deltaY axis way more, since it is bigger in size. Testing the site live to me it "feels" appropiate. YMMV though.
 
-}
+            return true;    
+            } else {
+            return false;
+            }
+            })();
+         
+            var isScrollable = (function() {
+            return {
+                topScroll: (function() {
+                                        if(document.getElementsByClassName("content-Tabs")[0].scrollTop < 5) {
+                                        return false;    
+                                        }
+                                        else {
+                                        return true;    
+                                        }
+                                        })()
+                        };
 
-};
-    
-})();
+            })();
+            var menuHeightCalculator = (function() {
+               return prevHeight + deltaY;
+            })();
+
+
+            if(Math.abs(deltaY)>0) {
+
+            if(isScrollable.topScroll) {
+            document.removeEventListener("touchmove", slideDownHandler);    
+            }
+
+            if(deltaY>0 && !isSlideAttempt) { //user moves his/her finger down, and it is not deemed to be a slide attempt (as defined above)
+                
+                if(deltaY+prevHeight<=minimumMenuHeight) { //without this, it bugs out when you slide the menu out and then slide back up (it doesnt disappear)
+                  
+                    menu.removeAttribute("style");
+                    header.removeAttribute("style");  
+                    document.getElementsByClassName("content-Tabs")[0].style.pointerEvents = "auto";
+             
+            }   
+                if(deltaY>minimumMenuHeight && menu.style.height.replace('px', '')<0.9*maxMenuHeight) { //if deltaY>minHeight, menu appears
+                    document.getElementsByClassName("content-Tabs")[0].style.pointerEvents = "none";
+                    header.style.height = "auto";  
+                    menu.style.zIndex = "1";
+                    menu.style.borderBottom = "2px solid rgb(230,230,230)";
+                    menu.style.height = menuHeightCalculator + 'px';
+                }
+                
+                if(menu.style.height.replace('px', '')>=0.9*maxMenuHeight) { //if menuHeight >= 90% of the max menu height, it becomes maxMenuHeight AND removes the evt listener. This also triggers the touchend event that records the
+                //current menuHeight to prevHeight, to be used with either of the menu slide functions
+                    menu.style.height = maxMenuHeight + 'px';
+                    document.getElementsByClassName("content-Tabs")[0].style.pointerEvents = "auto";
+                    document.removeEventListener("touchmove", slideDownHandler);
+                }
+
+            }
+
+
+            if(deltaY<0 && !isSlideAttempt) {
+                menu.style.height = menuHeightCalculator + 'px';
+                document.getElementsByClassName("content-Tabs")[0].style.pointerEvents = "none";
+                
+                if(menu.style.height.replace('px', '')<=minimumMenuHeight){
+                    menu.removeAttribute("style");
+                    header.removeAttribute("style");
+                    document.getElementsByClassName("content-Tabs")[0].style.pointerEvents = "auto";
+                    document.removeEventListener("touchmove", slideDownHandler);
+                }   
+                
+                
+            }
+                
+            }
+
+            }, //closes .touchMove
+
+            touchEnd: function(event) {
+            prevHeight = isNaN(parseInt(menu.style.height, 10)) ? 0 : parseInt(menu.style.height, 10);
+
+            }
+
+            };
+            
+        })();
 
 //need to check for device orientation so scrolling the menu down is disabled (and event.preventDefault() is not enabled)
-document.addEventListener("touchstart", touchStartHandler);
-document.addEventListener("touchend", touchEndHandler);
+    document.addEventListener("touchstart", touchStartHandler);
+    document.addEventListener("touchend", touchEndHandler);
 
 })();
 /************************************************************************ END OF MENU SLIDEDOWN HANDLER***********************************************************************************************************/
@@ -506,6 +503,7 @@ if(executeAJAX) { //used for nav menu clicks
 $.ajax({url: "/tab_getter", data: {tab: activeTabValue, id: status[activeTabValue]}, type: 'GET', dataType: 'html'}).done(function(response) {
 
     stateObject.state = status.state;
+    stateObject[activeTabValue] = isNaN(status[activeTabValue]) ? 1 : status[activeTabValue];
     $('#jumbotron').html(response);
 
     assignTabHandlers();
@@ -600,6 +598,8 @@ function slidesHandler(){
 var currentTab = [].slice.call(document.getElementsByClassName(stateObject.state.replace('State', 'Slide'))); //makes an array of items of all the slide containing divs
 //var currentTab = stateObject.state.replace('State', 'Slide');
 var currentTabActiveIndex = stateObject[activeTabValue]-1;
+console.log("state", stateObject)
+
 var activePicker = document.getElementById(stateObject.state.replace('State', 'CounterCurrent'));
 activePicker.value = stateObject[activeTabValue];
 document.getElementById(stateObject.state.replace('State', 'CounterTotal')).innerHTML = currentTab.length; //length of the slide picker at the bottom
@@ -1395,8 +1395,10 @@ function blogTabHandler(postToRequest, setListeners) {
     
     function setActivePost() {
         [].slice.call(document.getElementsByClassName("post-link")).map(function(element, index, array) {
-            console.log(currentPostId);
-            element.className.replace('post-link ', '') == currentPostId ? element.classList.add("active-post") : element.classList.remove("active-post");
+            console.log("currpost id", currentPostId);
+            element.id === currentPostId ? element.classList.add("active-post") : element.classList.remove("active-post");
+
+            //element.className.replace('post-link ', '') == currentPostId ? element.classList.add("active-post") : element.classList.remove("active-post");
 
         });
         
@@ -1440,7 +1442,9 @@ function blogTabHandler(postToRequest, setListeners) {
 
     
 
-    
+    //slug:post-titlefg2qt32t 
+    //slug:post-titlefg2qt32t
+
     var blogContent = document.getElementById("blogContents");
     var postContainer = document.getElementsByClassName("post-container")[0];
 
@@ -1450,7 +1454,7 @@ function blogTabHandler(postToRequest, setListeners) {
         
         if(!scheduled) {
         window.setTimeout(function() {
-        var targetPostId = event.target.className.replace('post-link ', ''); //determines the id of the post to retrieve
+        var targetPostId = event.target.id//event.target.className.replace('post-link ', '').replace('active-post', '').replace('/\s*/',''); //determines the id of the post to retrieve
 
         $.ajax({url: '/post_api', data: {'slug': targetPostId}, type: 'GET', dataType: 'html'}).done(function(response) {
 
@@ -1640,6 +1644,7 @@ of the scrollbutton so it doesnt start from zero when clicked/scrolled again) */
 var blogMenuMouseHandler = (function(){
     return  {
         mouseDownHandler: function(event) {
+            event.stopPropagation();
             mouseStartPositionY = event.clientY; 
             initialScrollButtonTransform = scrollButton.style.transform; 
          //   console.log(event);     
@@ -1656,7 +1661,7 @@ var blogMenuMouseHandler = (function(){
         },
 
         mouseUpHandler: function(event) {
-      
+            event.stopPropagation();
             //console.log(event);
             document.removeEventListener("mousemove", mouseMoveHandler);
             if(initialScrollButtonTransform != currentScrollButtonTransform) {
@@ -1770,7 +1775,7 @@ function scrollClickHandler(event) {
 // FINISH THE BLOG TAB HANDLER
 
 
-};
+}
 
 
 $(document).ready(main);

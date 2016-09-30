@@ -1,11 +1,21 @@
+	
+	<% sanitized_slug = sanitize params[:slug] %>
+	<% if sanitized_slug === "zetaomega9ya-itsindeedthelastpostletmego" %>
+		<% sanitized_slug = sanitize Post.last.slug %>
+	<% end %>
+
 
 <% if !@post %> 
 <%# if @post is not given (that is, the site is loaded through typing the url in the web browser, check if the posts exists using the %>
 <%# :slug param from the URL %>
 <%# if it does, @post = the record that it found, otherwise creates a new Post object(so it doesn't break the front end javascript) %>
-	<% if Post.exists?(:slug => params[:slug]) %>
 
-		<% @post = Post.find_by(slug: params[:slug]) %>
+	<% puts "param slug #{params[:slug]}" %>
+	<% puts "sanitized slug #{sanitized_slug}" %>
+
+	<% if Post.exists?(:slug => sanitized_slug) %>
+
+		<% @post = Post.find_by(slug: sanitized_slug) %>
 		<% else %>
 			<% @post = Post.new %>
 			<% @post.title = "Post not found" %>

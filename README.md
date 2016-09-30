@@ -7,30 +7,37 @@ A portfolio site with AJAX, pushstate, and an admin panel
  - Bundle install
  - db:setup
  - db:migrate
- - Rails test should be GREEN
+ - Do note that the site requires the AWS S3 ENV variables to be set. The tests that depend on them are skipped in case any of them is nil.
+ - The checked variables are
+ 	- ENV['AWS_S3_BUCKET']
+	- ENV['AWS_SECRET_ACCESS_KEY']
+	- ENV['AWS_S3_REGION']
+	- ENV['AWS_S3_BUCKET']
+	- You can also confirm this is the case in /test/integration/admin_integration_test.rb
 
-
+ - Rails test should be GREEN(provided you have set your AWS S3 ENV variables correctly, otherwise it will be yellow - 1 skip)
 
 
 
 **TO DO**
-
+- Add folder downloads to file manager
+- Add staging env to test the app in the same condition as the production env.
 - Add error messages for AJAX requests
-- Slide picker numbers after load
+
 - scrollbar click to take to that point
 - There's a bug with blog tab JS where it incorrectly goes remembers the first post that you load - probably has something to do with replaceState, but haven't taken the time to look at it more closely
 
 
 ** IN PROGRESS **
 
-- I should probably make the touch evt listeners always work and just constrain the menu height modifications on the menuToggle() func to clWidth<481
+
 
 
 - Add checks for error messages display on tests
-- Make AJAX request for active-post not fail
+
 - Use css height instead of the animation thingy on contact tab mobile
 - Make scrollbar fadeout + disappear, then reappear when moved or its area clicked
-- add stop propagation to scrollbutton;
+
 - remove ability of non admins to see the delete psot button for other users' posts
 - Chrome 54 beta has a weird bug with image height: auto when setting a width(should be proportional but is now setting height to the minimum) - Need to check if it happens on win Chrome 53 (doesnt on linux Chrome 53 nor firefox latest stable) -> probably happens in IE/edge too, better set explicit minheight
 - Polish the formatting on the non admin user pages
@@ -39,14 +46,14 @@ A portfolio site with AJAX, pushstate, and an admin panel
 - lazy load images
 - Related to ^, add SendGrid for mails, postgres for DB and whatever other production env changes are necessary to pass to production
 - reassemble the manifest files for the asset pipeline into 2 files: main and admin
-- verify that :slug params are safe (or if they need sanitization/parameterization)
+
 
 
 - clean up the file manager javascript, it looks awful right now
 - Add file manager mobile controls
 - See permission stuff for buckets (ACL, IIRC)
 - deselect all but one folder when uploading?
-- fix posts slug redirecter, it always queries the posts model
+
 - Add friendly forwarding on admin pages
 - Add size limit on uploads/downloads client side and server side
 
@@ -55,7 +62,14 @@ A portfolio site with AJAX, pushstate, and an admin panel
 
 **DONE**
 
-
+- verify that :slug params are safe (or if they need sanitization/parameterization)
+- fix posts slug redirecter, it always queries the posts model
+- Images are shown according to the first integer on their filename (filename.to_i)
+- Test images in production using name instead of a number.
+- Make AJAX request for active-post not fail
+- I should probably make the touch evt listeners always work and just constrain the menu height modifications on the menuToggle() func to clWidth<481
+- add stop propagation to scrollbutton;
+- Slide picker numbers after load fixed (no longer gives undefined when going from X tab to Y tab that contains a slider)
 - File manager done (includes unit & live integration tests)
 - añadir requisito login a file manager
 - Multiple files uploads added
