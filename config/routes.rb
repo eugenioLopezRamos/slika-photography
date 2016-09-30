@@ -8,13 +8,9 @@ Rails.application.routes.draw do
   get '/urban', to: 'static#show', :tab => 'urbanTab'
   get '/events', to: 'static#show', :tab => 'eventsTab'
   get '/contact', to: 'static#show', :tab => 'contactTab'
-  post '/contact', to: 'contact_mailer#create'#, :tab => 'contactTab'
-
-  #get '/blog/' => redirect("/blog/"), :slug => "#{Post.last.slug}" #, to: 'static#show', :tab => 'blogTab'#, :post_id => Post.last.id
-  #need to fix this one so I don't need to have a model reference here, it causes problems when deploying on empty databases and
-  #queries the post model even on unrelated routes
+  post '/contact', to: 'contact_mailer#create'
+  get '/blog/', :slug => "zetaomega9ya-itsindeedthelastpostletmego", to: 'static#show', :tab => 'blogTab'
   get '/blog/:slug', to: 'static#show', :tab => 'blogTab'
-  
   get 'post_api', to: 'static#retrieve_posts'
   get '/tab_getter', to: 'static#retrieve_tabs'
 

@@ -64,7 +64,8 @@ Rails.application.configure do
 
 
   # Enable serving of images, stylesheets, and JavaScripts from an asset server.
- # config.action_controller.asset_host = 'd1883h5a08woka.cloudfront.net'
+  #config.action_controller.asset_host = 'd1883h5a08woka.cloudfront.net'
+#  config.action_controller_asset_host = Rails::Server.new.options[:port]
 
 
   # Raises error for missing translations

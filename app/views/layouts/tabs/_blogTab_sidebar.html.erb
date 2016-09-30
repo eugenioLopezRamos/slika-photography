@@ -6,7 +6,7 @@
           <% @posts_asc = Post %>
         <% @posts_asc.by_date_desc.each do |post| %>
             <% clean_post_title = strip_tags(post.title) %>
-            <li><%= link_to content_tag(:span, clean_post_title), "/blog/#{post.slug}", class: "post-link #{post.slug}" %>
+            <li><%= link_to content_tag(:span, clean_post_title), "/blog/#{post.slug}", class: "post-link", :id => "#{post.slug}" %>
             </li>
             <% end %>
             </ol> 
