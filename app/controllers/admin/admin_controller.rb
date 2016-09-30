@@ -16,15 +16,31 @@ before_action :create_download_log, only: :download_file
   def upload_file
     
     # need to add server side check for image sizes. Probably best to check for total > 100mb
+    @total_size_mb = 0
 
-    if params[:image].nil?
+    if Rails.env.test?
+      @max_size_upload_mb = 5 #Max upload 5mb on test env
+    else 
+      @max_size_upload_mb = 50 #Otherwise its 50mb
+    end
 
+    if !params[:image].nil?
+      params[:image].each do |image| 
+        @total_size_mb += image.tempfile.size/1024/1024
+      end
+    end
+
+    if params[:image].nil? #Reject empty uploads
 
       flash.now[:error] = "No files selected!"
       render partial: '/admin/flash_messages'
       return
-    else
-    
+    elsif @total_size_mb > @max_size_upload_mb     #Reject uploads over a certain size
+
+      flash.now[:error] = "Upload size exceeds the maximum!"
+      render partial: '/admin/flash_messages'
+      return
+    else #Go ahead and upload
       s3 = Aws::S3::Client.new
 
       response_message = "#{"File".pluralize(params[:image].length)} successfully uploaded. #{"Location".pluralize(params[:image].length)}:<br />" 

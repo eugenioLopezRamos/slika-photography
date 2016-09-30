@@ -8,14 +8,14 @@ A portfolio site with AJAX, pushstate, and an admin panel
  - db:setup
  - db:migrate
  - Do note that the site requires the AWS S3 ENV variables to be set. The tests that depend on them are skipped in case any of them is nil.
- - The checked variables are
- 	- ENV['AWS_S3_BUCKET']
+ - Required variables:
+ 	- ENV['AWS_ACCESS_KEY_ID']
 	- ENV['AWS_SECRET_ACCESS_KEY']
 	- ENV['AWS_S3_REGION']
 	- ENV['AWS_S3_BUCKET']
 	- You can also confirm this is the case in /test/integration/admin_integration_test.rb
 
- - Rails test should be GREEN(provided you have set your AWS S3 ENV variables correctly, otherwise it will be yellow - 1 skip)
+ - Rails test should be GREEN(provided you have set your AWS S3 ENV variables correctly)
 
 
 
@@ -30,16 +30,9 @@ A portfolio site with AJAX, pushstate, and an admin panel
 
 ** IN PROGRESS **
 
-
-
-
-- Add checks for error messages display on tests
-
 - Use css height instead of the animation thingy on contact tab mobile
 - Make scrollbar fadeout + disappear, then reappear when moved or its area clicked
 
-- remove ability of non admins to see the delete psot button for other users' posts
-- Chrome 54 beta has a weird bug with image height: auto when setting a width(should be proportional but is now setting height to the minimum) - Need to check if it happens on win Chrome 53 (doesnt on linux Chrome 53 nor firefox latest stable) -> probably happens in IE/edge too, better set explicit minheight
 - Polish the formatting on the non admin user pages
 - stop hiding non active-Tab -> its not necessary anymore and can help with perceived load times
 - Add 100% minheight to content-Tab CSS and explicit 100% height to slide images
@@ -47,20 +40,24 @@ A portfolio site with AJAX, pushstate, and an admin panel
 - Related to ^, add SendGrid for mails, postgres for DB and whatever other production env changes are necessary to pass to production
 - reassemble the manifest files for the asset pipeline into 2 files: main and admin
 
-
-
-- clean up the file manager javascript, it looks awful right now
+- Add created files to the file manager (front end)
 - Add file manager mobile controls
 - See permission stuff for buckets (ACL, IIRC)
 - deselect all but one folder when uploading?
-
 - Add friendly forwarding on admin pages
-- Add size limit on uploads/downloads client side and server side
-
 - Server side verification of file -> image
-- Disable upload button for 1sec or so to avoid double clicks
+
 
 **DONE**
+
+- remove ability of non admins to see the delete psot button for other users' posts
+- Sanitize contact form input before sending the email
+- Add checks for error messages display on tests (seems to be done)
+- Activation email controller test -> integrated into users_signup_test "on valid creation". Probably improvable though.
+- Disable choose file for 1sec or so to avoid double clicks (originally said "upload button" - That's already disabled until the AJAX request is resolved)
+- clean up the file manager javascript, it looks awful right now (could probably use a refactor though)
+- Add size limit on uploads/downloads client side and server side
+- Chrome 54 beta has a weird bug with image height: auto when setting a width(should be proportional but is now setting height to the minimum) - Need to check if it happens on win Chrome 53 (doesnt on linux Chrome 53 nor firefox latest stable) -> probably happens in IE/edge too, better set explicit minheight :::::::: 30/09/2016 update seems to have been fixed? Not sure what happened, working correctly in chrome 54 beta & Edge (with which I had height:auto problems before)
 
 - verify that :slug params are safe (or if they need sanitization/parameterization)
 - fix posts slug redirecter, it always queries the posts model

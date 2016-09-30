@@ -1,8 +1,8 @@
 
 <%= javascript_include_tag 'jquery'%>
 <%= javascript_include_tag 'jquery_ujs'%>
-
 <%= stylesheet_link_tag 'admin', media: 'all' %>
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <%= csrf_meta_tag %>
 <div class="user-data-form-container">
@@ -53,16 +53,6 @@ border-radius: 2px;
 border: 1px solid blue;
 }
 
-.alert {
-background-color: rgb(200, 200, 200);
-color: #293952;
-border: 1px solid blue;
-}
-
-.alert-danger {
-background-color: #E3623B;
-color: white;
-}
 form {
 width: 100%;
 }
@@ -87,4 +77,5 @@ width: 100%;
 	<%= f.hidden_field :image_cache %>
 <% end %>
 </div>
+
 <%= javascript_include_tag 'file-manager' %>
