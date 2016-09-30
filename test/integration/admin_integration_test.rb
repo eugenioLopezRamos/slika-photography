@@ -12,10 +12,16 @@ class AdminIntegrationTest < ActionDispatch::IntegrationTest
   	@admin = users(:michael)
   	@image_1_name = 'TestImage1.jpg'
   	@image_2_name = 'TestImage2.jpg'
+
   	@image_1 = file_fixture('TestImage1.jpg')
  	@image_2 = file_fixture('TestImage2.jpg')
+
+ 	@heavy_img = file_fixture('heavy-img.jpg')
+
  	@uploaded_image_1 = Rack::Test::UploadedFile.new(@image_1, "image/jpeg")
 	@uploaded_image_2 = Rack::Test::UploadedFile.new(@image_2, "image/jpeg")
+
+	@uploaded_heavy_img = Rack::Test::UploadedFile.new(@heavy_img, "image/jpeg")
 
 	#Skips the tests if any of these ENV variables is nil, since they are required to correctly test the controller.
 	
@@ -35,7 +41,7 @@ class AdminIntegrationTest < ActionDispatch::IntegrationTest
 
 #im not sure if these are 100% ok, since all of these are done via AJAX requests instead of through rails "standard" forms
 
-# I will integrate all three tests(put object/get object/delete object) in this same tests, otherwise
+# I will integrate all three tests(put object/get object/delete object) in this same test, otherwise
 # I'd need to duplicate the uploading of the fixture files, which is slow (and costs money)
 
 # Find "#START TEST => UPLOADS" (WITHOUT the quotation marks) to go to the beginning of the uploads test
@@ -50,6 +56,7 @@ class AdminIntegrationTest < ActionDispatch::IntegrationTest
  	#log in.
  	log_in_as(@admin)
  	get admin_files_path
+	uploaded_images_array = [@uploaded_image_1, @uploaded_image_2]
 
  	#create a S3 client instance to use with tests.
 	s3 = Aws::S3::Client.new
@@ -62,11 +69,16 @@ class AdminIntegrationTest < ActionDispatch::IntegrationTest
 	 	assert_response :success
 	 	assert_select 'div.alert'
 
-	 
+	 	#POST with too much data (in MBs)
+	 	assert_no_difference 'Dir["#{Rails.root}/tmp/*"].length' do
+		 post admin_upload_path(@admin), params: {file_route: '', image: [@uploaded_heavy_img]}
+		 assert_select 'div.alert'
+		end
+		
 	file_routes_array.each do |file_route|
 
 	#POST files from the view - The most important part is an array of files under param image
-	 	uploaded_images_array = [@uploaded_image_1, @uploaded_image_2]
+
 	  	post admin_upload_path(@admin), params: {file_route: file_route, image: uploaded_images_array}
 
 

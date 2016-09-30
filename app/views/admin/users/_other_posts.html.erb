@@ -10,8 +10,10 @@
                         <%= link_to clean_post_title,  admin_post_path(post) %>        
                     </div>                                         
                     <div class="modify-post-links">
+                    <% if current_user.admin %>
                         <%= link_to "Delete this post", admin_post_path(post),
                         method: 'delete', class: "post-delete", data: {confirm: "Are you sure? This action cannot be undone"} %>
+                    <% end %>
                     </div>
                 <% end %>
             </div>

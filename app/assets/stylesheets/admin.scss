@@ -2,6 +2,20 @@
     $background-light-white: rgb(230,230,230);
     $dark-blue: rgb(41, 57, 82);
 
+    @keyframes flashDisappear {
+      0% {opacity: 1; height: auto;}
+      20% {opacity: 1;height: auto;}
+      40% {opacity: 1;height: auto;}
+      55% {opacity: 1;height: auto;}
+      65% {opacity: 0.85;height: auto;}
+      75% {opacity: 0.65;height: auto;}
+      85% {opacity: 0.45;height: auto;}
+      90% {opacity: 0.25;height: auto;}
+      99% {opacity: 0;height: auto;}
+      100% {opacity: 0; display: none; height:0; position:absolute; top:0;}
+
+    }
+
     body {
         font-family: $font-stack;
         color: rgb(41, 57, 82);
@@ -13,12 +27,6 @@
 
     }
 
-    .alert {
-      height: auto;
-      background-color: white;
-      border: 1px solid black;
-
-    }
 
     .nav-menu {
         background-color: $dark-blue;
@@ -56,8 +64,26 @@
     }
 
     .alert {
-      display: inherit;
+      height: auto;
+      position: absolute;
+      top:0;
       text-align: center;
+      background-color: rgb(200, 200, 200);
+      color: #293952;
+      border: 1px solid blue;
+      justify-content: center;
+      animation: flashDisappear 3s forwards;  
+  
+
+
+    }
+
+    .alert-danger {
+    background-color: #E3623B;
+    color: white;
+
+
+
     }
 
     .field_with_errors{
@@ -275,7 +301,7 @@
   		text-align: center;
   		padding: 10px;
   		display:flex;
-  		margin:auto;
+  	
   	}
 
   	.user-name-container {

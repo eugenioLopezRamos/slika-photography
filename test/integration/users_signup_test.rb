@@ -57,16 +57,17 @@ class UsersSignupTest < ActionDispatch::IntegrationTest
     get new_admin_user_path
 
     assert_redirected_to admin_user_path(@notadmin)
+
     assert_no_difference 'User.count' do
       post admin_users_path, params: { user: {name: "Example User",
                                               email: "user@example.com",
                                               password: "password",
                                               password_confirmation: "password"} }
-      end
+      end 
                                                    
   end
   
-  test "valid creation info on logged on admin should succeed" do
+  test "valid creation info on logged in admin should succeed" do
     get admin_login_path
     post admin_login_path, params: { session: { email: @admin.email,
                                                password: 'password' } }
@@ -81,6 +82,31 @@ class UsersSignupTest < ActionDispatch::IntegrationTest
     assert_redirected_to admin_user_path(@admin)
     assert_equal 1, ActionMailer::Base.deliveries.size
 
+    new_user_at_creation = assigns(:user)
+    delete admin_logout_path
+
+    #Test the user clicking an invalid activation token
+    get edit_admin_account_activation_path('invalidactivationtoken', email: new_user_at_creation.email)
+    assert_redirected_to admin_login_path
+
+    #test the user clicking the link to verify it's correct
+    
+    get edit_admin_account_activation_path(new_user_at_creation.activation_token, email: new_user_at_creation.email)
+
+    assert_redirected_to admin_user_path new_user_at_creation
+
+    assert new_user_at_creation.authenticated?(:activation, new_user_at_creation.activation_token) #Verifies that the test user is activated
+    assert is_logged_in?
+    delete admin_logout_path
+    log_in_as new_user_at_creation
+
+  
   end
+
+
+
+
   
 end
+
+

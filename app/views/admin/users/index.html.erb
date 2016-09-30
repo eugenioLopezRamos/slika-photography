@@ -15,8 +15,8 @@
 	            <h2>
 		            <%= link_to user.name, admin_user_path(user) %>
 		            <% if current_user.admin %>
-		            <%= link_to "Delete this user", admin_user_path(user), method: "delete", 
-		            data: {confirm: "Are you sure? This CANNOT be undone and will destroy the user AND his/her posts"} %>
+			            <%= link_to "Delete this user", admin_user_path(user), method: "delete", 
+			            data: {confirm: "Are you sure? This CANNOT be undone and will destroy the user AND his/her posts"} %>
 		            <% end %>
 	            </h2>
 	    	</div>
