@@ -1,16 +1,22 @@
-
+<% @user = @current_user %>
+<% provide(:title, @user.name) %>
 <%= javascript_include_tag 'jquery'%>
 <%= javascript_include_tag 'jquery_ujs'%>
 <%= stylesheet_link_tag 'admin', media: 'all' %>
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <%= csrf_meta_tag %>
-<div class="user-data-form-container">
 
-<div id="messages"></div>
+<%= render 'admin/users/menu' %>
+
+<div class="user-data-form-container file-manager">
+
+<div class="message-box" id="messages">
       <% flash.each do |message_type, message| %>
         <div class="alert alert-<%= message_type %>"><%= message %></div>
       <% end %>
+</div>
+
 
 <% s3 = Aws::S3::Client.new %>
 
@@ -20,41 +26,52 @@
 initialArray = <%= raw files_in_bucket %> // a global to be deleted on document.ready
 </script>
 
+<%# not sure if its worth to add these specific styles to another file/to admin.scss, since it's so little %>
 
 <style>
+body {
+	flex-direction: column;
+}
 
 li {
-margin-left: 40px;
-margin-top: 15px;
-margin-bottom: 15px;
-cursor: pointer;
-list-style-type: disc;
-list-style-position: inside;
+	margin-left: 40px;
+	margin-top: 15px;
+	margin-bottom: 15px;
+	cursor: pointer;
+	list-style-type: disc;
+	list-style-position: inside;
 }
 
 ul, span {
-cursor: pointer;
-
+	cursor: pointer;
 }
 
 .upload-dir-container {
-border: 1px solid blue;
-background-color: rgb(200, 200, 200);
-text-decoration: underline blue;
+	border: 1px solid blue;
+	background-color: rgb(200, 200, 200);
+	text-decoration: underline blue;
 
 }
 
+.message-box {
+	display: flex;
+	position: relative;
+	margin: auto;
+	width: 100%;
+	justify-content: center;
+
+}
 .selected {
-background-color: #7784D9;
-color: white;
-font-weight: bold;
-font-style: italic;
-border-radius: 2px;
-border: 1px solid blue;
+	background-color: #7784D9;
+	color: white;
+	font-weight: bold;
+	font-style: italic;
+	border-radius: 2px;
+	border: 1px solid blue;
 }
 
 form {
-width: 100%;
+	width: 100%;
 }
 
 </style>

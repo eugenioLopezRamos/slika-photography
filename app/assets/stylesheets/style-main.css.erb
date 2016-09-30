@@ -97,13 +97,13 @@ from {
   
 } 
 to {
-  transform: translate3d(0, -34.125em, 0);
+  transform: translate3d(0, 100vh, 0);
 }  
 }
 
 @keyframes uncontract-text3d {
 from {
-  transform: translate3d(0, -34.125em, 0);
+  transform: translate3d(0, 100vh, 0);
 } 
 to {
   transform: translate3d(0, 0,0);
@@ -114,19 +114,19 @@ to {
 
 @keyframes contract-form3d {
 from {
-  transform:translate3d(0, 24.875em,0);
+  transform:translate3d(0, 100%,0);
 
 }  to {
-  transform: translate3d(0, -12em,0); /*320px*/
+  transform: translate3d(0, -30vh,0); /*320px*/
 }
 }
 
 @keyframes uncontract-form3d {
  from {
-   transform: translate3d(0,-11em,0);
+   transform: translate3d(0,-30vh,0);
 }  
 to {
- transform: translate3d(0, 24.875em,0);
+ transform: translate3d(0, 100%,0);
 }
    
   
@@ -134,11 +134,11 @@ to {
 
 @keyframes contract3d {
 from {
-  transform: translate3d(-50%,-24.875em,0);
+  transform: translate3d(-50%,-45vh,0);
   
 } 
 to {
-  transform: translate3d(-50%, -35.125em,0);
+  transform: translate3d(-50%, -100vh,0);
 
 }
   
@@ -148,11 +148,11 @@ to {
 @keyframes uncontract3d {
   
   from {
-    transform: translate3d(-50%,-35.125em,0);
+    transform: translate3d(-50%,-100vh,0);
 
   }
   to{
-    transform: translate3d(-50%, -24.875em,0);
+    transform: translate3d(-50%, -45vh,0);
   }
 }
 
@@ -251,10 +251,10 @@ margin-left: auto;
   font-weight: bold;
   width: 14%;
   height: inherit;
-    text-align: center;
-    list-style: none;
-    display: flex;
-    justify-content: center;
+  text-align: center;
+  list-style: none;
+  display: flex;
+  justify-content: center;
     
 }
 
@@ -263,12 +263,12 @@ margin-left: auto;
   color: white;
   font-style: italic;
   font-weight: normal;
-display: flex;
-width: 100%;
-height: 1em;
-justify-content: center;
-margin: auto;
-pointer-events: none;
+  display: flex;
+  width: 100%;
+  height: 1em;
+  justify-content: center;
+  margin: auto;
+  pointer-events: none;
 
 }
 
@@ -285,7 +285,7 @@ pointer-events: none;
 }
 
 .companyName {
-/*position: absolute*/
+
  position: relative;
   font-family: 'Stalemate', cursive;
   list-style: none;
@@ -294,7 +294,7 @@ pointer-events: none;
   color: white;
   height: auto;
   width: 30%;
- /* transform: translateY(100%);*/
+
   opacity: 1;
   transition: opacity 1s;
 }
@@ -333,9 +333,9 @@ margin-right: auto;
 width: 100%; /*64.21 was the original value, but it doesnt work on firefox*/
 max-width: 1233px;
 min-width: 75em; /*1200px*/
-min-height: 51em; /*816px*/
+min-height: 47em; /*816px*/
 will-change: opacity; 
-display: none;
+/*display: none;*/
 }
 
 .active-Tab {
@@ -1605,8 +1605,8 @@ width: 100%;
 #contactContent {
 
 width: calc(100% - 10px);
-height: 100%;
-max-height: 100vh;
+height: 300%;
+/*max-height: 100vh;*/
 display: flex;
 flex-direction: column;
 margin: 0px 5px 0px 5px;
@@ -1639,6 +1639,7 @@ max-width: 100vw;
 width: 100%;
 margin-left:auto;
 margin-right: auto;
+height: 50%;
 }
 
 .textBlock {
@@ -1668,7 +1669,7 @@ width: auto;
 }
 
 .contactFormContainer {
-transform: translate3d(0, 24.875em, 0); /*350px*/
+transform: translate3d(0, 100%, 0); /*350px*/
 height: auto;
 width: 100%;
 overflow: visible;
@@ -1690,7 +1691,7 @@ height:60px;
 .contactButton {
 
 margin-top: 0;
-transform: translate3d(-50%, -24.875em, 0); /* */
+transform: translate3d(-50%, -45vh, 0); /* */
 margin-bottom: 0;
 display: flex;
 justify-content: center;

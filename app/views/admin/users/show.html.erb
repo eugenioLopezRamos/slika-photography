@@ -1,3 +1,5 @@
+
+
 <% provide(:title, @user.name) %>
 
 <%= javascript_include_tag 'jquery'%> 
@@ -7,26 +9,31 @@
 <%= csrf_meta_tag %>
 
 <div class="profile-main">
-<%= render 'admin/users/menu' %>
+    <%= render 'admin/users/menu' %>
 
-<%= render 'admin/flash_messages' %>
+    <%= render 'admin/flash_messages' %>
 
 
-<%= render 'admin/users/profile_info' %>
+    <%= render 'admin/users/profile_info' %>
 <hr>
+
     <div class="posts-dashboard">
         <div class="own-posts-dashboard">
             <% if @user.posts.any? %>
                 <%= render 'admin/users/own_posts' %>
             <% end %>
         </div>
+
         <hr>
+
         <div class="others-posts-dashboard">
-            <% if Post.count - @user.posts.count > 0  && @user == current_user %>
+            <% if Post.count - @user.posts.count > 0  && @user === current_user %>
                 <%= render 'admin/users/other_posts' %>
             <% end %>
         </div>
+
     </div>
+
 </div>
 
 

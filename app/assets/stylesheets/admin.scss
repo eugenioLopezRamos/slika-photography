@@ -26,10 +26,20 @@
         height:auto;
 
     }
+    
+    .message-box {
+    display: flex;
+    position: relative;
+    margin: auto;
+    width: 100%;
+    justify-content: center;
+
+  }
 
 
     .nav-menu {
         background-color: $dark-blue;
+        width:100%;
     }
 
     .nav-menu a {
@@ -72,7 +82,7 @@
       color: #293952;
       border: 1px solid blue;
       justify-content: center;
-      animation: flashDisappear 3s forwards;  
+      animation: flashDisappear 6s forwards;  
   
 
 

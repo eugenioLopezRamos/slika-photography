@@ -1,6 +1,9 @@
-      <% flash.each do |message_type, message| %>
-        <div class='alert alert-<%= message_type %>'><%= message %></div>
-      <% end %>
+      <div class="message-box">
+        <% flash.each do |message_type, message| %>
+          <div class='alert alert-<%= message_type %>'><%= message %></div>
+        <% end %>
+      </div>
+      
       <%if @user %>
 <% if @user.errors.any? %>
   <div id="error_explanation">

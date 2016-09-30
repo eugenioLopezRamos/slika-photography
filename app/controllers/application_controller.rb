@@ -27,7 +27,7 @@ class ApplicationController < ActionController::Base
       redirect_to admin_login_path #and return
       end
       
-      if logged_in? && !admin_user
+      if logged_in? && !current_user.admin?
         flash[:danger] = "You are not an admin"
         redirect_to admin_user_path(current_user)
       end

@@ -30,13 +30,11 @@ A portfolio site with AJAX, pushstate, and an admin panel
 
 ** IN PROGRESS **
 
-- Use css height instead of the animation thingy on contact tab mobile
+
 - Make scrollbar fadeout + disappear, then reappear when moved or its area clicked
 
-- Polish the formatting on the non admin user pages
-- stop hiding non active-Tab -> its not necessary anymore and can help with perceived load times
-- Add 100% minheight to content-Tab CSS and explicit 100% height to slide images
 - lazy load images
+
 - Related to ^, add SendGrid for mails, postgres for DB and whatever other production env changes are necessary to pass to production
 - reassemble the manifest files for the asset pipeline into 2 files: main and admin
 
@@ -46,10 +44,16 @@ A portfolio site with AJAX, pushstate, and an admin panel
 - deselect all but one folder when uploading?
 - Add friendly forwarding on admin pages
 - Server side verification of file -> image
+- Add img upload link to post/new
+
 
 
 **DONE**
 
+- Use css height instead of the animation thingy on contact tab mobile (turned em units into % and vh's)
+- stop hiding non active-Tab -> its not necessary anymore and can help with perceived load times
+- Add 100% minheight to content-Tab CSS and explicit 100% height to slide images (correction: it was just too much minheight.)
+- Polish the formatting on the non admin user pages
 - remove ability of non admins to see the delete psot button for other users' posts
 - Sanitize contact form input before sending the email
 - Add checks for error messages display on tests (seems to be done)

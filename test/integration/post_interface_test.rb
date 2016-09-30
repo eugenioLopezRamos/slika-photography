@@ -100,14 +100,19 @@ class PostInterfaceTest < ActionDispatch::IntegrationTest
     assert_not_equal @notadminpost.content, content # same principle as above, if these are different it means the post wasn't modified
   end
   
-  test "an user should not see links to edit/delete another user's post while on another user's profile" do
+  test "an user should not see links to edit another user's post while on another user's profile" do
     log_in_as(@admin)
     get admin_user_path(@admin)
     assert_select 'a.post-edit'
     assert_select 'a.post-delete'
     get admin_user_path(@notadmin)
     assert_select 'a.post-edit', 0
-    assert_select 'a.post-delete',0
+  end
+
+  test "admins should be able to see see the delete button for another user's post while on another user's profile" do
+    log_in_as(@admin)
+    get admin_user_path(@notadmin)
+    assert_select 'a.post-delete'  
   end
 
   
