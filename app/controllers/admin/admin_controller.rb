@@ -2,6 +2,7 @@ class Admin::AdminController < ApplicationController
 
 require 'zip'
 before_action :logged_in_user
+before_action :logged_in_admin_user
 before_action :create_download_log, only: :download_file
 
   def login

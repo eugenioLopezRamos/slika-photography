@@ -61,7 +61,7 @@ class Admin::UsersController < ApplicationController
     
     # Confirms an admin user.
     def admin_user
-      current_user.admin?
+      @current_user.admin?
     end
     
     def can_destroy_user

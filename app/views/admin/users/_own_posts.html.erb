@@ -3,13 +3,18 @@
     <div class="own-posts-container">
         <% @posts.by_date_desc.each do |post| %>
             <% clean_post_title = sanitize post.title, tags: %w(strong em a div img) %>
+
                 <div class="own-post-link"><%= link_to clean_post_title,  admin_post_path(post) %></div>
-                <% if current_user.id == @user.id %>
-                <div class="modify-post-links">
-                    <%= link_to "Edit this post  |", edit_admin_post_path(post), class: "post-edit" %>
-                    <%= link_to "  |  Delete this post", admin_post_path(post),
-                    method: 'delete', class: "post-delete", data: {confirm: "Are you sure? This action cannot be undone"}%>
+
+                <% if current_user.id == @user.id || current_user.admin? %>
+                    <div class="modify-post-links">
+                        <% if current_user.id === @user.id %>
+                            <%= link_to "Edit this post", edit_admin_post_path(post), class: "post-edit" %><pre>  </pre>
+                        <% end %>
+                        
+                        <%= link_to "Delete this post", admin_post_path(post),
+                        method: 'delete', class: "post-delete", data: {confirm: "Are you sure? This action cannot be undone"}%>
+                    </div>
                 <% end %>
-                </div>
         <% end %>
     </div>
