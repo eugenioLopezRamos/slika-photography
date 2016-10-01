@@ -1440,11 +1440,6 @@ function blogTabHandler(postToRequest, setListeners) {
 
     /**********************  /AJAX request handlers ************************/
 
-    
-
-    //slug:post-titlefg2qt32t 
-    //slug:post-titlefg2qt32t
-
     var blogContent = document.getElementById("blogContents");
     var postContainer = document.getElementsByClassName("post-container")[0];
 
@@ -1485,7 +1480,7 @@ function blogTabHandler(postToRequest, setListeners) {
     element.addEventListener("click", linksClickHandler);
     });
 
-    if(document.documentElement.clientWidth<481) {
+   
 
         var blogTouchHandler = (function() {    
             var touchStartPosX;//position of the touch X "pointer" at the start of the touch event
@@ -1493,20 +1488,22 @@ function blogTabHandler(postToRequest, setListeners) {
             var prevMargin = 0; //keeps track of the margin
             var leftStopThreshold = 0.55*document.documentElement.clientWidth;
             var startPrevMargin = 0;
-        
+            window.addEventListener("resize", function() {
+                     leftStopThreshold = 0.55*document.documentElement.clientWidth;
+            });
 
             return {
                 touchStart: function(event) {
-                  
-                    if(postContainer.scrollTop > 5) {
-                        event.stopPropagation();
-                       
-                    } 
-             
-                    touchStartPosX = event.changedTouches[0].clientX;
-                    startPrevMargin = prevMargin;
-                    postContainer.addEventListener("touchmove", blogMoveStart);
-              
+                   if(document.documentElement.clientWidth<481) {
+                        if(postContainer.scrollTop > 5) {
+                            event.stopPropagation();
+                        
+                        } 
+                
+                        touchStartPosX = event.changedTouches[0].clientX;
+                        startPrevMargin = prevMargin;
+                        postContainer.addEventListener("touchmove", blogMoveStart);
+                    } // closes clWidth<481
                 },
                 
                 touchMove: function(event) {
@@ -1567,7 +1564,7 @@ function blogTabHandler(postToRequest, setListeners) {
         };
         assignBlogEventListener();
 
-    } // closes clWidth<481
+   
 
 
 /** These affect the behavior of the scrollbar on the blog menu*/

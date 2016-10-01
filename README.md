@@ -45,7 +45,9 @@ A portfolio site with AJAX, pushstate, and an admin panel
 - Add friendly forwarding on admin pages
 - Server side verification of file -> image
 - Add img upload link to post/new
+- Make the slide picker bigger, esp. on mobile
 
+- There might be a small bug where the tab flickers due to the active-Tab assignation, need to check it out
 
 
 **DONE**
