@@ -1571,200 +1571,274 @@ function blogTabHandler(postToRequest, setListeners) {
 
 /** var definitions**/
 (function() {
-var postSidebarFull = document.getElementsByClassName('post-sidebar')[0];
-var postSidebarMenuContainer = document.getElementsByClassName('post-sidebar-menu-container')[0];
-var postSidebar = document.getElementsByClassName('post-sidebar-menu')[0];
-//need to change these 3names ^, they're a bit confusing I think
-
-var sidebarHeight = parseInt(getComputedStyle(postSidebar).height, 10);
-var menuContainerHeight = parseInt(getComputedStyle(postSidebarMenuContainer).height, 10);
-var scrollBar = document.getElementById("blog-menu-scrollbar");
+    //need to change scrollbutton size!
 
 
 
-var scrollButtonPrevScroll = 0;
 
 
-var delta = 0; //uses the event movement measurer method - event.clientY for mouse, event.deltaY for wheel etc
-if(menuContainerHeight<sidebarHeight) {
-var scrollScheduled = false; //debouncer
+    var postSidebar = document.getElementsByClassName('post-sidebar-menu')[0];
+    //need to change these 3names ^, they're a bit confusing I think
+    var sidebarHeight = parseInt(getComputedStyle(postSidebar).height, 10);
 
-var scrollBarHeight = parseInt(getComputedStyle(scrollBar).height, 10);
-var scrollButton = document.getElementById("blog-menu-scrollbar-btn");
-var scrollButtonHeight = parseInt(getComputedStyle(scrollButton).height, 10);
-var mouseStartPositionY = 0;
-var initialScrollButtonTransform;
-var currentScrollButtonTransform;
+    var postSidebarFull = document.getElementsByClassName('post-sidebar')[0];
+    var postSidebarMenuContainer = document.getElementsByClassName('post-sidebar-menu-container')[0];
+    var menuContainerHeight = parseInt(getComputedStyle(postSidebarMenuContainer).height, 10);
 
-var touchStartPositionY = 0;
+    var scrollBar = document.getElementById("blog-menu-scrollbar");
+    var scrollButtonPrevScroll = 0;
 
-/* the function that actually moves the menu */
-function postMenuScroller() {
-    //console.log("scrollButtonPrevScroll", scrollButtonPrevScroll);
-    if(menuContainerHeight<sidebarHeight){
-        if((Math.abs(scrollButtonPrevScroll) - delta)>=Math.abs(menuContainerHeight - sidebarHeight)) {
-            delta = -(Math.abs(menuContainerHeight - sidebarHeight) - Math.abs(scrollButtonPrevScroll));
-        }
-        if((Math.abs(scrollButtonPrevScroll) - delta)<0){
-            scrollButtonPrevScroll = 0;
-            delta = 0;
-        }
-      //  console.log("delta value", delta);
-        document.getElementsByClassName("post-sidebar-menu")[0].style.transform = "translate3d(0," +  (scrollButtonPrevScroll + delta) + 'px' + ",0)" 
-        scrollButton.style.transform = "translate3d(0, " + Math.max((((scrollButtonPrevScroll + delta)*scrollBarHeight/Math.abs(menuContainerHeight - sidebarHeight) + scrollButtonHeight)*-1 ), 0) +'px' + ", 0)";
-        currentScrollButtonTransform = scrollButton.style.transform;
-        //console.log(currentScrollButtonTransform)
-        return;
-    } 
-}
-/**** /the function that actually moves the menu ***********************/
 
-/* mousewheel handler */
-postSidebar.addEventListener("wheel", function(event) { //scroll with mousewheel
-    if(!scrollScheduled) {
-        scrollScheduled = true
-        window.setTimeout(function() {
-            delta = -event.deltaY;
-            postMenuScroller();
-            scrollButtonPrevScroll = scrollButtonPrevScroll + delta;
-            scrollScheduled = false;
-        }, 17)
-     }
-});
 
-/**** mouseclick+drag on scrollbar button handlers ***/
+//var delta = 0; //uses the event movement measurer method - event.clientY for mouse, event.deltaY for wheel etc
+    if(menuContainerHeight<sidebarHeight) {
+        var scrollScheduled = false; //debouncer
+        var scrollBarHeight = parseInt(getComputedStyle(scrollBar).height, 10);
+        var scrollButton = document.getElementById("blog-menu-scrollbar-btn");
+ 
+        var mouseStartPositionY = 0;
+        var initialScrollButtonTransform;
+        var currentScrollButtonTransform;
+        var minTransform = 0;
+        var maxTransform = (menuContainerHeight - sidebarHeight);
 
-/*  mousedown(initial click) set records the start coodinates, then calls mouseMoveHandler to
-handle the movement. mouseUpHandler fires on mouseup(when letting the mouse button go, and records the final position
-of the scrollbutton so it doesnt start from zero when clicked/scrolled again) */
+        var touchStartPositionY = 0;
 
-var blogMenuMouseHandler = (function(){
-    return  {
-        mouseDownHandler: function(event) {
-            event.stopPropagation();
-            mouseStartPositionY = event.clientY; 
-            initialScrollButtonTransform = scrollButton.style.transform; 
-         //   console.log(event);     
-            document.addEventListener("mousemove", mouseMoveHandler);
-        },
+        scrollButton.style.height = (function(){    //scrollbutton height will be same % of scrollbar as post-sidebar-menu-container.height is of post-sidebar-menu 
+                                    var containerToPostMenuRatio = menuContainerHeight/sidebarHeight;
+                         
+                                    var size = scrollBarHeight * containerToPostMenuRatio;
+                                    console.log("returns", size + "px")
+                                    return size + "px";
+                                    })();
 
-        mouseMoveHandler: function(event) {
-            event.preventDefault();
-            event.stopPropagation();
-            if(!scrollScheduled){
-                delta = mouseStartPositionY - event.clientY;
-                postMenuScroller();
+                                    
+       var scrollButtonHeight = parseInt(getComputedStyle(scrollButton).height, 10);
+        /* the function that actually moves the menu */
+        function postMenuScroller(initialPosition, variation) {
+            var startPos = 0;
+            initialPosition === "default" ? startPos = scrollButtonPrevScroll : startPos = initialPosition;
+            var variation = variation;
+
+
+            function applyTransform(amount) {
+                postSidebar.style.transform = "translate3d(0," +  amount + 'px' + ",0)";
+                return amount;
             }
-        },
 
-        mouseUpHandler: function(event) {
-            event.stopPropagation();
-            //console.log(event);
-            document.removeEventListener("mousemove", mouseMoveHandler);
-            if(initialScrollButtonTransform != currentScrollButtonTransform) {
-             //   console.log("initial", initialScrollButtonTransform);
-               // console.log("current", currentScrollButtonTransform);
-                scrollButtonPrevScroll = scrollButtonPrevScroll + delta;
-                initialScrollButtonTransform = currentScrollButtonTransform;
+            function moveTheButton(amount) {
+                var amount = -amount*2.7 - scrollButtonHeight; //change the amount*2.7 to the relative sizes of bar/button/container.
+                amount < 0 ? amount = 0 : amount = amount;
+                scrollButton.style.transform = "translate3d(0," + amount + 'px' + ",0)";
+                return amount
+
             }
-        }
-    }
-})();
+            //console.log("scrollButtonPrevScroll", scrollButtonPrevScroll);
+            /*if(menuContainerHeight<sidebarHeight){ //this makes the scroller not work if the posts fit the sidebar w/o scrolling needed
+                // this is also on the chopping block, it's way too complicated
 
-function mouseMoveHandler(event) {
-blogMenuMouseHandler.mouseMoveHandler(event);
-}
+                if((Math.abs(scrollButtonPrevScroll) - delta)>=Math.abs(menuContainerHeight - sidebarHeight)) {
+                    delta = -(Math.abs(menuContainerHeight - sidebarHeight) - Math.abs(scrollButtonPrevScroll));
+                }
 
-function mouseDownHandler(event) {
-blogMenuMouseHandler.mouseDownHandler(event);
-}
+                if((Math.abs(scrollButtonPrevScroll) - delta)<0){ //el trasnform no puede dar menos q el inicial
+                    scrollButtonPrevScroll = 0;
+                    delta = 0;
+                }*/
 
-function mouseUpHandler(event) {
-blogMenuMouseHandler.mouseUpHandler(event);
+            //  console.log("delta value", delta);
+                var prevPostSidebarTransform = postSidebar.style.transform.replace("translate3d(0,", "").replace(",0)", "");
 
-}
+                var percentageVariation = menuContainerHeight/prevPostSidebarTransform
 
-scrollButton.addEventListener("mousedown", mouseDownHandler);
-blogContent.addEventListener("mouseup", mouseUpHandler);
-/**  /mouseclick+drag on scrollbar button handlers **/
+                var transformAmount = (function() {
+
+                    if((scrollButtonPrevScroll + variation)>minTransform) { //if translateY would be lower than zero (or whatever the minTransform is set to), return minTransform;
+                        console.log("minimum");
+                        return minTransform;
+
+                    }
+                    else if ((scrollButtonPrevScroll + variation)<maxTransform) { //if the scroll would be more than all of  the posts, cap it to the max height of the posts menu container
+                        console.log("maximum");
+                        return maxTransform;
+                    }
+                else {
+                        console.log("startPos", startPos, "var", variation);
+                        console.log("std")
+                        return startPos + variation;
+                    }
+
+                })();
+                
+                scrollButtonPrevScroll = applyTransform(transformAmount);
+                moveTheButton(transformAmount);
+
+                //postSidebar.style.transform = "translate3d(0," +  (transformAmount) + 'px' + ",0)" ;
 
 
-/** touch scrollbar handler  **/
+                // need to calc what % of distance the postSidebar moved, then move that % to the scrollbutton, up to 0 or 100 of scrollbar-height
 
-var blogMenuTouchHandler = (function(){
-    return {
-//
-        touchStartHandler: function(event) {
-            if(currentScrollButtonTransform != "translate3d(0px, 0px, 0px)"){
-                event.stopPropagation();               
-            }
-            touchStartPositionY = event.changedTouches[0].clientY;       
-            postSidebarMenuContainer.addEventListener("touchmove", touchMoveHandler);
+                /*scrollButton.style.transform = "translate3d(0, " + Math.max((((scrollButtonPrevScroll + delta)*scrollBarHeight/Math.abs(menuContainerHeight - sidebarHeight) + scrollButtonHeight)*-1 ), 0) +'px' + ", 0)";
+                currentScrollButtonTransform = scrollButton.style.transform;*/
 
-        },
 
-        touchMoveHandler: function(event) {
-
-            if(currentScrollButtonTransform != "translate3d(0px, 0px, 0px)"){
-                 event.stopPropagation();               
-            }
-                delta = (event.changedTouches[0].clientY - touchStartPositionY);
-                postMenuScroller();
-        },
-
-        touchEndHandler: function(event) {
-            //event.stopPropagation();
-            postSidebarMenuContainer.removeEventListener("touchmove", touchMoveHandler);
-            if(initialScrollButtonTransform != currentScrollButtonTransform) {
-                scrollButtonPrevScroll = scrollButtonPrevScroll + delta;  
-                initialScrollButtonTransform = currentScrollButtonTransform;
+                //console.log(currentScrollButtonTransform)
+                return;
             } 
-                    
+        //}
+        /**** /the function that actually moves the menu ***********************/
+
+        /* mousewheel handler */
+        postSidebar.addEventListener("wheel", function(event) { //scroll with mousewheel
+        // if(!scrollScheduled) {
+                scrollScheduled = true
+            //   window.setTimeout(function() {
+                    var delta = -event.deltaY;
+                //  console.log("wheel delta", delta)
+                    postMenuScroller("default", delta);
+                // scrollButtonPrevScroll = scrollButtonPrevScroll + delta;
+            //     scrollScheduled = false;
+            //   }, 17)
+            // }
+        });
+
+        /**** mouseclick+drag on scrollbar button handlers ***/
+
+        /*  mousedown(initial click) set records the start coodinates, then calls mouseMoveHandler to
+        handle the movement. mouseUpHandler fires on mouseup(when letting the mouse button go, and records the final position
+        of the scrollbutton so it doesnt start from zero when clicked/scrolled again) */
+
+        var blogMenuMouseHandler = (function(){
+            var delta = 0;
+            return  {
+            
+                mouseDownHandler: function(event) {
+                    event.stopPropagation();
+                    mouseStartPositionY = event.clientY; 
+                    initialScrollButtonTransform = scrollButton.style.transform; 
+                //   console.log(event);     
+                    document.addEventListener("mousemove", mouseMoveHandler);
+                },
+
+                mouseMoveHandler: function(event) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                  //  if(!scrollScheduled){
+                        delta = mouseStartPositionY - event.clientY;
+                        console.log("del", delta);
+                        postMenuScroller("default", delta);
+                    //}
+                },
+
+                mouseUpHandler: function(event) {
+                    event.stopPropagation();
+                    //console.log(event);
+                    document.removeEventListener("mousemove", mouseMoveHandler);
+                    if(initialScrollButtonTransform != currentScrollButtonTransform) {
+                    //   console.log("initial", initialScrollButtonTransform);
+                    // console.log("current", currentScrollButtonTransform);
+                        //scrollButtonPrevScroll = scrollButtonPrevScroll + delta;
+                        //initialScrollButtonTransform = currentScrollButtonTransform;
+                    }
+                }
+            }
+        })();
+
+        function mouseMoveHandler(event) {
+        blogMenuMouseHandler.mouseMoveHandler(event);
         }
-    }// return close
-})();
 
-function touchMoveHandler(event) {
+        function mouseDownHandler(event) {
+        blogMenuMouseHandler.mouseDownHandler(event);
+        }
 
-blogMenuTouchHandler.touchMoveHandler(event);
-}
+        function mouseUpHandler(event) {
+        blogMenuMouseHandler.mouseUpHandler(event);
 
-function touchStartHandler(event) {
+        }
 
-blogMenuTouchHandler.touchStartHandler(event);
-}
-
-function touchEndHandler(event) {
-blogMenuTouchHandler.touchEndHandler(event);
-
-}
-
-function assignBlogMenuEventListener() {
-postSidebarMenuContainer.addEventListener("touchstart", touchStartHandler);
-postSidebarMenuContainer.addEventListener("touchend", touchEndHandler); //was postSidebarMenuContainer. .....
-
-}
-
-assignBlogMenuEventListener();
+        scrollButton.addEventListener("mousedown", mouseDownHandler);
+        blogContent.addEventListener("mouseup", mouseUpHandler);
+        /**  /mouseclick+drag on scrollbar button handlers **/
 
 
-/** /touch scrollbar handler   **/
+        /** touch scrollbar handler  **/
 
-/* scrollbar click handler (click takes you to that part of scrollbar) - should also work for touch */
+        var blogMenuTouchHandler = (function(){
+            var delta = 0;
+            return {
+            
+                touchStartHandler: function(event) {
+                    if(currentScrollButtonTransform != "translate3d(0px, 0px, 0px)"){
+                        event.stopPropagation();               
+                    }
+                    touchStartPositionY = event.changedTouches[0].clientY;       
+                    postSidebarMenuContainer.addEventListener("touchmove", touchMoveHandler);
 
-scrollBar.addEventListener("click", scrollClickHandler);
+                },
+
+                touchMoveHandler: function(event) {
+
+                    if(currentScrollButtonTransform != "translate3d(0px, 0px, 0px)"){
+                        event.stopPropagation();               
+                    }
+                        delta = (event.changedTouches[0].clientY - touchStartPositionY);
+                        postMenuScroller(delta);
+                },
+
+                touchEndHandler: function(event) {
+                    //event.stopPropagation();
+                    postSidebarMenuContainer.removeEventListener("touchmove", touchMoveHandler);
+                    if(initialScrollButtonTransform != currentScrollButtonTransform) {
+                        scrollButtonPrevScroll = scrollButtonPrevScroll + delta;  
+                        initialScrollButtonTransform = currentScrollButtonTransform;
+                    } 
+                            
+                }
+            }// return close
+        })();
+
+        function touchMoveHandler(event) {
+
+        blogMenuTouchHandler.touchMoveHandler(event);
+        }
+
+        function touchStartHandler(event) {
+
+        blogMenuTouchHandler.touchStartHandler(event);
+        }
+
+        function touchEndHandler(event) {
+        blogMenuTouchHandler.touchEndHandler(event);
+
+        }
+
+        function assignBlogMenuEventListener() {
+        postSidebarMenuContainer.addEventListener("touchstart", touchStartHandler);
+        postSidebarMenuContainer.addEventListener("touchend", touchEndHandler); //was postSidebarMenuContainer. .....
+
+        }
+
+        assignBlogMenuEventListener();
 
 
-function scrollClickHandler(event) {
-//placeholder - should work just like the wheel handler but delta = click.eventY - difference from click.eventY to top of scrollbar
-}
-/* /scrollbar click handler */
+        /** /touch scrollbar handler   **/
+
+        /* scrollbar click handler (click takes you to that part of scrollbar) - should also work for touch */
+
+        scrollBar.addEventListener("click", scrollClickHandler);
 
 
-} else {
+        function scrollClickHandler(event) {
+        //placeholder - should work just like the wheel handler but delta = click.eventY - difference from click.eventY to top of scrollbar
+        }
+    /* /scrollbar click handler */
+
+
+    } else {
     scrollBar.style.display = "none";
 
-} //end of the scrollbar function
+    } //end of the scrollbar function
 })()// blogmenu closure
 
 }
