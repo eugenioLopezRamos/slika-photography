@@ -1608,31 +1608,44 @@ function blogTabHandler(postToRequest, setListeners) {
                                     var containerToPostMenuRatio = menuContainerHeight/sidebarHeight;
                          
                                     var size = scrollBarHeight * containerToPostMenuRatio;
-                                    console.log("returns", size + "px")
+                            
                                     return size + "px";
                                     })();
 
-                                    
+
        var scrollButtonHeight = parseInt(getComputedStyle(scrollButton).height, 10);
+
+       
         /* the function that actually moves the menu */
         function postMenuScroller(initialPosition, variation) {
             var startPos = 0;
+
             initialPosition === "default" ? startPos = scrollButtonPrevScroll : startPos = initialPosition;
+
             var variation = variation;
 
 
             function applyTransform(amount) {
+
                 postSidebar.style.transform = "translate3d(0," +  amount + 'px' + ",0)";
+
                 return amount;
             }
 
             function moveTheButton(amount) {
-                var amount = -amount*2.7 - scrollButtonHeight; //change the amount*2.7 to the relative sizes of bar/button/container.
-                amount < 0 ? amount = 0 : amount = amount;
-                scrollButton.style.transform = "translate3d(0," + amount + 'px' + ",0)";
-                return amount
+                var amount = amount;
+                var containerToPostMenuRatio = menuContainerHeight/sidebarHeight;
 
+                amount = -amount*containerToPostMenuRatio;// + scrollButtonHeight; //change the amount*2.7 to the relative sizes of bar/button/container.
+
+                amount < 0 ? amount = 0 : amount = amount;
+
+                //amount = amount;
+
+                scrollButton.style.transform = "translate3d(0," + amount + 'px' + ",0)";
+                return amount;
             }
+
             //console.log("scrollButtonPrevScroll", scrollButtonPrevScroll);
             /*if(menuContainerHeight<sidebarHeight){ //this makes the scroller not work if the posts fit the sidebar w/o scrolling needed
                 // this is also on the chopping block, it's way too complicated
@@ -1647,9 +1660,9 @@ function blogTabHandler(postToRequest, setListeners) {
                 }*/
 
             //  console.log("delta value", delta);
-                var prevPostSidebarTransform = postSidebar.style.transform.replace("translate3d(0,", "").replace(",0)", "");
+               // var prevPostSidebarTransform = postSidebar.style.transform.replace("translate3d(0,", "").replace(",0)", "");
 
-                var percentageVariation = menuContainerHeight/prevPostSidebarTransform
+               // var percentageVariation = menuContainerHeight/prevPostSidebarTransform
 
                 var transformAmount = (function() {
 
