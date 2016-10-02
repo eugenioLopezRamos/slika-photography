@@ -185,15 +185,15 @@ from {
   background: rgba(230,230,230, 0.3);
   border: 1px solid yellow;
   width: 1.5em;
-  box-sizing: border-box;
+
   position: relative;
-  height: 100%;
+
 
 }
 
 .scrollbar-button {
   background: #333;
-  height: 2.5em;
+  height: 2.5em; /* just a default, this is modified by javascript */
   border: 1px solid white;
   box-sizing: border-box;
   width: 100%;
@@ -280,7 +280,7 @@ margin-left: auto;
 }
 
 .menu > li:hover {
-  background-color: #111 !important; /*:hover needs to be done with !important, otherwise the js styling overwrites it*/
+  background-color: #111 !important; /*:hover needs to be done with !important, otherwise the js styling overwrites it - To be changed it should be with a class*/
   opacity: 0.6;
 }
 
@@ -1108,7 +1108,7 @@ box-sizing: border-box;
 
 
 .post-sidebar {
-    height: 95%;
+    height: 96%;
     width: 35%;
     overflow-x: hidden;
     overflow-y: hidden;
@@ -1123,6 +1123,7 @@ box-sizing: border-box;
 .post-sidebar-title {
   display: flex;
   height: 10%;
+  padding-bottom: 5%;
   width: 100%;
   position: relative;
 
@@ -1139,8 +1140,7 @@ box-sizing: border-box;
 }
 
 .post-sidebar-menu-container {
-  height: 100%;
-  margin-top: 5%;
+  height: 105%;
   width:100%;
   overflow: hidden;
   display: flex;
@@ -1150,7 +1150,7 @@ box-sizing: border-box;
 .post-sidebar-menu {
   height: auto;
   width: 100%;
-  margin: 0 auto auto auto; 
+  margin: auto auto auto auto; 
   display: flex;
   flex-direction: column;
   font-family: Helvetica, Calibri, sans-serif;
@@ -1183,9 +1183,11 @@ box-sizing: border-box;
   width: 100%;
   display:flex;
   position:relative;
+  border: 1px solid transparent;
+  box-sizing: border-box;
 }
 
-.active-post{
+.post-sidebar-menu a.post-link.active-post{
   border: 1px solid white;
   box-sizing: border-box;
 
@@ -1752,20 +1754,21 @@ top: 12px;
 /* BEGINNING OF BLOG TAB FORMATTING*/
 
 #blogContents {
-max-width: 175%;
-width: 155%;
+/*max-width: 175%;*/
+width: 175%;
 
 margin: auto;
 }
 
 .post-container {
-    width: 60%;
+    width: 52.5%;
     margin: auto;
 }
 
 .post-sidebar {
     
-    width:40%;
+    width:47.5%;
+    margin: auto;
   
 
 }

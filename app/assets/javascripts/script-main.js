@@ -1486,10 +1486,10 @@ function blogTabHandler(postToRequest, setListeners) {
             var touchStartPosX;//position of the touch X "pointer" at the start of the touch event
             var touchMoveThreshold = 100; //threshold for menu movement
             var prevMargin = 0; //keeps track of the margin
-            var leftStopThreshold = 0.55*document.documentElement.clientWidth;
+            var leftStopThreshold = 0.8*document.documentElement.clientWidth;
             var startPrevMargin = 0;
             window.addEventListener("resize", function() {
-                     leftStopThreshold = 0.55*document.documentElement.clientWidth;
+                     leftStopThreshold = 0.9*document.documentElement.clientWidth;
             });
 
             return {
@@ -1648,19 +1648,18 @@ function blogTabHandler(postToRequest, setListeners) {
                 var transformAmount = (function() {
 
                     if((scrollButtonPrevScroll + variation)>minTransform) { //if translateY would be lower than zero (or whatever the minTransform is set to), return minTransform;
-                        console.log("minimum");
+        
                         return minTransform;
 
                     }
 
                     else if ((scrollButtonPrevScroll + variation)<maxTransform) { //if the scroll would be more than all of  the posts, cap it to the max height of the posts menu container
-                        console.log("maximum");
+              
                         return maxTransform;
                     }
 
                     else {
-                        console.log("startPos", startPos, "var", variation);
-                        console.log("std")
+
                         return startPos + variation;
                     }
 
@@ -1676,16 +1675,13 @@ function blogTabHandler(postToRequest, setListeners) {
 
         /* mousewheel handler */
         postSidebar.addEventListener("wheel", function(event) { //scroll with mousewheel
-        // if(!scrollScheduled) {
+
                 scrollScheduled = true
-            //   window.setTimeout(function() {
+
                     var delta = -event.deltaY;
-                //  console.log("wheel delta", delta)
+
                     postMenuScroller("default", delta);
-                // scrollButtonPrevScroll = scrollButtonPrevScroll + delta;
-            //     scrollScheduled = false;
-            //   }, 17)
-            // }
+
         });
 
         /**** mouseclick+drag on scrollbar button handlers ***/
@@ -1700,34 +1696,25 @@ function blogTabHandler(postToRequest, setListeners) {
             
                 mouseDownHandler: function(event) {
                     event.stopPropagation();
-                  //  mouseStartPositionY = event.clientY; 
-                 //   initialScrollButtonTransform = scrollButton.style.transform; 
-                //   console.log(event);     
                     document.addEventListener("mousemove", mouseMoveHandler);
                 },
 
                 mouseMoveHandler: function(event) {
                     event.preventDefault();
                     event.stopPropagation();
-                  //  if(!scrollScheduled){
+      
 
                         delta = -event.movementY;//mouseStartPositionY - event.clientY;
-                        console.log("del", delta);
+               
                         postMenuScroller("default", delta);
-                    //}
+                  
                 },
 
                 mouseUpHandler: function(event) {
                     event.stopPropagation();
-                    //console.log(event);
+
                     document.removeEventListener("mousemove", mouseMoveHandler);
 
-                  //  if(initialScrollButtonTransform != currentScrollButtonTransform) {
-                    //   console.log("initial", initialScrollButtonTransform);
-                    // console.log("current", currentScrollButtonTransform);
-                        //scrollButtonPrevScroll = scrollButtonPrevScroll + delta;
-                        //initialScrollButtonTransform = currentScrollButtonTransform;
-                  //  }
                 }
             }
         })();
@@ -1757,9 +1744,9 @@ function blogTabHandler(postToRequest, setListeners) {
             return {
             
                 touchStartHandler: function(event) {
-                   // if(currentScrollButtonTransform != "translate3d(0px, 0px, 0px)"){
-                        event.stopPropagation();               
-                    //}
+           
+                    event.stopPropagation();               
+                 
                     touchStartPositionY = event.changedTouches[0].clientY;       
                     postSidebarMenuContainer.addEventListener("touchmove", touchMoveHandler);
 
@@ -1767,22 +1754,17 @@ function blogTabHandler(postToRequest, setListeners) {
 
                 touchMoveHandler: function(event) {
 
-                  //  if(currentScrollButtonTransform != "translate3d(0px, 0px, 0px)"){
+                 
                         event.stopPropagation();               
-                    //}
-                  //  console.log("cchangetouches", event.changedTouches[0]);
+    
                         delta = (event.changedTouches[0].clientY - touchStartPositionY);
                         postMenuScroller("default", delta);
                         touchStartPositionY = event.changedTouches[0].clientY;
                 },
 
                 touchEndHandler: function(event) {
-                    //event.stopPropagation();
+                   
                     postSidebarMenuContainer.removeEventListener("touchmove", touchMoveHandler);
-                  //  if(initialScrollButtonTransform != currentScrollButtonTransform) {
-                       // scrollButtonPrevScroll = scrollButtonPrevScroll + delta;  
-                      //  initialScrollButtonTransform = currentScrollButtonTransform;
-                    //} 
                             
                 }
             }// return close
