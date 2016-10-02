@@ -31,7 +31,7 @@ A portfolio site with AJAX, pushstate, and an admin panel
 ** IN PROGRESS **
 
 
-- Make scrollbar fadeout + disappear, then reappear when moved or its area clicked
+
 
 - lazy load images
 
@@ -52,7 +52,7 @@ A portfolio site with AJAX, pushstate, and an admin panel
 
 
 **DONE**
-
+- **SCRAPPED** Make scrollbar fadeout + disappear, then reappear when moved or its area clicked - I think it'd look weird/would be annoying. Scrapping this idea.
 - Use css height instead of the animation thingy on contact tab mobile (turned em units into % and vh's)
 - stop hiding non active-Tab -> its not necessary anymore and can help with perceived load times
 - Add 100% minheight to content-Tab CSS and explicit 100% height to slide images (correction: it was just too much minheight.)
