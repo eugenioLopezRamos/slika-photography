@@ -1489,7 +1489,7 @@ function blogTabHandler(postToRequest, setListeners) {
             var leftStopThreshold = 0.8*document.documentElement.clientWidth;
             var startPrevMargin = 0;
             window.addEventListener("resize", function() {
-                     leftStopThreshold = 0.9*document.documentElement.clientWidth;
+                     leftStopThreshold = 0.8*document.documentElement.clientWidth;
             });
 
             return {
@@ -1570,50 +1570,54 @@ function blogTabHandler(postToRequest, setListeners) {
 /** These affect the behavior of the scrollbar on the blog menu*/
 
 /** var definitions**/
-(function() {
-    //need to change scrollbutton size!
+function blogMenuFunction(addListeners) {
 
+    var assignListeners = false;
 
-
-
+    addListeners === true ? assignListeners = true : assignListeners = assignListeners;
 
     var postSidebar = document.getElementsByClassName('post-sidebar-menu')[0];
-    //need to change these 3names ^, they're a bit confusing I think
+        //need to change these 3names ^, they're a bit confusing I think
     var sidebarHeight = parseInt(getComputedStyle(postSidebar).height, 10);
 
     var postSidebarFull = document.getElementsByClassName('post-sidebar')[0];
     var postSidebarMenuContainer = document.getElementsByClassName('post-sidebar-menu-container')[0];
     var menuContainerHeight = parseInt(getComputedStyle(postSidebarMenuContainer).height, 10);
-
+    console.log("is it here????????");
     var scrollBar = document.getElementById("blog-menu-scrollbar");
     var scrollButtonPrevScroll = 0;
+    var scrollScheduled = false; //debouncer
+    var scrollBarHeight = parseInt(getComputedStyle(scrollBar).height, 10);
+    var scrollButton = document.getElementById("blog-menu-scrollbar-btn");
+    
+    var mouseStartPositionY = 0;
+    var initialScrollButtonTransform;
+    var currentScrollButtonTransform;
+    var minTransform = 0;
+    var maxTransform = (menuContainerHeight - sidebarHeight);
 
-
-
-//var delta = 0; //uses the event movement measurer method - event.clientY for mouse, event.deltaY for wheel etc
-    if(menuContainerHeight<sidebarHeight) {
-        var scrollScheduled = false; //debouncer
-        var scrollBarHeight = parseInt(getComputedStyle(scrollBar).height, 10);
-        var scrollButton = document.getElementById("blog-menu-scrollbar-btn");
- 
-        var mouseStartPositionY = 0;
-        var initialScrollButtonTransform;
-        var currentScrollButtonTransform;
-        var minTransform = 0;
-        var maxTransform = (menuContainerHeight - sidebarHeight);
-
-        var touchStartPositionY = 0;
-
-        scrollButton.style.height = (function(){    //scrollbutton height will be same % of scrollbar as post-sidebar-menu-container.height is of post-sidebar-menu 
-                                    var containerToPostMenuRatio = menuContainerHeight/sidebarHeight;
-                         
-                                    var size = scrollBarHeight * containerToPostMenuRatio;
-                            
-                                    return size + "px";
+    var touchStartPositionY = 0;
+            scrollButton.style.height = (function(){    //scrollbutton height will be same % of scrollbar as post-sidebar-menu-container.height is of post-sidebar-menu 
+                                        var containerToPostMenuRatio = menuContainerHeight/sidebarHeight;
+                                        console.log("calc scroll btn size");
+                                        var size = scrollBarHeight * containerToPostMenuRatio;
+                                
+                                        return size + "px";
                                     })();
 
-
+                                    console.log("here it goes");
        var scrollButtonHeight = parseInt(getComputedStyle(scrollButton).height, 10);
+       console.log("here it is");
+
+    if((menuContainerHeight<sidebarHeight) && assignListeners) { //only load event listeners on first load, not on resizes.
+        /**removes any existing evt listeners. */
+        console.log("postmenuscroller", postMenuScroller);
+
+
+
+
+
+
 
        
         /* the function that actually moves the menu */
@@ -1674,21 +1678,17 @@ function blogTabHandler(postToRequest, setListeners) {
         /**** /the function that actually moves the menu ***********************/
 
         /* mousewheel handler */
-        postSidebar.addEventListener("wheel", function(event) { //scroll with mousewheel
 
-                scrollScheduled = true
+        function wheelHandler(event) {
+                scrollScheduled = true //debouncer - currently unused.
+                var delta = -event.deltaY;
+                postMenuScroller("default", delta);
+        }
 
-                    var delta = -event.deltaY;
-
-                    postMenuScroller("default", delta);
-
-        });
+      
+        postSidebarMenuContainer.addEventListener("wheel", wheelHandler);
 
         /**** mouseclick+drag on scrollbar button handlers ***/
-
-        /*  mousedown(initial click) set records the start coodinates, then calls mouseMoveHandler to
-        handle the movement. mouseUpHandler fires on mouseup(when letting the mouse button go, and records the final position
-        of the scrollbutton so it doesnt start from zero when clicked/scrolled again) */
 
         var blogMenuMouseHandler = (function(){
             var delta = 0;
@@ -1702,11 +1702,9 @@ function blogTabHandler(postToRequest, setListeners) {
                 mouseMoveHandler: function(event) {
                     event.preventDefault();
                     event.stopPropagation();
-      
-
-                        delta = -event.movementY;//mouseStartPositionY - event.clientY;
-               
-                        postMenuScroller("default", delta);
+    
+                    delta = -event.movementY;//mouseStartPositionY - event.clientY;              
+                    postMenuScroller("default", delta);
                   
                 },
 
@@ -1720,20 +1718,20 @@ function blogTabHandler(postToRequest, setListeners) {
         })();
 
         function mouseMoveHandler(event) {
-        blogMenuMouseHandler.mouseMoveHandler(event);
+            blogMenuMouseHandler.mouseMoveHandler(event);
         }
 
         function mouseDownHandler(event) {
-        blogMenuMouseHandler.mouseDownHandler(event);
+            blogMenuMouseHandler.mouseDownHandler(event);
         }
 
         function mouseUpHandler(event) {
-        blogMenuMouseHandler.mouseUpHandler(event);
+            blogMenuMouseHandler.mouseUpHandler(event);
 
         }
 
         scrollButton.addEventListener("mousedown", mouseDownHandler);
-        blogContent.addEventListener("mouseup", mouseUpHandler);
+        document.addEventListener("mouseup", mouseUpHandler);
         /**  /mouseclick+drag on scrollbar button handlers **/
 
 
@@ -1745,8 +1743,7 @@ function blogTabHandler(postToRequest, setListeners) {
             
                 touchStartHandler: function(event) {
            
-                    event.stopPropagation();               
-                 
+                    event.stopPropagation();                            
                     touchStartPositionY = event.changedTouches[0].clientY;       
                     postSidebarMenuContainer.addEventListener("touchmove", touchMoveHandler);
 
@@ -1754,12 +1751,11 @@ function blogTabHandler(postToRequest, setListeners) {
 
                 touchMoveHandler: function(event) {
 
-                 
-                        event.stopPropagation();               
-    
-                        delta = (event.changedTouches[0].clientY - touchStartPositionY);
-                        postMenuScroller("default", delta);
-                        touchStartPositionY = event.changedTouches[0].clientY;
+                    event.stopPropagation();                 
+                    delta = (event.changedTouches[0].clientY - touchStartPositionY);
+                    event.target.id === "blog-menu-scrollbar-btn" ? delta = -delta : delta = delta; // If touching the scrollbutton, direction is reversed so it matches using a scrollbar on desktop.
+                    postMenuScroller("default", delta);
+                    touchStartPositionY = event.changedTouches[0].clientY;
                 },
 
                 touchEndHandler: function(event) {
@@ -1785,33 +1781,48 @@ function blogTabHandler(postToRequest, setListeners) {
 
         }
 
-        function assignBlogMenuEventListener() {
-            postSidebarMenuContainer.addEventListener("touchstart", touchStartHandler);
-            postSidebarMenuContainer.addEventListener("touchend", touchEndHandler); //was postSidebarMenuContainer. .....
+    //    function assignBlogMenuEventListener() {
 
-        }
+        postSidebarMenuContainer.addEventListener("touchstart", touchStartHandler);
+        postSidebarMenuContainer.addEventListener("touchend", touchEndHandler); //was postSidebarMenuContainer. .....
 
-        assignBlogMenuEventListener();
+      //  }
+
+      //  assignBlogMenuEventListener();
 
 
         /** /touch scrollbar handler   **/
 
         /* scrollbar click handler (click takes you to that part of scrollbar) - should also work for touch */
 
-        scrollBar.addEventListener("click", scrollClickHandler);
-
 
         function scrollClickHandler(event) {
         //placeholder - should work just like the wheel handler but delta = click.eventY - difference from click.eventY to top of scrollbar
+            alert("KEK");
+
+         //   scrollBar.removeEventListener("click", scrollClickHandler);
+          //  scrollBar.addEventListener("click", scrollClickHandler);
+
+
         }
+
+        scrollBar.addEventListener("click", scrollClickHandler);
+
     /* /scrollbar click handler */
 
 
-    } else {
+    } else if(menuContainerHeight>sidebarHeight) {
     scrollBar.style.display = "none";
 
     } //end of the scrollbar function
-})()// blogmenu closure
+
+}// blogmenu closure
+
+
+blogMenuFunction(true);
+
+window.removeEventListener("resize", blogMenuFunction);
+window.addEventListener("resize", blogMenuFunction);
 
 }
 } //end of blogTabHandler
