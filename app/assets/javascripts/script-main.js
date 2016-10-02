@@ -1624,7 +1624,6 @@ function blogTabHandler(postToRequest, setListeners) {
 
             var variation = variation;
 
-
             function applyTransform(amount) {
 
                 postSidebar.style.transform = "translate3d(0," +  amount + 'px' + ",0)";
@@ -1646,24 +1645,6 @@ function blogTabHandler(postToRequest, setListeners) {
                 return amount;
             }
 
-            //console.log("scrollButtonPrevScroll", scrollButtonPrevScroll);
-            /*if(menuContainerHeight<sidebarHeight){ //this makes the scroller not work if the posts fit the sidebar w/o scrolling needed
-                // this is also on the chopping block, it's way too complicated
-
-                if((Math.abs(scrollButtonPrevScroll) - delta)>=Math.abs(menuContainerHeight - sidebarHeight)) {
-                    delta = -(Math.abs(menuContainerHeight - sidebarHeight) - Math.abs(scrollButtonPrevScroll));
-                }
-
-                if((Math.abs(scrollButtonPrevScroll) - delta)<0){ //el trasnform no puede dar menos q el inicial
-                    scrollButtonPrevScroll = 0;
-                    delta = 0;
-                }*/
-
-            //  console.log("delta value", delta);
-               // var prevPostSidebarTransform = postSidebar.style.transform.replace("translate3d(0,", "").replace(",0)", "");
-
-               // var percentageVariation = menuContainerHeight/prevPostSidebarTransform
-
                 var transformAmount = (function() {
 
                     if((scrollButtonPrevScroll + variation)>minTransform) { //if translateY would be lower than zero (or whatever the minTransform is set to), return minTransform;
@@ -1671,31 +1652,23 @@ function blogTabHandler(postToRequest, setListeners) {
                         return minTransform;
 
                     }
+
                     else if ((scrollButtonPrevScroll + variation)<maxTransform) { //if the scroll would be more than all of  the posts, cap it to the max height of the posts menu container
                         console.log("maximum");
                         return maxTransform;
                     }
-                else {
+
+                    else {
                         console.log("startPos", startPos, "var", variation);
                         console.log("std")
                         return startPos + variation;
                     }
 
                 })();
-                
-                scrollButtonPrevScroll = applyTransform(transformAmount);
+
                 moveTheButton(transformAmount);
+                scrollButtonPrevScroll = applyTransform(transformAmount);
 
-                //postSidebar.style.transform = "translate3d(0," +  (transformAmount) + 'px' + ",0)" ;
-
-
-                // need to calc what % of distance the postSidebar moved, then move that % to the scrollbutton, up to 0 or 100 of scrollbar-height
-
-                /*scrollButton.style.transform = "translate3d(0, " + Math.max((((scrollButtonPrevScroll + delta)*scrollBarHeight/Math.abs(menuContainerHeight - sidebarHeight) + scrollButtonHeight)*-1 ), 0) +'px' + ", 0)";
-                currentScrollButtonTransform = scrollButton.style.transform;*/
-
-
-                //console.log(currentScrollButtonTransform)
                 return;
             } 
         //}
@@ -1727,8 +1700,8 @@ function blogTabHandler(postToRequest, setListeners) {
             
                 mouseDownHandler: function(event) {
                     event.stopPropagation();
-                    mouseStartPositionY = event.clientY; 
-                    initialScrollButtonTransform = scrollButton.style.transform; 
+                  //  mouseStartPositionY = event.clientY; 
+                 //   initialScrollButtonTransform = scrollButton.style.transform; 
                 //   console.log(event);     
                     document.addEventListener("mousemove", mouseMoveHandler);
                 },
@@ -1737,7 +1710,8 @@ function blogTabHandler(postToRequest, setListeners) {
                     event.preventDefault();
                     event.stopPropagation();
                   //  if(!scrollScheduled){
-                        delta = mouseStartPositionY - event.clientY;
+
+                        delta = -event.movementY;//mouseStartPositionY - event.clientY;
                         console.log("del", delta);
                         postMenuScroller("default", delta);
                     //}
@@ -1747,12 +1721,13 @@ function blogTabHandler(postToRequest, setListeners) {
                     event.stopPropagation();
                     //console.log(event);
                     document.removeEventListener("mousemove", mouseMoveHandler);
-                    if(initialScrollButtonTransform != currentScrollButtonTransform) {
+
+                  //  if(initialScrollButtonTransform != currentScrollButtonTransform) {
                     //   console.log("initial", initialScrollButtonTransform);
                     // console.log("current", currentScrollButtonTransform);
                         //scrollButtonPrevScroll = scrollButtonPrevScroll + delta;
                         //initialScrollButtonTransform = currentScrollButtonTransform;
-                    }
+                  //  }
                 }
             }
         })();
@@ -1782,9 +1757,9 @@ function blogTabHandler(postToRequest, setListeners) {
             return {
             
                 touchStartHandler: function(event) {
-                    if(currentScrollButtonTransform != "translate3d(0px, 0px, 0px)"){
+                   // if(currentScrollButtonTransform != "translate3d(0px, 0px, 0px)"){
                         event.stopPropagation();               
-                    }
+                    //}
                     touchStartPositionY = event.changedTouches[0].clientY;       
                     postSidebarMenuContainer.addEventListener("touchmove", touchMoveHandler);
 
@@ -1792,20 +1767,22 @@ function blogTabHandler(postToRequest, setListeners) {
 
                 touchMoveHandler: function(event) {
 
-                    if(currentScrollButtonTransform != "translate3d(0px, 0px, 0px)"){
+                  //  if(currentScrollButtonTransform != "translate3d(0px, 0px, 0px)"){
                         event.stopPropagation();               
-                    }
+                    //}
+                  //  console.log("cchangetouches", event.changedTouches[0]);
                         delta = (event.changedTouches[0].clientY - touchStartPositionY);
-                        postMenuScroller(delta);
+                        postMenuScroller("default", delta);
+                        touchStartPositionY = event.changedTouches[0].clientY;
                 },
 
                 touchEndHandler: function(event) {
                     //event.stopPropagation();
                     postSidebarMenuContainer.removeEventListener("touchmove", touchMoveHandler);
-                    if(initialScrollButtonTransform != currentScrollButtonTransform) {
-                        scrollButtonPrevScroll = scrollButtonPrevScroll + delta;  
-                        initialScrollButtonTransform = currentScrollButtonTransform;
-                    } 
+                  //  if(initialScrollButtonTransform != currentScrollButtonTransform) {
+                       // scrollButtonPrevScroll = scrollButtonPrevScroll + delta;  
+                      //  initialScrollButtonTransform = currentScrollButtonTransform;
+                    //} 
                             
                 }
             }// return close
@@ -1813,22 +1790,22 @@ function blogTabHandler(postToRequest, setListeners) {
 
         function touchMoveHandler(event) {
 
-        blogMenuTouchHandler.touchMoveHandler(event);
+            blogMenuTouchHandler.touchMoveHandler(event);
         }
 
         function touchStartHandler(event) {
 
-        blogMenuTouchHandler.touchStartHandler(event);
+            blogMenuTouchHandler.touchStartHandler(event);
         }
 
         function touchEndHandler(event) {
-        blogMenuTouchHandler.touchEndHandler(event);
+            blogMenuTouchHandler.touchEndHandler(event);
 
         }
 
         function assignBlogMenuEventListener() {
-        postSidebarMenuContainer.addEventListener("touchstart", touchStartHandler);
-        postSidebarMenuContainer.addEventListener("touchend", touchEndHandler); //was postSidebarMenuContainer. .....
+            postSidebarMenuContainer.addEventListener("touchstart", touchStartHandler);
+            postSidebarMenuContainer.addEventListener("touchend", touchEndHandler); //was postSidebarMenuContainer. .....
 
         }
 
