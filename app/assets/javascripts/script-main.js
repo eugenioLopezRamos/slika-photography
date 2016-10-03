@@ -1802,50 +1802,29 @@ function blogMenuFunction(addListeners) {
 
 
         function scrollClickHandler(event) {
-        //placeholder - should work just like the wheel handler but delta = click.eventY - difference from click.eventY to top of scrollbar
-           // alert("KEK");
-            
-            var scrollButtonTop = scrollButton.getBoundingClientRect().top
-           // var scrollButtonBottom = scrollButton.getBoundingClientRect().top + scrollButton.offsetHeight;
 
-           // console.log("scrollbtntop", scrollButtonTop);
+            
+            var scrollButtonTop = scrollButton.getBoundingClientRect().top;
+
             var valueToUse = (function() {
 
-                    var scrollBarToTop = parseInt(scrollBar.getBoundingClientRect().top, 10);
-                    //var scrollBar.offsetHeight //totalHeight of scrollBar
-
-                   return (event.clientY - scrollBarToTop)
-                   // console.log("scroll to top", scrollBarToTop, "event Y", event.clientY);
-                    //return theValue;//(scrollButtonTop - scrollBarToTop) - theValue - scrollButtonHeight;
-
-              //      var percentageOfScrollbarClicked = (function() {
-                        
-
-                 //   })();
-                //    return percentageOfScrollbarClicked;
-
+                var scrollBarToTop = parseInt(scrollBar.getBoundingClientRect().top, 10);
+                return (event.clientY - scrollBarToTop);
             })();
-
-            //doc = document.getElementById("blog-menu-scrollbar-btn")
-
-            //bar = document.getElementById("blog-menu-scrollbar")
 
             delta = -valueToUse - scrollButtonPrevScroll;
  
            postMenuScroller("default", delta);
-           //scrollButton.offsetHeight = event.clientY;
-         //   scrollBar.removeEventListener("click", scrollClickHandler);
-          //  scrollBar.addEventListener("click", scrollClickHandler);
-
 
         }
 
         scrollBar.addEventListener("click", scrollClickHandler);
 
-    /* /scrollbar click handler */
+
 
 
     } else if(menuContainerHeight>sidebarHeight) {
+        
     scrollBar.style.display = "none";
 
     } //end of the scrollbar function

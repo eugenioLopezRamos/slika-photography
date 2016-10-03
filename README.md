@@ -24,16 +24,14 @@ A portfolio site with AJAX, pushstate, and an admin panel
 - Add staging env to test the app in the same condition as the production env.
 - Add error messages for AJAX requests
 
-- scrollbar click to take to that point
 - There's a bug with blog tab JS where it incorrectly goes remembers the first post that you load - probably has something to do with replaceState, but haven't taken the time to look at it more closely
 
 
 ** IN PROGRESS **
 
-
-
-
 - lazy load images
+- Optimizing images w/ imagemagick + frontend
+- clear uploads staging zone after request done
 
 - Related to ^, add SendGrid for mails, postgres for DB and whatever other production env changes are necessary to pass to production
 - reassemble the manifest files for the asset pipeline into 2 files: main and admin
@@ -52,6 +50,8 @@ A portfolio site with AJAX, pushstate, and an admin panel
 
 
 **DONE**
+
+- scrollbar click to take to that point
 - **SCRAPPED** Make scrollbar fadeout + disappear, then reappear when moved or its area clicked - I think it'd look weird/would be annoying. Scrapping this idea.
 - Use css height instead of the animation thingy on contact tab mobile (turned em units into % and vh's)
 - stop hiding non active-Tab -> its not necessary anymore and can help with perceived load times
