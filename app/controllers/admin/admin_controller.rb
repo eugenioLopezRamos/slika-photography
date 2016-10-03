@@ -41,16 +41,7 @@ before_action :create_download_log, only: :download_file
     
     # need to add server side check for image sizes. Probably best to check for total > 100mb
     @total_size_mb = 0
-    my_img = params[:image][0].tempfile
-    mi_sz = my_img.size
-    my_img = MiniMagick::Image.open(my_img.path)
-
-    mi_ht = my_img[:height]
-    mi_wt = my_img[:width]
-
-   # mi_sz = my_img[:size]
-
-   # debugger
+ 
     if Rails.env.test?
       @max_size_upload_mb = 5 #Max upload 5mb on test env
     else 
@@ -74,43 +65,52 @@ before_action :create_download_log, only: :download_file
       render partial: '/admin/flash_messages'
       return
     else #Go ahead and upload
-      s3 = Aws::S3::Client.new
+      
+      s3 = Aws::S3::Client.new #create the client
       
       response_message = "#{"File".pluralize(params[:image].length)} successfully uploaded. #{"Location".pluralize(params[:image].length)}:<br />" 
       #need to change that message, not always will all files be successfully uploaded
 
       params[:image].each do |image|
 
+        my_img = params[:image][0].tempfile
+        mi_sz = my_img.size
+        my_img = MiniMagick::Image.open(my_img.path)
+
+        mi_ht = my_img[:height]
+        mi_wt = my_img[:width]
 
 
+   # mi_sz = my_img[:size]
+
+#create versions: mobile/tablet/hd/fullHD from largest to smallest, try to add them to the array before I do the
+  #upload function so I don't write more code than necessary
     
 
      
 
-        my_img = image.tempfile.path
+        @my_img = image.tempfile.path
 
-   # new_img = MiniMagick::Image.new("#{my_img}") do |image|
-       MiniMagick::Tool::Convert.new do |convert|
+        @dest_file = File.open("#{Rails.root}/tmp/temp-#{image.original_filename}", "w+b")
 
-        convert << image.tempfile.path
-        convert.strip
-        convert.interlace "plane"
-        convert.quality "80"
-        convert.blur "0X6"
 
-        convert.resize("100x100")
-        #output = File.open("#{Rails.root}/tmp/temp-#{image.original_filename}", "w+b")
-        convert << "#{Rails.root}/tmp/temp-#{image.original_filename}" #<< output #<< output.path #image.tempfile.path
-       # convert << output.path
-        #convert << image_file #<< image.tempfile.path
-     #   convert << "#{image.path}"
+        MiniMagick::Tool::Convert.new do |convert| #convert the images
 
-    # debugger 
+          convert << image.tempfile.path
 
-      end #image.tempfile #("#{Rails.root}/tmp")
-  #  end
-    #debugger
-    image_file = "#{Rails.root}/tmp/temp-#{image.original_filename}" #my_img #new_img
+          convert.strip
+          convert.interlace "plane"
+          convert.quality "80"
+          convert.blur "0X6"
+          convert.resize("100x100")       
+
+          convert << @dest_file.path #"#{Rails.root}/tmp/temp-#{image.original_filename}" 
+        end
+
+
+
+        image_file = @dest_file#.rewind #"#{Rails.root}/tmp/temp-#{image.original_filename}" #my_img #new_img
+        #image_file = image_file.close
 
 
         image_file_name = image.original_filename
@@ -127,6 +127,14 @@ before_action :create_download_log, only: :download_file
         uploaded_file_route = uploaded_file_route.select{ |entry| entry.key === "#{image_file_route}#{image_file_name}"  }.map(&:key)
 
         response_message << uploaded_file_route.to_s.gsub(/\"*\[*\]*/, '') << "<br />"
+
+        @dest_file.close
+        File.unlink(@dest_file)
+
+
+
+
+
 
       end # params[:image].each end
 
