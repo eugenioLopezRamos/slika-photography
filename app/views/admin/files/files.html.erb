@@ -33,6 +33,9 @@ body {
 	flex-direction: column;
 }
 
+.user-data-form-container {
+	width: 50%;
+}
 li {
 	margin-left: 40px;
 	margin-top: 15px;
@@ -73,6 +76,64 @@ ul, span {
 form {
 	width: 100%;
 }
+.file-dashboard {
+display: flex;	
+}
+
+.file-dashboard li {
+margin: 5px 0 5px 0;
+}
+
+.file-list {
+display: flex;
+flex-direction: column;
+min-width: 25%;
+width: 25%;
+max-width: 25%;
+overflow: auto;
+
+}
+
+/*button.file-list {
+min-width: 12.5%;
+width: 12.5%;
+max-width: 12.5%;
+height: auto;
+}*/
+
+button.file-list#model {
+display:none;
+}
+
+li.file-info {
+list-style-type: none;	
+margin: auto;
+
+}
+
+.file-list-button-container {
+display: flex;
+flex-direction:row;
+
+}
+
+.file-list button {
+	margin: auto;
+min-height: 36px; /*same as li fontsize + margin*/
+width: 50%;	
+}
+.file-divider {
+margin: 3px 0 3px 0;
+
+}
+
+hr.file-info {
+	background-color: rgb(41, 57, 82);
+	width: 100%;
+	height: 2px;
+}
+
+
 
 </style>
 
@@ -86,7 +147,39 @@ form {
 
 <%= button_to "Download file", admin_upload_path, class: 'file-manager-button', :id => "download-file", :remote => false %> 
 <%= button_to "Delete files", admin_upload_path,  class: 'file-manager-button', :id => "delete-files" %>
+<!--<div class="upload-prep" id="upload-prep">-->
+	<span class="action-title">Upload preparation area</span>
+	<span class="action-description">Here you can see how your uploaded files will be processed</span>
 
+	<div class="file-dashboard" id="file-upload-dashboard">
+		
+		<div class="file-list" id="file-name">
+			<span class="action-description">File name</span>
+		</div>
+
+		<div class="file-list" id="file-original-size">
+			<span class="action-description">Original size</span>
+		</div>
+
+		<div class="file-list" id="file-compressed-size">
+			<span class="action-description">Compressed size</span>
+		</div>
+
+		<div class="file-list" id="file-serverside-info">
+			<span class"action-description">Calculations</span>
+
+			<button class="file-list preview-file-data" id="model">Get processed file data</button>
+			<button class="file-list preview-processed-file" id="model">Preview file</button>
+		
+		</div>
+
+
+
+	</div>
+
+
+
+<!--</div>-->
 <%= form_for(:image, url: admin_upload_path, html: {multipart: true, id: 'upload-file-form'}) do |f| %>
 	<%= f.submit "Upload image", :id =>'upload-file' %>
 	<%= f.label :image %>

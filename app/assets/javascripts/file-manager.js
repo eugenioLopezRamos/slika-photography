@@ -110,7 +110,7 @@ var fileManager = function(arrayOfFiles) {
 	        }
 
 	    }
-	    return;
+	    return file;
 	}
 
 	function directorize(array) {
@@ -182,6 +182,7 @@ var fileManager = function(arrayOfFiles) {
 	            element.style.display === "none" ? element.style.display = "" : element.style.display = "none";
 	        });
 
+
 	    });
 
 	});
@@ -197,7 +198,7 @@ var fileManager = function(arrayOfFiles) {
 	});
 
 	document.getElementById('file_input_field').addEventListener('change', function() {
-		var maxMBs = 5; //max mb for uploads
+		var maxMBs = 50; //max mb for uploads
 		var caller = this; //the element that changed.In this case, since it's an id it's unique anyway.
 
 		var sizeInMBs = (function(){
@@ -221,6 +222,112 @@ var fileManager = function(arrayOfFiles) {
 			alert('Total size of uploaded files is over the maximum allowed (' + maxMBs + 'MB).');
 
 			}
+		else {
+	
+			populateFileDashboard(caller.files, "file-name");
+
+		}
+		
+ 
+		function populateFileDashboard(fileset, folderId) {
+
+			var oldCurrentFolder = currentFolder; //I have to refactor that function, but for now this should do.
+			function newDivider() {
+				var hr = document.createElement("hr");
+				hr.classList.add("file-info");
+				return hr;
+
+			}
+
+		
+			console.log("fileset", fileset);
+			var myArray = [].slice.call(fileset).map(function(element, index,array) {	
+				return element;
+			});
+			
+			myArray.map(function(element, index, array) {
+
+				currentFolder = document.getElementById(folderId); //yes it's brute forcing the existing function. Needs refactor. To be done later. 
+				var createdEntry = createFile(element.name, index);
+				createElementGroup(element);
+				createdEntry.classList.add("file-info");
+
+
+
+				//var hr = newDivider().classList.add("file-divider");
+				var newHr = newDivider();
+				//createdEntry.appendChild(newHr);
+
+				
+				//insertar las otras versiones y un <hr> separando cada archivo + versiones de los otros.
+			});
+
+
+			currentFolder = oldCurrentFolder; //Then afterwards we go back to the same as before we started.
+		//	createFile(); //needds array element + its index
+
+		function createElementGroup(element) {
+			//this function creates the different files the uploader creates:
+				//assuming Full HD original asset:
+
+				//base version (full hd)
+				//HD version (fit for 1366*768 res screens)
+				//tablet version (900*600 approx. dimensions)
+				//<hr> separator
+
+				//smaller versions would create up to the original size, that is:
+				// a 900*600 image would only create 1 version: mobile
+				// a 1200*700 image would create an HD version and a tablet version..
+
+
+				var newHr = newDivider();
+
+				var newLi = document.createElement("li");
+				newLi.classList.add("file-info");
+				newLi.id = element.name + "-size";
+				newLi.innerText = parseInt(element.size/1024, 10) + " kb";
+				
+
+				document.getElementById("file-original-size").appendChild(newLi);
+			//	document.getElementById("file-original-size").appendChild(newHr);
+				/*var newLiInfo = document.createElement("li");
+				newLiInfo.classList.add("file-info");
+				newLi.id = element.name + "-compSize";
+				newLi.innerText = "Click get Processed data to get";*/
+
+
+				var newButton = document.createElement("button");
+				var newButton2 = document.createElement("button");
+
+				newButton.id = element.name + "-getProcessedData";
+				newButton2.id = element.name + "-previewFile";
+
+				newButton.innerText = "Get compressed size";
+
+				newButton2.innerText = "Preview File";
+				
+				document.getElementById("file-compressed-size").appendChild(newButton);
+
+			//	document.getElementById("file-compressed-size").appendChild(newHr);
+
+				/*var newButtonContainer = document.createElement("div");
+				newButtonContainer.id = element.name + "-buttonContainer";
+				newButtonContainer.classList.add("file-list-button-container");
+				newButtonContainer.appendChild(newButton);
+				newButtonContainer.appendChild(newButton2);
+
+				document.getElementById("file-serverside-info").appendChild(newButtonContainer);*/
+				//document.getElementById("file-serverside-info").appendChild(newButton2);
+				document.getElementById("file-serverside-info").appendChild(newButton2);
+			//	document.getElementById("file-serverside-info").appendChild(newHr);			
+	
+		}
+
+
+
+		}
+
+
 
 	}); 
 

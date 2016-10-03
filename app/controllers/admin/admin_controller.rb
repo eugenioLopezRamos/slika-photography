@@ -1,6 +1,7 @@
 class Admin::AdminController < ApplicationController
 
 require 'zip'
+require 'mini_magick'
 before_action :logged_in_user
 before_action :logged_in_admin_user
 before_action :create_download_log, only: :download_file
@@ -13,12 +14,43 @@ before_action :create_download_log, only: :download_file
     render 'admin/files/files'
   end
 
+  def optimize_images(*images_array)
+
+   @images = images_array || params[:image]
+
+   @images.each do |image|
+      MiniMagick::Tool::Mogrify.new do |mogrify|
+
+        mogrify.strip
+        mogrify.interlace "Plane"
+        mogrify.quality "80"
+        mogrify.blur 0x6
+
+    #    mogrify.resize("100x100")
+        
+        mogrify << image
+
+      end
+
+    end
+
+  end
+
 
   def upload_file
     
     # need to add server side check for image sizes. Probably best to check for total > 100mb
     @total_size_mb = 0
+    my_img = params[:image][0].tempfile
+    mi_sz = my_img.size
+    my_img = MiniMagick::Image.open(my_img.path)
 
+    mi_ht = my_img[:height]
+    mi_wt = my_img[:width]
+
+   # mi_sz = my_img[:size]
+
+   # debugger
     if Rails.env.test?
       @max_size_upload_mb = 5 #Max upload 5mb on test env
     else 
@@ -43,11 +75,33 @@ before_action :create_download_log, only: :download_file
       return
     else #Go ahead and upload
       s3 = Aws::S3::Client.new
-
+      
       response_message = "#{"File".pluralize(params[:image].length)} successfully uploaded. #{"Location".pluralize(params[:image].length)}:<br />" 
       #need to change that message, not always will all files be successfully uploaded
 
       params[:image].each do |image|
+
+
+      MiniMagick::Tool::Mogrify.new do |mogrify|
+
+        mogrify.strip
+        mogrify.interlace "plane"
+        mogrify.quality "80"
+        mogrify.blur 0x6
+
+        mogrify.resize("100x100")
+        
+        mogrify << "#{image.path}"
+        mogrify << "#{image.path}"
+         debugger 
+
+      end
+
+
+     
+
+
+
 
         image_file = image.tempfile #("#{Rails.root}/tmp")
         image_file_name = image.original_filename
