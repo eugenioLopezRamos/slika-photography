@@ -19,16 +19,16 @@ before_action :create_download_log, only: :download_file
    @images = images_array || params[:image]
 
    @images.each do |image|
-      MiniMagick::Tool::Mogrify.new do |mogrify|
+      MiniMagick::Tool::convert.new do |convert|
 
-        mogrify.strip
-        mogrify.interlace "Plane"
-        mogrify.quality "80"
-        mogrify.blur 0x6
+        convert.strip
+        convert.interlace "Plane"
+        convert.quality "80"
+        convert.blur 0x6
 
-    #    mogrify.resize("100x100")
+    #    convert.resize("100x100")
         
-        mogrify << image
+        convert << image
 
       end
 
@@ -82,28 +82,37 @@ before_action :create_download_log, only: :download_file
       params[:image].each do |image|
 
 
-      MiniMagick::Tool::Mogrify.new do |mogrify|
 
-        mogrify.strip
-        mogrify.interlace "plane"
-        mogrify.quality "80"
-        mogrify.blur 0x6
-
-        mogrify.resize("100x100")
-        
-        mogrify << "#{image.path}"
-        mogrify << "#{image.path}"
-         debugger 
-
-      end
-
+    
 
      
 
+        my_img = image.tempfile.path
+
+   # new_img = MiniMagick::Image.new("#{my_img}") do |image|
+       MiniMagick::Tool::Convert.new do |convert|
+
+        convert << image.tempfile.path
+        convert.strip
+        convert.interlace "plane"
+        convert.quality "80"
+        convert.blur "0X6"
+
+        convert.resize("100x100")
+        #output = File.open("#{Rails.root}/tmp/temp-#{image.original_filename}", "w+b")
+        convert << "#{Rails.root}/tmp/temp-#{image.original_filename}" #<< output #<< output.path #image.tempfile.path
+       # convert << output.path
+        #convert << image_file #<< image.tempfile.path
+     #   convert << "#{image.path}"
+
+    # debugger 
+
+      end #image.tempfile #("#{Rails.root}/tmp")
+  #  end
+    #debugger
+    image_file = "#{Rails.root}/tmp/temp-#{image.original_filename}" #my_img #new_img
 
 
-
-        image_file = image.tempfile #("#{Rails.root}/tmp")
         image_file_name = image.original_filename
         image_file_route = params[:file_route] #The route is unique anyways, can't upload to 2 folders at once
 
