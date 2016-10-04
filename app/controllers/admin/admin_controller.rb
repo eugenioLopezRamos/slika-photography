@@ -14,28 +14,96 @@ before_action :create_download_log, only: :download_file
     render 'admin/files/files'
   end
 
-  def optimize_images(*images_array)
 
-   @images = images_array || params[:image]
+  def optimize_images #(*images_array)
+    
+    @imgs_to_optimize = params[:image]
 
-   @images.each do |image|
-      MiniMagick::Tool::convert.new do |convert|
+    @to_upload = []
 
-        convert.strip
-        convert.interlace "Plane"
-        convert.quality "80"
-        convert.blur 0x6
+    @images_to_optimize.each do |image|
 
-    #    convert.resize("100x100")
-        
-        convert << image
+      img = MiniMagick::Image.open(image.path) #Need to open the file to check height/width
+
+      img_height = img[:height] #height of the image
+      img_width = img[:width] #width
+
+      #define the breakpoints. If the img_width is higher than a given breakpoint, reduce it to all breakponts below it
+      # example:
+      # img_width: 1200
+
+      #1500+ for fullhd <- is not created, not a good idea to stretch images
+      #1500>size>1100 for HD <- img is resized down to 1300 width, since its above
+      #1099>size>701 for big tablets <- img is resized to 1000 width
+      #700>size>481 for midsize-tablet <- img is resized down to 700 as well
+      #480 or less for phones <- also creates a version for  these smaller viewports
+
+
+      size_breakpoints = [2000, 1500, 1100, 900, 700, 480] #[480, 700, 900, 1100, 1500, 2000] #[1500, 1100, 701, 481, 0]
+
+#        img_width > 2000 ? -> 1900 & 1500 & 1100 & 900 & 700 & 480
+# 2000 > img_width > 1500 ? -> 1500 & 1100 & 900 & 700 & 480
+# 1500 > img_width > 1100 ? -> 1100 & 900 & 700 & 480
+# 1100 > img_width > 900 ? -> 900 & 700 & 480
+# 900 > img_width > 700 ? -> 700 & 480
+# 700 > img_width > 480 ? -> 480
+# 480 > img_width ? -> keep.
+
+      applicable_widths = []
+
+      size_breakpoints.each do |width|
+
+        if img_width > size_breakpoints[0] #img_width < size_breakpoints[0] && img_width >= size_breakpoints[-1]   #smaller than the first (biggest) and larger than the last (smallest)
+          applicable_widths << width.next
+        elsif !width.next.nil? && width > img_width > width.next
+            applicable_widths << width.next
+        elsif img_width<size_breakpoints[-1] && size_breakpoints.next.nil?
+            applicable_widths << img_width
+
+        end #end if img_width > size
 
       end
 
-    end
+        #create thumbnail
+        applicable_widths << 100
 
-  end
+        #create blurry preload image
+        #not going to do it, It's probably not worth it (since it will do 2 downloads - I'll use a loading anim in the view and the 
+        # retrieve the appropiate version w/ AJAX)
 
+        #keep original
+        
+
+        applicable_widths.each do |width|
+
+          MiniMagick::Tool::Convert.new do |convert| #convert the images
+            destination_file = File.open("#{Rails.root}/tmp/#{image.original_filename}-#{width}")
+
+            convert << image.tempfile.path
+
+            convert.strip
+            convert.interlace "plane"
+            convert.quality "80"
+            #convert.blur "0X6"
+           # convert.resize("100x100") width x ht
+            new_height = img_height * (width/img_width)
+            convert.resize("#{width}x#{new_height}")       
+
+            convert << destination_file.path #"#{Rails.root}/tmp/temp-#{image.original_filename}" 
+            @to_upload << destination_file #adds file to the array to be uploaded when the original function continues
+
+          end #ends minimagick block
+
+        end #app width do
+
+          #keep the original img
+          orig_file = File.open(image.tempfile, 'wb', :encoding => 'binary')
+
+          @to_upload.unshift(orig_file) #becomes index 0
+
+        return @to_upload
+
+      end
 
   def upload_file
     
@@ -73,27 +141,24 @@ before_action :create_download_log, only: :download_file
 
       params[:image].each do |image|
 
-        my_img = params[:image][0].tempfile
+        my_img = image.tempfile
         mi_sz = my_img.size
         my_img = MiniMagick::Image.open(my_img.path)
 
         mi_ht = my_img[:height]
         mi_wt = my_img[:width]
 
+        #optimize_images
+
 
    # mi_sz = my_img[:size]
 
 #create versions: mobile/tablet/hd/fullHD from largest to smallest, try to add them to the array before I do the
   #upload function so I don't write more code than necessary
-    
-
-     
-
+  
         @my_img = image.tempfile.path
 
         @dest_file = File.open("#{Rails.root}/tmp/temp-#{image.original_filename}", "w+b")
-
-
         MiniMagick::Tool::Convert.new do |convert| #convert the images
 
           convert << image.tempfile.path
@@ -130,11 +195,6 @@ before_action :create_download_log, only: :download_file
 
         @dest_file.close
         File.unlink(@dest_file)
-
-
-
-
-
 
       end # params[:image].each end
 
