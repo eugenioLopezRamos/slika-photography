@@ -17,7 +17,7 @@ before_action :create_download_log, only: :download_file
 
   def optimize_images #(*images_array)
     
-    @imgs_to_optimize = params[:image]
+    @images_to_optimize = params[:image]
 
     @to_upload = []
 
@@ -27,7 +27,22 @@ before_action :create_download_log, only: :download_file
 
       img_height = img[:height] #height of the image
       img_width = img[:width] #width
+     # orig_file = File.open(image.tempfile.path, 'rb')
+     #File.open(image.tempfile.path, 'rb') -> write en otro archivo -> cerrar el original -> rewind.
 
+      base_file = File.open(image.tempfile.path, 'rb')
+
+      new_file = File.open("#{Rails.root}/tmp/#{image.original_filename}", 'wb')
+
+      file_data = base_file.read()
+
+      new_file.write(file_data)
+
+      @to_upload << new_file
+
+     #new_file.close
+     # File.unlink(new_file)
+    #  debugger 
       #define the breakpoints. If the img_width is higher than a given breakpoint, reduce it to all breakponts below it
       # example:
       # img_width: 1200
@@ -51,21 +66,24 @@ before_action :create_download_log, only: :download_file
 
       applicable_widths = []
 
-      size_breakpoints.each do |width|
+      size_breakpoints.each_with_index do |width, index|
+        #  debugger
+
+        # width.next returns the next value ie the next integer, not the next element of the array
 
         if img_width > size_breakpoints[0] #img_width < size_breakpoints[0] && img_width >= size_breakpoints[-1]   #smaller than the first (biggest) and larger than the last (smallest)
-          applicable_widths << width.next
-        elsif !width.next.nil? && width > img_width > width.next
-            applicable_widths << width.next
-        elsif img_width<size_breakpoints[-1] && size_breakpoints.next.nil?
+          applicable_widths << size_breakpoints[0]
+        elsif (!size_breakpoints[index + 1].nil? && img_width > size_breakpoints[index + 1])
+            applicable_widths << size_breakpoints[index + 1]
+        elsif img_width<size_breakpoints[-1] && size_breakpoints[index + 1].nil?
             applicable_widths << img_width
 
         end #end if img_width > size
 
       end
-
+      #  debugger 
         #create thumbnail
-        applicable_widths << 100
+      #  applicable_widths << 100
 
         #create blurry preload image
         #not going to do it, It's probably not worth it (since it will do 2 downloads - I'll use a loading anim in the view and the 
@@ -74,36 +92,39 @@ before_action :create_download_log, only: :download_file
         #keep original
         
 
-        applicable_widths.each do |width|
+        applicable_widths.each do |app_width|
 
           MiniMagick::Tool::Convert.new do |convert| #convert the images
-            destination_file = File.open("#{Rails.root}/tmp/#{image.original_filename}-#{width}")
+            destination_file = File.open("#{Rails.root}/tmp/#{app_width}-#{image.original_filename}", 'w+b')
 
             convert << image.tempfile.path
 
             convert.strip
             convert.interlace "plane"
             convert.quality "80"
-            #convert.blur "0X6"
-           # convert.resize("100x100") width x ht
-            new_height = img_height * (width/img_width)
-            convert.resize("#{width}x#{new_height}")       
+            new_height = img_height * (app_width.to_f / img_width.to_f) #otherwise it's zero because integers.
+          #  debugger
+            convert.resize("#{app_width}x#{new_height}")       
 
             convert << destination_file.path #"#{Rails.root}/tmp/temp-#{image.original_filename}" 
+          
             @to_upload << destination_file #adds file to the array to be uploaded when the original function continues
-
+          
           end #ends minimagick block
 
-        end #app width do
+        end #app_width do
 
           #keep the original img
-          orig_file = File.open(image.tempfile, 'wb', :encoding => 'binary')
+        #  orig_file = File.open(image.tempfile.path, 'w+b')
 
-          @to_upload.unshift(orig_file) #becomes index 0
-
-        return @to_upload
-
-      end
+       #   @to_upload.unshift(orig_file) #becomes index 0
+          debugger
+         # debugger
+       # return @to_upload
+       end #end @img_to_optimize
+       return @to_upload
+       
+  end
 
   def upload_file
     
@@ -139,14 +160,14 @@ before_action :create_download_log, only: :download_file
       response_message = "#{"File".pluralize(params[:image].length)} successfully uploaded. #{"Location".pluralize(params[:image].length)}:<br />" 
       #need to change that message, not always will all files be successfully uploaded
 
-      params[:image].each do |image|
+     # params[:image].each do |image|
 
-        my_img = image.tempfile
-        mi_sz = my_img.size
-        my_img = MiniMagick::Image.open(my_img.path)
+       # my_img = image.tempfile
+     #   mi_sz = my_img.size
+      #  my_img = MiniMagick::Image.open(my_img.path)
 
-        mi_ht = my_img[:height]
-        mi_wt = my_img[:width]
+      #  mi_ht = my_img[:height]
+     #   mi_wt = my_img[:width]
 
         #optimize_images
 
@@ -156,47 +177,51 @@ before_action :create_download_log, only: :download_file
 #create versions: mobile/tablet/hd/fullHD from largest to smallest, try to add them to the array before I do the
   #upload function so I don't write more code than necessary
   
-        @my_img = image.tempfile.path
+      #  @my_img = image.tempfile.path
 
-        @dest_file = File.open("#{Rails.root}/tmp/temp-#{image.original_filename}", "w+b")
-        MiniMagick::Tool::Convert.new do |convert| #convert the images
+    #    @dest_file = File.open("#{Rails.root}/tmp/temp-#{image.original_filename}", "w+b")
+    #    MiniMagick::Tool::Convert.new do |convert| #convert the images
 
-          convert << image.tempfile.path
+     #     convert << image.tempfile.path
 
-          convert.strip
-          convert.interlace "plane"
-          convert.quality "80"
-          convert.blur "0X6"
-          convert.resize("100x100")       
+    #      convert.strip
+     #     convert.interlace "plane"
+     #     convert.quality "80"
+     #     convert.blur "0X6"
+     #     convert.resize("100x100")       
 
-          convert << @dest_file.path #"#{Rails.root}/tmp/temp-#{image.original_filename}" 
-        end
+    #      convert << @dest_file.path #"#{Rails.root}/tmp/temp-#{image.original_filename}" 
+   #     end
 
 
 
-        image_file = @dest_file#.rewind #"#{Rails.root}/tmp/temp-#{image.original_filename}" #my_img #new_img
+       # image_file = @dest_file#.rewind #"#{Rails.root}/tmp/temp-#{image.original_filename}" #my_img #new_img
         #image_file = image_file.close
+        optimized_array = optimize_images
+        #debugger 
+        optimized_array.each do |image|
+          
+          image_file = image #File.open(image.path, 'rb') # was image.tempfile
+          image_file_name = File.basename(image_file) # was image.original_filename
+          image_file_route = params[:file_route] #The route is unique anyways, can't upload to 2 folders at once
 
+          File.open(image_file, 'rb', :encoding => 'binary') do |file|
+            s3.put_object(bucket: ENV['AWS_S3_BUCKET'], key: "#{image_file_route}#{image_file_name}", body: file)
+          end #file open end
 
-        image_file_name = image.original_filename
-        image_file_route = params[:file_route] #The route is unique anyways, can't upload to 2 folders at once
+         # image.tempfile.close
+       #   image.tempfile.unlink
+          
+          uploaded_file_route = s3.list_objects(bucket: ENV['AWS_S3_BUCKET'], marker: image_file_route).contents
+          uploaded_file_route = uploaded_file_route.select{ |entry| entry.key === "#{image_file_route}#{image_file_name}"  }.map(&:key)
 
-        File.open(image_file, 'rb', :encoding => 'binary') do |file|
-          s3.put_object(bucket: ENV['AWS_S3_BUCKET'], key: "#{image_file_route}#{image_file_name}", body: file)
-        end #file open end
+          response_message << uploaded_file_route.to_s.gsub(/\"*\[*\]*/, '') << "<br />"
 
-        image.tempfile.close
-        image.tempfile.unlink
-        
-        uploaded_file_route = s3.list_objects(bucket: ENV['AWS_S3_BUCKET'], marker: image_file_route).contents
-        uploaded_file_route = uploaded_file_route.select{ |entry| entry.key === "#{image_file_route}#{image_file_name}"  }.map(&:key)
+          image.close
+          File.unlink(image)
+        end # @to_upload end
 
-        response_message << uploaded_file_route.to_s.gsub(/\"*\[*\]*/, '') << "<br />"
-
-        @dest_file.close
-        File.unlink(@dest_file)
-
-      end # params[:image].each end
+     # end # params[:image].each end
 
       flash.now[:info] = response_message.html_safe #{}"File successfully uploaded. Location: #{uploaded_file_route.to_s.gsub(/\"*\[*\]*/, '')}".html_safe
       render partial: '/admin/flash_messages'
