@@ -24,6 +24,9 @@
 #ignore public uploads
 public/uploads/*
 
+#ignore images folder
+images/*
+
 #ignore .env
 .env
 
