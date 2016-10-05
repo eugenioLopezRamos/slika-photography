@@ -45,19 +45,32 @@
   s3 = Aws::S3::Client.new
   files_in_folder = s3::list_objects(bucket:ENV['AWS_S3_BUCKET'], prefix: full_dir).contents.map(&:key)
 
+  original_files = Array.new #will contain the base filename of each photo
   sizes_per_file = Hash.new #A hash with the following structure = "filename" => [available image sizes] } 
 
-  original_files = files_in_folder.select{ |key| key.start_with?("#{full_dir}/original-")}.map do |key|
+  files_in_folder.select{ |key| key.start_with?("#{full_dir}/original-")}.map do |key|
   # debugger
-      base_filename = key.gsub("#{full_dir}/original-", '')
 
-      files_in_folder.select { |file_route| file_route.include?(base_filename) }.map do |version|
+      base_file = key.gsub("#{full_dir}/original-", '')
+      versions = Array.new #Will include all the available versions of the file (depending on base_file dimensions)
+
+      files_in_folder.select { |file_route| file_route.include?(base_file) }.map do |version|
 
         #base_filename as hashkey, [version] as value
+       # debugger
+        to_add = version.gsub("#{full_dir}/", '') #removes the file route
+             #  debugger
+        to_add = to_add.gsub("-#{base_file}", '') #removes the dash that separates the base filename and the filename itself
+ 
+        if to_add != "original"  #don't add the "original" string to the array.
+         versions.push to_add 
+        end 
 
       end
 
-
+      original_files.push base_file #adds the base file to the original files Array
+      sizes_per_file[base_file] = versions #creates an entry in the sizes_per_file hash for the file we just added, listing
+      #its available sizes
 
   end
 
@@ -79,18 +92,18 @@ and program JS to decide what to use depending on size availability and clientWi
     <% if counter === active_slide %>
 
       <%= content_tag :div, class: "#{@tab_value} #{active_slide_class}" do %>
-        <%= image_tag("#{@image_dir}/#{slide}") %> 
-      <% end -%>
+        <%= image_tag("#{@image_dir}/#{slide}", id: "#{full_dir}/#{slide}", data: {sizes: sizes_per_file[slide]} ) %> 
+      <% end %>
 
     <% else %>
     
     <%= content_tag :div, class: "#{@tab_value}" do %>
       <%#= image_tag("#{@image_dir}/#{slide}-placeholder"), id="#{slide}"-%>
-      <%= image_tag("", id: "#{full_dir}/#{slide}") %>
+      <%= image_tag("", id: "#{full_dir}/#{slide}", data: {sizes: sizes_per_file[slide]} ) %>
     <%= render 'layouts/loadAnim' %>
 
     <%# id de imagen en el div contenedor de la imagen y luego reemplazar el innerhtml del div con el div de la imagen -%>
-    <% end -%>
+    <% end %>
   <% end %>
 
 <% end %>
