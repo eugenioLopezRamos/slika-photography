@@ -628,17 +628,16 @@ $.ajax({url:, type: 'GET', data: currentTabActiveIndex})*/
         return parseInt(element, 10);
     });
     //console.log("document", document.querySelector('.active-slide img'));
-    console.log("possSizes", possibleSizes);
+
     //console.log("typeof poss", typeof possibleSizes);
 
     var screenSize = document.documentElement.clientWidth;
-    console.log("screen", screenSize);
 
-   var sizeToGet = possibleSizes.map(function(element, index, array) {
+
+   var sizeToGet = possibleSizes.filter(function(element, index, array) {
 
         if(index === 0) {
             if(screenSize > element) {
-                debugger
                 return element;
             }
         }
@@ -652,14 +651,16 @@ $.ajax({url:, type: 'GET', data: currentTabActiveIndex})*/
                 return element;         
         }
         else {
-            console.log("Something's wrong");
+            return;
         }
-
+       
     });
 
+console.log("sizetoget", sizeToGet);
     return sizeToGet;
 
 }
+
 
 getImages();
 
