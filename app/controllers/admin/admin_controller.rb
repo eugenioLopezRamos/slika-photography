@@ -54,7 +54,7 @@ before_action :create_download_log, only: :download_file
       #480 or less for phones <- also creates a version for  these smaller viewports
 
 
-      size_breakpoints = [2000, 1500, 1100, 900, 700, 480] #[480, 700, 900, 1100, 1500, 2000] #[1500, 1100, 701, 481, 0]
+      size_breakpoints = ApplicationHelper::size_breakpoints #[2000, 1500, 1100, 900, 700, 480] #[480, 700, 900, 1100, 1500, 2000] #[1500, 1100, 701, 481, 0]
 
 #        img_width > 2000 ? -> 1900 & 1500 & 1100 & 900 & 700 & 480
 # 2000 > img_width > 1500 ? -> 1500 & 1100 & 900 & 700 & 480
@@ -66,9 +66,9 @@ before_action :create_download_log, only: :download_file
 
       applicable_widths = []
 
-      size_breakpoints.each_with_index do |width, index|
-        #  debugger
-
+      size_breakpoints.slice(0..-2).each_with_index do |width, index| #last size (thumbnail size, the smallest) is excluded
+        #since it will always be included
+      
         # width.next returns the next value ie the next integer, not the next element of the array
 
         if img_width > size_breakpoints[0] #img_width < size_breakpoints[0] && img_width >= size_breakpoints[-1]   #smaller than the first (biggest) and larger than the last (smallest)
@@ -84,7 +84,7 @@ before_action :create_download_log, only: :download_file
     
 
         #add thumbnail size
-        applicable_widths << 100
+        applicable_widths << size_breakpoints[-1]
 
         #create blurry preload image
         #not going to do it, It's probably not worth it (since it will do 2 downloads - I'll use a loading anim in the view and the 

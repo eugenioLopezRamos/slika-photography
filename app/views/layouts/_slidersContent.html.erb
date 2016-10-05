@@ -10,10 +10,10 @@
     #Use the counter to determine what slide is the active one and set its class below.
   counter = 0
 
-  if params[:id].nil?
+  if params[:id].nil? #params :id  comes from /tabs_retriever which is accessed by AJAX calls
         active_slide = 1
   else
-      active_slide = params[:id]
+      active_slide = params[:id] 
       active_slide = active_slide.to_i
   end
 
@@ -45,58 +45,49 @@
   s3 = Aws::S3::Client.new
   files_in_folder = s3::list_objects(bucket:ENV['AWS_S3_BUCKET'], prefix: full_dir).contents.map(&:key)
 
+  sizes_per_file = Hash.new #A hash with the following structure = "filename" => [available image sizes] } 
+
   original_files = files_in_folder.select{ |key| key.start_with?("#{full_dir}/original-")}.map do |key|
   # debugger
-      key.gsub!("#{full_dir}/original-", '')
+      base_filename = key.gsub("#{full_dir}/original-", '')
+
+      files_in_folder.select { |file_route| file_route.include?(base_filename) }.map do |version|
+
+        #base_filename as hashkey, [version] as value
+
+      end
+
+
+
   end
 
-  files_in_folder.sort! {|a,z| a.to_i <=> z.to_i}
+
+
+
+  original_files.sort! {|a,z| a.to_i <=> z.to_i}
   
 %>
 
 
+<%# maybe I could save a list of available sizes for each image, send them to the front end
+and program JS to decide what to use depending on size availability and clientWidth? %>
 
+<%# create a hash  {full_image_path => [1100, 900, 700, 480, 100] for example? So we have a list of available sizes per image %>
 
 <% original_files.each do |slide| %> 
     <% counter += 1 %>
     <% if counter === active_slide %>
 
-      <%= content_tag :div, class: "#{@tab_value} #{active_slide_class}" do -%>
-        <%= image_tag("#{@image_dir}/#{slide}") -%> 
+      <%= content_tag :div, class: "#{@tab_value} #{active_slide_class}" do %>
+        <%= image_tag("#{@image_dir}/#{slide}") %> 
       <% end -%>
 
     <% else %>
     
-    <%= content_tag :div, class: "#{@tab_value}" do -%>
+    <%= content_tag :div, class: "#{@tab_value}" do %>
       <%#= image_tag("#{@image_dir}/#{slide}-placeholder"), id="#{slide}"-%>
-      <%= image_tag("")-%>
-        <div class="dots-container">
-
-          <div class="dots">
-
-            <div class="outer-border first">
-              <div class="inner-border first"></div>
-            </div>
-
-          </div>  
-
-          <div class="dots">
-
-            <div class="outer-border second">
-              <div class="inner-border second"></div>
-            </div>  
-
-          </div>   
-
-          <div class="dots">
-
-            <div class="outer-border third">
-              <div class="inner-border third"></div>
-            </div>
-
-          </div>
-        
-        </div>
+      <%= image_tag("", id: "#{full_dir}/#{slide}") %>
+    <%= render 'layouts/loadAnim' %>
 
     <%# id de imagen en el div contenedor de la imagen y luego reemplazar el innerhtml del div con el div de la imagen -%>
     <% end -%>
