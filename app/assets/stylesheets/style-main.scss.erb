@@ -17,6 +17,20 @@ min-height:100%;
   
 }
 
+@keyframes pop {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.3);
+  }
+
+}
+
+$anim-duration: 0.65s;
+
+
+
 /*need to find a way to play animations in reverse so I don't repeat myself so much - I tried but while it worked, it did without animation (the "animation" lasted 0 sec despite having set a duration of 2s) */
 @keyframes fadeOut {
   from {
@@ -316,7 +330,7 @@ margin-left: auto;
 height:calc(100vh - 3.8*2em - 4px);
 width: 100vw;
 position: relative;
-background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(<%= asset_path "/images/background/camera-background.jpg" %>);
+background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(<%= asset_path "/images/background/1500-camera-background.jpg" %>);
 background-size: cover;
 overflow:hidden; /* this is used to hide the buttons that appear on mobile - if I use this prop on .jumbotron the design at load gets screwed up, need to see why that happens*/
 will-change: opacity;    /* browser optimizes the processes for opacity transitions - this makes the animations smoother on mobile*/
@@ -335,7 +349,7 @@ max-width: 1233px;
 min-width: 75em; /*1200px*/
 min-height: 47em; /*816px*/
 will-change: opacity; 
-/*display: none;*/
+display: none;
 }
 
 .active-Tab {
@@ -672,6 +686,64 @@ margin-left: 3px;
 margin-top: auto;
 margin-bottom: auto;
 }
+
+/* FORMAT THE LOADING DOTS */
+
+.dots-container {
+  display: flex;
+  justify-content: center;
+  margin: auto;
+
+}
+
+.outer-border {
+  display: flex;
+  justify-content: center;
+  margin: auto 10px auto 10px;
+  border-radius: 16px;
+  height: 16px;
+  width: 16px; /*MUST be an even number, so cant percentage it (else the borders might look uneven) */
+  background-color: rgb(130, 130, 130);
+  animation: pop $anim-duration alternate;
+  animation-iteration-count: infinite;
+}
+
+
+.inner-border {
+
+  display: flex;
+  justify-content: center;
+  margin: auto;
+  border-radius: 100%;
+  height: 80%;
+  width: 80%;
+  background-color: #111;
+  
+}
+
+.outer-border.first {
+  -webkit-animation-delay: $anim-duration;
+  -moz-animation-delay: $anim-duration;
+  animation-delay: $anim-duration;
+
+}
+
+.outer-border.second {
+  -webkit-animation-delay: 1.5 * $anim-duration;
+  -moz-animation-delay: 1.5 * $anim-duration;
+  animation-delay: 1.5 * $anim-duration;
+
+}
+
+.outer-border.third {
+  -webkit-animation-delay: 2 * $anim-duration;
+  -moz-animation-delay: 2 * $anim-duration;
+  animation-delay: 2 * $anim-duration;
+
+}
+
+
+/* /FORMAT THE LOADING ANIM DOTS */
 
 
 /*DEFINES THE STYLING OF THE PEOPLE TAB*/
@@ -1382,6 +1454,7 @@ display: none;
 display: block;
 position: relative;
 height: auto;
+background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(<%= asset_path "/images/background/1100-camera-background.jpg" %>);
 min-height: calc(inherit - 4.15em - 4px);
 max-height: calc(inherit - 4.15em - 4px);
 /*height: calc(100% - 4.15em - 4px); /* 2px =  <hr> */
@@ -1453,6 +1526,7 @@ margin-bottom: auto;
 
 /* END OF FORMATTING OF THE SLIDER BUTTONS */
 
+/* FORMATS THE LOADING ANIM DOTS */
 
 
 
@@ -1835,6 +1909,7 @@ width: 98.7vw; /*probably need to supplement with javascript since scrollbar wid
 
 .jumbotron {
 height: 100vh;
+background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(<%= asset_path "/images/background/1100-camera-background.jpg" %>);
 min-height: 31.25em; /*min=500px*/
 width: 100%;
 
@@ -1960,6 +2035,7 @@ max-width: 100vw;
 overflow: hidden;
 min-height: 0;
 min-width: 0;
+background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(<%= asset_path "/images/background/1100-camera-background.jpg" %>);
 background-size: cover;
 background-repeat: no-repeat;
 

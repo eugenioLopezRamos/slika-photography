@@ -47,6 +47,7 @@ A portfolio site with AJAX, pushstate, and an admin panel
 - medium sizes blog tab CSS fixes.
 
 - There might be a small bug where the tab flickers due to the active-Tab assignation, need to check it out
+- Resque queues for upload/convert?
 
 
 **DONE**

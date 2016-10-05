@@ -26,6 +26,7 @@
   #does a request to our s3 bucket using the AWS-SDK. Prefix is the "directory", contents is the part of the full response that lists the files inside
   #our bucket that match our constraints. In this case, the "prefix" helps us get only the "directory" we want within the bucket.
   #contents.map(&:key) presents only the key (so its like the root + included files). the slice method is added to exclude the 0 index, which is the "root" of the directory
+ 
   if Rails.env.production?
     s3 = Aws::S3::Client.new
     files_in_folder = s3::list_objects(bucket:ENV['AWS_S3_BUCKET'], prefix: full_dir).contents.map(&:key)
@@ -37,6 +38,18 @@
   else
    files_in_folder = Dir.entries("#{full_dir}/") - %w[. ..] #remove dots.
   end
+  
+  #to be taken out, just trying for dev
+  #size_prefixes = [100, 480, 700, 900, 1100, 1500, 2000] #should be the same as the admin_controller#upload_file ones.
+
+  s3 = Aws::S3::Client.new
+  files_in_folder = s3::list_objects(bucket:ENV['AWS_S3_BUCKET'], prefix: full_dir).contents.map(&:key)
+
+  original_files = files_in_folder.select{ |key| key.start_with?("#{full_dir}/original-")}.map do |key|
+  # debugger
+      key.gsub!("#{full_dir}/original-", '')
+  end
+
   files_in_folder.sort! {|a,z| a.to_i <=> z.to_i}
   
 %>
@@ -44,17 +57,48 @@
 
 
 
-<% files_in_folder.each do |slide| %> 
-  <% counter += 1 %>
-  <% if counter == active_slide %>
+<% original_files.each do |slide| %> 
+    <% counter += 1 %>
+    <% if counter === active_slide %>
 
       <%= content_tag :div, class: "#{@tab_value} #{active_slide_class}" do -%>
-        <%= image_tag("#{@image_dir}/#{slide}") -%>
+        <%= image_tag("#{@image_dir}/#{slide}") -%> 
       <% end -%>
 
-  <% else %>
+    <% else %>
+    
     <%= content_tag :div, class: "#{@tab_value}" do -%>
-      <%#= image_tag("#{@image_dir}/#{slide}-placeholder") -%>
+      <%#= image_tag("#{@image_dir}/#{slide}-placeholder"), id="#{slide}"-%>
+      <%= image_tag("")-%>
+        <div class="dots-container">
+
+          <div class="dots">
+
+            <div class="outer-border first">
+              <div class="inner-border first"></div>
+            </div>
+
+          </div>  
+
+          <div class="dots">
+
+            <div class="outer-border second">
+              <div class="inner-border second"></div>
+            </div>  
+
+          </div>   
+
+          <div class="dots">
+
+            <div class="outer-border third">
+              <div class="inner-border third"></div>
+            </div>
+
+          </div>
+        
+        </div>
+
+    <%# id de imagen en el div contenedor de la imagen y luego reemplazar el innerhtml del div con el div de la imagen -%>
     <% end -%>
   <% end %>
 

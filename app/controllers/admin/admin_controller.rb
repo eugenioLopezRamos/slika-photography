@@ -32,7 +32,7 @@ before_action :create_download_log, only: :download_file
 
       base_file = File.open(image.tempfile.path, 'rb')
 
-      new_file = File.open("#{Rails.root}/tmp/#{image.original_filename}", 'wb')
+      new_file = File.open("#{Rails.root}/tmp/original-#{image.original_filename}", 'wb')
 
       file_data = base_file.read()
 
@@ -81,9 +81,10 @@ before_action :create_download_log, only: :download_file
         end #end if img_width > size
 
       end
-      #  debugger 
-        #create thumbnail
-      #  applicable_widths << 100
+    
+
+        #add thumbnail size
+        applicable_widths << 100
 
         #create blurry preload image
         #not going to do it, It's probably not worth it (since it will do 2 downloads - I'll use a loading anim in the view and the 
@@ -99,11 +100,9 @@ before_action :create_download_log, only: :download_file
 
             convert << image.tempfile.path
 
-            convert.strip
             convert.interlace "plane"
             convert.quality "80"
             new_height = img_height * (app_width.to_f / img_width.to_f) #otherwise it's zero because integers.
-          #  debugger
             convert.resize("#{app_width}x#{new_height}")       
 
             convert << destination_file.path #"#{Rails.root}/tmp/temp-#{image.original_filename}" 
@@ -114,14 +113,8 @@ before_action :create_download_log, only: :download_file
 
         end #app_width do
 
-          #keep the original img
-        #  orig_file = File.open(image.tempfile.path, 'w+b')
-
-       #   @to_upload.unshift(orig_file) #becomes index 0
-          debugger
-         # debugger
-       # return @to_upload
        end #end @img_to_optimize
+
        return @to_upload
        
   end
@@ -160,57 +153,17 @@ before_action :create_download_log, only: :download_file
       response_message = "#{"File".pluralize(params[:image].length)} successfully uploaded. #{"Location".pluralize(params[:image].length)}:<br />" 
       #need to change that message, not always will all files be successfully uploaded
 
-     # params[:image].each do |image|
-
-       # my_img = image.tempfile
-     #   mi_sz = my_img.size
-      #  my_img = MiniMagick::Image.open(my_img.path)
-
-      #  mi_ht = my_img[:height]
-     #   mi_wt = my_img[:width]
-
-        #optimize_images
-
-
-   # mi_sz = my_img[:size]
-
-#create versions: mobile/tablet/hd/fullHD from largest to smallest, try to add them to the array before I do the
-  #upload function so I don't write more code than necessary
-  
-      #  @my_img = image.tempfile.path
-
-    #    @dest_file = File.open("#{Rails.root}/tmp/temp-#{image.original_filename}", "w+b")
-    #    MiniMagick::Tool::Convert.new do |convert| #convert the images
-
-     #     convert << image.tempfile.path
-
-    #      convert.strip
-     #     convert.interlace "plane"
-     #     convert.quality "80"
-     #     convert.blur "0X6"
-     #     convert.resize("100x100")       
-
-    #      convert << @dest_file.path #"#{Rails.root}/tmp/temp-#{image.original_filename}" 
-   #     end
-
-
-
-       # image_file = @dest_file#.rewind #"#{Rails.root}/tmp/temp-#{image.original_filename}" #my_img #new_img
-        #image_file = image_file.close
         optimized_array = optimize_images
-        #debugger 
+       
         optimized_array.each do |image|
           
-          image_file = image #File.open(image.path, 'rb') # was image.tempfile
-          image_file_name = File.basename(image_file) # was image.original_filename
+          image_file = image 
+          image_file_name = File.basename(image_file)
           image_file_route = params[:file_route] #The route is unique anyways, can't upload to 2 folders at once
 
           File.open(image_file, 'rb', :encoding => 'binary') do |file|
             s3.put_object(bucket: ENV['AWS_S3_BUCKET'], key: "#{image_file_route}#{image_file_name}", body: file)
           end #file open end
-
-         # image.tempfile.close
-       #   image.tempfile.unlink
           
           uploaded_file_route = s3.list_objects(bucket: ENV['AWS_S3_BUCKET'], marker: image_file_route).contents
           uploaded_file_route = uploaded_file_route.select{ |entry| entry.key === "#{image_file_route}#{image_file_name}"  }.map(&:key)
@@ -219,11 +172,9 @@ before_action :create_download_log, only: :download_file
 
           image.close
           File.unlink(image)
-        end # @to_upload end
+        end # @optimized_array end
 
-     # end # params[:image].each end
-
-      flash.now[:info] = response_message.html_safe #{}"File successfully uploaded. Location: #{uploaded_file_route.to_s.gsub(/\"*\[*\]*/, '')}".html_safe
+      flash.now[:info] = response_message.html_safe 
       render partial: '/admin/flash_messages'
       end #else end
 
@@ -236,7 +187,7 @@ before_action :create_download_log, only: :download_file
     @operation_results = []
     downloaded_file_count = 0
    
-      selected_files = ActiveSupport::JSON.decode params[:files]
+    selected_files = ActiveSupport::JSON.decode params[:files]
  
     s3 = Aws::S3::Client.new
 
@@ -293,7 +244,7 @@ before_action :create_download_log, only: :download_file
 
       @download_log.rewind
       @download_log.close
-    end
+     end
 
 
 
