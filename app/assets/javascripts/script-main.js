@@ -605,10 +605,45 @@ activePicker.value = stateObject[activeTabValue];
 document.getElementById(stateObject.state.replace('State', 'CounterTotal')).innerHTML = currentTab.length; //length of the slide picker at the bottom
 
 (function animateActiveSlideOnFirstLoad() { //function is an IIFE, name is given only for the benefit of the human reader :)
-    var slideToAnim = document.getElementsByClassName('active-slide')[0];
+   /* var slideToAnim = document.getElementsByClassName('active-slide')[0];
     slideToAnim.classList.remove('active-slide');
-    slideToAnim.classList.add('active-slide');
+    slideToAnim.classList.add('active-slide');*/
 })();
+//can't use srcset, not supported in IE11- (and I want to support IE10/11 + Edge), will use AJAX w/ resize evt listeners :/
+
+/* */
+/*var imageAddress = 'images/' + currentTab + '/' + imageSize + '-' + 'asdasd'
+$.ajax({url:, type: 'GET', data: currentTabActiveIndex})*/
+
+/* function getImages() {
+    var possibleSizes = [2000, 1500, 1100, 900, 700, 480];
+    var screenSize = document.documentElement.clientWidth;
+
+   var sizeToGet =  possibleSizes.map(function(element, index, array) {
+
+        if(index === 0) {
+            if(screenSize > element) {
+                return element;
+            }
+        }
+
+        if(index === array.length - 1) {
+            if(screenSize < element) {
+                return element;
+            }
+        }
+        else if(array[index + 1] && element > screenSize && screenSize > array[index + 1]) {           
+                return element;         
+        }
+        else {
+            console.log("Something's wrong");
+        }
+
+    });
+    
+    return sizeToGet;
+
+}*/
 
 //currentTab[stateObject[activeTabValue]-1].classList.add("active-slide"); //from the currentTab array, check on stateObject what's the slide we should be at, and add 'active-slide to it'
 
