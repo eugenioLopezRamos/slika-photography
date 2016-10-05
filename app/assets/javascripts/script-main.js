@@ -599,6 +599,8 @@ var currentTab = [].slice.call(document.getElementsByClassName(stateObject.state
 //var currentTab = stateObject.state.replace('State', 'Slide');
 var currentTabActiveIndex = stateObject[activeTabValue]-1;
 console.log("state", stateObject)
+var initialClientWidth = document.documentElement.clientWidth;
+
 
 var activePicker = document.getElementById(stateObject.state.replace('State', 'CounterCurrent'));
 activePicker.value = stateObject[activeTabValue];
@@ -609,25 +611,39 @@ document.getElementById(stateObject.state.replace('State', 'CounterTotal')).inne
     slideToAnim.classList.remove('active-slide');
     slideToAnim.classList.add('active-slide');*/
 })();
+
+
 //can't use srcset, not supported in IE11- (and I want to support IE10/11 + Edge), will use AJAX w/ resize evt listeners :/
 
 /* */
 /*var imageAddress = 'images/' + currentTab + '/' + imageSize + '-' + 'asdasd'
 $.ajax({url:, type: 'GET', data: currentTabActiveIndex})*/
 
-/* function getImages() {
-    var possibleSizes = [2000, 1500, 1100, 900, 700, 480];
-    var screenSize = document.documentElement.clientWidth;
 
-   var sizeToGet =  possibleSizes.map(function(element, index, array) {
+ function getImages() {
+    var possibleSizes = JSON.parse(document.querySelector('.active-slide img').getAttribute("data-sizes"));
+
+    possibleSizes = possibleSizes.map(function(element) {
+
+        return parseInt(element, 10);
+    });
+    //console.log("document", document.querySelector('.active-slide img'));
+    console.log("possSizes", possibleSizes);
+    //console.log("typeof poss", typeof possibleSizes);
+
+    var screenSize = document.documentElement.clientWidth;
+    console.log("screen", screenSize);
+
+   var sizeToGet = possibleSizes.map(function(element, index, array) {
 
         if(index === 0) {
             if(screenSize > element) {
+                debugger
                 return element;
             }
         }
 
-        if(index === array.length - 1) {
+        else if(index === array.length - 1) {
             if(screenSize < element) {
                 return element;
             }
@@ -640,10 +656,12 @@ $.ajax({url:, type: 'GET', data: currentTabActiveIndex})*/
         }
 
     });
-    
+
     return sizeToGet;
 
-}*/
+}
+
+getImages();
 
 //currentTab[stateObject[activeTabValue]-1].classList.add("active-slide"); //from the currentTab array, check on stateObject what's the slide we should be at, and add 'active-slide to it'
 
