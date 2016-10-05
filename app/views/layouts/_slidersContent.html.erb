@@ -69,7 +69,7 @@
 
   end
   original_files.sort! {|a,z| a.to_i <=> z.to_i}
-  
+  # "#{@image_dir}/#{slide}", id: "#{full_dir}/#{slide}"
 %>
 
 <% original_files.each do |slide| %> 
@@ -77,14 +77,16 @@
     <% if counter === active_slide %>
 
       <%= content_tag :div, class: "#{@tab_value} #{active_slide_class}" do %>
-        <%= image_tag("#{@image_dir}/#{slide}", id: "#{full_dir}/#{slide}", data: {sizes: sizes_per_file[slide]} ) %> 
+        <%= image_tag("", id: "#{full_dir}/#{slide}", data: {sizes: sizes_per_file[slide], route: "#{full_dir}" , file: "#{slide}" } ) %>
+        <%# añadir locals a loadAnim para poder ocultar solo una (la relacionada a la slide q corresponda)%>
+        <%= render 'layouts/loadAnim' %> 
       <% end %>
 
     <% else %>
     
     <%= content_tag :div, class: "#{@tab_value}" do %>
       <%#= image_tag("#{@image_dir}/#{slide}-placeholder"), id="#{slide}"-%>
-      <%= image_tag("", id: "#{full_dir}/#{slide}", data: {sizes: sizes_per_file[slide]} ) %>
+      <%= image_tag("", id: "#{full_dir}/#{slide}", data: {sizes: sizes_per_file[slide], route: "#{full_dir}" , file: "#{slide}" } ) %>
     <%= render 'layouts/loadAnim' %>
 
     <%# id de imagen en el div contenedor de la imagen y luego reemplazar el innerhtml del div con el div de la imagen -%>

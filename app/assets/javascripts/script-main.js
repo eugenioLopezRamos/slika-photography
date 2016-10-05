@@ -595,429 +595,452 @@ event.preventDefault();
 /*********************************************************************************** START OF SLIDES HANDLER ****************************************************************************************/
 function slidesHandler(){
     
-var currentTab = [].slice.call(document.getElementsByClassName(stateObject.state.replace('State', 'Slide'))); //makes an array of items of all the slide containing divs
-//var currentTab = stateObject.state.replace('State', 'Slide');
-var currentTabActiveIndex = stateObject[activeTabValue]-1;
-console.log("state", stateObject)
-var initialClientWidth = document.documentElement.clientWidth;
+    var currentTab = [].slice.call(document.getElementsByClassName(stateObject.state.replace('State', 'Slide'))); //makes an array of items of all the slide containing divs
+    //var currentTab = stateObject.state.replace('State', 'Slide');
+    var currentTabActiveIndex = stateObject[activeTabValue]-1;
+    console.log("state", stateObject)
+    var initialClientWidth = document.documentElement.clientWidth;
 
 
-var activePicker = document.getElementById(stateObject.state.replace('State', 'CounterCurrent'));
-activePicker.value = stateObject[activeTabValue];
-document.getElementById(stateObject.state.replace('State', 'CounterTotal')).innerHTML = currentTab.length; //length of the slide picker at the bottom
+    var activePicker = document.getElementById(stateObject.state.replace('State', 'CounterCurrent'));
+    activePicker.value = stateObject[activeTabValue];
+    document.getElementById(stateObject.state.replace('State', 'CounterTotal')).innerHTML = currentTab.length; //length of the slide picker at the bottom
 
-(function animateActiveSlideOnFirstLoad() { //function is an IIFE, name is given only for the benefit of the human reader :)
-   /* var slideToAnim = document.getElementsByClassName('active-slide')[0];
-    slideToAnim.classList.remove('active-slide');
-    slideToAnim.classList.add('active-slide');*/
-})();
-
-
-//can't use srcset, not supported in IE11- (and I want to support IE10/11 + Edge), will use AJAX w/ resize evt listeners :/
-
-/* */
-/*var imageAddress = 'images/' + currentTab + '/' + imageSize + '-' + 'asdasd'
-$.ajax({url:, type: 'GET', data: currentTabActiveIndex})*/
+    (function animateActiveSlideOnFirstLoad() { //function is an IIFE, name is given only for the benefit of the human reader :)
+    /* var slideToAnim = document.getElementsByClassName('active-slide')[0];
+        slideToAnim.classList.remove('active-slide');
+        slideToAnim.classList.add('active-slide');*/
+    })();
 
 
- function getImages() {
-    var possibleSizes = JSON.parse(document.querySelector('.active-slide img').getAttribute("data-sizes"));
+    //can't use srcset, not supported in IE11- (and I want to support IE10/11 + Edge), will use AJAX w/ resize evt listeners :/
 
-    possibleSizes = possibleSizes.map(function(element) {
-
-        return parseInt(element, 10);
-    });
-    //console.log("document", document.querySelector('.active-slide img'));
-
-    //console.log("typeof poss", typeof possibleSizes);
-
-    var screenSize = document.documentElement.clientWidth;
+    /* */
+    /*var imageAddress = 'images/' + currentTab + '/' + imageSize + '-' + 'asdasd'
+    $.ajax({url:, type: 'GET', data: currentTabActiveIndex})*/
 
 
-   var sizeToGet = possibleSizes.filter(function(element, index, array) {
+    function determineSizeToGet(selector) {
+  
+        var selector = selector;
+      
+        console.log("SELECTOR", selector);
 
-        if(index === 0) {
-            if(screenSize > element) {
-                return element;
+        var possibleSizes = JSON.parse(document.querySelector(selector).getAttribute("data-sizes"));
+
+        possibleSizes = possibleSizes.map(function(element) {
+
+            return parseInt(element, 10);
+        });
+        //console.log("document", document.querySelector('.active-slide img'));
+
+        //console.log("typeof poss", typeof possibleSizes);
+
+        var screenSize = document.documentElement.clientWidth;
+
+        var sizeToGet = possibleSizes.filter(function(element, index, array) {
+
+            if(index === 0) {
+                if(screenSize > element) {
+                    return element;
+                }
             }
+
+            else if(index === array.length - 1) {
+                if(screenSize < element) {
+                    return element;
+                }
+            }
+            else if(array[index + 1] && element > screenSize && screenSize > array[index + 1]) {           
+                    return element;         
+            }
+            else {
+                return;
+            }
+        
+        });
+
+        console.log("sizetoget", sizeToGet);
+        return sizeToGet;
+
         }
 
-        else if(index === array.length - 1) {
-            if(screenSize < element) {
-                return element;
-            }
+
+   // determineSizeToGet('.active-slide');
+
+    function getResizedImage(selector, size) {
+
+        var selector = selector + ' img';
+        var size = size(selector);
+
+        var target = document.querySelector(selector);
+        var route = target.getAttribute("data-route");
+        var file = target.getAttribute("data-file");
+        var newFile = size[0] + "-" + file;
+        var src = route + "/" + newFile;
+
+        target.setAttribute("src", src);
+
+    }
+
+    getResizedImage('.active-slide', determineSizeToGet);
+
+
+
+    //currentTab[stateObject[activeTabValue]-1].classList.add("active-slide"); //from the currentTab array, check on stateObject what's the slide we should be at, and add 'active-slide to it'
+
+        
+    //typeof stateObject[activeTabValue] == "undefined" ? determineActiveIndex() : ""; //creates a key/value pair such as 'peopleTab: 1'. This is used as
+    // 'memory' to remember what slide you were seeing, so it can be displayed when using the back/forward browser buttons
+    //it is done this way because for this case I think cookies are a bit excessive/intrusive, since state is only relevant while the page is active (as oppossed to e.g. login status)
+
+
+    //defines common variables used/shared among the different methods of the slidesHandler object/closure   
+
+    var touchStartPosX;//position of the touch X "pointer" at the start of the touch event
+    var touchMoveThreshold = 140; //threshold for slide change (in px) - 110px
+    var doubleTapCounter = 0; //used to check for double taps to use the fullscreen API
+    var movePass = function(event){ //need a named function for the event listener, so it can later be removed with removeEventListener.
+    slidesTouchHandler.touchMove(event);        
+    };
+
+    var slidesTouchHandler = (function() {
+
+    return {
+
+    touchStart: function(event){ //this is called upon touching the screen, and it does 2 things: saves the position where the screen was touched (in touchStartPosX, in the slidesHandler scope) and
+    //creates an eventListener for touch movements. This listener has the handler MovePass, which is also set in the slidesHandler scope because it must be reused between the properties of the slidesTouchHandler object
+    //which I should rename because its a bit confusing.
+    //this code should check for double taps on jumbotron, to use the fullscreen API
+    doubleTapCounter++;
+    setTimeout(function() { //when a touchstart event happens, waits 200ms before reseting the counter back to zero
+    doubleTapCounter = 0;
+    }, 200);
+
+    if(doubleTapCounter >= 2) { // if a double tap happens, toggles between fullscreen and non-fullscreen.
+        if(document.webkitExitFullscreen()) { 
+            document.webkitExitFullscreen();  
+        } 
+        else if(!document.fullScreenElement) { //calls fullscreen API on webkit, need to add firefox/IE. Element to fullscreen is jumbotron, since that's the element that has the content.
+            document.getElementById("jumbotron").webkitRequestFullscreen();   
+        } 
+    doubleTapCounter = 0;
+    }
+    touchStartPosX =  event.changedTouches[0].clientX; //assigns X coordinate of the touchstart event.
+    document.addEventListener("touchmove", movePass); //adds the slidesHandler.touchMove function as handler for the "touchmove" event.
+    },
+
+    touchMove: function(event){ //this property is called by the movePass handler function from the event listener set in .touchStart
+    event = this.event || window.event; //window. event is for IE compat, need to check if this is still needed.
+    var originalPosX = touchStartPosX; //the X coords of the start of the touch event, set in .touchStart
+    var newX = event.changedTouches[0].clientX; //the current position of the touch X coords (after the user has slid his/her finger)
+    var deltaX = newX - originalPosX;//the difference between the start X position and the current position - a negative value means newX is to the left of originalPosX, positive is to the right
+
+    if(deltaX>0) {
+    document.getElementsByClassName("active-slide")[0].style.left = deltaX + 'px';
+    }
+
+    if(deltaX<0) {
+    document.getElementsByClassName("active-slide")[0].style.right = -deltaX + 'px';    
+    }
+
+    if(deltaX>0 && deltaX>touchMoveThreshold) { //user moves touch to the right for more than 110 pixels
+    //document.getElementsByClassName("active-slide")[0].style.display = "none";
+    document.removeEventListener("touchmove", movePass); //if I don't remove this, every 1px you move the touch cursor will change slides
+    prevSlideHandler(); //goes to the prevSlide function
+
+    }
+    if(deltaX<0 && deltaX<touchMoveThreshold*-1) {//user moves touch to the left for more than 110 pixels
+    //document.getElementsByClassName("active-slide")[0].style.display = "none";
+    document.removeEventListener("touchmove", movePass);
+    nextSlideHandler(); //nextSlide function.
+
+    }
+
+    },
+
+    touchEnd: function(){ //called upon lifting the finger off the activeslide, it simply removes the event listener we set up in touchStart.
+    parseInt(document.getElementsByClassName("active-slide")[0].style.right, 10) < touchMoveThreshold ? document.getElementsByClassName("active-slide")[0].removeAttribute("style") : "";
+    parseInt(document.getElementsByClassName("active-slide")[0].style.left, 10) < touchMoveThreshold  ? document.getElementsByClassName("active-slide")[0].removeAttribute("style") : "";
+    document.removeEventListener("touchmove", movePass);
+    },
+
+
+
+    };    
+        
+    
+        
+    })();
+
+    //Yes, I am aware that the whole previous/next slide and add/remove class is MUCH faster w/ jQuery (.prev(), .next(), .addClass(), .removeClass(), however I wanted to try a vanilla JS solution
+
+
+    function determineActiveIndex() {//this function has to be called every time the classes are modified
+
+    var findTheActiveSlide = function(element) {//finds the index where the element has class="active-slide"
+    if(element.classList.contains("active-slide")) { 
+            return element; 
         }
-        else if(array[index + 1] && element > screenSize && screenSize > array[index + 1]) {           
-                return element;         
+    else {
+            return; 
+    }    
+    };
+    currentTabActiveIndex = currentTab.findIndex(findTheActiveSlide, 0);
+    stateObject[activeTabValue] = currentTabActiveIndex+1;
+    history.replaceState(stateObject, "", "");
+    }
+    determineActiveIndex();
+
+    function prevSlideHandler() {
+        
+    if(!scheduled) {
+    scheduled=true; //stops the event from happening again.
+
+    var currentTabPrevSlide = (function(){
+    if (currentTabActiveIndex==0){
+        return currentTab[currentTab.length-1]; //arrays are zero indexed.
         }
         else {
-            return;
+        return currentTab[currentTabActiveIndex-1];
         }
-       
-    });
+    })();
 
-console.log("sizetoget", sizeToGet);
-    return sizeToGet;
+        currentTab[currentTabActiveIndex].style.animation = "fadeOut 0.45s forwards";//this will get changed to an animation, but for now it will suffice
+        
+        window.setTimeout(function() { //waits until the anim is over to start processing the rest of the code
+        currentTab[currentTabActiveIndex].removeAttribute("style");
+        currentTab[currentTabActiveIndex].style.display = "none";
+        currentTab[currentTabActiveIndex].classList.remove("active-slide");
+        currentTabPrevSlide.classList.add("active-slide");
+        currentTabPrevSlide.style.animation = "imgFadeIn 0.45s forwards";
+        currentTabPrevSlide.style.display= "flex";
 
-}
-
-
-getImages();
-
-//currentTab[stateObject[activeTabValue]-1].classList.add("active-slide"); //from the currentTab array, check on stateObject what's the slide we should be at, and add 'active-slide to it'
-
+        activePicker.value = (function() {
+        if(activePicker.value == 1) {
+        return currentTab.length;    
+        }
+        else {
+        return parseInt(activePicker.value, 10) - 1;
+        }
+        })();
     
-//typeof stateObject[activeTabValue] == "undefined" ? determineActiveIndex() : ""; //creates a key/value pair such as 'peopleTab: 1'. This is used as
-// 'memory' to remember what slide you were seeing, so it can be displayed when using the back/forward browser buttons
-//it is done this way because for this case I think cookies are a bit excessive/intrusive, since state is only relevant while the page is active (as oppossed to e.g. login status)
+        scheduled=false; //allows the event to happen again once its finished
+        
+        determineActiveIndex(); 
+        assignTouchEventListeners(); //assigns the touch evt listeners - Can probably make this more efficient by not loading them on non touch devices + removing all the evt listeners except the one currently in use(on currentTab)
 
+        console.log(currentTabActiveIndex);
+        }, 460);    
+        
+        
 
-//defines common variables used/shared among the different methods of the slidesHandler object/closure   
-
-var touchStartPosX;//position of the touch X "pointer" at the start of the touch event
-var touchMoveThreshold = 140; //threshold for slide change (in px) - 110px
-var doubleTapCounter = 0; //used to check for double taps to use the fullscreen API
-var movePass = function(event){ //need a named function for the event listener, so it can later be removed with removeEventListener.
-slidesTouchHandler.touchMove(event);        
-};
-
-var slidesTouchHandler = (function() {
-
-return {
-
-touchStart: function(event){ //this is called upon touching the screen, and it does 2 things: saves the position where the screen was touched (in touchStartPosX, in the slidesHandler scope) and
-//creates an eventListener for touch movements. This listener has the handler MovePass, which is also set in the slidesHandler scope because it must be reused between the properties of the slidesTouchHandler object
-//which I should rename because its a bit confusing.
-//this code should check for double taps on jumbotron, to use the fullscreen API
-doubleTapCounter++;
-setTimeout(function() { //when a touchstart event happens, waits 200ms before reseting the counter back to zero
-doubleTapCounter = 0;
-}, 200);
-
-if(doubleTapCounter >= 2) { // if a double tap happens, toggles between fullscreen and non-fullscreen.
-    if(document.webkitExitFullscreen()) { 
-        document.webkitExitFullscreen();  
-    } 
-    else if(!document.fullScreenElement) { //calls fullscreen API on webkit, need to add firefox/IE. Element to fullscreen is jumbotron, since that's the element that has the content.
-        document.getElementById("jumbotron").webkitRequestFullscreen();   
-    } 
-doubleTapCounter = 0;
-}
-touchStartPosX =  event.changedTouches[0].clientX; //assigns X coordinate of the touchstart event.
-document.addEventListener("touchmove", movePass); //adds the slidesHandler.touchMove function as handler for the "touchmove" event.
-},
-
-touchMove: function(event){ //this property is called by the movePass handler function from the event listener set in .touchStart
-event = this.event || window.event; //window. event is for IE compat, need to check if this is still needed.
-var originalPosX = touchStartPosX; //the X coords of the start of the touch event, set in .touchStart
-var newX = event.changedTouches[0].clientX; //the current position of the touch X coords (after the user has slid his/her finger)
-var deltaX = newX - originalPosX;//the difference between the start X position and the current position - a negative value means newX is to the left of originalPosX, positive is to the right
-
-if(deltaX>0) {
-document.getElementsByClassName("active-slide")[0].style.left = deltaX + 'px';
-}
-
-if(deltaX<0) {
-document.getElementsByClassName("active-slide")[0].style.right = -deltaX + 'px';    
-}
-
-if(deltaX>0 && deltaX>touchMoveThreshold) { //user moves touch to the right for more than 110 pixels
-//document.getElementsByClassName("active-slide")[0].style.display = "none";
-document.removeEventListener("touchmove", movePass); //if I don't remove this, every 1px you move the touch cursor will change slides
-prevSlideHandler(); //goes to the prevSlide function
-
-}
-if(deltaX<0 && deltaX<touchMoveThreshold*-1) {//user moves touch to the left for more than 110 pixels
-//document.getElementsByClassName("active-slide")[0].style.display = "none";
-document.removeEventListener("touchmove", movePass);
-nextSlideHandler(); //nextSlide function.
-
-}
-
-},
-
-touchEnd: function(){ //called upon lifting the finger off the activeslide, it simply removes the event listener we set up in touchStart.
-parseInt(document.getElementsByClassName("active-slide")[0].style.right, 10) < touchMoveThreshold ? document.getElementsByClassName("active-slide")[0].removeAttribute("style") : "";
-parseInt(document.getElementsByClassName("active-slide")[0].style.left, 10) < touchMoveThreshold  ? document.getElementsByClassName("active-slide")[0].removeAttribute("style") : "";
-document.removeEventListener("touchmove", movePass);
-},
-
-
-
-};    
-    
- 
-    
-})();
-
-//Yes, I am aware that the whole previous/next slide and add/remove class is MUCH faster w/ jQuery (.prev(), .next(), .addClass(), .removeClass(), however I wanted to try a vanilla JS solution
-
-
-function determineActiveIndex() {//this function has to be called every time the classes are modified
-
-var findTheActiveSlide = function(element) {//finds the index where the element has class="active-slide"
-if(element.classList.contains("active-slide")) { 
-        return element; 
     }
-   else {
-        return; 
-   }    
-};
-currentTabActiveIndex = currentTab.findIndex(findTheActiveSlide, 0);
-stateObject[activeTabValue] = currentTabActiveIndex+1;
-history.replaceState(stateObject, "", "");
-}
-determineActiveIndex();
-
-function prevSlideHandler() {
-    
-if(!scheduled) {
-scheduled=true; //stops the event from happening again.
-
-var currentTabPrevSlide = (function(){
-if (currentTabActiveIndex==0){
-    return currentTab[currentTab.length-1]; //arrays are zero indexed.
+        
     }
-    else {
-    return currentTab[currentTabActiveIndex-1];
-    }
-})();
+
+    function nextSlideHandler() {
+        
+        
+    if(!scheduled) {
+    scheduled=true; //stops the event from happening again.    
+
+
+
+    var currentTabNextSlide = (function(){
+        if (currentTabActiveIndex==currentTab.length-1){//arrays are zero indexed.
+        return currentTab[0]; 
+        }
+        else {
+        return currentTab[currentTabActiveIndex+1];
+        }
+    })();
 
     currentTab[currentTabActiveIndex].style.animation = "fadeOut 0.45s forwards";//this will get changed to an animation, but for now it will suffice
-    
-    window.setTimeout(function() { //waits until the anim is over to start processing the rest of the code
+    window.setTimeout(function() {
     currentTab[currentTabActiveIndex].removeAttribute("style");
     currentTab[currentTabActiveIndex].style.display = "none";
     currentTab[currentTabActiveIndex].classList.remove("active-slide");
-    currentTabPrevSlide.classList.add("active-slide");
-    currentTabPrevSlide.style.animation = "imgFadeIn 0.45s forwards";
-    currentTabPrevSlide.style.display= "flex";
+    currentTabNextSlide.classList.add("active-slide");
+    currentTabNextSlide.style.animation = "imgFadeIn 0.45s forwards";
+    currentTabNextSlide.style.display= "flex";
 
     activePicker.value = (function() {
-    if(activePicker.value == 1) {
-    return currentTab.length;    
-    }
-    else {
-    return parseInt(activePicker.value, 10) - 1;
-    }
+        if (activePicker.value == currentTab.length) {
+        return 1;    
+        }
+        else {
+        return parseInt(activePicker.value, 10) + 1;
+        }
     })();
-   
-    scheduled=false; //allows the event to happen again once its finished
-    
-    determineActiveIndex(); 
-    assignTouchEventListeners(); //assigns the touch evt listeners - Can probably make this more efficient by not loading them on non touch devices + removing all the evt listeners except the one currently in use(on currentTab)
-
-    console.log(currentTabActiveIndex);
-    }, 460);    
-    
-    
-
-}
-    
-}
-
-function nextSlideHandler() {
-    
-    
-if(!scheduled) {
-scheduled=true; //stops the event from happening again.    
 
 
+        scheduled=false; //allows the event to happen again once its finished
+        determineActiveIndex();  
+        assignTouchEventListeners();    
+        console.log("crtTab Active index",currentTabActiveIndex);
+        console.log(stateObject[activeTabValue]);
+    }, 460);   
 
-var currentTabNextSlide = (function(){
-    if (currentTabActiveIndex==currentTab.length-1){//arrays are zero indexed.
-    return currentTab[0]; 
     }
-    else {
-    return currentTab[currentTabActiveIndex+1];
     }
-})();
 
-currentTab[currentTabActiveIndex].style.animation = "fadeOut 0.45s forwards";//this will get changed to an animation, but for now it will suffice
-window.setTimeout(function() {
-currentTab[currentTabActiveIndex].removeAttribute("style");
-currentTab[currentTabActiveIndex].style.display = "none";
-currentTab[currentTabActiveIndex].classList.remove("active-slide");
-currentTabNextSlide.classList.add("active-slide");
-currentTabNextSlide.style.animation = "imgFadeIn 0.45s forwards";
-currentTabNextSlide.style.display= "flex";
+    function jumpToSlide(currentTab, slideToJumpTo) {
 
-activePicker.value = (function() {
-    if (activePicker.value == currentTab.length) {
-    return 1;    
+    if(slideToJumpTo < 1) {
+    slideToJumpTo = 0;    
     }
-    else {
-    return parseInt(activePicker.value, 10) + 1;
+
+    if(slideToJumpTo > currentTab.length) {
+    slideToJumpTo = currentTab.length;    
     }
-})();
+
+    currentTab[currentTabActiveIndex].style.animation = "fadeOut 0.45s forwards";
+
+    window.setTimeout(function() {
+        currentTab[currentTabActiveIndex].style.display = "none";
+        currentTab[currentTabActiveIndex].classList.remove("active-slide");
+        currentTab[slideToJumpTo].classList.add("active-slide");
+        currentTab[slideToJumpTo].style.animation = "imgFadeIn 0.45s forwards";
+        currentTab[slideToJumpTo].style.display= "flex";
+        activePicker.value = slideToJumpTo+1;
+        determineActiveIndex(); 
+        assignTouchEventListeners();
+        }, 460);    
+
+        console.log(currentTabActiveIndex);
+    }
 
 
-scheduled=false; //allows the event to happen again once its finished
-determineActiveIndex();  
-assignTouchEventListeners();    
-console.log("crtTab Active index",currentTabActiveIndex);
-console.log(stateObject[activeTabValue]);
-}, 460);   
+    function onTouch(event) {
+        slidesTouchHandler.touchStart(event);    
+    }//need to name this function so I can remove the event listener later
 
-}
-}
+    function onTouchEnd (event) {
+        slidesTouchHandler.touchEnd();  
+    }//need to name this function so I can remove the event listener later
 
-function jumpToSlide(currentTab, slideToJumpTo) {
+    function assignTouchEventListeners() {
+        // start of touch event listener
+        currentTab[currentTabActiveIndex].addEventListener("touchstart", onTouch);
+        //end of touch event listener
+        currentTab[currentTabActiveIndex].addEventListener("touchend", onTouchEnd);
 
-if(slideToJumpTo < 1) {
-slideToJumpTo = 0;    
-}
+        console.log("current tab active index", currentTabActiveIndex);
 
-if(slideToJumpTo > currentTab.length) {
-slideToJumpTo = currentTab.length;    
-}
+    }
 
-currentTab[currentTabActiveIndex].style.animation = "fadeOut 0.45s forwards";
-
- window.setTimeout(function() {
-    currentTab[currentTabActiveIndex].style.display = "none";
-    currentTab[currentTabActiveIndex].classList.remove("active-slide");
-    currentTab[slideToJumpTo].classList.add("active-slide");
-    currentTab[slideToJumpTo].style.animation = "imgFadeIn 0.45s forwards";
-    currentTab[slideToJumpTo].style.display= "flex";
-    activePicker.value = slideToJumpTo+1;
-    determineActiveIndex(); 
     assignTouchEventListeners();
-    }, 460);    
 
-    console.log(currentTabActiveIndex);
-}
+    function slidePickerHandler() {
+
+    var slidePicker = [].slice.call(document.getElementsByClassName("slidePicker")); //array of all slide pickers 
+
+    //console.log(slidePicker);
+    //I don't really like this solution...seems really ugly.
+
+    //It works like this: .map goes through each item of slidePicker, sets a new var called "assignEvtListeners" to true. if assignEvtListeners is true, executes  array[index].addEvtListener("focus"...)'s
+    // event listener assignation. Otherwise every time you focus the slide picker it adds another evt listener, which looks fine right up until you enter NaN and then are greeted by 9001 alerts. Also wastes resources unnecessarily
+
+    slidePicker.map(function(element, index, array) {
+
+        
+    //if(amtOfListenersToAssign>0){
+    var assignEvtListeners = true;
+    //amtOfListenersToAssign--;
+
+    array[index].addEventListener("focus", function() {
+    if(assignEvtListeners == true) {    
+    determineActiveIndex();
+    //definir el valor activo al momento de focusear activePicker.
+    var activePickerCurValue = activePicker.value;
+    console.log(assignEvtListeners);
+
+    document.addEventListener("keypress", function(event) {
+        
+    if(event.keyCode == "13") {
+
+    if(activePickerCurValue !== activePicker.value) {    
+
+    if(isNaN(activePicker.value) || activePicker.value == "") {
+
+    alert("Please pick a number between 1 and " + currentTab.length);
+    activePicker.value = "";
+    return;
+    } else {
+    activePicker.blur(); // triggers the below event listener    
+    }
 
 
-function onTouch(event) {
-slidesTouchHandler.touchStart(event);    
-}//need to name this function so I can remove the event listener later
+    }
 
-function onTouchEnd (event) {
-slidesTouchHandler.touchEnd();  
-}//need to name this function so I can remove the event listener later
+    }    
+        
+    }); //closes the keypress evt listener
 
-function assignTouchEventListeners() {
-// start of touch event listener
-currentTab[currentTabActiveIndex].addEventListener("touchstart", onTouch);
-//end of touch event listener
-currentTab[currentTabActiveIndex].addEventListener("touchend", onTouchEnd);
+    array[index].addEventListener("blur", function(event) {
+        
+    if(isNaN(activePicker.value) || activePicker.value == "") {
 
-console.log("current tab active index", currentTabActiveIndex);
+    alert("Please pick a number between 1 and " + currentTab.length);
+    activePicker.value = "";
+    return;
+    }
 
-}
+    if(activePickerCurValue !== activePicker.value) {    
+    activePickerCurValue = activePicker.value;    
 
-assignTouchEventListeners();
+    jumpToSlide(currentTab, parseInt(activePicker.value, 10)-1);   
 
-function slidePickerHandler() {
+    window.setTimeout(function() {
+    prevNextButtonHandlers();     
+        
+    }, 460);
 
-var slidePicker = [].slice.call(document.getElementsByClassName("slidePicker")); //array of all slide pickers 
+    }
 
-//console.log(slidePicker);
-//I don't really like this solution...seems really ugly.
+    }); //closes the blur evt listener
 
-//It works like this: .map goes through each item of slidePicker, sets a new var called "assignEvtListeners" to true. if assignEvtListeners is true, executes  array[index].addEvtListener("focus"...)'s
-// event listener assignation. Otherwise every time you focus the slide picker it adds another evt listener, which looks fine right up until you enter NaN and then are greeted by 9001 alerts. Also wastes resources unnecessarily
+    assignEvtListeners = false;    
+    }
 
-slidePicker.map(function(element, index, array) {
+    });     //closes the focus evt listener 
 
+    //}
+    }); //closes the map function
     
-//if(amtOfListenersToAssign>0){
-var assignEvtListeners = true;
-//amtOfListenersToAssign--;
+    }//closes slidePickerHandler
 
-array[index].addEventListener("focus", function() {
-if(assignEvtListeners == true) {    
-determineActiveIndex();
-//definir el valor activo al momento de focusear activePicker.
-var activePickerCurValue = activePicker.value;
-console.log(assignEvtListeners);
+    slidePickerHandler();
 
-document.addEventListener("keypress", function(event) {
-    
-if(event.keyCode == "13") {
+    function prevNextButtonHandlers() { //assigns click event handlers for prev/next slide (clicking the arrow buttons in desktop mode)
+        
+        var prevButton = [].slice.call(document.getElementsByClassName("slider-nav-prev")); //makes an array with all divs with the "slider...." class
+        var nextButton = [].slice.call(document.getElementsByClassName("slider-nav-next")); //^same but for next
 
-if(activePickerCurValue !== activePicker.value) {    
+        prevButton.map(function(element, array, index) {element.addEventListener("click", prevSlideHandler)}); //assigns an event listener for each of the elements in the array.
+        nextButton.map(function(element, array, index) {element.addEventListener("click", nextSlideHandler)}); //^same
 
-if(isNaN(activePicker.value) || activePicker.value == "") {
+    }
 
-alert("Please pick a number between 1 and " + currentTab.length);
-activePicker.value = "";
-return;
-} else {
-activePicker.blur(); // triggers the below event listener    
-}
+    prevNextButtonHandlers();
 
+    function removePrevNextButtonHandlers() { //used when the slide picker input is clicked
+        var prevButton = [].slice.call(document.getElementsByClassName("slider-nav-prev")); //makes an array with all divs with the "slider...." class
+        var nextButton = [].slice.call(document.getElementsByClassName("slider-nav-next")); //^same but for next
 
-}
-
-}    
-    
-}); //closes the keypress evt listener
-
-array[index].addEventListener("blur", function(event) {
-    
-if(isNaN(activePicker.value) || activePicker.value == "") {
-
-alert("Please pick a number between 1 and " + currentTab.length);
-activePicker.value = "";
-return;
-}
-
-if(activePickerCurValue !== activePicker.value) {    
-activePickerCurValue = activePicker.value;    
-
-jumpToSlide(currentTab, parseInt(activePicker.value, 10)-1);   
-
-window.setTimeout(function() {
-prevNextButtonHandlers();     
-    
-}, 460);
-
-}
-
-}); //closes the blur evt listener
-
-assignEvtListeners = false;    
-}
-
-});     //closes the focus evt listener 
-
-//}
-}); //closes the map function
-  
-}//closes slidePickerHandler
-
-slidePickerHandler();
-
-function prevNextButtonHandlers() { //assigns click event handlers for prev/next slide (clicking the arrow buttons in desktop mode)
-    
-var prevButton = [].slice.call(document.getElementsByClassName("slider-nav-prev")); //makes an array with all divs with the "slider...." class
-var nextButton = [].slice.call(document.getElementsByClassName("slider-nav-next")); //^same but for next
-
-prevButton.map(function(element, array, index) {element.addEventListener("click", prevSlideHandler)}); //assigns an event listener for each of the elements in the array.
-nextButton.map(function(element, array, index) {element.addEventListener("click", nextSlideHandler)}); //^same
-
-}
-
-prevNextButtonHandlers();
-
-function removePrevNextButtonHandlers() { //used when the slide picker input is clicked
-var prevButton = [].slice.call(document.getElementsByClassName("slider-nav-prev")); //makes an array with all divs with the "slider...." class
-var nextButton = [].slice.call(document.getElementsByClassName("slider-nav-next")); //^same but for next
-
-prevButton.map(function(element, array, index) {element.removeEventListener("click", prevSlideHandler)});
-nextButton.map(function(element, array, index) {element.removeEventListener("click", nextSlideHandler)});
-    
-}
+        prevButton.map(function(element, array, index) {element.removeEventListener("click", prevSlideHandler)});
+        nextButton.map(function(element, array, index) {element.removeEventListener("click", nextSlideHandler)});
+        
+    }
 
 
 
 
-//here there should be another function to remove the event listeners (since the ones on the hidden slides are unnecessary)
+    //here there should be another function to remove the event listeners (since the ones on the hidden slides are unnecessary)
 
 
-//stops event listener stacking
+    //stops event listener stacking
 
 } //slides handler closing bracket
 
