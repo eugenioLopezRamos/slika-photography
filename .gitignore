@@ -24,6 +24,9 @@
 #ignore public uploads
 public/uploads/*
 
+#ignore public assets
+public/assets/*
+
 #ignore images folder
 images/*
 
