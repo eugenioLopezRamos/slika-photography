@@ -108,7 +108,7 @@
     <%= content_tag :div, class: "#{@tab_value}" do %>
       <%#= image_tag("#{@image_dir}/#{slide}-placeholder"), id="#{slide}"-%>
          <%= render 'layouts/loadAnim' %>
-      <%= image_tag("", id: "#{full_dir}/#{slide}", data: {sizes: sizes_per_file[slide], route: "#{full_dir}" , file: "#{slide}" } ) %>
+      <%= image_tag("", id: "#{full_dir}/#{slide}", data: {sizes: sizes_per_file[slide], route: "#{asset_path full_dir}" , file: "#{slide}" } ) %>
  
 
     <%# id de imagen en el div contenedor de la imagen y luego reemplazar el innerhtml del div con el div de la imagen -%>
