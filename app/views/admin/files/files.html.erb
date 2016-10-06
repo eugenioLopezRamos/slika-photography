@@ -120,6 +120,7 @@ flex-direction:row;
 .file-list button {
 	margin: auto;
 min-height: 36px; /*same as li fontsize + margin*/
+max-height: 36px;
 width: 50%;	
 }
 .file-divider {
@@ -133,6 +134,25 @@ hr.file-info {
 	height: 2px;
 }
 
+@media screen and (max-width: 480px) {
+.user-data-form-container {
+	width: 100%;
+	font-size: 80%;
+}
+
+.file-list button {
+margin: 0;
+width: 100%;
+
+}
+
+.file-dashboard .action-description {
+	margin-bottom: 5px;
+}
+
+
+
+}
 
 
 </style>
@@ -162,14 +182,11 @@ hr.file-info {
 		</div>
 
 		<div class="file-list" id="file-compressed-size">
-			<span class="action-description">Compressed size</span>
+			<span class="action-description">New size</span>
 		</div>
 
 		<div class="file-list" id="file-serverside-info">
-			<span class"action-description">Calculations</span>
-
-			<button class="file-list preview-file-data" id="model">Get processed file data</button>
-			<button class="file-list preview-processed-file" id="model">Preview file</button>
+			<span class="action-description">Preview</span>
 		
 		</div>
 
