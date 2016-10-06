@@ -32,8 +32,11 @@ A portfolio site with AJAX, pushstate, and an admin panel
 
 
 - Test optimized image creations (in admin integration controller)
-- Convert all dev machine images and S3 images to new formats (just batch the converter on the dirs)
-- Resque queues for upload/convert?
+- pointer events none durante la animacion inicial del menu
+- file manager mobile css
+- Add error handlers for failed AJAX requests and failed image fetches
+- Add image slide event listener a los dots tambien
+- Add fullscreen for the other browsers too
 
 - clear uploads staging zone after request done
 
@@ -58,7 +61,7 @@ A portfolio site with AJAX, pushstate, and an admin panel
 
 - Lazy load images
 - Optimizing images w/ imagemagick + frontend
-
+- Convert all dev machine images and S3 images to new formats (just batch the converter on the dirs)
 - scrollbar click to take to that point
 - **SCRAPPED** Make scrollbar fadeout + disappear, then reappear when moved or its area clicked - I think it'd look weird/would be annoying. Scrapping this idea.
 - Use css height instead of the animation thingy on contact tab mobile (turned em units into % and vh's)
@@ -123,3 +126,4 @@ These are "would be nice to have"s
 - Facebook comments on blog posts  
 - JSON based AJAX translations  
 - Polishing the new post page, the inline editor looks weird and the normal editor looks too big.
+- Resque queues for upload/convert?

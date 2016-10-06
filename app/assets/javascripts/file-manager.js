@@ -26,6 +26,8 @@ var fileManager = function(arrayOfFiles) {
 	var currentFolder = root;
 	var parentFolder = root;
 
+	var doubleClick = 0;
+
 	function createFolder(object, currIndex) {
 	    var object = object;
 
@@ -145,14 +147,10 @@ var fileManager = function(arrayOfFiles) {
 
 	/**********************			ASSIGN HANDLERS/EVENT LISTENERS ETC				*****************************/
 	function toggleSelectedState(event) {
-	    if (event.ctrlKey === true) {
-	        event.target.classList.toggle('selected');
-	        return false;
-	    } else {
-	        return true;
-	    }
+		   	
+	    event.target.classList.toggle('selected');        
+		return true;
 	}
-
 
 
 	[].slice.call(document.getElementsByTagName("li")).map(function(element, index, array) { // hides all <li> by default...
@@ -163,26 +161,34 @@ var fileManager = function(arrayOfFiles) {
 	    }
 
 	    element.addEventListener("click", function(event) {
+		
 	        toggleSelectedState(event);
+		
 	    });
 	});
 
 	[].slice.call(document.getElementsByTagName("span")).map(function(element, index, array) { //but toggles them when you click the folder's <span>
 
 	    element.addEventListener("click", function(event) {
-	        var continueFunction = toggleSelectedState(event);
-	        if (!continueFunction) {
-	            return
-	        } else {
-	            ""
-	        };
+			var continueFunction = false;
 
+			doubleClick++;
 
-	        [].slice.call(element.parentElement.children).slice(1).map(function(element, index, array) {
-	            element.style.display === "none" ? element.style.display = "" : element.style.display = "none";
-	        });
+			window.setTimeout(function(){
 
+	        	if(doubleClick < 2 & !continueFunction) {
+					[].slice.call(element.parentElement.children).slice(1).map(function(element, index, array) { //slice(1) excludes the span w/the name
+						element.style.display === "none" ? element.style.display = "" : element.style.display = "none";
+					});
+				}
 
+				doubleClick = 0;
+			}, 300)
+
+			if(doubleClick>1) {
+	        	continueFunction = toggleSelectedState(event);
+				return;
+			}
 	    });
 
 	});
@@ -227,20 +233,29 @@ var fileManager = function(arrayOfFiles) {
 			populateFileDashboard(caller.files, "file-name");
 
 		}
+
+		//añadir que al cambiar se  borren todos los existentes
 		
  
 		function populateFileDashboard(fileset, folderId) {
 
 			var oldCurrentFolder = currentFolder; //I have to refactor that function, but for now this should do.
 			function newDivider() {
-				var hr = document.createElement("hr");
-				hr.classList.add("file-info");
-				return hr;
+			//	var hr = document.createElement("hr");
+		//		hr.classList.add("file-info");
+			//	return hr;
 
 			}
 
-		
-			console.log("fileset", fileset);
+			if(document.getElementsByClassName("file-info").length > 0) {
+
+				[].slice.call(document.getElementsByClassName("file-info")).map(function(element, index, array) {
+					element.parentElement.removeChild(element);
+				});
+				//remove each element.
+			}
+			
+		//	console.log("fileset", fileset);
 			var myArray = [].slice.call(fileset).map(function(element, index,array) {	
 				return element;
 			});
@@ -250,12 +265,13 @@ var fileManager = function(arrayOfFiles) {
 				currentFolder = document.getElementById(folderId); //yes it's brute forcing the existing function. Needs refactor. To be done later. 
 				var createdEntry = createFile(element.name, index);
 				createElementGroup(element);
-				createdEntry.classList.add("file-info");
+				createdEntry.classList.remove("file");
+				createdEntry.classList.add("file-info", "name");
 
 
 
 				//var hr = newDivider().classList.add("file-divider");
-				var newHr = newDivider();
+				//var newHr = newDivider();
 				//createdEntry.appendChild(newHr);
 
 				
@@ -283,7 +299,7 @@ var fileManager = function(arrayOfFiles) {
 				var newHr = newDivider();
 
 				var newLi = document.createElement("li");
-				newLi.classList.add("file-info");
+				newLi.classList.add("file-info", "size");
 				newLi.id = element.name + "-size";
 				newLi.innerText = parseInt(element.size/1024, 10) + " kb";
 				
@@ -298,11 +314,13 @@ var fileManager = function(arrayOfFiles) {
 
 				var newButton = document.createElement("button");
 				var newButton2 = document.createElement("button");
-
+				newButton.classList.add("file-info", "get-processed-data-btn")
 				newButton.id = element.name + "-getProcessedData";
+
+				newButton2.classList.add("file-info", "preview-file-btn")				
 				newButton2.id = element.name + "-previewFile";
 
-				newButton.innerText = "Get compressed size";
+				newButton.innerText = "Get size";
 
 				newButton2.innerText = "Preview File";
 				
@@ -467,7 +485,7 @@ var fileManager = function(arrayOfFiles) {
 
 
 	    var filesToUpload = document.getElementById('file_input_field').files
-	    console.log("files", filesToUpload);
+	  //  console.log("files", filesToUpload);
 
 	    if (filesToUpload.length < 1) {
 	        alert("No files selected for upload");
