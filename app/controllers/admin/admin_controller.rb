@@ -183,9 +183,39 @@ before_action :create_download_log, only: :download_file
     @operation_results = []
     downloaded_file_count = 0
    
-    selected_files = ActiveSupport::JSON.decode params[:files]
- 
+    selected_files = Array.new
+    files_array = ActiveSupport::JSON.decode params[:files]
+    #same as delete, check if every item to see if it's a folder, if it is s3.list_objects, add all children keys to the array
+    #then array.uniq! it up
+
     s3 = Aws::S3::Client.new
+
+    files_array.each do |file|
+
+      if is_folder?(file) #checks if |file| is a folder - if it is, get all children...
+        all_children = s3.list_objects(bucket: ENV['AWS_S3_BUCKET'], prefix: file).contents.map(&:key) #gets all of the folder's children
+      
+
+        all_children.each do |child| #and adds them to selected_files
+
+          if !is_folder?(child)
+            child_to_add = child
+            selected_files.push child_to_add
+          end
+
+        end
+
+      else 
+        string_to_add = file #adds each file to the selected_files
+        selected_files.push string_to_add
+      end
+
+    end
+
+    #debugger
+    selected_files.uniq!
+
+ 
 
     @temp_zip = Tempfile.new('temp.zip', "#{Rails.root}/tmp")
 
@@ -203,7 +233,7 @@ before_action :create_download_log, only: :download_file
             @operation_results.push "<br />#{sel_file}: #{e.message.gsub('key', 'file')}<br />" 
            # render partial: 'admin/flash_messages', :status => 404
             # this should have more :status codes according to the possible errors S3 can throw
-            end #begin close
+          end #begin close
 
           if !resp.nil?
          
@@ -297,7 +327,7 @@ before_action :create_download_log, only: :download_file
         string_to_add = {key: file} #adds each file to the "to_delete" array
         to_delete.push string_to_add
       end
-  end
+    end
 
     to_delete.uniq! #eliminates duplicates, thanks ruby!
 

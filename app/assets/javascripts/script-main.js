@@ -1,5 +1,5 @@
 var main = function() {
-    console.log("CHANGEEEEE");
+  //  console.log("CHANGEEEEE");
 
 //console.log(window.location.pathname);
 //console.log(window.location.pathname.replace('/', ''));
@@ -20,6 +20,16 @@ state: activeTabValue.replace('Tab', 'State'),
 })()*/
 
 };
+
+var banner = document.getElementById("messages-banner");
+var bannerMessage = document.getElementById("message-text");
+
+function removeBannerClasses(event) {
+    event.target.className = "";
+    event.target.classList.add("messages");
+}
+
+banner.addEventListener("animationend", removeBannerClasses);
 
 typeof stateObject[activeTabValue] == "undefined" ? stateObject[activeTabValue] = 1 : "";
 //console.log("first state", stateObject[activeTabValue]);
@@ -508,7 +518,22 @@ $.ajax({url: "/tab_getter", data: {tab: activeTabValue, id: status[activeTabValu
 
     assignTabHandlers();
 
-}).fail(function(response){console.log("failresponse", response)});
+}).fail(function(response){
+
+
+    banner.classList.add("error");
+
+    if(response === "net::ERR_INTERNET_DISCONNECTED") {
+
+        bannerMessage.innerHTML = "No internet connection detected!"
+
+    }
+    else {
+
+        bannerMessage.innerHTML = "Oops, we couldn't retrieve that, please try again"
+    }
+
+});
 
 }
 
