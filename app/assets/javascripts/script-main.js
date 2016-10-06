@@ -619,12 +619,19 @@ function slidesHandler(){
     /*var imageAddress = 'images/' + currentTab + '/' + imageSize + '-' + 'asdasd'
     $.ajax({url:, type: 'GET', data: currentTabActiveIndex})*/
 
+    function removeLoadingDots(event) {
 
-    function determineSizeToGet(selector) {
+        event.target.parentElement.removeChild(document.querySelector('.dots-container'));
+        
+    }
+
+
+    function determineSizeToGet(selectorValue) {
   
-        var selector = selector;
-      
-        console.log("SELECTOR", selector);
+        var selector = selectorValue;
+        console.log("selectorval size to get", selectorValue, "selector", selector);
+        console.log("query", document.querySelector(selector));
+       // console.log("SELECTOR", selector);
 
         var possibleSizes = JSON.parse(document.querySelector(selector).getAttribute("data-sizes"));
 
@@ -660,7 +667,7 @@ function slidesHandler(){
         
         });
 
-        console.log("sizetoget", sizeToGet);
+        //console.log("sizetoget", sizeToGet);
         return sizeToGet;
 
         }
@@ -668,22 +675,41 @@ function slidesHandler(){
 
    // determineSizeToGet('.active-slide');
 
-    function getResizedImage(selector, size) {
+    function getResizedImage(selectorValue,selectorType, size) {
+        var selectorMarker = (function() {
 
-        var selector = selector + ' img';
+            switch(selectorType) {
+                //break is unreachable in these, so I skipped them.
+                case "class":
+                    return '.'
+                case "id":
+                    return '#'
+                case "element":
+                    return '';
+                default:
+                    return;
+
+            }
+        })();
+
+
+        var selector = selectorMarker + selectorValue + ' img';
+        //console.log("selector", selector);
         var size = size(selector);
 
         var target = document.querySelector(selector);
+        //console.log("target", target);
         var route = target.getAttribute("data-route");
         var file = target.getAttribute("data-file");
         var newFile = size[0] + "-" + file;
         var src = route + "/" + newFile;
 
+        target.addEventListener("load",removeLoadingDots)
         target.setAttribute("src", src);
 
     }
 
-    getResizedImage('.active-slide', determineSizeToGet);
+    getResizedImage('active-slide', 'class', determineSizeToGet);
 
 
 
@@ -724,45 +750,45 @@ function slidesHandler(){
         else if(!document.fullScreenElement) { //calls fullscreen API on webkit, need to add firefox/IE. Element to fullscreen is jumbotron, since that's the element that has the content.
             document.getElementById("jumbotron").webkitRequestFullscreen();   
         } 
-    doubleTapCounter = 0;
+        doubleTapCounter = 0;
     }
-    touchStartPosX =  event.changedTouches[0].clientX; //assigns X coordinate of the touchstart event.
-    document.addEventListener("touchmove", movePass); //adds the slidesHandler.touchMove function as handler for the "touchmove" event.
+        touchStartPosX =  event.changedTouches[0].clientX; //assigns X coordinate of the touchstart event.
+        document.addEventListener("touchmove", movePass); //adds the slidesHandler.touchMove function as handler for the "touchmove" event.
     },
 
     touchMove: function(event){ //this property is called by the movePass handler function from the event listener set in .touchStart
-    event = this.event || window.event; //window. event is for IE compat, need to check if this is still needed.
-    var originalPosX = touchStartPosX; //the X coords of the start of the touch event, set in .touchStart
-    var newX = event.changedTouches[0].clientX; //the current position of the touch X coords (after the user has slid his/her finger)
-    var deltaX = newX - originalPosX;//the difference between the start X position and the current position - a negative value means newX is to the left of originalPosX, positive is to the right
+        event = this.event || window.event; //window. event is for IE compat, need to check if this is still needed.
+        var originalPosX = touchStartPosX; //the X coords of the start of the touch event, set in .touchStart
+        var newX = event.changedTouches[0].clientX; //the current position of the touch X coords (after the user has slid his/her finger)
+        var deltaX = newX - originalPosX;//the difference between the start X position and the current position - a negative value means newX is to the left of originalPosX, positive is to the right
 
     if(deltaX>0) {
-    document.getElementsByClassName("active-slide")[0].style.left = deltaX + 'px';
+        document.getElementsByClassName("active-slide")[0].style.left = deltaX + 'px';
     }
 
     if(deltaX<0) {
-    document.getElementsByClassName("active-slide")[0].style.right = -deltaX + 'px';    
+        document.getElementsByClassName("active-slide")[0].style.right = -deltaX + 'px';    
     }
 
     if(deltaX>0 && deltaX>touchMoveThreshold) { //user moves touch to the right for more than 110 pixels
     //document.getElementsByClassName("active-slide")[0].style.display = "none";
-    document.removeEventListener("touchmove", movePass); //if I don't remove this, every 1px you move the touch cursor will change slides
-    prevSlideHandler(); //goes to the prevSlide function
+        document.removeEventListener("touchmove", movePass); //if I don't remove this, every 1px you move the touch cursor will change slides
+        prevSlideHandler(); //goes to the prevSlide function
 
     }
     if(deltaX<0 && deltaX<touchMoveThreshold*-1) {//user moves touch to the left for more than 110 pixels
     //document.getElementsByClassName("active-slide")[0].style.display = "none";
-    document.removeEventListener("touchmove", movePass);
-    nextSlideHandler(); //nextSlide function.
+        document.removeEventListener("touchmove", movePass);
+        nextSlideHandler(); //nextSlide function.
 
     }
 
     },
 
     touchEnd: function(){ //called upon lifting the finger off the activeslide, it simply removes the event listener we set up in touchStart.
-    parseInt(document.getElementsByClassName("active-slide")[0].style.right, 10) < touchMoveThreshold ? document.getElementsByClassName("active-slide")[0].removeAttribute("style") : "";
-    parseInt(document.getElementsByClassName("active-slide")[0].style.left, 10) < touchMoveThreshold  ? document.getElementsByClassName("active-slide")[0].removeAttribute("style") : "";
-    document.removeEventListener("touchmove", movePass);
+        parseInt(document.getElementsByClassName("active-slide")[0].style.right, 10) < touchMoveThreshold ? document.getElementsByClassName("active-slide")[0].removeAttribute("style") : "";
+        parseInt(document.getElementsByClassName("active-slide")[0].style.left, 10) < touchMoveThreshold  ? document.getElementsByClassName("active-slide")[0].removeAttribute("style") : "";
+        document.removeEventListener("touchmove", movePass);
     },
 
 
@@ -809,28 +835,35 @@ function slidesHandler(){
         currentTab[currentTabActiveIndex].style.animation = "fadeOut 0.45s forwards";//this will get changed to an animation, but for now it will suffice
         
         window.setTimeout(function() { //waits until the anim is over to start processing the rest of the code
-        currentTab[currentTabActiveIndex].removeAttribute("style");
-        currentTab[currentTabActiveIndex].style.display = "none";
-        currentTab[currentTabActiveIndex].classList.remove("active-slide");
-        currentTabPrevSlide.classList.add("active-slide");
-        currentTabPrevSlide.style.animation = "imgFadeIn 0.45s forwards";
-        currentTabPrevSlide.style.display= "flex";
 
-        activePicker.value = (function() {
-        if(activePicker.value == 1) {
-        return currentTab.length;    
-        }
-        else {
-        return parseInt(activePicker.value, 10) - 1;
-        }
-        })();
+            currentTab[currentTabActiveIndex].removeAttribute("style");
+            currentTab[currentTabActiveIndex].style.display = "none";
+            currentTab[currentTabActiveIndex].classList.remove("active-slide");
+
     
-        scheduled=false; //allows the event to happen again once its finished
-        
-        determineActiveIndex(); 
-        assignTouchEventListeners(); //assigns the touch evt listeners - Can probably make this more efficient by not loading them on non touch devices + removing all the evt listeners except the one currently in use(on currentTab)
+            currentTabPrevSlide.classList.add("active-slide");
+            currentTabPrevSlide.style.animation = "imgFadeIn 0.45s forwards";
+            currentTabPrevSlide.style.display= "flex";
 
-        console.log(currentTabActiveIndex);
+            getResizedImage('active-slide', "class", determineSizeToGet);
+
+            activePicker.value = (function() {
+
+                if(activePicker.value == 1) {
+                    return currentTab.length;    
+                }
+                else {
+                    return parseInt(activePicker.value, 10) - 1;
+                }
+
+            })();
+        
+            scheduled=false; //allows the event to happen again once its finished
+            
+            determineActiveIndex(); 
+            assignTouchEventListeners(); //assigns the touch evt listeners - Can probably make this more efficient by not loading them on non touch devices + removing all the evt listeners except the one currently in use(on currentTab)
+
+            console.log(currentTabActiveIndex);
         }, 460);    
         
         
@@ -843,44 +876,49 @@ function slidesHandler(){
         
         
     if(!scheduled) {
-    scheduled=true; //stops the event from happening again.    
+        scheduled=true; //stops the event from happening again.    
+
+        var currentTabNextSlide = (function(){
+            if (currentTabActiveIndex==currentTab.length-1){//arrays are zero indexed.
+            return currentTab[0]; 
+            }
+            else {
+            return currentTab[currentTabActiveIndex+1];
+            }
+        })();
+
+        currentTab[currentTabActiveIndex].style.animation = "fadeOut 0.45s forwards";//this will get changed to an animation, but for now it will suffice
+        
+        window.setTimeout(function() {
+
+            currentTab[currentTabActiveIndex].removeAttribute("style");
+            currentTab[currentTabActiveIndex].style.display = "none";
+            currentTab[currentTabActiveIndex].classList.remove("active-slide");
+
+            currentTabNextSlide.classList.add("active-slide");
+            currentTabNextSlide.style.animation = "imgFadeIn 0.45s forwards";
+            currentTabNextSlide.style.display= "flex";
+
+            //console.log("next slide claasses", currentTabNextSlide);
+            
+            getResizedImage('active-slide', "class", determineSizeToGet);
+
+            activePicker.value = (function() {
+                if (activePicker.value == currentTab.length) {
+                return 1;    
+                }
+                else {
+                return parseInt(activePicker.value, 10) + 1;
+                }
+            })();
 
 
-
-    var currentTabNextSlide = (function(){
-        if (currentTabActiveIndex==currentTab.length-1){//arrays are zero indexed.
-        return currentTab[0]; 
-        }
-        else {
-        return currentTab[currentTabActiveIndex+1];
-        }
-    })();
-
-    currentTab[currentTabActiveIndex].style.animation = "fadeOut 0.45s forwards";//this will get changed to an animation, but for now it will suffice
-    window.setTimeout(function() {
-    currentTab[currentTabActiveIndex].removeAttribute("style");
-    currentTab[currentTabActiveIndex].style.display = "none";
-    currentTab[currentTabActiveIndex].classList.remove("active-slide");
-    currentTabNextSlide.classList.add("active-slide");
-    currentTabNextSlide.style.animation = "imgFadeIn 0.45s forwards";
-    currentTabNextSlide.style.display= "flex";
-
-    activePicker.value = (function() {
-        if (activePicker.value == currentTab.length) {
-        return 1;    
-        }
-        else {
-        return parseInt(activePicker.value, 10) + 1;
-        }
-    })();
-
-
-        scheduled=false; //allows the event to happen again once its finished
-        determineActiveIndex();  
-        assignTouchEventListeners();    
-        console.log("crtTab Active index",currentTabActiveIndex);
-        console.log(stateObject[activeTabValue]);
-    }, 460);   
+            scheduled=false; //allows the event to happen again once its finished
+            determineActiveIndex();  
+            assignTouchEventListeners();    
+            console.log("crtTab Active index",currentTabActiveIndex);
+            console.log(stateObject[activeTabValue]);
+        }, 460);   
 
     }
     }
@@ -898,11 +936,15 @@ function slidesHandler(){
     currentTab[currentTabActiveIndex].style.animation = "fadeOut 0.45s forwards";
 
     window.setTimeout(function() {
+
         currentTab[currentTabActiveIndex].style.display = "none";
         currentTab[currentTabActiveIndex].classList.remove("active-slide");
+
         currentTab[slideToJumpTo].classList.add("active-slide");
         currentTab[slideToJumpTo].style.animation = "imgFadeIn 0.45s forwards";
         currentTab[slideToJumpTo].style.display= "flex";
+        getResizedImage('active-slide', "class", determineSizeToGet);
+
         activePicker.value = slideToJumpTo+1;
         determineActiveIndex(); 
         assignTouchEventListeners();

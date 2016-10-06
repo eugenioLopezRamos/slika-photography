@@ -6,6 +6,22 @@ before_action :logged_in_user
 before_action :logged_in_admin_user
 before_action :create_download_log, only: :download_file
 
+  def size_breakpoints
+
+      [2000, 1500, 1100, 900, 700, 480, 100] 
+
+    #defines the breakpoints. If the img_width is higher than a given breakpoint, reduce it to all breakpoints below it
+ 
+    #        img_width > 2000 ? -> 2000 & 1500 & 1100 & 900 & 700 & 480 & 100
+    # 2000 > img_width > 1500 ? -> 1500 & 1100 & 900 & 700 & 480 & 100
+    # 1500 > img_width > 1100 ? -> 1100 & 900 & 700 & 480 & 100
+    # 1100 > img_width > 900 ? -> 900 & 700 & 480 & 100
+    # 900 > img_width > 700 ? -> 700 & 480 & 100
+    # 700 > img_width > 480 ? -> 480 & 100
+    # 480 > img_width ? -> img_width & 100
+
+  end
+
   def login
     redirect_to '/admin/login'
   end
@@ -25,8 +41,11 @@ before_action :create_download_log, only: :download_file
 
       img = MiniMagick::Image.open(image.path) #Need to open the file to check height/width
 
-      img_height = img[:height] #height of the image
-      img_width = img[:width] #width
+        img_height = img[:height] #height of the image
+        img_width = img[:width] #width
+
+     
+      
      # orig_file = File.open(image.tempfile.path, 'rb')
      #File.open(image.tempfile.path, 'rb') -> write en otro archivo -> cerrar el original -> rewind.
 
@@ -40,58 +59,32 @@ before_action :create_download_log, only: :download_file
 
       @to_upload << new_file
 
-     #new_file.close
-     # File.unlink(new_file)
-    #  debugger 
-      #define the breakpoints. If the img_width is higher than a given breakpoint, reduce it to all breakponts below it
-      # example:
-      # img_width: 1200
-
-      #1500+ for fullhd <- is not created, not a good idea to stretch images
-      #1500>size>1100 for HD <- img is resized down to 1300 width, since its above
-      #1099>size>701 for big tablets <- img is resized to 1000 width
-      #700>size>481 for midsize-tablet <- img is resized down to 700 as well
-      #480 or less for phones <- also creates a version for  these smaller viewports
-
-
-      size_breakpoints = ApplicationHelper::size_breakpoints #[2000, 1500, 1100, 900, 700, 480] #[480, 700, 900, 1100, 1500, 2000] #[1500, 1100, 701, 481, 0]
-
-#        img_width > 2000 ? -> 1900 & 1500 & 1100 & 900 & 700 & 480
-# 2000 > img_width > 1500 ? -> 1500 & 1100 & 900 & 700 & 480
-# 1500 > img_width > 1100 ? -> 1100 & 900 & 700 & 480
-# 1100 > img_width > 900 ? -> 900 & 700 & 480
-# 900 > img_width > 700 ? -> 700 & 480
-# 700 > img_width > 480 ? -> 480
-# 480 > img_width ? -> keep.
-
       applicable_widths = []
+      shortened_breakpoints = size_breakpoints.slice(0..-2) #ignores the last size, the thumbnail, since thats always included
 
-      size_breakpoints.slice(0..-2).each_with_index do |width, index| #last size (thumbnail size, the smallest) is excluded
+      shortened_breakpoints.each_with_index do |width, index| #last size (thumbnail size, the smallest) is excluded
         #since it will always be included
       
         # width.next returns the next value ie the next integer, not the next element of the array
 
-        if img_width > size_breakpoints[0] #img_width < size_breakpoints[0] && img_width >= size_breakpoints[-1]   #smaller than the first (biggest) and larger than the last (smallest)
-          applicable_widths << size_breakpoints[0]
-        elsif (!size_breakpoints[index + 1].nil? && img_width > size_breakpoints[index + 1])
-            applicable_widths << size_breakpoints[index + 1]
-        elsif img_width<size_breakpoints[-1] && size_breakpoints[index + 1].nil?
+        if img_width > shortened_breakpoints[0] #img_width < shortened_breakpoints[0] && img_width >= shortened_breakpoints[-1]   #smaller than the first (biggest) and larger than the last (smallest)
+          applicable_widths << shortened_breakpoints[0]
+        elsif (!shortened_breakpoints[index + 1].nil? && img_width > shortened_breakpoints[index + 1])
+            applicable_widths << shortened_breakpoints[index + 1]
+        elsif img_width<shortened_breakpoints[-1] && shortened_breakpoints[index + 1].nil?
+          #  debugger
             applicable_widths << img_width
 
         end #end if img_width > size
-
+      
       end
-    
 
-        #add thumbnail size
-        applicable_widths << size_breakpoints[-1]
+      #adds the thumbnail
+      applicable_widths << size_breakpoints[-1]
 
-        #create blurry preload image
-        #not going to do it, It's probably not worth it (since it will do 2 downloads - I'll use a loading anim in the view and the 
-        # retrieve the appropiate version w/ AJAX)
-
-        #keep original
-        
+      #create blurry preload image
+      #not going to do it, It's probably not worth it (since it will do 2 downloads - I'll use a loading anim in the view and the 
+      # retrieve the appropiate version w/ AJAX)
 
         applicable_widths.each do |app_width|
 
@@ -108,13 +101,15 @@ before_action :create_download_log, only: :download_file
             convert << destination_file.path #"#{Rails.root}/tmp/temp-#{image.original_filename}" 
           
             @to_upload << destination_file #adds file to the array to be uploaded when the original function continues
-          
+ 
           end #ends minimagick block
 
         end #app_width do
-
+          
+            image.tempfile.close
+            image.tempfile.unlink
        end #end @img_to_optimize
-
+   
        return @to_upload
        
   end
@@ -169,9 +164,10 @@ before_action :create_download_log, only: :download_file
           uploaded_file_route = uploaded_file_route.select{ |entry| entry.key === "#{image_file_route}#{image_file_name}"  }.map(&:key)
 
           response_message << uploaded_file_route.to_s.gsub(/\"*\[*\]*/, '') << "<br />"
-
+          
           image.close
           File.unlink(image)
+
         end # @optimized_array end
 
       flash.now[:info] = response_message.html_safe 

@@ -29,8 +29,12 @@ A portfolio site with AJAX, pushstate, and an admin panel
 
 ** IN PROGRESS **
 
-- lazy load images
-- Optimizing images w/ imagemagick + frontend
+
+
+- Test optimized image creations (in admin integration controller)
+- Convert all dev machine images and S3 images to new formats (just batch the converter on the dirs)
+- Resque queues for upload/convert?
+
 - clear uploads staging zone after request done
 
 - Related to ^, add SendGrid for mails, postgres for DB and whatever other production env changes are necessary to pass to production
@@ -47,10 +51,13 @@ A portfolio site with AJAX, pushstate, and an admin panel
 - medium sizes blog tab CSS fixes.
 
 - There might be a small bug where the tab flickers due to the active-Tab assignation, need to check it out
-- Resque queues for upload/convert?
+
 
 
 **DONE**
+
+- Lazy load images
+- Optimizing images w/ imagemagick + frontend
 
 - scrollbar click to take to that point
 - **SCRAPPED** Make scrollbar fadeout + disappear, then reappear when moved or its area clicked - I think it'd look weird/would be annoying. Scrapping this idea.

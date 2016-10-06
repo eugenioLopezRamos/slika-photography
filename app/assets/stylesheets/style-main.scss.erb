@@ -349,12 +349,14 @@ max-width: 1233px;
 min-width: 75em; /*1200px*/
 min-height: 47em; /*816px*/
 will-change: opacity; 
-display: none;
+/*previously these 2 were on active tab*/
+display: block;
+animation: imgFadeIn 0.45s forwards;
 }
 
 .active-Tab {
-display: block;
-animation: imgFadeIn 0.45s forwards;
+
+/*^ previously had those 2*/
 }
 
 
@@ -693,6 +695,7 @@ margin-bottom: auto;
   display: flex;
   justify-content: center;
   margin: auto;
+  position: absolute;
 
 }
 

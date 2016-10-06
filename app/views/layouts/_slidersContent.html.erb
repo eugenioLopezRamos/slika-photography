@@ -36,12 +36,16 @@
     end
     files_in_folder.delete_if {|file| "#{file}" === ""}
   else
-   files_in_folder = Dir.entries("#{full_dir}/") - %w[. ..] #remove dots.
-   files_in_folder.map! { |file| file = "#{full_dir}/#{file}" }
+    files_in_folder = Dir.entries("#{full_dir}/") - %w[. ..] #remove dots.
+    files_in_folder.map! { |file| file = "#{full_dir}/#{file}" }
   end
+
+  #currently in dev the background is taken from public/images/background and the rest of iamges are taken from Rails.root/images
+  #this is due to me prioritizing the route format of the S3 bucket.
   
-  #s3 = Aws::S3::Client.new
-  #files_in_folder = s3::list_objects(bucket:ENV['AWS_S3_BUCKET'], prefix: full_dir).contents.map(&:key)
+  s3 = Aws::S3::Client.new
+  files_in_folder = s3::list_objects(bucket:ENV['AWS_S3_BUCKET'], prefix: full_dir).contents.map(&:key)
+  
 
   original_files = Array.new #will contain the base filename of each photo
   sizes_per_file = Hash.new #A hash with the following structure = "filename" => [available image sizes] } 
@@ -77,17 +81,19 @@
     <% if counter === active_slide %>
 
       <%= content_tag :div, class: "#{@tab_value} #{active_slide_class}" do %>
+              <%= render 'layouts/loadAnim' %> 
         <%= image_tag("", id: "#{full_dir}/#{slide}", data: {sizes: sizes_per_file[slide], route: "#{full_dir}" , file: "#{slide}" } ) %>
         <%# añadir locals a loadAnim para poder ocultar solo una (la relacionada a la slide q corresponda)%>
-        <%= render 'layouts/loadAnim' %> 
+
       <% end %>
 
     <% else %>
     
     <%= content_tag :div, class: "#{@tab_value}" do %>
       <%#= image_tag("#{@image_dir}/#{slide}-placeholder"), id="#{slide}"-%>
+         <%= render 'layouts/loadAnim' %>
       <%= image_tag("", id: "#{full_dir}/#{slide}", data: {sizes: sizes_per_file[slide], route: "#{full_dir}" , file: "#{slide}" } ) %>
-    <%= render 'layouts/loadAnim' %>
+ 
 
     <%# id de imagen en el div contenedor de la imagen y luego reemplazar el innerhtml del div con el div de la imagen -%>
     <% end %>
