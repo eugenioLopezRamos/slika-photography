@@ -37,6 +37,7 @@ var fileManager = function(arrayOfFiles) {
 	        var folderSpan = document.createElement("span");
 	        var folderSpanText = document.createTextNode(object.replace(parentFolder.id, ''));
 	        folderSpan.appendChild(folderSpanText);
+			folderSpan.id = object;
 	        newFolder.appendChild(folderSpan);
 	        newFolder.id = object;
 	        return newFolder;

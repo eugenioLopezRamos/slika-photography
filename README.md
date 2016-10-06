@@ -20,7 +20,8 @@ A portfolio site with AJAX, pushstate, and an admin panel
 
 
 **TO DO**
-- Add folder downloads to file manager
+
+
 - Add staging env to test the app in the same condition as the production env.
 - Add error messages for AJAX requests
 
@@ -29,36 +30,43 @@ A portfolio site with AJAX, pushstate, and an admin panel
 
 ** IN PROGRESS **
 
-
-
 - Test optimized image creations (in admin integration controller)
 - pointer events none durante la animacion inicial del menu
-- file manager mobile css
+
 - Add error handlers for failed AJAX requests and failed image fetches
 - Add image slide event listener a los dots tambien
 - Add fullscreen for the other browsers too
-
-- clear uploads staging zone after request done
 
 - Related to ^, add SendGrid for mails, postgres for DB and whatever other production env changes are necessary to pass to production
 - reassemble the manifest files for the asset pipeline into 2 files: main and admin
 
 - Add created files to the file manager (front end)
-- Add file manager mobile controls
+
 - See permission stuff for buckets (ACL, IIRC)
 - deselect all but one folder when uploading?
 - Add friendly forwarding on admin pages
-- Server side verification of file -> image
-- Add img upload link to post/new
+- bug: clicking folders hides subfolders even when not appropiate
+
 - Make the slide picker bigger, esp. on mobile
 - medium sizes blog tab CSS fixes.
+- check mid size responsive image loader (nexus 7 doesnt load peopleSlider/1.jpg -> returns "undefined")
 
 - There might be a small bug where the tab flickers due to the active-Tab assignation, need to check it out
+- Server side verification of file -> image
 
-
+- Add img upload link to post/new(these would be sent to s3/posts/<SLUG_NAME_HERE>)
+- Img responsivizer for posts? (check all img tags in the post, remove source, calc appropiate size, fill src)
+- It isn't needed to delete the loading dots, it seems. Also they give a console error when they are removed and it tries to remove them again
 
 **DONE**
 
+
+
+
+- Add folder downloads to file manager
+- Add file manager mobile controls
+- file manager mobile css
+- clear uploads staging zone after request done
 - Lazy load images
 - Optimizing images w/ imagemagick + frontend
 - Convert all dev machine images and S3 images to new formats (just batch the converter on the dirs)

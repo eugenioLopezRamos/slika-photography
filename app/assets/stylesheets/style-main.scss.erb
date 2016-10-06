@@ -29,6 +29,18 @@ min-height:100%;
 
 $anim-duration: 0.65s;
 
+@keyframes messageBoxAnim {
+  from {
+    display: flex;
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+    display: none;
+  }
+
+}
+
 
 
 /*need to find a way to play animations in reverse so I don't repeat myself so much - I tried but while it worked, it did without animation (the "animation" lasted 0 sec despite having set a duration of 2s) */
@@ -214,6 +226,59 @@ from {
   transform: translate3d(0px, 0px, 0px);
 }
 
+.messages {
+
+display: none;
+position: absolute;
+justify-content: center;
+font-family: Helvetica, Calibri, sans-serif;
+font-size: 1em;
+width:100%;
+color: white;
+padding: 5px;
+
+
+animation: messageBoxAnim 1.5s forwards;
+
+}
+
+.messages span {
+
+padding: 3px;
+border-radius: 2px;
+border: 1px solid white;
+
+}
+
+.messages.error {
+display: flex;
+
+
+-webkit-animation-delay: 2.5s;
+-moz-animation-delay: 2.5s;
+-o-animation-delay: 2.5s;
+animation-delay: 2.5s;
+
+}
+
+.messages.info {
+display: flex;
+
+-webkit-animation-delay: 2.5s;
+-moz-animation-delay: 2.5s;
+-o-animation-delay: 2.5s;
+animation-delay: 2.5s;
+
+}
+
+
+.messages.error span {
+
+background-color: #D64D4D;
+font-style: bold;
+
+
+}
 
 
 
