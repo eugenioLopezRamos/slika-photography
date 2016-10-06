@@ -1,0 +1,2738 @@
+@keyframes flashDisappear {
+  0% {
+    opacity: 1;
+    height: auto;
+  }
+  20% {
+    opacity: 1;
+    height: auto;
+  }
+  40% {
+    opacity: 1;
+    height: auto;
+  }
+  55% {
+    opacity: 1;
+    height: auto;
+  }
+  65% {
+    opacity: 0.85;
+    height: auto;
+  }
+  75% {
+    opacity: 0.65;
+    height: auto;
+  }
+  85% {
+    opacity: 0.45;
+    height: auto;
+  }
+  90% {
+    opacity: 0.25;
+    height: auto;
+  }
+  99% {
+    opacity: 0;
+    height: auto;
+  }
+  100% {
+    opacity: 0;
+    display: none;
+    height: 0;
+    position: absolute;
+    top: 0;
+  }
+}
+/* line 19, /home/eugenio/workspace/rails-app/app/assets/stylesheets/admin.scss */
+body {
+  font-family: Calibri, Helvetica, Sans-serif;
+  color: #293952;
+  background-color: #e6e6e6;
+  margin: auto;
+  display: flex;
+  justify-content: center;
+  height: auto;
+}
+
+/* line 30, /home/eugenio/workspace/rails-app/app/assets/stylesheets/admin.scss */
+.message-box {
+  display: flex;
+  position: relative;
+  margin: auto;
+  width: 100%;
+  justify-content: center;
+}
+
+/* line 40, /home/eugenio/workspace/rails-app/app/assets/stylesheets/admin.scss */
+.nav-menu {
+  background-color: #293952;
+  width: 100%;
+}
+
+/* line 45, /home/eugenio/workspace/rails-app/app/assets/stylesheets/admin.scss */
+.nav-menu a {
+  text-decoration: none;
+  color: white;
+}
+
+/* line 50, /home/eugenio/workspace/rails-app/app/assets/stylesheets/admin.scss */
+form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: auto;
+}
+
+/* line 58, /home/eugenio/workspace/rails-app/app/assets/stylesheets/admin.scss */
+form label {
+  margin: 5px auto 5px auto;
+}
+
+/* line 64, /home/eugenio/workspace/rails-app/app/assets/stylesheets/admin.scss */
+form input {
+  margin: 5px;
+}
+
+/* line 69, /home/eugenio/workspace/rails-app/app/assets/stylesheets/admin.scss */
+.password-reset-container {
+  display: flex;
+  flex-direction: column;
+  margin: auto;
+  text-align: center;
+}
+
+/* line 76, /home/eugenio/workspace/rails-app/app/assets/stylesheets/admin.scss */
+.alert {
+  height: auto;
+  position: absolute;
+  top: 0;
+  text-align: center;
+  background-color: #c8c8c8;
+  color: #293952;
+  border: 1px solid blue;
+  justify-content: center;
+  animation: flashDisappear 6s forwards;
+}
+
+/* line 91, /home/eugenio/workspace/rails-app/app/assets/stylesheets/admin.scss */
+.alert-danger {
+  background-color: #E3623B;
+  color: white;
+}
+
+/* line 99, /home/eugenio/workspace/rails-app/app/assets/stylesheets/admin.scss */
+.field_with_errors {
+  background-color: #c82d28;
+  display: inherit;
+  color: white;
+  text-align: inherit;
+}
+
+@media screen and (max-width: 480px) {
+  /* line 109, /home/eugenio/workspace/rails-app/app/assets/stylesheets/admin.scss */
+  .profile-main {
+    width: 100%;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  /* line 117, /home/eugenio/workspace/rails-app/app/assets/stylesheets/admin.scss */
+  .profile-main a {
+    text-decoration: none;
+  }
+
+  /* line 121, /home/eugenio/workspace/rails-app/app/assets/stylesheets/admin.scss */
+  .profile-main hr {
+    width: 100%;
+    color: #293952;
+    height: 2px;
+  }
+
+  /* line 128, /home/eugenio/workspace/rails-app/app/assets/stylesheets/admin.scss */
+  .nav-menu {
+    position: relative;
+    width: 100%;
+    margin: 0;
+    display: flex;
+    justify-content: flex-start;
+  }
+
+  /* line 137, /home/eugenio/workspace/rails-app/app/assets/stylesheets/admin.scss */
+  .nav-menu > a {
+    padding: 20px 5px 20px 5px;
+    text-align: center;
+    margin: 0;
+    border: 1px solid white;
+    width: 25%;
+  }
+
+  /* line 145, /home/eugenio/workspace/rails-app/app/assets/stylesheets/admin.scss */
+  .user-name-container {
+    font-size: 2em;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  /* line 155, /home/eugenio/workspace/rails-app/app/assets/stylesheets/admin.scss */
+  .user-name-container .user-name-text {
+    margin-left: auto;
+    margin-right: auto;
+    position: relative;
+  }
+  /* line 160, /home/eugenio/workspace/rails-app/app/assets/stylesheets/admin.scss */
+  .user-name-container a {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* line 166, /home/eugenio/workspace/rails-app/app/assets/stylesheets/admin.scss */
+  .posts-dashboard {
+    /*not necessary in this media query*/
+  }
+
+  /* line 170, /home/eugenio/workspace/rails-app/app/assets/stylesheets/admin.scss */
+  .own-posts-container {
+    width: 100%;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+  }
+
+  /* line 178, /home/eugenio/workspace/rails-app/app/assets/stylesheets/admin.scss */
+  .user-posts-title {
+    margin-left: auto;
+    margin-right: auto;
+    font-size: 1.2em;
+  }
+
+  /* line 184, /home/eugenio/workspace/rails-app/app/assets/stylesheets/admin.scss */
+  .own-post-link {
+    width: auto;
+    display: flex;
+    justify-content: center;
+    margin: 10px auto 10px auto;
+  }
+
+  /* line 192, /home/eugenio/workspace/rails-app/app/assets/stylesheets/admin.scss */
+  .modify-post-links {
+    display: flex;
+    width: auto;
+    justify-content: center;
+    margin: auto auto 10px auto;
+  }
+
+  /* line 199, /home/eugenio/workspace/rails-app/app/assets/stylesheets/admin.scss */
+  .others-posts-dashboard {
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* line 204, /home/eugenio/workspace/rails-app/app/assets/stylesheets/admin.scss */
+  .other-posts-user-name {
+    display: flex;
+    justify-content: center;
+    margin: 5px auto 5px auto;
+  }
+
+  /* line 210, /home/eugenio/workspace/rails-app/app/assets/stylesheets/admin.scss */
+  .other-posts-container {
+    width: 100%;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+  }
+
+  /* line 218, /home/eugenio/workspace/rails-app/app/assets/stylesheets/admin.scss */
+  .others-post-link {
+    width: auto;
+    display: flex;
+    justify-content: center;
+    margin: 10px auto 10px auto;
+  }
+
+  /* line 226, /home/eugenio/workspace/rails-app/app/assets/stylesheets/admin.scss */
+  .user-data-form-container {
+    display: flex;
+    margin: auto;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  /* line 234, /home/eugenio/workspace/rails-app/app/assets/stylesheets/admin.scss */
+  .action-title {
+    display: flex;
+    text-align: justify;
+    font-weight: bold;
+    margin: auto;
+  }
+
+  /* line 241, /home/eugenio/workspace/rails-app/app/assets/stylesheets/admin.scss */
+  .action-description {
+    display: flex;
+    justify-content: center;
+  }
+
+  /* line 250, /home/eugenio/workspace/rails-app/app/assets/stylesheets/admin.scss */
+  .user-data-form > label {
+    margin: 5px auto 5px auto;
+  }
+
+  /* line 254, /home/eugenio/workspace/rails-app/app/assets/stylesheets/admin.scss */
+  .user-data-form > input {
+    margin: 5px;
+  }
+
+  /* line 259, /home/eugenio/workspace/rails-app/app/assets/stylesheets/admin.scss */
+  .index-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  /* line 265, /home/eugenio/workspace/rails-app/app/assets/stylesheets/admin.scss */
+  .index-user-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin: auto;
+  }
+}
+@media screen and (min-width: 481px) {
+  /* line 280, /home/eugenio/workspace/rails-app/app/assets/stylesheets/admin.scss */
+  .login-container {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+  }
+
+  /* line 286, /home/eugenio/workspace/rails-app/app/assets/stylesheets/admin.scss */
+  .profile-main {
+    width: 100%;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  /* line 294, /home/eugenio/workspace/rails-app/app/assets/stylesheets/admin.scss */
+  .profile-main hr {
+    width: auto;
+    margin: 0;
+  }
+
+  /* line 299, /home/eugenio/workspace/rails-app/app/assets/stylesheets/admin.scss */
+  .nav-menu {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+  }
+
+  /* line 308, /home/eugenio/workspace/rails-app/app/assets/stylesheets/admin.scss */
+  .nav-menu a {
+    border: 1px solid white;
+    width: 25%;
+    text-align: center;
+    padding: 10px;
+    display: flex;
+  }
+
+  /* line 317, /home/eugenio/workspace/rails-app/app/assets/stylesheets/admin.scss */
+  .user-name-container {
+    width: 100%;
+    margin: auto;
+    display: flex;
+    justify-content: center;
+  }
+
+  /* line 326, /home/eugenio/workspace/rails-app/app/assets/stylesheets/admin.scss */
+  .user-name-container .user-name-text {
+    margin: 5px;
+  }
+  /* line 329, /home/eugenio/workspace/rails-app/app/assets/stylesheets/admin.scss */
+  .user-name-container .profile-edit {
+    margin: 5px;
+  }
+
+  /* line 334, /home/eugenio/workspace/rails-app/app/assets/stylesheets/admin.scss */
+  .posts-dashboard {
+    display: flex;
+    flex-direction: row;
+  }
+
+  /* line 341, /home/eugenio/workspace/rails-app/app/assets/stylesheets/admin.scss */
+  .posts-dashboard .own-posts-dashboard {
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+  }
+  /* line 347, /home/eugenio/workspace/rails-app/app/assets/stylesheets/admin.scss */
+  .posts-dashboard .user-posts-title {
+    display: flex;
+    justify-content: center;
+    margin: 5px auto 5px auto;
+  }
+  /* line 353, /home/eugenio/workspace/rails-app/app/assets/stylesheets/admin.scss */
+  .posts-dashboard .own-posts-container {
+    width: auto;
+    margin: 0 10px 0 10px;
+  }
+  /* line 358, /home/eugenio/workspace/rails-app/app/assets/stylesheets/admin.scss */
+  .posts-dashboard .own-post-link {
+    display: flex;
+    justify-content: center;
+    margin: 25px auto 5px auto;
+  }
+  /* line 364, /home/eugenio/workspace/rails-app/app/assets/stylesheets/admin.scss */
+  .posts-dashboard .modify-post-links {
+    display: flex;
+    justify-content: center;
+    margin: 5px auto 25px auto;
+  }
+  /* line 370, /home/eugenio/workspace/rails-app/app/assets/stylesheets/admin.scss */
+  .posts-dashboard .others-posts-dashboard {
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+  }
+  /* line 377, /home/eugenio/workspace/rails-app/app/assets/stylesheets/admin.scss */
+  .posts-dashboard .other-posts-user-name {
+    display: flex;
+    justify-content: center;
+    margin: 5px auto 5px auto;
+  }
+  /* line 383, /home/eugenio/workspace/rails-app/app/assets/stylesheets/admin.scss */
+  .posts-dashboard .other-posts-container {
+    width: auto;
+    margin: 0;
+  }
+  /* line 387, /home/eugenio/workspace/rails-app/app/assets/stylesheets/admin.scss */
+  .posts-dashboard .others-post-link {
+    display: flex;
+    justify-content: center;
+  }
+
+  /* line 393, /home/eugenio/workspace/rails-app/app/assets/stylesheets/admin.scss */
+  .user-data-form-container {
+    display: flex;
+    margin: auto;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  /* line 402, /home/eugenio/workspace/rails-app/app/assets/stylesheets/admin.scss */
+  .action-title {
+    display: flex;
+    text-align: justify;
+    font-weight: bold;
+    margin: auto;
+  }
+
+  /* line 409, /home/eugenio/workspace/rails-app/app/assets/stylesheets/admin.scss */
+  .action-description {
+    display: flex;
+    justify-content: center;
+  }
+
+  /* line 415, /home/eugenio/workspace/rails-app/app/assets/stylesheets/admin.scss */
+  .user-data-form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin: auto;
+  }
+
+  /* line 422, /home/eugenio/workspace/rails-app/app/assets/stylesheets/admin.scss */
+  .user-data-form > label {
+    /* margin:5px auto 5px auto;*/
+  }
+
+  /* line 426, /home/eugenio/workspace/rails-app/app/assets/stylesheets/admin.scss */
+  .user-data-form > input {
+    /*margin: 5px;*/
+  }
+
+  /* line 430, /home/eugenio/workspace/rails-app/app/assets/stylesheets/admin.scss */
+  .index-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  /* line 436, /home/eugenio/workspace/rails-app/app/assets/stylesheets/admin.scss */
+  .index-user-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin: auto;
+  }
+}
+@charset "UTF-8";
+/* line 1, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+* {
+  margin: 0;
+  padding: 0;
+  /*height:100%;*/
+}
+
+/* line 7, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+html {
+  height: 100%;
+}
+
+/* line 13, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+body {
+  min-height: 100%;
+}
+
+@keyframes pop {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.3);
+  }
+}
+/*need to find a way to play animations in reverse so I don't repeat myself so much - I tried but while it worked, it did without animation (the "animation" lasted 0 sec despite having set a duration of 2s) */
+@keyframes fadeOut {
+  from {
+    opacity: 0.6;
+  }
+  to {
+    opacity: 0;
+  }
+}
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 0.6;
+  }
+}
+@keyframes fadeInFull {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes imgFadeIn {
+  from {
+    opacity: 0.4;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes menuContract {
+  0% {
+    height: 100vh;
+  }
+  100% {
+    height: 15vh;
+  }
+}
+/****************************************************************************** MOVING W/TRANSLATES **********************************************************************************************/
+@keyframes expand3d {
+  from {
+    transform: translate3d(0, -3.25em, 0);
+  }
+  to {
+    transform: translate3d(0, 0.5em, 0);
+  }
+}
+@keyframes unexpand3d {
+  from {
+    transform: translate3d(0, 0.5em, 0);
+  }
+  to {
+    transform: translate3d(0, -3.25em, 0);
+  }
+}
+@keyframes contract-text3d {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(0, 100vh, 0);
+  }
+}
+@keyframes uncontract-text3d {
+  from {
+    transform: translate3d(0, 100vh, 0);
+  }
+  to {
+    transform: translate3d(0, 0, 0);
+  }
+}
+@keyframes contract-form3d {
+  from {
+    transform: translate3d(0, 100%, 0);
+  }
+  to {
+    transform: translate3d(0, -30vh, 0);
+    /*320px*/
+  }
+}
+@keyframes uncontract-form3d {
+  from {
+    transform: translate3d(0, -30vh, 0);
+  }
+  to {
+    transform: translate3d(0, 100%, 0);
+  }
+}
+@keyframes contract3d {
+  from {
+    transform: translate3d(-50%, -45vh, 0);
+  }
+  to {
+    transform: translate3d(-50%, -100vh, 0);
+  }
+}
+@keyframes uncontract3d {
+  from {
+    transform: translate3d(-50%, -100vh, 0);
+  }
+  to {
+    transform: translate3d(-50%, -45vh, 0);
+  }
+}
+@keyframes moveToLeft {
+  from {
+    transform: translate3d(0px, 0, 0);
+  }
+  to {
+    transform: translate3d(-700px, 0, 0);
+  }
+}
+@keyframes moveToRightOut {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(700px, 0, 0);
+  }
+}
+@keyframes moveToRightOutIn {
+  from {
+    transform: translate3d(-700px, 0, 0);
+  }
+  to {
+    transform: translate3d(0px, 0, 0);
+  }
+}
+/* line 198, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+.scrollbar-scroll {
+  background: rgba(230, 230, 230, 0.3);
+  border: 1px solid yellow;
+  width: 1.5em;
+  position: relative;
+}
+
+/* line 208, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+.scrollbar-button {
+  background: #333;
+  height: 2.5em;
+  /* just a default, this is modified by javascript */
+  border: 1px solid white;
+  box-sizing: border-box;
+  width: 100%;
+  transform: translate3d(0px, 0px, 0px);
+}
+
+/* FULL HD CSS (ALSO WORKS AS DEFAULT */
+/* line 222, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+.sitewrapper {
+  min-height: 100%;
+  height: 100%;
+  width: 100vw;
+  overflow: hidden;
+}
+
+/* line 229, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+.headerBackground {
+  background-color: #333;
+  min-height: 3.7em;
+  height: 3.8em;
+  width: 100%;
+  display: flex;
+  position: relative;
+}
+
+/* line 239, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+.header {
+  position: relative;
+  min-width: 75em;
+  /*1200px*/
+  width: 64.7%;
+  margin-left: auto;
+  margin-right: auto;
+  height: inherit;
+  display: flex;
+}
+
+/* line 250, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+.menu {
+  position: relative;
+  width: 70%;
+  height: inherit;
+  display: flex;
+  justify-content: flex-end;
+  will-change: height;
+}
+
+/* line 261, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+.menu .navMenu {
+  float: left;
+  font-family: 'Helvetica', sans-serif;
+  font-size: 1em;
+  font-weight: bold;
+  width: 14%;
+  height: inherit;
+  text-align: center;
+  list-style: none;
+  display: flex;
+  justify-content: center;
+}
+
+/* line 275, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+.navMenu span {
+  color: white;
+  font-style: italic;
+  font-weight: normal;
+  display: flex;
+  width: 100%;
+  height: 1em;
+  justify-content: center;
+  margin: auto;
+  pointer-events: none;
+}
+
+/* line 289, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+.navMenu a {
+  text-decoration: none;
+  height: 100%;
+  width: 100%;
+  display: flex;
+}
+
+/* line 296, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+.menu > li:hover {
+  background-color: #111 !important;
+  /*:hover needs to be done with !important, otherwise the js styling overwrites it - To be changed it should be with a class*/
+  opacity: 0.6;
+}
+
+/* line 301, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+.companyName {
+  position: relative;
+  font-family: 'Stalemate', cursive;
+  list-style: none;
+  font-size: 2.6em;
+  font-style: italic;
+  color: white;
+  height: auto;
+  width: 30%;
+  opacity: 1;
+  transition: opacity 1s;
+}
+
+/* line 316, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+.companyName a {
+  text-decoration: none;
+  color: white;
+  position: relative;
+}
+
+/* line 322, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+.companyName:hover {
+  opacity: 0.6;
+  transition: opacity 0.2s;
+}
+
+/* line 328, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+.jumbotron {
+  height: calc(100vh - 3.8*2em - 4px);
+  width: 100vw;
+  position: relative;
+  background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(/images/background/camera-background.jpg);
+  background-size: cover;
+  overflow: hidden;
+  /* this is used to hide the buttons that appear on mobile - if I use this prop on .jumbotron the design at load gets screwed up, need to see why that happens*/
+  will-change: opacity;
+  /* browser optimizes the processes for opacity transitions - this makes the animations smoother on mobile*/
+}
+
+/*DEFINES THE STYLING OF THE TABS CONTAINER*/
+/* line 343, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+.content-Tabs {
+  height: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
+  /*64.21 was the original value, but it doesnt work on firefox*/
+  max-width: 1233px;
+  min-width: 75em;
+  /*1200px*/
+  min-height: 47em;
+  /*816px*/
+  will-change: opacity;
+  /*display: none;*/
+}
+
+/* line 355, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+.active-Tab {
+  display: block;
+  animation: imgFadeIn 0.45s forwards;
+}
+
+/*DEFINES THE STYLING OF THE HOME TAB*/
+/* line 364, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+#homeContent {
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  height: 100%;
+  text-align: center;
+  color: white;
+}
+
+/* line 375, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+.homeTabTitle {
+  font-family: 'Stalemate', cursive;
+  font-style: italic;
+  font-size: 3.5em;
+  font-weight: normal;
+  display: inline;
+}
+
+/* line 385, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+.home-main-par {
+  text-align: left;
+  font-size: 1em;
+  width: 61.4%;
+  height: auto;
+  display: block;
+  color: white;
+  font-family: Helvetica, Calibri, Arial, Sans-serif;
+}
+
+/* line 395, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+.home-main-img {
+  display: block;
+  margin-top: 5px;
+  float: right;
+}
+
+/* line 401, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+.smallThumbnails {
+  display: flex;
+  position: relative;
+  width: 61.4%;
+  height: 50%;
+  margin-top: 3.125em;
+}
+
+/* line 411, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+.smallThumbnailsContainer {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  position: relative;
+  justify-content: center;
+  height: 100%;
+}
+
+/* line 421, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+.smallThumbnailImgs {
+  display: flex;
+  border: 3px solid transparent;
+  margin: 3px;
+  padding: 0;
+  height: auto;
+  width: 45%;
+  /*have to account for margins - w/o margins it could be 50%*/
+  font-family: Helvetica, Calibri, Arial, Sans-serif;
+  vertical-align: top;
+  font-size: 0px;
+}
+
+/* line 433, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+.smallThumbnailImgs:hover {
+  border: 3px double white;
+  border-radius: 3px;
+}
+
+/* line 438, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+.smallThumbnailImgs span {
+  height: 16px;
+  width: 1%;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  margin: auto;
+  pointer-events: none;
+}
+
+/* line 449, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+#thumbnailPhoto1 {
+  background: url(/images/home/people.jpg);
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+/* line 455, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+#thumbnailPhoto1:hover {
+  background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url(/images/home/people.jpg);
+  background-size: cover;
+  background-repeat: no-repeat;
+  font-size: 1em;
+  font-style: italic;
+  font-weight: bold;
+}
+
+/* line 465, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+#thumbnailPhoto2 {
+  background: url(/images/home/models.jpg);
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+/* line 471, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+#thumbnailPhoto2:hover {
+  background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url(/images/home/models.jpg);
+  background-size: cover;
+  background-repeat: no-repeat;
+  font-size: 1em;
+  font-style: italic;
+  font-weight: bold;
+}
+
+/* line 481, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+#thumbnailPhoto3 {
+  background: url(/images/home/urban.jpg);
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+/* line 488, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+#thumbnailPhoto3:hover {
+  background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url(/images/home/urban.jpg);
+  background-size: cover;
+  background-repeat: no-repeat;
+  font-size: 1em;
+  font-style: italic;
+  font-weight: bold;
+}
+
+/* line 498, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+#thumbnailPhoto4 {
+  background: url(/images/home/events.jpg);
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+/* line 505, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+#thumbnailPhoto4:hover {
+  background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url(/images/home/events.jpg);
+  background-size: cover;
+  background-repeat: no-repeat;
+  font-size: 1em;
+  font-style: italic;
+  font-weight: bold;
+}
+
+/* line 515, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+.bigThumbnails {
+  display: none;
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  background-color: rgba(51, 51, 51, 0.6);
+  top: 0;
+  left: 0;
+  animation: fadeInFull 0.45s forwards;
+}
+
+/* line 527, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+.bigThumbnailsContainer {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  margin: auto;
+  justify-content: center;
+}
+
+/* line 535, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+.bigThumbnailImgs {
+  display: none;
+  max-width: 1233px;
+  max-height: 100%;
+  margin: auto;
+  justify-content: center;
+}
+
+/*********** STYLING OF THE BUTTONS TO MOVE SLIDER IMGS ***/
+/* line 547, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+.slider-nav-next {
+  position: relative;
+  float: right;
+  height: inherit;
+  width: 50%;
+  opacity: 0.6;
+  animation: fadeOut 3s;
+  animation-fill-mode: forwards;
+}
+
+/* line 558, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+.slider-nav-next:hover {
+  opacity: 0.6;
+  animation: fadeIn 1s;
+}
+
+/* line 563, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+.nextArrow {
+  top: calc(50% - 128px);
+  left: calc(100% - 128px);
+  position: absolute;
+  height: 128px;
+  width: 128px;
+  background-color: rgba(255, 255, 255, 0.6);
+  border: 3px solid black;
+  border-radius: 65px 65px 65px 65px;
+}
+
+/* line 574, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+.nextArrowHead {
+  width: 50px;
+  height: 50px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  background-color: rgba(255, 255, 255, 0);
+  border-bottom: 5px solid black;
+  border-right: 5px solid black;
+  transform: rotate(-45deg) translate(-75%, -75%);
+  transform-origin: top left;
+}
+
+/* line 588, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+.slider-nav-prev {
+  position: relative;
+  float: left;
+  height: inherit;
+  /* 79.8465%*/
+  width: 50%;
+  opacity: 0.6;
+  animation: fadeOut 3s;
+  animation-fill-mode: forwards;
+}
+
+/* line 599, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+.slider-nav-prev:hover {
+  opacity: 0.6;
+  animation: fadeIn 1s;
+}
+
+/* line 604, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+.prevArrow {
+  top: calc(50% - 128px);
+  left: 0%;
+  position: absolute;
+  height: 128px;
+  width: 128px;
+  background-color: rgba(255, 255, 255, 0.6);
+  border: 3px solid black;
+  border-radius: 65px 65px 65px 65px;
+}
+
+/* line 615, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+.prevArrowHead {
+  width: 50px;
+  height: 50px;
+  position: absolute;
+  top: 50%;
+  left: calc(50% + 12.5px);
+  background-color: rgba(255, 255, 255, 0);
+  border-top: 5px solid black;
+  border-left: 5px solid black;
+  transform: rotate(-45deg) translateY(-75%);
+  transform-origin: center;
+}
+
+/*** SLIDES COUNTER ****/
+/* line 631, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+.slideCounter {
+  height: 50px;
+  width: 100px;
+  background-color: rgba(255, 255, 255, 0.6);
+  color: black;
+  left: calc(50% - 50px);
+  top: calc(100% - 55px);
+  position: absolute;
+  z-index: 2;
+  box-sizing: border-box;
+  border: 1px solid black;
+  border-radius: 3px;
+  animation: fadeOut 3s forwards;
+  text-align: center;
+  display: flex;
+}
+
+/* line 648, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+.slideCounter:hover {
+  opacity: 1;
+  animation: fadeInFull 0.6s;
+}
+
+/* line 654, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+.sliderValue {
+  margin: auto;
+  font-family: Helvetica, Calibri, Arial, Sans-serif;
+  font-size: 1em;
+  display: flex;
+  height: 1em;
+}
+
+/* line 662, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+.slidePicker {
+  width: 15px;
+  max-width: 15px;
+  font-family: Helvetica, Calibri, Arial, sans-serif;
+  font-size: 0.8em;
+  margin-right: 3px;
+  height: 1.2em;
+}
+
+/* line 674, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* line 680, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+.counterTotal {
+  width: 20px;
+  font-family: Helvetica, Calibri, Arial, sans-serif;
+  font-size: 0.9em;
+  height: 1em;
+  margin-left: 3px;
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+/*DEFINES THE STYLING OF THE PEOPLE TAB*/
+/* line 694, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+.peopleSlider {
+  position: absolute;
+  width: 100%;
+  max-width: 1233px;
+  margin: 0 auto 0 auto;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+/* line 703, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+.peopleSlider img {
+  max-width: 1233px;
+  position: relative;
+  display: flex;
+}
+
+/* line 710, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+.peopleSlide {
+  display: none;
+  position: absolute;
+  text-align: center;
+  width: 100%;
+}
+
+/* line 718, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+.peopleSlider .active-slide {
+  display: flex;
+  /*this is useful for the first image that shows, the next ones to be shown with .show() need to have this specified on the jQuery .show() or they default to display: block (since they were display: none)*/
+  align-items: center;
+  justify-content: center;
+  animation: imgFadeIn 0.6s forwards;
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+/*DEFINES THE STYLING OF THE MODELS TAB*/
+/* line 736, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+.modelsSlider {
+  margin: 0 auto 0 auto;
+  position: absolute;
+  /* height: 100vh;*/
+  /*width: 64.21%;*/
+  width: 100%;
+  max-width: 1233px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+/* line 747, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+.modelsSlider img {
+  max-width: 1233px;
+  position: relative;
+  display: flex;
+}
+
+/* line 753, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+.modelsSlide {
+  width: 100%;
+  display: none;
+  position: absolute;
+  text-align: center;
+}
+
+/* line 761, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+.modelsSlider .active-slide {
+  display: flex;
+  /*this is useful for the first image that shows, the next ones to be shown with .show() need to have this specified on the jQuery .show() or they default to display: block (since they were display: none)*/
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  animation: imgFadeIn 0.6s forwards;
+}
+
+/*DEFINES THE STYLING OF THE URBAN TAB*/
+/* line 778, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+.urbanSlider {
+  margin: 0 auto 0 auto;
+  position: absolute;
+  /*  width: 64.21%;*/
+  width: 100%;
+  max-width: 1233px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+/* line 790, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+.urbanSlider img {
+  max-width: 1233px;
+  position: relative;
+}
+
+/* line 795, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+.urbanSlide {
+  width: 100%;
+  display: none;
+  position: absolute;
+  text-align: center;
+}
+
+/* line 803, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+.urbanSlider .active-slide {
+  display: flex;
+  /*this is useful for the first image that shows, the next ones to be shown with .show() need to have this specified on the jQuery .show() or they default to display: block (since they were display: none)*/
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  animation: imgFadeIn 0.6s forwards;
+}
+
+/*DEFINES THE STYLING OF THE EVENTS  TAB*/
+/* line 816, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+.eventsSlider {
+  position: absolute;
+  width: 100%;
+  max-width: 1233px;
+  margin: 0 auto 0 auto;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+/* line 825, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+.eventsSlider img {
+  max-width: 1233px;
+  position: relative;
+}
+
+/* line 830, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+.eventsSlide {
+  display: none;
+  position: absolute;
+  text-align: center;
+  width: 100%;
+}
+
+/* line 839, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+.eventsSlider .active-slide {
+  display: flex;
+  /*this is useful for the first image that shows, the next ones to be shown with .show() need to have this specified on the jQuery .show() or they default to display: block (since they were display: none)*/
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  animation: imgFadeIn 0.6s forwards;
+}
+
+/*DEFINES THE STYLING OF THE CONTACT TAB*/
+/* line 853, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+.contactBackground {
+  padding-top: 5px;
+  position: absolute;
+}
+
+/* line 860, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+#contactContent {
+  width: 50%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* line 868, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+.photographerTitle {
+  color: white;
+  text-align: center;
+  float: none;
+  width: 71.8125%;
+  display: inline-block;
+  font-family: 'Stalemate', cursive;
+  font-weight: normal;
+  font-style: italic;
+  font-size: 3.5em;
+}
+
+/* line 881, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+.leoPhoto {
+  margin-top: 5px;
+  padding-right: 5px;
+  float: left;
+  height: auto;
+  width: auto;
+}
+
+/* line 889, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+.contactText {
+  color: white;
+  display: block;
+  text-align: justify;
+  margin-bottom: 10px;
+  font-family: 'Helvetica', sans-serif;
+}
+
+/* line 898, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+.contactFormContainer {
+  position: relative;
+  display: flex;
+  justify-content: center;
+}
+
+/* line 907, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+#emailForm {
+  height: 400px;
+  width: 300px;
+  display: inline-block;
+  justify-content: center;
+  /*background-color: #333;*/
+  border: 3px double white;
+  text-align: center;
+  color: white;
+  padding: 0.5em 0 0.5em 0;
+  /*overflow: hidden;*/
+}
+
+/* line 922, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+.aboutButton {
+  height: 0px;
+  background-color: green;
+  display: none;
+  animation: none;
+  transform: none;
+}
+
+/* line 931, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+.contactButton {
+  display: none;
+  height: 50px;
+  width: 100px;
+  background-color: yellow;
+  margin-top: -58px;
+  margin-bottom: 8px;
+  animation: none;
+  transform: none;
+}
+
+/* line 943, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+#emailForm input {
+  margin: 0.5em;
+  width: 200px;
+  font-family: Calibri, Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  box-sizing: border-box;
+  line-height: 20px;
+}
+
+/* line 954, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+textarea[name="clientMessage"] {
+  height: 100px;
+  width: 200px;
+  /*margin: 0.5em 0.5em 1em 0.5em;*/
+  margin: 0.5em 0.5em 0.25em 0.5em;
+  resize: vertical;
+  max-height: 150px;
+  font-family: Calibri, Helvetica, Arial, sans-serif;
+  font-size: 1em;
+  /*text-rendering: geometricPrecision;
+  -webkit-appearance: textfield;*/
+  box-sizing: border-box;
+  padding-left: 3px;
+  line-height: 16px;
+}
+
+/* line 972, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+input[name="submit"] {
+  margin-top: 0px;
+  background-color: #333;
+  height: 2.1875em;
+  /*50 px*/
+  font-family: Calibri, Helvetica, Arial, sans-serif;
+  color: white;
+  border: 0.0625em solid white;
+  /*1px*/
+  font-style: italic;
+}
+
+/* line 983, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+input[name="submit"]:hover {
+  background-color: #1e1e1e;
+}
+
+/* line 987, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+input[name="submit"]:active {
+  background-color: #111;
+}
+
+/* line 991, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+#fbMessageBox {
+  /* no point in using classes here since there will be only one point where we'll show the FB message box*/
+  display: none;
+}
+
+/* line 997, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+.contactFormText {
+  font-family: Calibri, Helvetica, Arial, sans-serif;
+  color: white;
+  font-style: italic;
+  font-size: 1em;
+}
+
+/* line 1007, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+.contactFormText.top {
+  width: 12.5em;
+  text-align: left;
+  margin: 0 auto 0 auto;
+}
+
+/* line 1013, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+.contactFormText.bottom img {
+  padding: 0.3125em;
+  border: none;
+}
+
+/* line 1019, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+.contactFormText.bottom img:hover {
+  box-shadow: inset 0px 0px 15px 5px rgba(224, 224, 224, 0.8);
+  opacity: 0.5;
+}
+
+/* line 1024, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+.socialMessageBox {
+  width: 275px;
+  height: 325px;
+  background-color: #333;
+  box-sizing: border-box;
+  border: 1px double white;
+  text-align: center;
+  vertical-align: middle;
+  top: 12px;
+  left: calc(50% - 138px);
+}
+
+/* line 1037, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+.closeButton {
+  height: 20px;
+  width: 23px;
+  margin: auto;
+  background-color: #FF4200;
+  color: white;
+  font-size: 1em;
+  font-family: Helvetica, Calibri, Arial, sans-serif;
+  font-style: bold;
+  position: absolute;
+  z-index: 2;
+  left: 250px;
+  text-align: center;
+  box-sizing: border-box;
+  border-left: 1px solid white;
+  border-bottom: 1px solid white;
+  cursor: default;
+}
+
+/* line 1057, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+.contactImages {
+  margin: 0 auto 0 auto;
+  height: 2.5em;
+  /*40px*/
+}
+
+/* line 1063, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+.fb-page.fb_iframe_widget {
+  top: 50%;
+  transform: translateY(-50%);
+  /*top + transform combined seem to be the same as transform: translateY(16%) - in this particular case at least*/
+}
+
+/*DEFINES THE STYLING OF THE BLOG TAB*/
+/* line 1076, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+#blogContents {
+  width: 100%;
+  color: white;
+  margin: auto;
+  display: flex;
+}
+
+/* line 1083, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+.post-container {
+  height: 96%;
+  width: 60%;
+  margin: auto;
+  display: flex;
+  overflow: auto;
+}
+
+/* line 1091, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+.post {
+  width: 100%;
+  animation: imgFadeIn 0.45s forwards;
+}
+
+/* line 1095, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+.post-title {
+  margin: 5px;
+  height: auto;
+  width: calc(100% - 10px);
+  max-width: calc(100% - 10px);
+  word-break: break-word;
+}
+
+/* line 1102, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+.timestamp {
+  font-family: Helvetica, Calibri, Sans-serif;
+  font-size: 14px;
+  font-style: italic;
+  margin: 5px;
+}
+
+/* line 1110, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+.post-content {
+  display: block;
+  margin: 5px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  max-width: 100%;
+  word-break: break-word;
+}
+
+/* line 1119, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+.post-content img {
+  box-sizing: border-box;
+}
+
+/* line 1124, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+.post-sidebar {
+  height: 96%;
+  width: 35%;
+  overflow-x: hidden;
+  overflow-y: hidden;
+  display: flex;
+  flex-direction: column;
+  margin: auto;
+  justify-content: flex-start;
+  border-left: 1px solid white;
+  border-right: 1px solid white;
+}
+
+/* line 1137, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+.post-sidebar-title {
+  display: flex;
+  height: 10%;
+  padding-bottom: 5%;
+  width: 100%;
+  position: relative;
+}
+
+/* line 1147, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+.post-sidebar-title > span {
+  height: 100%;
+  font-family: Stalemate;
+  font-size: 3.5em;
+  font-style: italic;
+  margin: auto;
+}
+
+/* line 1156, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+.post-sidebar-menu-container {
+  height: 105%;
+  width: 100%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: row;
+}
+
+/* line 1164, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+.post-sidebar-menu {
+  height: auto;
+  width: 100%;
+  margin: auto auto auto auto;
+  display: flex;
+  flex-direction: column;
+  font-family: Helvetica, Calibri, sans-serif;
+  font-size: 16px;
+  color: white;
+}
+
+/* line 1176, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+.post-sidebar-menu li {
+  height: 12.5%;
+  min-height: 12.5%;
+  width: 90%;
+  margin: auto;
+  display: flex;
+}
+
+/* line 1185, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+.post-sidebar-menu li:hover {
+  background-color: #333333;
+  background-color: rgba(200, 200, 200, 0.2);
+}
+
+/* line 1191, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+.post-sidebar-menu a {
+  text-decoration: none;
+  color: white;
+  height: 100%;
+  min-height: 10vmin;
+  width: 100%;
+  display: flex;
+  position: relative;
+  border: 1px solid transparent;
+  box-sizing: border-box;
+}
+
+/* line 1204, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+.post-sidebar-menu a.post-link.active-post {
+  border: 1px solid white;
+  box-sizing: border-box;
+}
+
+/* line 1211, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+.post-sidebar-menu a > span {
+  margin: auto auto auto 5px;
+  pointer-events: none;
+}
+
+/*DEFINES THE STYLING OF THE BOTTOM BAR */
+/* line 1219, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+.bottomBackground {
+  background-color: #333;
+  height: 100%;
+}
+
+/* line 1224, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+.bottomBar {
+  margin: auto;
+  min-width: 37.5em;
+  width: 37.5em;
+  /*600px;*/
+  height: 3.8em;
+  position: relative;
+}
+
+/* line 1232, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+.socialMedia {
+  text-align: center;
+  width: 600px;
+  height: 35px;
+  position: relative;
+  display: flex;
+  justify-content: center;
+}
+
+/* line 1241, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+.socialMedia a {
+  display: flex;
+  flex-direction: row;
+  height: 30px;
+  width: 30px;
+  text-decoration: none;
+  border: 0px;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+/* line 1253, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+.socialMedia img {
+  padding-top: 10px;
+  display: block;
+  height: 30px;
+  width: 30px;
+  border: 0px;
+}
+
+/* line 1262, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+.madeBy {
+  margin-top: 7px;
+  text-align: center;
+  font-family: Calibri;
+  font-size: 12px;
+  color: white;
+  font-style: italic;
+}
+
+/* MOBILE CSS 480PX WIDTH */
+@media screen and (max-width: 480px) {
+  /**** SITE WRAPPER ****/
+  /* line 1278, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+  body {
+    overflow-y: hidden;
+    /*prevents chrome pulldown to reload, which I cant allow if the site has scrolling overflow*/
+  }
+
+  /* line 1282, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+  .sitewrapper {
+    /* height: 100vh;
+     width: 100vw;*/
+    min-height: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+  }
+
+  /**** NAV BAR - HEADER ****/
+  /* line 1295, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+  .headerBackground {
+    height: auto;
+    min-height: 2.2em;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    min-width: 0;
+  }
+
+  /* line 1306, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+  .header {
+    display: flex;
+    flex-direction: column;
+    height: 2.2em;
+    width: 100%;
+    min-width: 0;
+    position: absolute;
+    /*needed to make the slide down menu work*/
+  }
+
+  /* line 1316, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+  .companyName {
+    background-color: #333;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    position: relative;
+    margin-bottom: 0;
+    font-size: 2em;
+  }
+
+  /* line 1329, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+  .companyName:hover {
+    opacity: 1;
+  }
+
+  /* line 1333, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+  .companyName .leoName {
+    background-color: #333;
+    height: 100%;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* line 1342, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+  .companyName a {
+    background-color: #333;
+    width: 100%;
+    height: 1.1em;
+    margin: 0;
+    text-align: center;
+    display: flex;
+  }
+
+  /* line 1351, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+  .menu {
+    background-color: #333;
+    /* margin-top: 3.8em;*/
+    /*display: none;*/
+    flex-direction: column;
+    height: calc(100% - 2.2em);
+    width: 100%;
+    text-align: center;
+    color: white;
+    font-family: Helvetica;
+    max-height: calc(100vh - 4.4em);
+    will-change: height;
+  }
+
+  /* line 1366, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+  .menu .navMenu {
+    height: 100%;
+    width: 100%;
+    color: white;
+  }
+
+  /* line 1375, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+  .menu li {
+    /*border-color: #333;*/
+    height: 100%;
+    /* color: white;*/
+  }
+
+  /* line 1382, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+  .bigImgs {
+    display: none;
+  }
+
+  /**** BEGINNING OF CONTENT STYLING ****/
+  /* line 1393, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+  .jumbotron {
+    /* THIS IS THE WRAPPER FOR ALL THE CONTENT */
+    display: block;
+    position: relative;
+    height: auto;
+    min-height: calc(inherit - 4.15em - 4px);
+    max-height: calc(inherit - 4.15em - 4px);
+    /*height: calc(100% - 4.15em - 4px); /* 2px =  <hr> */
+    width: 100vw;
+    overflow: hidden;
+  }
+
+  /* THE FORMATTING OF THE SLIDER BUTTONS */
+  /* line 1412, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+  .slider-nav-prev {
+    display: none;
+    /*no longer needed since touch sliding was implemented*/
+    animation: none;
+    position: relative;
+    height: auto;
+    width: 50%;
+    opacity: 1;
+  }
+
+  /* line 1423, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+  .arrowPrev {
+    margin: 0;
+    height: auto;
+    float: left;
+    /*porque esto hace que se cambie el tamaño de la imagen? investigar! (none: img 90x90, left: 64x64)  */
+  }
+
+  /* line 1429, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+  .slider-nav-prev:hover {
+    animation: none;
+  }
+
+  /* line 1433, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+  .slider-nav-next {
+    display: none;
+    /*no longer needed since touch sliding was implemented*/
+    animation: none;
+    position: relative;
+    height: auto;
+    width: 50%;
+    opacity: 1;
+  }
+
+  /* line 1444, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+  .arrowNext {
+    margin: 0;
+    height: auto;
+    float: right;
+  }
+
+  /* line 1454, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+  .slider-nav-next:hover {
+    animation: none;
+  }
+
+  /* line 1458, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+  .counterTotal {
+    width: 20px;
+    font-family: Helvetica, Calibri, Arial, sans-serif;
+    font-size: 1em;
+    height: 1em;
+    margin-left: 3px;
+    margin-top: auto;
+    margin-bottom: auto;
+  }
+
+  /* END OF FORMATTING OF THE SLIDER BUTTONS */
+  /* FORMATS THE LOADING ANIM DOTS */
+  /* line 1473, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+  .dots-container {
+    display: flex;
+    justify-content: center;
+    margin: auto;
+  }
+
+  /* line 1480, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+  .outer-border {
+    display: flex;
+    justify-content: center;
+    margin: auto 5px auto 5px;
+    border-radius: 2.5vmin;
+    height: 5vmin;
+    width: 5vmin;
+    background-color: yellow;
+    animation: pop 0.65s alternate;
+    animation-iteration-count: infinite;
+  }
+
+  /* line 1493, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+  .inner-border {
+    display: flex;
+    justify-content: center;
+    margin: auto;
+    border-radius: 2vmin;
+    height: 4vmin;
+    width: 4vmin;
+    background-color: blue;
+  }
+
+  /* line 1505, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+  .outer-border.first {
+    -webkit-animation-delay: 0.65s;
+    -moz-animation-delay: 0.65s;
+    animation-delay: 0.65s;
+  }
+
+  /* line 1512, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+  .outer-border.second {
+    -webkit-animation-delay: 0.975s;
+    -moz-animation-delay: 0.975s;
+    animation-delay: 0.975s;
+  }
+
+  /* line 1519, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+  .outer-border.third {
+    -webkit-animation-delay: 0.975s;
+    -moz-animation-delay: 0.975s;
+    animation-delay: 0.975s;
+  }
+
+  /* FORMATS THE LOADING ANIM DOTS */
+  /* line 1549, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+  .content-Tabs {
+    /* THIS IS WHAT CONTAINS EACH OF THE TABS */
+    height: calc(100vh - 4.15em - 4px);
+    min-height: calc(100vh - 4.15em - 4px);
+    max-height: calc(100vh - 4.15em - 4px);
+    display: block;
+    min-width: 0;
+    width: 100%;
+  }
+
+  /* line 1560, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+  .content-Tabs img {
+    /*margin: 0px 0px 0px 0px;*/
+    text-align: center;
+    max-height: calc(100vh - 3.8em - 1em);
+    max-width: calc(100vw - 1em);
+  }
+
+  /* line 1568, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+  #homeContent {
+    /* THIS IS THE HOME TAB */
+    height: 100%;
+    width: auto;
+    overflow: scroll;
+  }
+
+  /* line 1577, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+  .homeTabTitle {
+    font-size: 2em;
+  }
+
+  /* line 1581, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+  .home-main-par {
+    width: 100%;
+    height: 100%;
+    font-size: 0.66em;
+    position: relative;
+    display: block;
+  }
+
+  /* line 1589, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+  .home-main-img {
+    margin: 3.2em 2px 2px 2px;
+    height: 30%;
+    width: 30%;
+  }
+
+  /* line 1596, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+  .smallThumbnails {
+    width: 100%;
+    height: 50%;
+    margin-top: 0.3em;
+  }
+
+  /* line 1603, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+  .smallThumbnailsContainer {
+    width: 100%;
+    margin: auto;
+  }
+
+  /* line 1609, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+  #thumbnailPhoto1, #thumbnailPhoto2, #thumbnailPhoto3, #thumbnailPhoto4 {
+    min-height: 22vmax;
+    max-height: 22vmax;
+    background-size: cover;
+  }
+
+  /* line 1616, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+  #thumbnailPhoto1:hover, #thumbnailPhoto2:hover, #thumbnailPhoto3:hover, #thumbnailPhoto4:hover {
+    font-size: 0px;
+    min-height: 22vmax;
+    max-height: 22vmax;
+    background-size: cover;
+  }
+
+  /* line 1624, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+  .bigThumbnailImgs {
+    width: 100%;
+  }
+
+  /* THE CONTENT OF THE PEOPLE TAB*/
+  /* line 1637, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+  .peopleContent {
+    width: 100%;
+  }
+
+  /* line 1644, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+  .peopleSlider .active-slide {
+    margin: 5px auto 5px auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    /*min-height: 21.15em;*/
+    height: 100%;
+    width: 100%;
+  }
+
+  /* line 1656, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+  .modelsSlider .active-slide {
+    margin: 5px auto 5px auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    height: 100%;
+    /*min-height: 21.15em;*/
+    width: 100%;
+  }
+
+  /*END OF THE MODELS TAB FORMATTING*/
+  /* FORMATTING OF THE URBAN TAB */
+  /* line 1672, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+  .urbanSlider .active-slide {
+    margin: 5px auto 5px auto;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    height: 100%;
+    /*min-height: 21.15em;*/
+    width: 100%;
+  }
+
+  /* line 1683, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+  .eventsSlider .active-slide {
+    margin: 5px auto 5px auto;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    height: 100%;
+    /*min-height: 21.15em;*/
+    width: 100%;
+  }
+
+  /* END OF EVENTS TAB FORMATTING */
+  /* CONTACT TAB FORMATTING */
+  /* line 1697, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+  #contactContent {
+    width: calc(100% - 10px);
+    height: 300%;
+    /*max-height: 100vh;*/
+    display: flex;
+    flex-direction: column;
+    margin: 0px 5px 0px 5px;
+    overflow: hidden;
+  }
+
+  /* line 1708, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+  .leoPhoto {
+    float: left;
+    width: 30%;
+    position: relative;
+    padding-left: 5px;
+    max-height: 10.125em;
+    /* 210px*/
+    max-width: 6.625em;
+    /*154px*/
+  }
+
+  /* line 1718, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+  .leoPhoto img {
+    padding-top: 5px;
+    margin: 0;
+    height: 100%;
+    width: 100%;
+    max-height: 10.125em;
+    /* 210px*/
+    max-width: 6.625em;
+    /*154px*/
+    display: inline-block;
+  }
+
+  /* line 1729, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+  .contactText {
+    max-width: 100vw;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    height: 50%;
+  }
+
+  /* line 1737, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+  .textBlock {
+    width: auto;
+    display: block;
+    text-align: justify;
+  }
+
+  /* line 1743, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+  .photographerTitle {
+    width: auto;
+    margin-left: auto;
+    margin-right: auto;
+    font-size: 2em;
+  }
+
+  /* line 1750, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+  #contactPar {
+    font-size: 0.95em;
+    display: block;
+    width: 100%;
+  }
+
+  /* line 1757, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+  .contactFormOuterBorder {
+    margin: 0 -5px 0 -5px;
+    height: auto;
+    width: auto;
+  }
+
+  /* line 1763, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+  .contactFormContainer {
+    transform: translate3d(0, 100%, 0);
+    /*350px*/
+    height: auto;
+    width: 100%;
+    overflow: visible;
+    text-align: center;
+    justify-content: center;
+  }
+
+  /* line 1773, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+  #emailForm {
+    position: relative;
+    height: 20em;
+  }
+
+  /* line 1778, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+  textarea[name="clientMessage"] {
+    resize: none;
+    height: 60px;
+  }
+
+  /* line 1783, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+  .contactButton {
+    margin-top: 0;
+    transform: translate3d(-50%, -45vh, 0);
+    /* */
+    margin-bottom: 0;
+    display: flex;
+    justify-content: center;
+    background-color: #333;
+    height: 3.125em;
+    /*50 px*/
+    font-family: Calibri, Helvetica, Arial, sans-serif;
+    color: white;
+    border: 0.0625em solid white;
+    /*1px*/
+    font-style: italic;
+    position: absolute;
+    /*tiene que ser absolute al principio*/
+    left: 50%;
+  }
+
+  /* line 1802, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+  .contactButtonText {
+    position: relative;
+    top: 50%;
+    transform: translateY(-25%);
+    vertical-align: middle;
+  }
+
+  /* line 1809, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+  .aboutButton {
+    transform: translate3d(0, -3.25em, 0);
+    /*3.125em height + 2*0.0625em borders*/
+    left: calc(50% - 50px);
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    background-color: #333;
+    height: 3.125em;
+    /*50 px*/
+    width: 100px;
+    /**/
+    font-family: Calibri, Helvetica, Arial, sans-serif;
+    color: white;
+    border: 0.0625em solid white;
+    /*1px*/
+    font-style: italic;
+    position: absolute;
+  }
+
+  /* line 1827, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+  .socialMessageBox {
+    left: 12px;
+    height: 325px;
+  }
+
+  /* line 1833, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+  .fb-page.fb_iframe_widget {
+    top: 12px;
+  }
+
+  /*END OF CONTACT TAB FORMATTING */
+  /* BEGINNING OF BLOG TAB FORMATTING*/
+  /* line 1846, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+  #blogContents {
+    /*max-width: 175%;*/
+    width: 175%;
+    margin: auto;
+  }
+
+  /* line 1853, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+  .post-container {
+    width: 52.5%;
+    margin: auto;
+  }
+
+  /* line 1858, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+  .post-sidebar {
+    width: 47.5%;
+    margin: auto;
+  }
+
+  /* line 1865, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+  .post-sidebar-title > span {
+    font-size: 2.2em;
+  }
+
+  /* line 1869, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+  .post-sidebar-menu li > a {
+    min-height: 20vmin;
+  }
+
+  /* line 1873, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+  .post-sidebar .post-link {
+    word-break: break-word;
+  }
+
+  /* END OF BLOG TAB FORMATTING*/
+  /*BOTTOM BAR WITH LINKS TO SOCIAL MEDIA */
+  /* line 1884, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+  .bottomBackground {
+    height: auto;
+  }
+
+  /* line 1888, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+  .bottomBar {
+    width: 100vw;
+    min-width: 100vw;
+    max-width: 100vw;
+    height: 1.95em;
+    padding-top: 0;
+    position: relative;
+  }
+
+  /* line 1898, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+  .socialMedia {
+    height: 32px;
+    width: 100%;
+  }
+
+  /* line 1903, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+  .socialMedia img {
+    padding-top: 0;
+    height: 30px;
+    width: 30px;
+  }
+
+  /* line 1910, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+  .madeBy {
+    display: none;
+  }
+}
+/****       HD CSS       ***/
+@media screen and (min-width: 1201px) and (max-width: 1599px) {
+  /* line 1920, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+  .sitewrapper {
+    height: calc(100vh + 2 * 3.8em + 4px);
+    width: 98.7vw;
+    /*probably need to supplement with javascript since scrollbar width may vary*/
+  }
+
+  /* line 1926, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+  .jumbotron {
+    height: 100vh;
+    min-height: 31.25em;
+    /*min=500px*/
+    width: 100%;
+  }
+
+  /* line 1933, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+  .content-Tabs {
+    min-height: 31.25em;
+    /*min=500px*/
+    height: 100%;
+    width: 100vw;
+    max-width: 100%;
+  }
+
+  /* line 1940, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+  #homeContent {
+    width: 95%;
+    font-size: 0.8em;
+  }
+
+  /* line 1947, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+  .smallThumbnailImgs {
+    height: 50%;
+    width: 40%;
+  }
+
+  /* line 1953, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+  .peopleSlider {
+    max-width: 100%;
+  }
+
+  /* line 1957, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+  .peopleSlider .active-slide {
+    max-width: 100%;
+  }
+
+  /* line 1961, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+  .modelsSlider {
+    max-width: 100%;
+  }
+
+  /* line 1965, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+  .modelsSlider .active-slide {
+    max-width: 100%;
+  }
+
+  /* line 1969, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+  .urbanSlider {
+    max-width: 100%;
+  }
+
+  /* line 1973, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+  .urbanSlider .active-slide {
+    max-width: 100%;
+  }
+
+  /* line 1977, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+  .eventsSlider {
+    max-width: 100%;
+  }
+
+  /* line 1981, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+  .eventsSlider .active-slide {
+    max-width: 100%;
+  }
+
+  /* line 1985, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+  .bottomBackground {
+    height: auto;
+  }
+}
+/*TABLET CSS */
+@media screen and (min-width: 481px) and (max-width: 1200px) {
+  /* line 1994, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+  .sitewrapper {
+    width: calc(100vw + 0px);
+    /* the 2 extra pixels on width on both sitewrapper and jumbotron are needed to compensate for the scrollbar appearing and disappearing when rotating*/
+    max-width: calc(100vw + 0px);
+    height: 100vh;
+    padding: 0;
+    margin: 0;
+  }
+
+  /* line 2004, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+  .headerBackground {
+    min-height: 0;
+    height: 2.5em;
+    width: 100%;
+  }
+
+  /* line 2011, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+  .header {
+    min-width: 0;
+    width: 100%;
+    height: 2.5em;
+  }
+
+  /* line 2017, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+  .companyName {
+    font-size: 1.625em;
+    /*26px*/
+    text-align: center;
+    vertical-align: middle;
+    margin: auto;
+  }
+
+  /* line 2024, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+  .companyName:hover {
+    opacity: 1;
+  }
+
+  /* line 2028, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+  .navMenu a {
+    font-size: 0.8em;
+    height: auto;
+  }
+
+  /* line 2035, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+  .counterTotal {
+    width: 20px;
+    font-family: Helvetica, Calibri, Arial, sans-serif;
+    font-size: 1em;
+    height: 1em;
+    margin-left: 3px;
+    margin-top: auto;
+    margin-bottom: auto;
+  }
+
+  /* line 2046, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+  .jumbotron {
+    height: calc(100vh - 4.7em - 0.1875em);
+    width: 100vw;
+    max-width: 100vw;
+    overflow: hidden;
+    min-height: 0;
+    min-width: 0;
+    background-size: cover;
+    background-repeat: no-repeat;
+  }
+
+  /* line 2058, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+  .content-Tabs {
+    min-height: 0;
+    /*min=500px*/
+    min-width: 0;
+    height: 100%;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  /* line 2066, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+  #homeContent {
+    min-width: 0;
+    width: 100vw;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+    color: white;
+    overflow: scroll;
+  }
+
+  /* line 2077, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+  #homeContent h1 {
+    width: 50%;
+    font-size: 2.6em;
+  }
+
+  /* line 2083, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+  .home-main-par {
+    width: auto;
+    /* needs to be auto instead of 100% - with 100% it overflows*/
+    height: 100%;
+    margin: 5px;
+    font-size: 0.8em;
+    position: relative;
+    display: block;
+  }
+
+  /* line 2094, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+  .home-main-img {
+    display: inline-block;
+    height: auto;
+    width: 30%;
+    margin-right: 5px;
+  }
+
+  /* line 2101, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+  .smallThumbnails {
+    width: 100%;
+    height: 50%;
+    margin-top: 0.3em;
+  }
+
+  /* line 2108, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+  .smallThumbnailsContainer {
+    width: 100%;
+    margin: auto;
+  }
+
+  /* line 2114, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+  #thumbnailPhoto1, #thumbnailPhoto2, #thumbnailPhoto3, #thumbnailPhoto4 {
+    min-height: 22vmax;
+    max-height: 22vmax;
+    background-size: cover;
+  }
+
+  /* line 2121, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+  #thumbnailPhoto1:hover, #thumbnailPhoto2:hover, #thumbnailPhoto3:hover, #thumbnailPhoto4:hover {
+    font-size: 0px;
+  }
+
+  /* line 2126, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+  .bigThumbnailImgs {
+    width: auto;
+    height: 80%;
+  }
+
+  /* line 2138, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+  .peopleSlider {
+    max-height: 100%;
+    max-width: 100%;
+  }
+
+  /* line 2143, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+  .slider-nav-prev {
+    display: none;
+  }
+
+  /* line 2147, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+  .slider-nav-next {
+    display: none;
+  }
+
+  /* line 2151, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+  .peopleSlider img {
+    max-width: 100vw;
+    max-height: 100vh;
+  }
+
+  /* line 2156, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+  .peopleSlider .active-slide {
+    max-height: 100%;
+    max-width: 100%;
+  }
+
+  /* line 2161, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+  .modelsSlider {
+    max-height: 100%;
+    max-width: 100%;
+  }
+
+  /* line 2166, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+  .modelsSlider .active-slide {
+    max-height: 100%;
+    max-width: 100%;
+  }
+
+  /* line 2171, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+  .modelsSlider img {
+    max-width: 100vw;
+    max-height: 100vh;
+  }
+
+  /* line 2176, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+  .urbanSlider {
+    max-height: 100%;
+    max-width: 100%;
+  }
+
+  /* line 2181, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+  .urbanSlider .active-slide {
+    max-height: 100%;
+    max-width: 100%;
+  }
+
+  /* line 2186, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+  .urbanSlider img {
+    max-width: 100vw;
+    max-height: 100vh;
+  }
+
+  /* line 2191, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+  .eventsSlider {
+    max-height: 100%;
+    max-width: 100%;
+  }
+
+  /* line 2196, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+  .eventsSlider .active-slide {
+    max-height: 100%;
+    max-width: 100%;
+  }
+
+  /* line 2201, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+  .eventsSlider img {
+    max-width: 100vw;
+    max-height: 100vh;
+  }
+
+  /* line 2206, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+  #contactContent {
+    max-width: 100vw;
+    width: 100vw;
+    display: flex;
+    flex-direction: column;
+    overflow: scroll;
+  }
+
+  /* line 2214, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+  .leoPhoto {
+    display: flex;
+    width: 30%;
+    margin-top: 5px;
+    max-height: 13.125em;
+    /* 210px*/
+    max-width: 9.625em;
+    /*154px*/
+  }
+
+  /* line 2222, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+  .leoPhoto img {
+    height: 30%;
+    width: 100%;
+    max-height: 13.125em;
+    /* 210px*/
+    max-width: 9.625em;
+    /*154px*/
+  }
+
+  /* line 2229, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+  .contactText {
+    max-width: 100vw;
+    width: 85%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* line 2236, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+  .textBlock {
+    width: 68%;
+    display: flex;
+    flex-direction: column;
+    text-align: justify;
+  }
+
+  /* line 2243, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+  .photographerTitle {
+    width: auto;
+    margin-left: auto;
+    margin-right: auto;
+    font-size: 1.625em;
+    float: left;
+  }
+
+  /* line 2251, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+  #contactPar {
+    font-size: 0.95em;
+    width: 100%;
+    display: flex;
+  }
+
+  /* line 2258, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+  .contactFormContainer {
+    display: flex;
+  }
+
+  /* line 2262, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+  #emailForm {
+    height: 360px;
+  }
+
+  /* line 2266, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+  .bottomBar {
+    height: 2.2em;
+  }
+
+  /* line 2270, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+  .socialMedia {
+    height: 32px;
+  }
+
+  /* line 2276, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+  .socialMedia img {
+    height: 30px;
+    width: 30px;
+    padding-top: 2px;
+  }
+
+  /* line 2282, /home/eugenio/workspace/rails-app/app/assets/stylesheets/style-main.scss.erb */
+  .madeBy {
+    display: none;
+  }
+}
+/*
+ * This is a manifest file that'll be compiled into application.css, which will include all the files
+ * listed below.
+ *
+ * Any CSS and SCSS file within this directory, lib/assets/stylesheets, vendor/assets/stylesheets,
+ * or any plugin's vendor/assets/stylesheets directory can be referenced here using a relative path.
+ *
+ * You're free to add application-wide styles to this file and they'll appear at the bottom of the
+ * compiled file so the styles you add here take precedence over styles defined in any styles
+ * defined in the other CSS/SCSS files in this directory. It is generally better to create a new
+ * file per style scope.
+ *
+
+
+
+
+ */
+

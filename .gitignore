@@ -30,9 +30,5 @@ images/*
 #ignore .env
 .env
 
-#ignore /public - Files are served from a cdn in production anyways
-/public
-
-
 #ignore database.yml
 config/database.yml
