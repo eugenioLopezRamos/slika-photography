@@ -486,7 +486,6 @@ var fileManager = function(arrayOfFiles) {
 
 
 	    var filesToUpload = document.getElementById('file_input_field').files
-	  //  console.log("files", filesToUpload);
 
 	    if (filesToUpload.length < 1) {
 	        alert("No files selected for upload");
@@ -507,7 +506,7 @@ var fileManager = function(arrayOfFiles) {
 	        if (!element.type.match('image.*')) {
 
 	            return;
-	        } else {
+	    	} else {
 	            formData.append("image[]", element, element.name);
 	        }
 

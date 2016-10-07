@@ -2,6 +2,8 @@ class Admin::AdminController < ApplicationController
 
 require 'zip'
 require 'mini_magick'
+require 'mimemagic'
+
 before_action :logged_in_user
 before_action :logged_in_admin_user
 before_action :create_download_log, only: :download_file
@@ -33,7 +35,7 @@ before_action :create_download_log, only: :download_file
 
   def optimize_images #(*images_array)
     
-    @images_to_optimize = params[:image]
+    @images_to_optimize = @actually_images
 
     @to_upload = []
 
@@ -118,7 +120,12 @@ before_action :create_download_log, only: :download_file
     
     # need to add server side check for image sizes. Probably best to check for total > 100mb
     @total_size_mb = 0
- 
+    @actually_images = Array.new #will contain all files that are images after checking with mimemagic
+    response_message = String.new #Response to be sent back to client
+    uploaded_file_list = String.new #Contains all successfully uploaded files, to be included in response_message
+    uploaded_file_count = 0
+    #need to change that message, not always will all files be successfully uploaded
+
     if Rails.env.test?
       @max_size_upload_mb = 5 #Max upload 5mb on test env
     else 
@@ -126,8 +133,17 @@ before_action :create_download_log, only: :download_file
     end
 
     if !params[:image].nil?
-      params[:image].each do |image| 
-        @total_size_mb += image.tempfile.size/1024/1024
+    
+      params[:image].each do |image|
+        
+        if !MimeMagic.by_magic(image).nil? && MimeMagic.by_magic(image).image? 
+          #check that the attached file is actually an image
+          @actually_images.push image      
+          @total_size_mb += image.tempfile.size/1024/1024
+        else
+          response_message << "#{image.original_filename} is not an image.<br />"         
+        end
+
       end
     end
 
@@ -138,15 +154,13 @@ before_action :create_download_log, only: :download_file
       return
     elsif @total_size_mb > @max_size_upload_mb     #Reject uploads over a certain size
 
-      flash.now[:error] = "Upload size exceeds the maximum!"
+      flash.now[:error] = "Upload size exceeds the maximum(#{max_size_upload_mb} MB)!"
       render partial: '/admin/flash_messages'
       return
     else #Go ahead and upload
       
       s3 = Aws::S3::Client.new #create the client
       
-      response_message = "#{"File".pluralize(params[:image].length)} successfully uploaded. #{"Location".pluralize(params[:image].length)}:<br />" 
-      #need to change that message, not always will all files be successfully uploaded
 
         optimized_array = optimize_images
        
@@ -162,14 +176,20 @@ before_action :create_download_log, only: :download_file
           
           uploaded_file_route = s3.list_objects(bucket: ENV['AWS_S3_BUCKET'], marker: image_file_route).contents
           uploaded_file_route = uploaded_file_route.select{ |entry| entry.key === "#{image_file_route}#{image_file_name}"  }.map(&:key)
-
-          response_message << uploaded_file_route.to_s.gsub(/\"*\[*\]*/, '') << "<br />"
+          uploaded_file_count += 1
+          uploaded_file_list << uploaded_file_route.to_s.gsub(/\"*\[*\]*/, '') << "<br />"
           
           image.close
           File.unlink(image)
 
         end # @optimized_array end
 
+      #adds all messages and sends them
+      if uploaded_file_count > 0
+        response_message << "#{"File".pluralize(uploaded_file_count)} successfully uploaded. #{"Location".pluralize(uploaded_file_count)}:<br />"
+      end
+
+      response_message << uploaded_file_list
       flash.now[:info] = response_message.html_safe 
       render partial: '/admin/flash_messages'
       end #else end

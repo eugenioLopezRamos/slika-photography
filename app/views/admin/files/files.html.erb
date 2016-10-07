@@ -189,20 +189,17 @@ width: 100%;
 			<span class="action-description">Preview</span>
 		
 		</div>
-
-
-
 	</div>
 
+	<%= form_tag({action: :upload_file}, multipart: true, id: 'upload-file-form') do %>
+		<%= label_tag 'image' %>
+		<%= submit_tag "Upload image", :id =>'upload-file' %>
+
+		<%= file_field_tag 'image[]', accept: 'image/jpeg, image/gif, image/png', class: 'upload-btn', :id =>'file_input_field', :multiple => true %>
+		<%= hidden_field_tag :image_cache %>
+	<% end %>
 
 
-<!--</div>-->
-<%= form_for(:image, url: admin_upload_path, html: {multipart: true, id: 'upload-file-form'}) do |f| %>
-	<%= f.submit "Upload image", :id =>'upload-file' %>
-	<%= f.label :image %>
-	<%= f.file_field :image, class: 'upload-btn', accept: 'image/jpeg, image/gif, image/png', :id =>'file_input_field', :multiple => true %>
-	<%= f.hidden_field :image_cache %>
-<% end %>
 </div>
 
 <%= javascript_include_tag 'file-manager' %>
