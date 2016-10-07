@@ -64,8 +64,12 @@
         #base_filename as hashkey, [version] as value
         to_add = version.gsub("#{full_dir}/", '') #removes the file route
         to_add = to_add.gsub("-#{base_file}", '') #removes the dash that separates the base filename and the filename itself
- 
-        if to_add != "original"  #don't add the "original" string to the array.
+        
+        if to_add != "original" && to_add != size_breakpoints[-1].to_s && to_add != base_file #size_breakpoints comes from Application_helper.rb 
+        #since it's used in the admin pages(when uploading) and in this public view that belongs to another controller.
+
+        #this admittedly big if statement checks that the to_add value isn't == "original", isn't the LAST item of size_breakpoints (the thumbnail size)
+        # and isn't equal to the base file name, just in case.
          versions.push to_add 
         end 
 
@@ -88,7 +92,7 @@
       
       <% if Rails.env.development? || Rails.env.test? %>
       <%#  resets the full_dir so "public/" isn't added twice since image_tag auto adds it. 
-            Probably should have used just old HTML but at least I learned a bit about the asset_path
+            Probably should have used just plain old HTML but at least I learned a bit about the asset_path
             I guess %>
         <% full_dir = "#{assets_dir}#{@image_dir}" %>
       <% end %>
@@ -98,7 +102,7 @@
       <%= content_tag :div, class: "#{@tab_value} #{active_slide_class}" do %>
               <%= render 'layouts/loadAnim' %> 
         <%= image_tag("", id: "#{full_dir}/#{slide}", data: {sizes: sizes_per_file[slide], route: "#{asset_path full_dir}" , file: "#{slide}" } ) %>
-      
+        
         <%# añadir locals a loadAnim para poder ocultar solo una (la relacionada a la slide q corresponda)%>
 
       <% end %>

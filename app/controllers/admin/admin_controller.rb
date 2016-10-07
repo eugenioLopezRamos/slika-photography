@@ -70,7 +70,7 @@ before_action :create_download_log, only: :download_file
         if img_width > shortened_breakpoints[0] #img_width < shortened_breakpoints[0] && img_width >= shortened_breakpoints[-1]   #smaller than the first (biggest) and larger than the last (smallest)
           applicable_widths << shortened_breakpoints[0]
         elsif (!shortened_breakpoints[index + 1].nil? && img_width > shortened_breakpoints[index + 1])
-            applicable_widths << shortened_breakpoints[index + 1]
+          applicable_widths << shortened_breakpoints[index + 1]
         elsif img_width<shortened_breakpoints[-1] && shortened_breakpoints[index + 1].nil?
           #  debugger
             applicable_widths << img_width
@@ -237,7 +237,7 @@ before_action :create_download_log, only: :download_file
 
           if !resp.nil?
          
-            File.open(file) do |file|
+            File.open(file) do |file| #change file to temp_file later
               Zip::File.open(@temp_zip.path, Zip::File::CREATE) do |zipfile|
                 zipfile.add(sel_file, file.path)
                 downloaded_file_count = downloaded_file_count + 1
