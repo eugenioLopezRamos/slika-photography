@@ -1,5 +1,6 @@
 class Admin::AdminController < ApplicationController
 
+
 require 'zip'
 require 'mini_magick'
 require 'mimemagic'
@@ -7,22 +8,6 @@ require 'mimemagic'
 before_action :logged_in_user
 before_action :logged_in_admin_user
 before_action :create_download_log, only: :download_file
-
-  def size_breakpoints
-
-      [2000, 1500, 1100, 900, 700, 480, 100] 
-
-    #defines the breakpoints. If the img_width is higher than a given breakpoint, reduce it to all breakpoints below it
- 
-    #        img_width > 2000 ? -> 2000 & 1500 & 1100 & 900 & 700 & 480 & 100
-    # 2000 > img_width > 1500 ? -> 1500 & 1100 & 900 & 700 & 480 & 100
-    # 1500 > img_width > 1100 ? -> 1100 & 900 & 700 & 480 & 100
-    # 1100 > img_width > 900 ? -> 900 & 700 & 480 & 100
-    # 900 > img_width > 700 ? -> 700 & 480 & 100
-    # 700 > img_width > 480 ? -> 480 & 100
-    # 480 > img_width ? -> img_width & 100
-
-  end
 
   def login
     redirect_to '/admin/login'
@@ -45,8 +30,6 @@ before_action :create_download_log, only: :download_file
 
         img_height = img[:height] #height of the image
         img_width = img[:width] #width
-
-     
       
      # orig_file = File.open(image.tempfile.path, 'rb')
      #File.open(image.tempfile.path, 'rb') -> write en otro archivo -> cerrar el original -> rewind.
@@ -62,7 +45,8 @@ before_action :create_download_log, only: :download_file
       @to_upload << new_file
 
       applicable_widths = []
-      shortened_breakpoints = size_breakpoints.slice(0..-2) #ignores the last size, the thumbnail, since thats always included
+      img_sizes = size_breakpoints #comes from ApplicationController
+      shortened_breakpoints = img_sizes.slice(0..-2) #ignores the last size, the thumbnail, since thats always included
 
       shortened_breakpoints.each_with_index do |width, index| #last size (thumbnail size, the smallest) is excluded
         #since it will always be included
@@ -82,7 +66,7 @@ before_action :create_download_log, only: :download_file
       end
 
       #adds the thumbnail
-      applicable_widths << size_breakpoints[-1]
+      applicable_widths << img_sizes[-1]
 
       #create blurry preload image
       #not going to do it, It's probably not worth it (since it will do 2 downloads - I'll use a loading anim in the view and the 
@@ -135,7 +119,7 @@ before_action :create_download_log, only: :download_file
     if !params[:image].nil?
     
       params[:image].each do |image|
-        
+
         if !MimeMagic.by_magic(image).nil? && MimeMagic.by_magic(image).image? 
           #check that the attached file is actually an image
           @actually_images.push image      
@@ -257,9 +241,9 @@ before_action :create_download_log, only: :download_file
 
           if !resp.nil?
          
-            File.open(file) do |file| #change file to temp_file later
+            File.open(file) do |downloaded_file| #change file to temp_file later
               Zip::File.open(@temp_zip.path, Zip::File::CREATE) do |zipfile|
-                zipfile.add(sel_file, file.path)
+                zipfile.add(sel_file, downloaded_file.path)
                 downloaded_file_count = downloaded_file_count + 1
               end #zip block close
             end #file open close
