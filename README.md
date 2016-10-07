@@ -44,8 +44,6 @@ _post editor_
 - Img responsivizer for posts? (check all img tags in the post, remove source, calc appropiate size, fill src)
 
 _admin controller_
-
-- check the accuracy of the image resizer method on admin controller.
 - Test optimized image creations (in admin integration controller test)
 
 _public front end_
@@ -66,7 +64,7 @@ _admin panel front end_
 
 **DONE**
 
-
+- check the accuracy of the image resizer method on admin controller. -> Done, refactored the function a bit.
 - change |file| to temp_file later (admin controller ln. 240, currently it's called file, same as the iterator of its parent block)
 - Use application_ helper size_breakpoints in admin controller instead of own method.
 - Server side verification of file -> image
