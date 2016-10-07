@@ -46,16 +46,13 @@ _post editor_
 _admin controller_
 
 - check the accuracy of the image resizer method on admin controller.
-- Use application_helper size_breakpoints in admin controller instead of own method.
-- change |file| to temp_file later (admin controller ln. 240, currently it's called file, same as the iterator of its parent block)
-
-
 - Test optimized image creations (in admin integration controller test)
 
 _public front end_
 - Add image slide event listener a los dots tambien
 - check the animations on image load, seems like they arent working quite right on first load.
-
+- Add loading message
+- Contact tab is bad. Review
 
 _admin panel front end_
 - Add created files to the file manager (front end)
@@ -68,6 +65,10 @@ _admin panel front end_
 
 
 **DONE**
+
+
+- change |file| to temp_file later (admin controller ln. 240, currently it's called file, same as the iterator of its parent block)
+- Use application_ helper size_breakpoints in admin controller instead of own method.
 - Server side verification of file -> image
 - There's a bug with blog tab JS where it incorrectly goes remembers the first post that you load -> Checked, couldn't make it bug.
 - Nav menu looks a bit off on nexus 7 (contact us button) -> done, changed font-size from .navMenu a to .navMenu span then added a declaration on the /* tablet css */ part of the file
