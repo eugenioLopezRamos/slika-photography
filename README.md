@@ -26,33 +26,49 @@ A portfolio site with AJAX, pushstate, and an admin panel
 
 ** IN PROGRESS **
 
-- Test optimized image creations (in admin integration controller)
 
-- Add image slide event listener a los dots tambien
 
-- Related to ^, add SendGrid for mails, postgres for DB and whatever other production env changes are necessary to pass to production
-- reassemble the manifest files for the asset pipeline into 2 files: main and admin
-
-- Add created files to the file manager (front end)
-
+_s3_
 - See permission stuff for buckets (ACL, IIRC)
-- deselect all but one folder when uploading?
-- Add friendly forwarding on admin pages
-- bug: clicking folders hides subfolders even when not appropiate
-- check the animations on image load, seems like they arent working quite right on first load.
 
-- Server side verification of file -> image
+_heroku_
+- Related to ^, add SendGrid for mails, postgres for DB and whatever other production env changes are necessary to pass to production
+
+_misc backend_
+- reassemble the manifest files for the asset pipeline into 2 files: main and admin
+- Check if I can use cloudflare instead of cloudFront.
+
+_post editor_
 
 - Add img upload link to post/new(these would be sent to s3/posts/<SLUG_NAME_HERE>)
 - Img responsivizer for posts? (check all img tags in the post, remove source, calc appropiate size, fill src)
-- change file to temp_file later (admin controller ln. 240, currently it's called file, same as the iterator of its parent block)
+
+_admin controller_
+
 - check the accuracy of the image resizer method on admin controller.
 - Use application_helper size_breakpoints in admin controller instead of own method.
+- change |file| to temp_file later (admin controller ln. 240, currently it's called file, same as the iterator of its parent block)
+
+
+- Test optimized image creations (in admin integration controller test)
+
+_public front end_
+- Add image slide event listener a los dots tambien
+- check the animations on image load, seems like they arent working quite right on first load.
+
+
+_admin panel front end_
+- Add created files to the file manager (front end)
+- deselect all but one folder when uploading?
+- Add friendly forwarding on admin pages
+- bug: clicking folders hides subfolders even when not appropiate
+- Add a link to the file manager on the admin panel
 
 
 
 
 **DONE**
+- Server side verification of file -> image
 - There's a bug with blog tab JS where it incorrectly goes remembers the first post that you load -> Checked, couldn't make it bug.
 - Nav menu looks a bit off on nexus 7 (contact us button) -> done, changed font-size from .navMenu a to .navMenu span then added a declaration on the /* tablet css */ part of the file
 - check mid size responsive image loader (nexus 7 doesnt load peopleSlider/1.jpg -> returns "undefined") <- done, refactored function a bit

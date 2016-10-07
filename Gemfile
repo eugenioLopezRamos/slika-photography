@@ -22,10 +22,15 @@ gem 'aws-sdk'
 
 #carrier wave for image uploads
 #gem 'carrierwave',             '0.11.2'
+
 #mini magick for img resizing
 gem 'mini_magick',             '4.5.1'
-#fog as cloud library
-gem 'fog',                     '1.38.0'
+
+#mimemagic to check that files are images
+gem 'mimemagic', '0.3.2'
+
+#fog as cloud library -> replaced w/ AWS SDK
+#gem 'fog',                     '1.38.0'
 
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
