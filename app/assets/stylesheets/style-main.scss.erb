@@ -140,10 +140,10 @@ to {
 
 @keyframes contract-form3d {
 from {
-  transform:translate3d(0, 100%,0);
+  transform:translate3d(0, 100vh,0);
 
 }  to {
-  transform: translate3d(0, -30vh,0); /*320px*/
+  transform: translate3d(0, -30vh,0);
 }
 }
 
@@ -152,7 +152,7 @@ from {
    transform: translate3d(0,-30vh,0);
 }  
 to {
- transform: translate3d(0, 100%,0);
+ transform: translate3d(0, 100vh,0);
 }
    
   
@@ -160,11 +160,11 @@ to {
 
 @keyframes contract3d {
 from {
-  transform: translate3d(-50%,-45vh,0);
+  transform: translate3d(0, 0, 0);
   
 } 
 to {
-  transform: translate3d(-50%, -100vh,0);
+  transform: translate3d(0, -75vh, 0);
 
 }
   
@@ -174,11 +174,11 @@ to {
 @keyframes uncontract3d {
   
   from {
-    transform: translate3d(-50%,-100vh,0);
+    transform: translate3d(0,-75vh,0);
 
   }
   to{
-    transform: translate3d(-50%, -45vh,0);
+    transform: translate3d(0, 0, 0);
   }
 }
 
@@ -790,23 +790,23 @@ margin-bottom: auto;
 }
 
 .outer-border.first {
-  -webkit-animation-delay: $anim-duration;
-  -moz-animation-delay: $anim-duration;
-  animation-delay: $anim-duration;
+  -webkit-animation-delay: 0 * $anim-duration;
+  -moz-animation-delay: 0 * $anim-duration;
+  animation-delay: 0 * $anim-duration;
 
 }
 
 .outer-border.second {
-  -webkit-animation-delay: 1.5 * $anim-duration;
-  -moz-animation-delay: 1.5 * $anim-duration;
-  animation-delay: 1.5 * $anim-duration;
+  -webkit-animation-delay: 0.5 * $anim-duration;
+  -moz-animation-delay: 0.5 * $anim-duration;
+  animation-delay: 0.5 * $anim-duration;
 
 }
 
 .outer-border.third {
-  -webkit-animation-delay: 2 * $anim-duration;
-  -moz-animation-delay: 2 * $anim-duration;
-  animation-delay: 2 * $anim-duration;
+  -webkit-animation-delay: 1 * $anim-duration;
+  -moz-animation-delay: 1 * $anim-duration;
+  animation-delay: 1 * $anim-duration;
 
 }
 
@@ -1814,7 +1814,7 @@ width: auto;
 }
 
 .contactFormContainer {
-transform: translate3d(0, 100%, 0); /*350px*/
+transform: translate3d(0, 100vh, 0); 
 height: auto;
 width: 100%;
 overflow: visible;
@@ -1834,28 +1834,40 @@ height:60px;
 }
 
 .contactButton {
-
+/*
 margin-top: 0;
-transform: translate3d(-50%, -45vh, 0); /* */
+transform: translate3d(-50%, -45vh, 0); 
 margin-bottom: 0;
 display: flex;
 justify-content: center;
 background-color: #333;
-height: 3.125em; /*50 px*/
+height: 3.125em; 
 font-family:  Calibri, Helvetica, Arial, sans-serif;
 color: white;
-border: 0.0625em solid white; /*1px*/
+border: 0.0625em solid white;
 font-style: italic;
-position: absolute; /*tiene que ser absolute al principio*/
-left: 50%;
+position: absolute; 
+left: 50%;*/
+
+margin: 0 auto 0 auto;
+display: flex;
+justify-content: center;
+background-color: #333;
+height: 50px;
+font-family: Calibri, Helvetica, Arial, sans-serif;
+color: white;
+border: 0.0625em solid white;
+font-style: italic;
+position: relative;
+
 
 }
 
 
 .contactButtonText {
 position: relative;
-top: 50%;
-transform: translateY(-25%);
+justify-content: center;
+margin: auto;
 vertical-align: middle;
 }
 

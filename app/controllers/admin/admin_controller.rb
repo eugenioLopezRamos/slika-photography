@@ -28,11 +28,11 @@ before_action :create_download_log, only: :download_file
 
       img = MiniMagick::Image.open(image.path) #Need to open the file to check height/width
 
-        img_height = img[:height] #height of the image
-        img_width = img[:width] #width
+      img_height = img[:height] #height of the image
+      img_width = img[:width] #width
       
-     # orig_file = File.open(image.tempfile.path, 'rb')
-     #File.open(image.tempfile.path, 'rb') -> write en otro archivo -> cerrar el original -> rewind.
+      # orig_file = File.open(image.tempfile.path, 'rb')
+      #File.open(image.tempfile.path, 'rb') -> write en otro archivo -> cerrar el original -> rewind.
 
       base_file = File.open(image.tempfile.path, 'rb')
 
@@ -45,6 +45,7 @@ before_action :create_download_log, only: :download_file
       @to_upload << new_file
 
       applicable_widths = []
+
       img_sizes = size_breakpoints #comes from ApplicationController
       shortened_breakpoints = img_sizes.slice(0..-2) #ignores the last size, the thumbnail, since thats always included
 
@@ -53,11 +54,11 @@ before_action :create_download_log, only: :download_file
       
         # width.next returns the next value ie the next integer, not the next element of the array
 
-        if img_width > shortened_breakpoints[0] #img_width < shortened_breakpoints[0] && img_width >= shortened_breakpoints[-1]   #smaller than the first (biggest) and larger than the last (smallest)
+        if index === 0 && img_width > shortened_breakpoints[0] #img_width < shortened_breakpoints[0] && img_width >= shortened_breakpoints[-1]   #smaller than the first (biggest) and larger than the last (smallest)
           applicable_widths << shortened_breakpoints[0]
         elsif (!shortened_breakpoints[index + 1].nil? && img_width > shortened_breakpoints[index + 1])
           applicable_widths << shortened_breakpoints[index + 1]
-        elsif img_width<shortened_breakpoints[-1] && shortened_breakpoints[index + 1].nil?
+        elsif index === (shortened_breakpoints.length - 1) && img_width<shortened_breakpoints[-1]# && shortened_breakpoints[index + 1].nil?
           #  debugger
             applicable_widths << img_width
 
@@ -95,7 +96,7 @@ before_action :create_download_log, only: :download_file
             image.tempfile.close
             image.tempfile.unlink
        end #end @img_to_optimize
-   
+     
        return @to_upload
        
   end
@@ -145,15 +146,13 @@ before_action :create_download_log, only: :download_file
       
       s3 = Aws::S3::Client.new #create the client
       
-
         optimized_array = optimize_images
-       
         optimized_array.each do |image|
           
-          image_file = image 
+          image_file = image
           image_file_name = File.basename(image_file)
           image_file_route = params[:file_route] #The route is unique anyways, can't upload to 2 folders at once
-
+          
           File.open(image_file, 'rb', :encoding => 'binary') do |file|
             s3.put_object(bucket: ENV['AWS_S3_BUCKET'], key: "#{image_file_route}#{image_file_name}", body: file)
           end #file open end

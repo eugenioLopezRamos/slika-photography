@@ -1463,17 +1463,16 @@ contactForm.style.animation="none";
 
 contactButton.onclick = function() {
      
-contactButton.style.animation = "contract3d 5s forwards";    
-contactText.style.animation ="contract-text3d 2s forwards";
+contactButton.style.animation = "contract3d 3s forwards";    
+contactText.style.animation = "contract-text3d 2s forwards";
 contactForm.style.animation = "contract-form3d 2s forwards"; 
 aboutButton.style.animation ="expand3d 1.5s forwards";
-
 
 };
 
 aboutButton.onclick = function() {
 
-contactButton.style.animation = "uncontract3d 2s forwards";    
+contactButton.style.animation = "uncontract3d 3s forwards";    
 contactText.style.animation ="uncontract-text3d 2s forwards";
 contactForm.style.animation = "uncontract-form3d 2s forwards";
 aboutButton.style.animation ="unexpand3d 1.5s forwards";   
