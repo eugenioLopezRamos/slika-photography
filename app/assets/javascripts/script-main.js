@@ -646,9 +646,6 @@ function slidesHandler(){
     function determineSizeToGet(selectorValue) {
   
         var selector = selectorValue;
-        console.log("selectorval size to get", selectorValue, "selector", selector);
-        console.log("query", document.querySelector(selector));
-       // console.log("SELECTOR", selector);
 
         var possibleSizes = JSON.parse(document.querySelector(selector).getAttribute("data-sizes"));
 
@@ -656,41 +653,32 @@ function slidesHandler(){
 
             return parseInt(element, 10);
         });
-        //console.log("document", document.querySelector('.active-slide img'));
-
-        //console.log("typeof poss", typeof possibleSizes);
 
         var screenSize = document.documentElement.clientWidth;
 
         var sizeToGet = possibleSizes.filter(function(element, index, array) {
 
-            if(index === 0) {
-                if(screenSize > element) {
-                    return element;
-                }
+            if(index === 0 && screenSize > element) { // screensize is bigger than the biggest available size?
+                return element; //use the biggest available size
             }
 
-            else if(index === array.length - 1) {
-                if(screenSize < element) {
-                    return element;
-                }
+            else if(index === array.length - 1)  { //if none of the bigger images can be used, use the smallest one
+                return element; //use the smallest size
             }
-            else if(array[index + 1] && element > screenSize && screenSize > array[index + 1]) {           
-                    return element;         
+            else if(screenSize > element) {//screensize is larget than the currentElement and it isnt last or first.
+                //(!shortened_breakpoints[index + 1].nil? && img_width > shortened_breakpoints[index + 1])        
+                return element;         
             }
             else {
+
                 return;
             }
         
         });
 
-        //console.log("sizetoget", sizeToGet);
         return sizeToGet;
 
         }
-
-
-   // determineSizeToGet('.active-slide');
 
     function getResizedImage(selectorValue,selectorType, size) {
         var selectorMarker = (function() {
@@ -705,7 +693,6 @@ function slidesHandler(){
                     return '';
                 default:
                     return;
-
             }
         })();
 
@@ -719,7 +706,7 @@ function slidesHandler(){
 
 
         var selector = selectorMarker + selectorValue + ' img';
-        //console.log("selector", selector);
+
         var size = size(selector);
 
         var target = document.querySelector(selector);

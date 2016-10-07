@@ -22,7 +22,6 @@ A portfolio site with AJAX, pushstate, and an admin panel
 **TO DO**
 
 - Add staging env to test the app in the same condition as the production env.
-- There's a bug with blog tab JS where it incorrectly goes remembers the first post that you load - probably has something to do with replaceState, but haven't taken the time to look at it more closely
 
 
 ** IN PROGRESS **
@@ -40,21 +39,24 @@ A portfolio site with AJAX, pushstate, and an admin panel
 - deselect all but one folder when uploading?
 - Add friendly forwarding on admin pages
 - bug: clicking folders hides subfolders even when not appropiate
-
-- Make the slide picker bigger, esp. on mobile
-
-- check mid size responsive image loader (nexus 7 doesnt load peopleSlider/1.jpg -> returns "undefined")
-- Nav menu looks a bit off on nexus 7 (contact us button)
+- check the animations on image load, seems like they arent working quite right on first load.
 
 - Server side verification of file -> image
 
 - Add img upload link to post/new(these would be sent to s3/posts/<SLUG_NAME_HERE>)
 - Img responsivizer for posts? (check all img tags in the post, remove source, calc appropiate size, fill src)
+- change file to temp_file later (admin controller ln. 240, currently it's called file, same as the iterator of its parent block)
+- check the accuracy of the image resizer method on admin controller.
+- Use application_helper size_breakpoints in admin controller instead of own method.
+
+
 
 
 **DONE**
-
-
+- There's a bug with blog tab JS where it incorrectly goes remembers the first post that you load -> Checked, couldn't make it bug.
+- Nav menu looks a bit off on nexus 7 (contact us button) -> done, changed font-size from .navMenu a to .navMenu span then added a declaration on the /* tablet css */ part of the file
+- check mid size responsive image loader (nexus 7 doesnt load peopleSlider/1.jpg -> returns "undefined") <- done, refactored function a bit
+- Make the slide picker bigger, esp. on mobile <- Took a look at this, in review seems a fine size. Leaving it as is.
 - Add error messages for AJAX requests -> done, created something similar to the flash message of the admin pages
 - Add fullscreen for the other browsers too -> Added fullscreen API use on the mobile layout for IE/Edge/webkit/moz.
 - medium sizes blog tab CSS fixes.
