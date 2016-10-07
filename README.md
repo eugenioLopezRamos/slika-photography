@@ -21,21 +21,15 @@ A portfolio site with AJAX, pushstate, and an admin panel
 
 **TO DO**
 
-
 - Add staging env to test the app in the same condition as the production env.
-- Add error messages for AJAX requests
-
 - There's a bug with blog tab JS where it incorrectly goes remembers the first post that you load - probably has something to do with replaceState, but haven't taken the time to look at it more closely
 
 
 ** IN PROGRESS **
 
 - Test optimized image creations (in admin integration controller)
-- pointer events none durante la animacion inicial del menu
 
-- Add error handlers for failed AJAX requests and failed image fetches
 - Add image slide event listener a los dots tambien
-- Add fullscreen for the other browsers too
 
 - Related to ^, add SendGrid for mails, postgres for DB and whatever other production env changes are necessary to pass to production
 - reassemble the manifest files for the asset pipeline into 2 files: main and admin
@@ -48,21 +42,26 @@ A portfolio site with AJAX, pushstate, and an admin panel
 - bug: clicking folders hides subfolders even when not appropiate
 
 - Make the slide picker bigger, esp. on mobile
-- medium sizes blog tab CSS fixes.
-- check mid size responsive image loader (nexus 7 doesnt load peopleSlider/1.jpg -> returns "undefined")
 
-- There might be a small bug where the tab flickers due to the active-Tab assignation, need to check it out
+- check mid size responsive image loader (nexus 7 doesnt load peopleSlider/1.jpg -> returns "undefined")
+- Nav menu looks a bit off on nexus 7 (contact us button)
+
 - Server side verification of file -> image
 
 - Add img upload link to post/new(these would be sent to s3/posts/<SLUG_NAME_HERE>)
 - Img responsivizer for posts? (check all img tags in the post, remove source, calc appropiate size, fill src)
-- It isn't needed to delete the loading dots, it seems. Also they give a console error when they are removed and it tries to remove them again
+
 
 **DONE**
 
 
-
-
+- Add error messages for AJAX requests -> done, created something similar to the flash message of the admin pages
+- Add fullscreen for the other browsers too -> Added fullscreen API use on the mobile layout for IE/Edge/webkit/moz.
+- medium sizes blog tab CSS fixes.
+- pointer events none durante la animacion inicial del menu - changed. Couldn't stop touch detection on the whole document, so instead I made it so the evt listeners are assigned after the animation.
+- Add error handlers for failed AJAX requests and failed image fetches
+- It isn't needed to delete the loading dots, it seems. Also they give a console error when they are removed and it tries to remove them again <- removed the dot-removed :)
+- There might be a small bug where the tab flickers due to the active-Tab assignation, need to check it out
 - Add folder downloads to file manager
 - Add file manager mobile controls
 - file manager mobile css

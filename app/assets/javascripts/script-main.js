@@ -231,38 +231,6 @@ function homeTabHandler(){
 
 
 
-    if(document.documentElement.clientWidth<=480) {
-        (function initialMenuAnimation() {
-
-
-        header.style.height = "auto";  
-        menu.style.zIndex = "1";
-        menu.style.borderBottom = "2px solid rgb(230,230,230)";
-
-        menu.style.height = maxMenuHeight + 'px';
-        prevHeight = maxMenuHeight;
-        //while(prevHeight>minimumMenuHeight) {
-
-        window.setTimeout(function() {
-        menu.style.animation = "menuContract 1s forwards";
-         //closes if<minHeight
-        prevHeight = 0;
-        }, 1000);
-            
-        //} //closes while loop
-        window.setTimeout(function(){
-        if(prevHeight<minimumMenuHeight) {
-            prevHeight = 0;
-            menu.removeAttribute("style");
-            header.removeAttribute("style"); 
-
-        }   
-            
-        }, 1850); 
-
-        })(); //closes function
-
-    }
 
 
     function touchStartHandler(event) { //handles touching the screen
@@ -398,9 +366,44 @@ function homeTabHandler(){
             
         })();
 
+
+    if(document.documentElement.clientWidth<=480) {
+        (function initialMenuAnimation() {
+
+        header.style.height = "auto";  
+        menu.style.zIndex = "1";
+        menu.style.borderBottom = "2px solid rgb(230,230,230)";
+
+        menu.style.height = maxMenuHeight + 'px';
+        prevHeight = maxMenuHeight;
+
+        menu.style.animation = "menuContract 1.2s forwards";
+
+        prevHeight = 0;
+
+        window.setTimeout(function(){
+     
+            prevHeight = 0;
+            menu.removeAttribute("style");
+            header.removeAttribute("style"); 
+            document.addEventListener("touchstart", touchStartHandler);
+            document.addEventListener("touchend", touchEndHandler);  
+            
+        }, 1200); 
+
+        })(); //closes function
+
+    } 
+    else {
+
+        document.addEventListener("touchstart", touchStartHandler);
+        document.addEventListener("touchend", touchEndHandler);
+
+    }
+
+
 //need to check for device orientation so scrolling the menu down is disabled (and event.preventDefault() is not enabled)
-    document.addEventListener("touchstart", touchStartHandler);
-    document.addEventListener("touchend", touchEndHandler);
+
 
 })();
 /************************************************************************ END OF MENU SLIDEDOWN HANDLER***********************************************************************************************************/
@@ -497,7 +500,7 @@ typeof executeAJAX === "undefined" ? executeAJAX = true : executeAJAX = executeA
 
 
 var stateToRequest = status.state;
-console.log("stateToRequest", stateToRequest);
+//console.log("stateToRequest", stateToRequest);
 var trimmedStatus = status.state.replace('State', '');
 
 activeTabValue = trimmedStatus + "Tab" ; //sets activeTabvalue
@@ -520,19 +523,8 @@ $.ajax({url: "/tab_getter", data: {tab: activeTabValue, id: status[activeTabValu
 
 }).fail(function(response){
 
-
     banner.classList.add("error");
-
-    if(response === "net::ERR_INTERNET_DISCONNECTED") {
-
-        bannerMessage.innerHTML = "No internet connection detected!"
-
-    }
-    else {
-
-        bannerMessage.innerHTML = "Oops, we couldn't retrieve that, please try again"
-    }
-
+    bannerMessage.innerHTML = "Oops, we couldn't retrieve that, please try again.";
 });
 
 }
@@ -644,11 +636,11 @@ function slidesHandler(){
     /*var imageAddress = 'images/' + currentTab + '/' + imageSize + '-' + 'asdasd'
     $.ajax({url:, type: 'GET', data: currentTabActiveIndex})*/
 
-    function removeLoadingDots(event) {
+   // function removeLoadingDots(event) {
 
-        event.target.parentElement.removeChild(document.querySelector('.dots-container'));
+     //   event.target.parentElement.removeChild(document.querySelector('.dots-container'));
         
-    }
+    //}
 
 
     function determineSizeToGet(selectorValue) {
@@ -717,6 +709,14 @@ function slidesHandler(){
             }
         })();
 
+        function imgLoadError(event) {
+            console.log("evttt", event.target);
+          //  alert("HEEY");
+            banner.classList.add("error");
+            bannerMessage.innerHTML = "The image did not load in time! Please try again";
+            ///event.target.removeEventListener("error", imgLoadError);
+        }
+
 
         var selector = selectorMarker + selectorValue + ' img';
         //console.log("selector", selector);
@@ -729,8 +729,11 @@ function slidesHandler(){
         var newFile = size[0] + "-" + file;
         var src = route + "/" + newFile;
 
-        target.addEventListener("load",removeLoadingDots)
+        //target.addEventListener("load",removeLoadingDots)
+
+
         target.setAttribute("src", src);
+        target.addEventListener("error", imgLoadError);
 
     }
 
@@ -769,12 +772,52 @@ function slidesHandler(){
     }, 200);
 
     if(doubleTapCounter >= 2) { // if a double tap happens, toggles between fullscreen and non-fullscreen.
-        if(document.webkitExitFullscreen()) { 
-            document.webkitExitFullscreen();  
+        if(document.webkitFullscreenElement) { 
+
+            document.webkitExitFullscreen();
+
         } 
-        else if(!document.fullScreenElement) { //calls fullscreen API on webkit, need to add firefox/IE. Element to fullscreen is jumbotron, since that's the element that has the content.
-            document.getElementById("jumbotron").webkitRequestFullscreen();   
+        else if(document.mozFullScreenElement) {//document.mozCancelFullScreen()) {
+            document.mozCancelFullScreen(); 
+        }
+        else if(document.msFullscreenElement) {//document.msExitFullscreen()) {
+
+            document.msExitFullscreen();
+         
+        }
+        else if(document.fullscreenElement) {
+
+            document.exitFullscreen();
+              
+        }
+
+        if(document.getElementById("jumbotron").webkitRequestFullscreen) { 
+
+            document.getElementById("jumbotron").webkitRequestFullscreen();
+            banner.classList.add("info");
+            bannerMessage.innerHTML = "Double tap again to leave fullscreen mode";  
         } 
+        else if(document.getElementById("jumbotron").mozRequestFullScreen) {//document.mozCancelFullScreen()) {
+            document.getElementById("jumbotron").mozRequestFullScreen();
+            banner.classList.add("info");
+            bannerMessage.innerHTML = "Double tap again to leave fullscreen mode";
+           
+        }
+        else if(document.getElementById("jumbotron").msRequestFullscreen) {//document.msExitFullscreen()) {
+        
+            document.getElementById("jumbotron").msRequestFullscreen();
+            banner.classList.add("info");
+            bannerMessage.innerHTML = "Double tap again to leave fullscreen mode";  
+
+        }
+        else if(document.getElementById("jumbotron").requestFullscreen) {
+            document.requestFullscreen();  
+            banner.classList.add("info");
+            bannerMessage.innerHTML = "Double tap again to leave fullscreen mode";              
+        }
+
+
+
         doubleTapCounter = 0;
     }
         touchStartPosX =  event.changedTouches[0].clientX; //assigns X coordinate of the touchstart event.
@@ -782,7 +825,7 @@ function slidesHandler(){
     },
 
     touchMove: function(event){ //this property is called by the movePass handler function from the event listener set in .touchStart
-        event = this.event || window.event; //window. event is for IE compat, need to check if this is still needed.
+
         var originalPosX = touchStartPosX; //the X coords of the start of the touch event, set in .touchStart
         var newX = event.changedTouches[0].clientX; //the current position of the touch X coords (after the user has slid his/her finger)
         var deltaX = newX - originalPosX;//the difference between the start X position and the current position - a negative value means newX is to the left of originalPosX, positive is to the right
@@ -1256,11 +1299,20 @@ modifyInputValues(notClickedObjects, false);
 //Responses to form submission
 
 $('#contactUsForm').on("ajax:success", function(e, data, status, xhr) {
-    alert("We have been emailed");
+    
+
+    banner.classList.add("info");
+
+    bannerMessage.innerHTML = "We have been emailed. Thanks!";
+
     initInputs();
 });
+
 $('#contactUsForm').on("ajax:failure", function(e, data, status, xhr) {
-   alert("Unfortunately, an error has occurred:", status, xhr); 
+
+        banner.classList.add("error");
+        bannerMessage.innerHTML = "Oops, something went wrong. Please try again";
+
 });
 
 
@@ -1562,6 +1614,10 @@ function blogTabHandler(postToRequest, setListeners) {
         
       //  history.replaceState(stateObject, "state", "");
             setActivePost();
+    }).fail(function(response) {
+
+            banner.classList.add("error");
+            bannerMessage.innerHTML = "Oops, we couldn't retrieve that, please try again.";
     });
     
     } else if(typeof postToRequest == "undefined"){ //this is used when states are different
@@ -1605,7 +1661,10 @@ function blogTabHandler(postToRequest, setListeners) {
             setActivePost();
 
         }).fail(function(response) {
-            alert("Sorry, something went wrong: " + response.status + ": " + response.responseText);
+
+            banner.classList.add("error");
+            bannerMessage.innerHTML = "Oops, we couldn't retrieve that, please try again.";
+    
             });                    
             
             
