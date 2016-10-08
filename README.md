@@ -48,9 +48,9 @@ _admin controller_
 
 _public front end_
 - Add image slide event listener a los dots tambien
-- check the animations on image load, seems like they arent working quite right on first load.
-- Add loading message
-- Contact tab is bad. Review
+- clicking the "logo" on mobile should show the full height menu
+
+- See someway of not loading the fb script on tab load, its really really slow
 
 _admin panel front end_
 - Add created files to the file manager (front end)
@@ -63,7 +63,9 @@ _admin panel front end_
 
 
 **DONE**
-
+- Add loading message to the tab getter requests - Done and fixed a bug about referencing a nonexistant DOM object (the msg banners when changing tabs)
+- check the animations on image load, seems like they arent working quite right on first load. - They seem to be working fine now.
+- Contact tab is bad. Review - Fixed. Changed animations.
 - check the accuracy of the image resizer method on admin controller. -> Done, refactored the function a bit.
 - change |file| to temp_file later (admin controller ln. 240, currently it's called file, same as the iterator of its parent block)
 - Use application_ helper size_breakpoints in admin controller instead of own method.

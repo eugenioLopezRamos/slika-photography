@@ -21,15 +21,19 @@ state: activeTabValue.replace('Tab', 'State'),
 
 };
 
-var banner = document.getElementById("messages-banner");
-var bannerMessage = document.getElementById("message-text");
+function useMessagesBanner(typeOfMessage, message) {
+    var banner = document.getElementById("messages-banner");
+    var bannerMessage = document.getElementById("message-text");
+    banner.classList.add(typeOfMessage); //should be "info" or "error"
+    bannerMessage.innerHTML = message;
 
-function removeBannerClasses(event) {
-    event.target.className = "";
-    event.target.classList.add("messages");
+    function removeBannerClasses(event) {
+        event.target.className = "";
+        event.target.classList.add("messages");
+    }
+    banner.addEventListener("animationend", removeBannerClasses);
 }
 
-banner.addEventListener("animationend", removeBannerClasses);
 
 typeof stateObject[activeTabValue] == "undefined" ? stateObject[activeTabValue] = 1 : "";
 //console.log("first state", stateObject[activeTabValue]);
@@ -513,7 +517,13 @@ if(isBlogUpdate) {
 
 if(executeAJAX) { //used for nav menu clicks
 
-$.ajax({url: "/tab_getter", data: {tab: activeTabValue, id: status[activeTabValue]}, type: 'GET', dataType: 'html'}).done(function(response) {
+    useMessagesBanner("info", "Loading..."); 
+    console.log("logit");
+
+$.ajax({url: "/tab_getter", 
+        data: {tab: activeTabValue, id: status[activeTabValue]}, 
+        type: 'GET', 
+        dataType: 'html'}).done(function(response) {
 
     stateObject.state = status.state;
     stateObject[activeTabValue] = isNaN(status[activeTabValue]) ? 1 : status[activeTabValue];
@@ -523,8 +533,7 @@ $.ajax({url: "/tab_getter", data: {tab: activeTabValue, id: status[activeTabValu
 
 }).fail(function(response){
 
-    banner.classList.add("error");
-    bannerMessage.innerHTML = "Oops, we couldn't retrieve that, please try again.";
+     useMessagesBanner("error", "Oops, we couldn't retrieve that. Please try again"); 
 });
 
 }
@@ -588,7 +597,7 @@ checkForSliders(contentParentNode); //checks all nodes of content-Tabs for the e
 //}, 200);
 
  if(!document.getElementsByClassName("content-Tabs")[0].classList.contains("active-Tab")) {
-document.getElementsByClassName("content-Tabs")[0].classList.add("active-Tab");
+    document.getElementsByClassName("content-Tabs")[0].classList.add("active-Tab");
 } 
 }
 
@@ -699,8 +708,7 @@ function slidesHandler(){
         function imgLoadError(event) {
             console.log("evttt", event.target);
           //  alert("HEEY");
-            banner.classList.add("error");
-            bannerMessage.innerHTML = "The image did not load in time! Please try again";
+              useMessagesBanner("error", "The image did not load in time. Please try again"); 
             ///event.target.removeEventListener("error", imgLoadError);
         }
 
@@ -781,26 +789,28 @@ function slidesHandler(){
         if(document.getElementById("jumbotron").webkitRequestFullscreen) { 
 
             document.getElementById("jumbotron").webkitRequestFullscreen();
-            banner.classList.add("info");
-            bannerMessage.innerHTML = "Double tap again to leave fullscreen mode";  
+         //   banner.classList.add("info");
+         //   bannerMessage.innerHTML = "Double tap again to leave fullscreen mode"; 
+            useMessagesBanner("info", "Double tap again to leave fullscreen mode"); 
         } 
         else if(document.getElementById("jumbotron").mozRequestFullScreen) {//document.mozCancelFullScreen()) {
             document.getElementById("jumbotron").mozRequestFullScreen();
-            banner.classList.add("info");
-            bannerMessage.innerHTML = "Double tap again to leave fullscreen mode";
-           
+         //   banner.classList.add("info");
+          //  bannerMessage.innerHTML = "Double tap again to leave fullscreen mode";
+            useMessagesBanner("info", "Double tap again to leave fullscreen mode");         
         }
         else if(document.getElementById("jumbotron").msRequestFullscreen) {//document.msExitFullscreen()) {
         
             document.getElementById("jumbotron").msRequestFullscreen();
-            banner.classList.add("info");
-            bannerMessage.innerHTML = "Double tap again to leave fullscreen mode";  
-
+            //banner.classList.add("info");
+            //bannerMessage.innerHTML = "Double tap again to leave fullscreen mode";  
+            useMessagesBanner("info", "Double tap again to leave fullscreen mode"); 
         }
         else if(document.getElementById("jumbotron").requestFullscreen) {
             document.requestFullscreen();  
-            banner.classList.add("info");
-            bannerMessage.innerHTML = "Double tap again to leave fullscreen mode";              
+           // banner.classList.add("info");
+           // bannerMessage.innerHTML = "Double tap again to leave fullscreen mode"; 
+            useMessagesBanner("info", "Double tap again to leave fullscreen mode");              
         }
 
 
@@ -1288,17 +1298,19 @@ modifyInputValues(notClickedObjects, false);
 $('#contactUsForm').on("ajax:success", function(e, data, status, xhr) {
     
 
-    banner.classList.add("info");
+   // banner.classList.add("info");
 
-    bannerMessage.innerHTML = "We have been emailed. Thanks!";
+   // bannerMessage.innerHTML = "We have been emailed. Thanks!";
+    useMessagesBanner("info", "We have been emailed. Thanks!"); 
 
     initInputs();
 });
 
 $('#contactUsForm').on("ajax:failure", function(e, data, status, xhr) {
 
-        banner.classList.add("error");
-        bannerMessage.innerHTML = "Oops, something went wrong. Please try again";
+      //  banner.classList.add("error");
+      //  bannerMessage.innerHTML = "Oops, something went wrong. Please try again";
+        useMessagesBanner("error", "Oops, something went wrong. Please try again"); 
 
 });
 
@@ -1462,21 +1474,54 @@ contactForm.style.animation="none";
 
 
 contactButton.onclick = function() {
-     
-contactButton.style.animation = "contract3d 3s forwards";    
-contactText.style.animation = "contract-text3d 2s forwards";
-contactForm.style.animation = "contract-form3d 2s forwards"; 
-aboutButton.style.animation ="expand3d 1.5s forwards";
+
+   // contactButton.style.animation = "fadeOut 0.3s forwards";
+    contactText.style.animation = "fadeOut 0.3s forwards";
+
+//these scripts are delayed sometimes while the fb script loads :/ will try to fix
+    setTimeout(function(){
+    
+       // contactButton.style.display = "none";    
+        contactText.style.display = "none";
+
+     //   contactButton.style.animation = "none";
+        contactText.style.animation = "none";
+
+        aboutButton.style.display = "flex";
+        contactForm.style.display = "block";
+
+        aboutButton.style.animation = "imgFadeIn 0.5s forwards";
+        contactForm.style.animation = "imgFadeIn 0.5s forwards";
+
+    }, 301)
 
 };
 
 aboutButton.onclick = function() {
 
-contactButton.style.animation = "uncontract3d 3s forwards";    
-contactText.style.animation ="uncontract-text3d 2s forwards";
-contactForm.style.animation = "uncontract-form3d 2s forwards";
-aboutButton.style.animation ="unexpand3d 1.5s forwards";   
-   
+    aboutButton.style.animation = "fadeOut 0.3s forwards";
+    contactForm.style.animation = "fadeOut 0.3s forwards";
+
+    setTimeout(function(){
+
+        aboutButton.style.display = "none"; 
+        contactForm.style.display = "none";
+
+        aboutButton.style.animation = "none"; 
+        contactForm.style.animation = "none";
+
+       // contactButton.style.display = "flex";  
+        contactText.style.display = "block";
+
+        //contactButton.style.animation = "imgFadeIn 0.5s forwards"; 
+        contactText.style.animation = "imgFadeIn 0.5s forwards";
+
+
+    }, 301)
+
+
+
+
     
 };
 
@@ -1602,8 +1647,7 @@ function blogTabHandler(postToRequest, setListeners) {
             setActivePost();
     }).fail(function(response) {
 
-            banner.classList.add("error");
-            bannerMessage.innerHTML = "Oops, we couldn't retrieve that, please try again.";
+        useMessagesBanner("error", "Oops, we couldn't retrieve that. Please try again"); 
     });
     
     } else if(typeof postToRequest == "undefined"){ //this is used when states are different
@@ -1648,8 +1692,7 @@ function blogTabHandler(postToRequest, setListeners) {
 
         }).fail(function(response) {
 
-            banner.classList.add("error");
-            bannerMessage.innerHTML = "Oops, we couldn't retrieve that, please try again.";
+            useMessagesBanner("error", "Oops, we couldn't retrieve that. Please try again"); 
     
             });                    
             
