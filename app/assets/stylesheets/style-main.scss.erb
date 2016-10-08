@@ -140,16 +140,16 @@ to {
 
 @keyframes contract-form3d {
 from {
-  transform:translate3d(0, 100vh,0);
+  transform:translate3d(0, 100vh, 0);
 
 }  to {
-  transform: translate3d(0, -30vh,0);
+  transform: translate3d(0, calc(-36vh),0);
 }
 }
 
 @keyframes uncontract-form3d {
  from {
-   transform: translate3d(0,-30vh,0);
+   transform: translate3d(0, calc(-36vh),0);
 }  
 to {
  transform: translate3d(0, 100vh,0);
@@ -236,6 +236,7 @@ font-size: 1em;
 width:100%;
 color: white;
 padding: 5px;
+z-index: 9001;
 
 
 animation: messageBoxAnim 1.5s forwards;
@@ -275,8 +276,14 @@ animation-delay: 2.5s;
 .messages.error span {
 
 background-color: #D64D4D;
-font-style: bold;
+font-weight: bold;
 
+
+}
+
+.messages.info span {
+background-color: #333;
+font-weight: bold;
 
 }
 
@@ -1749,12 +1756,12 @@ width: 100%;
 
 #contactContent {
 
-width: calc(100% - 10px);
-height: 300%;
-/*max-height: 100vh;*/
+width: 100%;
+
+height: 100%;
+
 display: flex;
 flex-direction: column;
-margin: 0px 5px 0px 5px;
 overflow: hidden;
 }
 
@@ -1781,10 +1788,9 @@ display: inline-block;
 
 .contactText {
 max-width: 100vw;
-width: 100%;
-margin-left:auto;
-margin-right: auto;
-height: 50%;
+width: 95%;
+margin: 0 auto 0 auto;
+will-change: opacity;
 }
 
 .textBlock {
@@ -1804,22 +1810,27 @@ font-size: 2em;
 font-size: 0.95em;
 display: block;
 width: 100%;
+margin-bottom: 10px;
 
 }
 
-.contactFormOuterBorder {
+/*.contactFormOuterBorder {
 margin: 0 -5px 0 -5px;
 height: auto;
 width: auto;
-}
+}*/
 
 .contactFormContainer {
-transform: translate3d(0, 100vh, 0); 
+/*transform: translate3d(0, 100vh, 0); */
 height: auto;
+min-height: 20em;
+margin-top: 70px;
 width: 100%;
 overflow: visible;
 text-align: center;
 justify-content: center;
+display:none;
+will-change: opacity;
   
 }
 
@@ -1834,32 +1845,19 @@ height:60px;
 }
 
 .contactButton {
-/*
-margin-top: 0;
-transform: translate3d(-50%, -45vh, 0); 
-margin-bottom: 0;
-display: flex;
-justify-content: center;
-background-color: #333;
-height: 3.125em; 
-font-family:  Calibri, Helvetica, Arial, sans-serif;
-color: white;
-border: 0.0625em solid white;
-font-style: italic;
-position: absolute; 
-left: 50%;*/
 
 margin: 0 auto 0 auto;
 display: flex;
 justify-content: center;
 background-color: #333;
-height: 50px;
+height: 3.125em; 
+min-height: 3.125em; /* button becomes smaller when viewport height gets smaller and its position is relative.This stops that */
 font-family: Calibri, Helvetica, Arial, sans-serif;
 color: white;
 border: 0.0625em solid white;
 font-style: italic;
-position: relative;
-
+position: static;
+will-change: opacity;
 
 }
 
@@ -1873,7 +1871,7 @@ vertical-align: middle;
 
 .aboutButton {
 
-transform: translate3d(0, -3.25em, 0);  /*3.125em height + 2*0.0625em borders*/
+/*transform: translate3d(0, -3.25em, 0);  /*3.125em height + 2*0.0625em borders*/
 left: calc(50% - 50px);
 display: flex;
 justify-content: center;
@@ -1886,6 +1884,9 @@ color: white;
 border: 0.0625em solid white; /*1px*/
 font-style: italic;
 position: absolute;
+margin-top: 5px;
+display:none;
+will-change: opacity;
 
 }
 

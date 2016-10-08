@@ -1,10 +1,9 @@
 <%= form_for :contact_mailer, remote: true, html: {id: "contactUsForm"} do |f| %>
 
-<%=f.text_field :client_name, name: 'clientName' %>
-<%=f.email_field :client_email, name: 'clientEmail' %>
-<%=f.text_field :client_subject, name: 'clientSubject' %>
-<%=f.text_area :client_message, name: 'clientMessage' %>
-
-<%= f.submit yield(:button_text), name: 'submit' %>
+    <%=f.text_field :client_name, name: 'clientName' %>
+    <%=f.email_field :client_email, name: 'clientEmail' %>
+    <%=f.text_field :client_subject, name: 'clientSubject' %>
+    <%=f.text_area :client_message, name: 'clientMessage' %>
+    <%= f.submit yield(:button_text), name: 'submit' %>
 
 <% end %>
