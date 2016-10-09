@@ -18,7 +18,7 @@ before_action :create_download_log, only: :download_file
   end
 
 
-  def optimize_images #(*images_array)
+  def optimize_images
     
     @images_to_optimize = @actually_images
 
@@ -30,68 +30,53 @@ before_action :create_download_log, only: :download_file
 
       img_height = img[:height] #height of the image
       img_width = img[:width] #width
-      
-      # orig_file = File.open(image.tempfile.path, 'rb')
-      #File.open(image.tempfile.path, 'rb') -> write en otro archivo -> cerrar el original -> rewind.
 
       base_file = File.open(image.tempfile.path, 'rb')
-
       new_file = File.open("#{Rails.root}/tmp/original-#{image.original_filename}", 'wb')
-
       file_data = base_file.read()
-
       new_file.write(file_data)
-
       @to_upload << new_file
 
       applicable_widths = []
 
-      img_sizes = size_breakpoints #comes from ApplicationController
+      img_sizes = size_breakpoints #comes from ApplicationController (application helper)
       shortened_breakpoints = img_sizes.slice(0..-2) #ignores the last size, the thumbnail, since thats always included
 
-      shortened_breakpoints.each_with_index do |width, index| #last size (thumbnail size, the smallest) is excluded
-        #since it will always be included
-      
-        # width.next returns the next value ie the next integer, not the next element of the array
+      shortened_breakpoints.each_with_index do |width, index| 
 
-        if index === 0 && img_width > shortened_breakpoints[0] #img_width < shortened_breakpoints[0] && img_width >= shortened_breakpoints[-1]   #smaller than the first (biggest) and larger than the last (smallest)
+        if index === 0 && img_width > shortened_breakpoints[0] 
           applicable_widths << shortened_breakpoints[0]
         elsif (!shortened_breakpoints[index + 1].nil? && img_width > shortened_breakpoints[index + 1])
           applicable_widths << shortened_breakpoints[index + 1]
-        elsif index === (shortened_breakpoints.length - 1) && img_width<shortened_breakpoints[-1]# && shortened_breakpoints[index + 1].nil?
-          #  debugger
+        elsif index === (shortened_breakpoints.length - 1) && img_width<shortened_breakpoints[-1]
             applicable_widths << img_width
 
-        end #end if img_width > size
+        end #end if img_width vs size
       
       end
 
       #adds the thumbnail
       applicable_widths << img_sizes[-1]
 
-      #create blurry preload image
-      #not going to do it, It's probably not worth it (since it will do 2 downloads - I'll use a loading anim in the view and the 
-      # retrieve the appropiate version w/ AJAX)
-
-        applicable_widths.each do |app_width|
+        applicable_widths.each do |app_width| #convert the image to each applicable with
 
           MiniMagick::Tool::Convert.new do |convert| #convert the images
-            destination_file = File.open("#{Rails.root}/tmp/#{app_width}-#{image.original_filename}", 'w+b')
 
+            destination_file = File.open("#{Rails.root}/tmp/#{app_width}-#{image.original_filename}", 'w+b')
             convert << image.tempfile.path
 
             convert.interlace "plane"
             convert.quality "80"
-            new_height = img_height * (app_width.to_f / img_width.to_f) #otherwise it's zero because integers.
+            new_height = img_height * (app_width.to_f / img_width.to_f) #Needs to be float or it's always zero.
             convert.resize("#{app_width}x#{new_height}")       
 
-            convert << destination_file.path #"#{Rails.root}/tmp/temp-#{image.original_filename}" 
+            convert << destination_file.path  
           
-            @to_upload << destination_file #adds file to the array to be uploaded when the original function continues
+            @to_upload << destination_file #adds file to the array to be uploaded when the caller method continues
  
           end #ends minimagick block
 
-        end #app_width do
+        end #ends app_width do
           
             image.tempfile.close
             image.tempfile.unlink
@@ -108,8 +93,8 @@ before_action :create_download_log, only: :download_file
     @actually_images = Array.new #will contain all files that are images after checking with mimemagic
     response_message = String.new #Response to be sent back to client
     uploaded_file_list = String.new #Contains all successfully uploaded files, to be included in response_message
-    uploaded_file_count = 0
-    #need to change that message, not always will all files be successfully uploaded
+    uploaded_file_count = 0 # amount of successfully uploaded files.
+
 
     if Rails.env.test?
       @max_size_upload_mb = 5 #Max upload 5mb on test env
@@ -121,7 +106,7 @@ before_action :create_download_log, only: :download_file
     
       params[:image].each do |image|
 
-        if !MimeMagic.by_magic(image).nil? && MimeMagic.by_magic(image).image? 
+        if !MimeMagic.by_magic(image).nil? && MimeMagic.by_magic(image).image?  #Some files, such as JS/SCSS return MIME type nil when checking by_magic. Since file extension MIME detection is unreliable, I've decided to require !MIME.nil?
           #check that the attached file is actually an image
           @actually_images.push image      
           @total_size_mb += image.tempfile.size/1024/1024
@@ -146,7 +131,7 @@ before_action :create_download_log, only: :download_file
       
       s3 = Aws::S3::Client.new #create the client
       
-        optimized_array = optimize_images
+        optimized_array = optimize_images # AdminController#optimize_images
         optimized_array.each do |image|
           
           image_file = image
@@ -160,16 +145,16 @@ before_action :create_download_log, only: :download_file
           uploaded_file_route = s3.list_objects(bucket: ENV['AWS_S3_BUCKET'], marker: image_file_route).contents
           uploaded_file_route = uploaded_file_route.select{ |entry| entry.key === "#{image_file_route}#{image_file_name}"  }.map(&:key)
           uploaded_file_count += 1
-          uploaded_file_list << uploaded_file_route.to_s.gsub(/\"*\[*\]*/, '') << "<br />"
+          uploaded_file_list << "<span class='uploaded-file-list-item'>" << uploaded_file_route.to_s.gsub(/\"*\[*\]*/, '') << "</span>" << "<br />"
           
           image.close
           File.unlink(image)
 
         end # @optimized_array end
 
-      #adds all messages and sends them
+      #adds all messages 
       if uploaded_file_count > 0
-        response_message << "#{"File".pluralize(uploaded_file_count)} successfully uploaded. #{"Location".pluralize(uploaded_file_count)}:<br />"
+        response_message << "#{uploaded_file_count} #{"File".pluralize(uploaded_file_count)} successfully uploaded. #{"Location".pluralize(uploaded_file_count)}:<br />"
       end
 
       response_message << uploaded_file_list
@@ -182,13 +167,12 @@ before_action :create_download_log, only: :download_file
 
   def download_file
 
-  #  download_messages_log = Tempfile.new("download_log.txt", "#{Rails.root}/tmp")
     @operation_results = []
     downloaded_file_count = 0
    
     selected_files = Array.new
     files_array = ActiveSupport::JSON.decode params[:files]
-    #same as delete, check if every item to see if it's a folder, if it is s3.list_objects, add all children keys to the array
+    #same as delete, check every item to see if it's a folder, if it is s3.list_objects, add all children keys to the array
     #then array.uniq! it up
 
     s3 = Aws::S3::Client.new

@@ -8,8 +8,6 @@ var getTabFromUrl = window.location.pathname.replace('/', '').split("/")[0];//.r
 
 var activeTabValue = getTabFromUrl + 'Tab'; //used to manage the state of the different tabs
 
-
-
 var stateObject = {// initializes the state object for use in the nav menu handler
 state: activeTabValue.replace('Tab', 'State'),
 /*blogTab: (function() { //returns the post number (or slug)

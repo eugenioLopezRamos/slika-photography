@@ -207,7 +207,7 @@ var fileManager = function(arrayOfFiles) {
 	document.getElementById('file_input_field').addEventListener('change', function() {
 		var maxMBs = 50; //max mb for uploads
 		var caller = this; //the element that changed.In this case, since it's an id it's unique anyway.
-
+		
 		var sizeInMBs = (function(){
 									var totalSize = 0;
 									var i = 0;
@@ -230,7 +230,7 @@ var fileManager = function(arrayOfFiles) {
 
 			}
 		else {
-	
+			console.log("fire again", caller.files);
 			populateFileDashboard(caller.files, "file-name");
 
 		}
@@ -256,7 +256,7 @@ var fileManager = function(arrayOfFiles) {
 				//remove each element.
 			}
 			
-		//	console.log("fileset", fileset);
+
 			var myArray = [].slice.call(fileset).map(function(element, index,array) {	
 				return element;
 			});
@@ -269,14 +269,6 @@ var fileManager = function(arrayOfFiles) {
 				createdEntry.classList.remove("file");
 				createdEntry.classList.add("file-info", "name");
 
-
-
-				//var hr = newDivider().classList.add("file-divider");
-				//var newHr = newDivider();
-				//createdEntry.appendChild(newHr);
-
-				
-				//insertar las otras versiones y un <hr> separando cada archivo + versiones de los otros.
 			});
 
 
@@ -290,7 +282,7 @@ var fileManager = function(arrayOfFiles) {
 				//base version (full hd)
 				//HD version (fit for 1366*768 res screens)
 				//tablet version (900*600 approx. dimensions)
-				//<hr> separator
+
 
 				//smaller versions would create up to the original size, that is:
 				// a 900*600 image would only create 1 version: mobile
@@ -306,12 +298,6 @@ var fileManager = function(arrayOfFiles) {
 				
 
 				document.getElementById("file-original-size").appendChild(newLi);
-			//	document.getElementById("file-original-size").appendChild(newHr);
-				/*var newLiInfo = document.createElement("li");
-				newLiInfo.classList.add("file-info");
-				newLi.id = element.name + "-compSize";
-				newLi.innerText = "Click get Processed data to get";*/
-
 
 				var newButton = document.createElement("button");
 				var newButton2 = document.createElement("button");
@@ -327,18 +313,8 @@ var fileManager = function(arrayOfFiles) {
 				
 				document.getElementById("file-compressed-size").appendChild(newButton);
 
-			//	document.getElementById("file-compressed-size").appendChild(newHr);
-
-				/*var newButtonContainer = document.createElement("div");
-				newButtonContainer.id = element.name + "-buttonContainer";
-				newButtonContainer.classList.add("file-list-button-container");
-				newButtonContainer.appendChild(newButton);
-				newButtonContainer.appendChild(newButton2);
-
-				document.getElementById("file-serverside-info").appendChild(newButtonContainer);*/
-				//document.getElementById("file-serverside-info").appendChild(newButton2);
 				document.getElementById("file-serverside-info").appendChild(newButton2);
-			//	document.getElementById("file-serverside-info").appendChild(newHr);			
+	
 	
 		}
 
@@ -477,10 +453,28 @@ var fileManager = function(arrayOfFiles) {
 	    event.preventDefault();
 
 	    var uploadRoute;
+		var selectedFiles = document.getElementsByClassName('selected');
+	    if (selectedFiles.length === 1) {
+	        uploadRoute = selectedFiles[0].innerText;
+	    } else if (selectedFiles.length > 1)  {
 
-	    if (document.getElementsByClassName('selected').length > 0) {
-	        uploadRoute = document.getElementsByClassName('selected')[0].innerText;
-	    } else {
+			var answer = window.confirm("Files will be uploaded to the first selected folder:\n" + selectedFiles[0].innerText +//
+			"\n Do you wish to continue?")
+
+			if (!answer) {
+				return;
+			}
+			else {
+				uploadRoute = selectedFiles[0].innerText;
+				[].slice.call(selectedFiles).map(function(element, index, array) {
+					if(index != 0) {
+						element.classList.remove("selected");
+					}
+				});
+			}
+
+		}
+		else {
 	        uploadRoute = "";
 	    }
 
@@ -526,6 +520,36 @@ var fileManager = function(arrayOfFiles) {
 	                element.classList.toggle('selected');
 	            });
 
+				//create a virtual element that's used to make us able to extract the HTML from the response
+				var uploadsDummy = document.createElement("div");
+				uploadsDummy.className = "dummy";
+				uploadsDummy.id = "file-upload-dummy";
+				$("#file-upload-dummy").html(xhr.response);
+				document.body.appendChild(uploadsDummy);
+
+				[].slice.call(document.getElementsByClassName("uploaded-file-list-item")).map(function(element, index, array) { //really really should have made this into a named function by now.
+		
+
+					var file = element.innerHTML;	
+					var folder = element.innerHTML.split("/");
+					folder.splice(folder.length - 1);
+					folder = folder.join("/") + "/";
+					folder = document.getElementById(folder);
+					var oldCurrentFolder = currentFolder;
+					!folder ? currentFolder = root : currentFolder = folder;
+
+					if (!document.getElementById(file)) {
+						createFile(file, myArray.length); //also need to refactor that.
+					}
+
+					currentFolder = oldCurrentFolder;
+				
+				});
+
+				document.body.removeChild(uploadsDummy);
+				
+
+
 	        }
 
 	        if (xhr.status === 500) {
@@ -534,7 +558,8 @@ var fileManager = function(arrayOfFiles) {
 
 	        document.getElementById('upload-file').disabled = false;
 	        document.getElementById('file_input_field').value = "";
-
+			var evt = new Event("change");
+			document.getElementById('file_input_field').dispatchEvent(evt); //clears the preparation area, the change evt doesnt trigger naturally when setting value to ""
 	    }
 
 
