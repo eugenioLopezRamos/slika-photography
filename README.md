@@ -23,10 +23,7 @@ A portfolio site with AJAX, pushstate, and an admin panel
 
 - Add staging env to test the app in the same condition as the production env.
 
-
 ** IN PROGRESS **
-
-
 
 _s3_
 - See permission stuff for buckets (ACL, IIRC)
@@ -35,8 +32,9 @@ _heroku_
 - Related to ^, add SendGrid for mails, postgres for DB and whatever other production env changes are necessary to pass to production
 
 _misc backend_
-- reassemble the manifest files for the asset pipeline into 2 files: main and admin
-- Check if I can use cloudflare instead of cloudFront.
+
+- Move logic from slidersContent (view) to staticController and add testing.
+- In the spirit of DRYness, change the tab_ getter and post_api routes to use the normal tab/blog routes and respond to format: JS to do their current jobs.
 
 _post editor_
 
@@ -47,22 +45,26 @@ _admin controller_
 - Test optimized image creations (in admin integration controller test)
 
 _public front end_
-- Add image slide event listener a los dots tambien
-- clicking the "logo" on mobile should show the full height menu
 
-- See someway of not loading the fb script on tab load, its really really slow
+- clicking the "logo" on mobile should show the full height menu
+- See someway of not loading the fb script on tab load, its really really slow (probably just load it when clicking the fb button)
+- Theres a small bug when moving the slides to the left and to the right or viceversa (to be fixed later, its a small bug.)
 
 _admin panel front end_
-- Add created files to the file manager (front end)
-- deselect all but one folder when uploading?
+
+- Sort files into files and folders, right now it looks messy.
+
 - Add friendly forwarding on admin pages
 - bug: clicking folders hides subfolders even when not appropiate
 - Add a link to the file manager on the admin panel
 
 
-
-
 **DONE**
+
+- deselect all but one folder when uploading - Done, with confirmations.
+- Clears the upload preparation area on xhr end
+- Add created files to the file manager (front end)
+- Add image slide event listener a los dots tambien - Done, the normal evt listener works since increasing the dots' div minheight (that uses a transparent div) also increses the size of the peopleSlide div (its parent), where the evt listener is, and triggers it because of evt bubbling
 - Add loading message to the tab getter requests - Done and fixed a bug about referencing a nonexistant DOM object (the msg banners when changing tabs)
 - check the animations on image load, seems like they arent working quite right on first load. - They seem to be working fine now.
 - Contact tab is bad. Review - Fixed. Changed animations.
@@ -153,3 +155,5 @@ These are "would be nice to have"s
 - JSON based AJAX translations  
 - Polishing the new post page, the inline editor looks weird and the normal editor looks too big.
 - Resque queues for upload/convert?
+- reassemble the manifest files for the asset pipeline into 2 files: main and admin
+- Check if I can use cloudflare instead of cloudFront.
