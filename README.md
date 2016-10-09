@@ -49,18 +49,20 @@ _public front end_
 - clicking the "logo" on mobile should show the full height menu
 - See someway of not loading the fb script on tab load, its really really slow (probably just load it when clicking the fb button)
 - Theres a small bug when moving the slides to the left and to the right or viceversa (to be fixed later, its a small bug.)
+- Change the images on the home tab
 
 _admin panel front end_
 
 - Sort files into files and folders, right now it looks messy.
-
 - Add friendly forwarding on admin pages
-- bug: clicking folders hides subfolders even when not appropiate
-- Add a link to the file manager on the admin panel
+
+
 
 
 **DONE**
 
+- bug: clicking folders hides subfolders even when not appropiate - Fixed, but code is a bit convoluted
+- Add a link to the file manager on the admin panel
 - deselect all but one folder when uploading - Done, with confirmations.
 - Clears the upload preparation area on xhr end
 - Add created files to the file manager (front end)

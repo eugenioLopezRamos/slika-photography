@@ -57,9 +57,6 @@ var fileManager = function(arrayOfFiles) {
 
 	        //					nextItemValue.split(currentFolderValue) = background/
 	        //	and then you resolve the outer .split() -> images/.split(background/) = images/ is the common parent of these 2 folders
-
-	        console.log("currFolderID", currentFolderValue);
-	        console.log("next val", myArray[currIndex + 1]);
 	        currentFolder = document.getElementById(currentFolderValue.split(nextItemValue.split(currentFolderValue))) || root;
 	    }
 
@@ -178,11 +175,22 @@ var fileManager = function(arrayOfFiles) {
 			window.setTimeout(function(){
 
 	        	if(doubleClick < 2 & !continueFunction) {
-					[].slice.call(element.parentElement.children).slice(1).map(function(element, index, array) { //slice(1) excludes the span w/the name
-						element.style.display === "none" ? element.style.display = "" : element.style.display = "none";
+					var outerElement = element;
+					outerElement.classList.toggle("open");
+
+					[].slice.call(outerElement.parentElement.children).map(function(innerElement, index, array) { 
+
+						if (outerElement != innerElement){
+						
+							if(outerElement.classList.contains("open")) {
+								innerElement.style.display = "";
+							}
+							else {
+								innerElement.style.display = "none";
+							}
+						} 
 					});
 				}
-
 				doubleClick = 0;
 			}, 300)
 
@@ -535,11 +543,17 @@ var fileManager = function(arrayOfFiles) {
 					folder.splice(folder.length - 1);
 					folder = folder.join("/") + "/";
 					folder = document.getElementById(folder);
+
+					if(folder != root && !folder.classList.contains("open")) {
+						file.style.display = "none";
+					}
+					
 					var oldCurrentFolder = currentFolder;
 					!folder ? currentFolder = root : currentFolder = folder;
 
 					if (!document.getElementById(file)) {
 						createFile(file, myArray.length); //also need to refactor that.
+						
 					}
 
 					currentFolder = oldCurrentFolder;
