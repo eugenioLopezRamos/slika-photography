@@ -138,6 +138,9 @@ var fileManager = function(arrayOfFiles) {
 	            }
 	        }
 	    });
+		//here there should be a function to sort by inserting the folders first
+		
+
 
 	}
 

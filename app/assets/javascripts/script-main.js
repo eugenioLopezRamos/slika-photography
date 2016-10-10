@@ -1154,23 +1154,6 @@ function slidesHandler(){
 //Probably Fancy Programming Syndrome, but at least I learned a bit...
 function contactFormHandler() { 
  //defines a new object type - inputField, used for the data relating to the inputfields and text area for the contact form     
-if(typeof FB == "undefined") {
-console.log("FB is undefined");    
-}
-
-else {
-
-document.documentElement.clientWidth < 480 ? delay = 1800 : delay = 0;    
-(function(delay) {
-window.setTimeout(function() {
-    
-  window.fbAsyncInit(); //reloads the fb script, needed or it doesn't work when you: visit Contact -> visit another tab -> visit Contact again  
-    
-}, delay);
-
-}
-)(delay);
-}
 
 function inputField(target, textValue, eventName, eventClass, eventId, defaultValue) {
 this.target = target,
@@ -1320,19 +1303,25 @@ var fbMessageButton = document.getElementById("fbMessageButton");
 
 fbMessageButton.onclick = function() { //trying to see how to do a handler function in vanilla JS instead of jQuery
 
-//this is easier w/jquery: button.css("display", "none") ? button.show() : button.hide(); 
-var showMessageBox = function() {
+if(!document.querySelector(".socialMessageBox iframe")) {
+    
+  window.fbAsyncInit();
 
-fbMessageBox.style.position="absolute"; //this becomes an inline style instead of a css style
-fbMessageBox.style.display="inline-block";
+}
 
-};
+    //this is easier w/jquery: button.css("display", "none") ? button.show() : button.hide(); 
+    var showMessageBox = function() {
 
-var hideMessageBox = function() {
-fbMessageBox.style.display = "none";    
-};
+        fbMessageBox.style.position="absolute"; //this becomes an inline style instead of a css style
+        fbMessageBox.style.display="inline-block";
 
-window.getComputedStyle(fbMessageBox, null).getPropertyValue("display") == "none" ? showMessageBox() : hideMessageBox(); //ternary operator working - same as an IF/ELSE statement, but shorter
+    };
+
+    var hideMessageBox = function() {
+        fbMessageBox.style.display = "none";    
+    };
+
+    window.getComputedStyle(fbMessageBox, null).getPropertyValue("display") == "none" ? showMessageBox() : hideMessageBox(); //ternary operator working - same as an IF/ELSE statement, but shorter
 };
 
 
