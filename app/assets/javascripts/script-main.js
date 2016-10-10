@@ -231,10 +231,6 @@ function homeTabHandler(){
     var maxMenuHeight = clHeight - 4.25 * oneEm; //in px as integer (no 'px' after)
 
 
-
-
-
-
     function touchStartHandler(event) { //handles touching the screen
         event.stopPropagation();
         menuToggleHandler.touchStart(event);    
@@ -275,33 +271,32 @@ function homeTabHandler(){
 
 
             var isSlideAttempt = (function() { //is user trying to change slides? evaluates to true/false
-            if(Math.abs(clHeight/clWidth * deltaX)>Math.abs(deltaY)) { //checks if the pointer has moved farther to the right/left than up/down. Not perfect since height/width are different
-            //assuming 640 height, 360 width (for example. clientHeight/width are smaller since they dont consider OS/browser UI)
-            // 640/360 = ratio of height to width is 1.7 height is 1.7 times width
-            // 360/640 = ratio of width to height is 0.56 (width is 0.56 times height)
-            //So, assuming we move the touch 50% on deltaX and 50% on deltaY:
-            // 360 * 50%  = 180px on deltaX, 640 * 50% = 320px on deltaY
-            // then we multiply by the factors: for deltaX = 180*1.7 = 153px, for deltaY = 320 * 0.56 = 179.2
-            //so we end up with a small difference that favors deltaY, but remember, we are moving (in pixels) the deltaY axis way more, since it is bigger in size. Testing the site live to me it "feels" appropiate. YMMV though.
-
-            return true;    
-            } else {
-            return false;
-            }
+                if(Math.abs(clHeight/clWidth * deltaX)>Math.abs(deltaY)) { //checks if the pointer has moved farther to the right/left than up/down. Not perfect since height/width are different
+                    //assuming 640 height, 360 width (for example. clientHeight/width are smaller since they dont consider OS/browser UI)
+                    // 640/360 = ratio of height to width is 1.7 height is 1.7 times width
+                    // 360/640 = ratio of width to height is 0.56 (width is 0.56 times height)
+                    //So, assuming we move the touch 50% on deltaX and 50% on deltaY:
+                    // 360 * 50%  = 180px on deltaX, 640 * 50% = 320px on deltaY
+                    // then we multiply by the factors: for deltaX = 180*1.7 = 153px, for deltaY = 320 * 0.56 = 179.2
+                    //so we end up with a small difference that favors deltaY, but remember, we are moving (in pixels) the deltaY axis way more, since it is bigger in size. Testing the site live to me it "feels" appropiate. YMMV though.
+                    return true;    
+                } 
+                else {
+                    return false;
+                }
             })();
          
             var isScrollable = (function() {
             return {
                 topScroll: (function() {
-                                        if(document.getElementsByClassName("content-Tabs")[0].scrollTop < 5) {
-                                        return false;    
-                                        }
-                                        else {
-                                        return true;    
-                                        }
-                                        })()
-                        };
-
+                            if(document.getElementsByClassName("content-Tabs")[0].scrollTop < 5) {
+                                return false;    
+                                }
+                            else {
+                                return true;    
+                                }
+                                })()
+                            };
             })();
             var menuHeightCalculator = (function() {
                return prevHeight + deltaY;
@@ -378,20 +373,23 @@ function homeTabHandler(){
 
         menu.style.height = maxMenuHeight + 'px';
         prevHeight = maxMenuHeight;
+                //prevHeight = 0;
+        function menuAfterAnim() {
 
-        menu.style.animation = "menuContract 1.2s forwards";
-
-        prevHeight = 0;
-
-        window.setTimeout(function(){
-     
             prevHeight = 0;
             menu.removeAttribute("style");
             header.removeAttribute("style"); 
             document.addEventListener("touchstart", touchStartHandler);
-            document.addEventListener("touchend", touchEndHandler);  
-            
-        }, 1200); 
+            document.addEventListener("touchend", touchEndHandler);
+            event.target.style.animation = "";
+            menu.removeEventListener("animationend", menuAfterAnim);  
+        }
+
+        menu.addEventListener("animationend", menuAfterAnim);
+
+        menu.style.animation = "menuContract 1.2s forwards";
+
+
 
         })(); //closes function
 
@@ -401,47 +399,95 @@ function homeTabHandler(){
         document.addEventListener("touchstart", touchStartHandler);
         document.addEventListener("touchend", touchEndHandler);
 
+    } //close init
+
+    $('.menu li').click(function(event) { 
+
+        var clickedId = this.id;
+
+        console.log("evt", event);
+        console.log("evt ttgt", event.target);
+        event.preventDefault();
+
+        prevHeight = 0; //makes menu height reset to zero again
+        document.getElementsByClassName("content-Tabs")[0].style.pointerEvents = "auto";
+        
+        //document.documentElement.webkitRequestFullscreen();  
+
+        var header = document.getElementById('header');    
+        var menu = document.getElementById('menu');
+        header.removeAttribute('style');
+        menu.removeAttribute('style');
+
+        $('.menu li').css("background-color", "#333");
+
+        $('#' + clickedId).css("background-color", "#111");
+
+        stateObject.state = clickedId.replace('Tab', 'State');
+        history.pushState(stateObject, "state", "/" + clickedId.replace('Tab', ''));
+      
+        updateState(stateObject, true);
+
+    });
+
+    function showAndHideMenu(event) {
+
+        prevHeight = parseInt(getComputedStyle(menu).height, 10);
+        if(prevHeight >= minimumMenuHeight + 10) {
+
+            menu.style.height = prevHeight + 'px';
+        }else {
+            menu.removeAttribute("style");
+            header.removeAttribute("style");
+            prevHeight = "0";
+            menu.style.height = "0" + "px";
+        }
+        menu.style.animation = "";
+
+
     }
 
 
-//need to check for device orientation so scrolling the menu down is disabled (and event.preventDefault() is not enabled)
 
+    // COMPANY NAME CLICK HANDLER 
+    menu.addEventListener("animationend", showAndHideMenu); //triggered when clicking the companyName on mobile.
+    $('.companyName').click(function(event) {
+
+    event.preventDefault();
+    event.stopPropagation();
+
+    if(document.documentElement.clientWidth < 481) {
+
+      header.style.height = "auto";
+      menu.style.zIndex = "2";
+      menu.style.borderBottom = "2px solid rgb(230,230,230)";
+      var direction;
+
+      if(parseInt(getComputedStyle(menu).height, 10) < minimumMenuHeight + 10) {
+        direction = "reverse";
+
+      } else {
+          direction = "";
+      }
+
+      menu.style.animation = "menuContract 0.7s " + direction + " forwards";
+    }
+
+    else {
+        var event = new MouseEvent("click", {
+            'target': document.querySelector("a[href='/home']")
+        });
+
+        document.querySelector(".menu li").dispatchEvent(event);
+    }
+
+    });
 
 })();
 /************************************************************************ END OF MENU SLIDEDOWN HANDLER***********************************************************************************************************/
 
 /************************************************************************ START OF NAVMENU HANDLER ****************************************************************************************************************/
-$('.menu li').click(function(event) { //added event here so it doesnt fail on firefox
 
-var clickedId = this.id;
-
-event.preventDefault();
-
-prevHeight = 0; //makes menu height reset to zero again
-document.getElementsByClassName("content-Tabs")[0].style.pointerEvents = "auto";
-  
-//document.documentElement.webkitRequestFullscreen();  
-
-var header = document.getElementById('header');    
-var menu = document.getElementById('menu');
-header.removeAttribute('style');
-menu.removeAttribute('style');
-
-$('.menu li').css("background-color", "#333");
-
-$('#' + clickedId).css("background-color", "#111");
-
-stateObject.state = clickedId.replace('Tab', 'State');
-history.pushState(stateObject, "state", "/" + clickedId.replace('Tab', ''));
-
-
-
-
-
-//console.log(stateObject);
-updateState(stateObject, true);
-
-});
 /*************************************************************************************END OF NAVMENU HANDLER ************************************************************************************/
 
 function popStateHandler(popstateEvent) {
@@ -603,18 +649,6 @@ checkForSliders(contentParentNode); //checks all nodes of content-Tabs for the e
 document.getElementById(activeTabValue).style.backgroundColor = "#111";
 }
 /********************************************************************************* END OF UPDATESTATE FUNCTION ***********************************************************************************/
-
-
-/********************************************************************************** COMPANY NAME CLICKHANDLER ****************************************************************************************/
-// COMPANY NAME CLICK HANDLER - Exactly the same as clicking "Home" in the Nav menu - need to DRY it up.
-$('.companyName').click(function() {
-event.preventDefault();
-//homeState();  
-//need to add menu for mobile here (or redirect to home in all the other cases)
-
-});
-
-/********************************************************************************** END OF COMPANY NAME CLICKHANDLER ******************************************************************************/
 
 /*********************************************************************************** START OF SLIDES HANDLER ****************************************************************************************/
 function slidesHandler(){
