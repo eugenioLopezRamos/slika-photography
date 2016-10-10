@@ -450,38 +450,78 @@ function homeTabHandler(){
 
 
     // COMPANY NAME CLICK HANDLER 
-    menu.addEventListener("animationend", showAndHideMenu); //triggered when clicking the companyName on mobile.
+    //menu.addEventListener("animationend", showAndHideMenu); //triggered when clicking the companyName on mobile.
     $('.companyName').click(function(event) {
 
-    event.preventDefault();
-    event.stopPropagation();
+        event.preventDefault();
+        event.stopPropagation();
 
-    if(document.documentElement.clientWidth < 481) {
+        if(document.documentElement.clientWidth < 481) {
 
-      header.style.height = "auto";
-      menu.style.zIndex = "2";
-      menu.style.borderBottom = "2px solid rgb(230,230,230)";
-      var direction;
+            header.style.height = "auto";
+            menu.style.zIndex = "2";
+            menu.style.borderBottom = "2px solid rgb(230,230,230)";
+            menu.style.height = "100vh";
+/*  
+            if( isNaN(parseInt(menu.style.height), 10) )  {
+                menu.style.height = "0px";
+            }
+      
+            var currentHeight = parseInt(getComputedStyle(menu).height, 10);
+            var direction;
+            if(currentHeight <= minimumMenuHeight) {
+                direction = "grow";
+            }else {
+                direction = "shrink";
+            }
 
-      if(parseInt(getComputedStyle(menu).height, 10) < minimumMenuHeight + 10) {
-        direction = "reverse";
 
-      } else {
-          direction = "";
-      }
+            var menuInterval = window.setInterval(function(mexMenuHeight){
+                console.log("direction", direction);
+                console.log("menu", menu.style.height);
+                if(direction === "grow") {
+                    menu.style.height = parseInt(menu.style.height, 10) + maxMenuHeight/60 + 'px';
 
-      menu.style.animation = "menuContract 0.7s " + direction + " forwards";
-    }
+                }
+                if(direction === "shrink") {
+                    menu.style.height = parseInt(menu.style.height, 10) - maxMenuHeight/60 + 'px';
 
-    else {
-        var event = new MouseEvent("click", {
-            'target': document.querySelector("a[href='/home']")
+                }
+
+                if(direction === "grow" && parseInt(menu.style.height, 10) > 0.9 * maxMenuHeight) {
+                    menu.style.height = maxMenuHeight + 'px';
+                    window.clearInterval(menuInterval);
+                }
+                if(direction === "shrink" && parseInt(menu.style.height, 10) < minimumMenuHeight + 10) {
+                    menu.removeAttribute("style");
+                    header.removeAttribute("style");
+
+                    window.clearInterval(menuInterval);
+                }
+                prevHeight = parseInt(menu.style.height, 10);
+            }, 500/60);
+
+
+
+
+            */
+
+            $(menu).slideToggle();
+
+
+
+            
+        }
+
+        else {
+            var event = new MouseEvent("click", {
+                'target': document.querySelector("a[href='/home']")
+            });
+
+            document.querySelector(".menu li").dispatchEvent(event);
+        }
+
         });
-
-        document.querySelector(".menu li").dispatchEvent(event);
-    }
-
-    });
 
 })();
 /************************************************************************ END OF MENU SLIDEDOWN HANDLER***********************************************************************************************************/
