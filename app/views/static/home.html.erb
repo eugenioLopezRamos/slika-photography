@@ -3,16 +3,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href='https://fonts.googleapis.com/css?family=Stalemate&subset=latin,latin-ext' rel='stylesheet' type='text/css'>	    
 </head>
-
+<body>
 <div class="sitewrapper" id="sitewrapper">
-<%= render 'layouts/header' %>
-<div class="jumbotron" id="jumbotron">
+  <%= render 'layouts/header' %>
+  <div class="jumbotron" id="jumbotron">
 
-<%= render "layouts/jumbotron" %>
-</div>
-<%= render 'layouts/bottomBar' %>
+  <%= render "layouts/jumbotron" %>
+  </div>
+  <%= render 'layouts/bottomBar' %>
 </div>
 
 	<%= javascript_include_tag 'jquery' %>
+  <%= javascript_include_tag 'script-main' %>
 	<%= javascript_include_tag 'jquery_ujs' %>
-  	<%= javascript_include_tag 'script-main' %>
+
+</body>

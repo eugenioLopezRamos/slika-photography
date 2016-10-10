@@ -47,9 +47,10 @@ _admin controller_
 _public front end_
 
 - clicking the "logo" on mobile should show the full height menu
-- See someway of not loading the fb script on tab load, its really really slow (probably just load it when clicking the fb button)
+
 - Theres a small bug when moving the slides to the left and to the right or viceversa (to be fixed later, its a small bug.)
 - Change the images on the home tab
+- on mobile the menu should start expanded
 
 _admin panel front end_
 
@@ -60,7 +61,7 @@ _admin panel front end_
 
 
 **DONE**
-
+- See someway of not loading the fb script on tab load, its really really slow (probably just load it when clicking the fb button) - Kind of done, loads on startup, but can be reloaded correctly when revisiting (without reloading on every fb button click)
 - bug: clicking folders hides subfolders even when not appropiate - Fixed, but code is a bit convoluted
 - Add a link to the file manager on the admin panel
 - deselect all but one folder when uploading - Done, with confirmations.
