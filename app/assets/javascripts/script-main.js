@@ -583,7 +583,7 @@ function popStateHandler(popstateEvent) {
 //   stateObject.state = popstateEvent.state.state; //sets the state property value to the value of the state property that's on the popstate event (so, back or forwards)
    
    var isBlogUpdate = (function(){
-       if(popstateEvent.state.state == "blogState" && stateObject.state == "blogState"){
+       if(popstateEvent.state.state === "blogState" && stateObject.state === "blogState"){
            return true;
        }
    })();
@@ -673,34 +673,35 @@ blogTabHandler();
 
 else{
     
-var contentParentNode = document.getElementsByClassName("content-Tabs")[0];
+    var contentParentNode = document.getElementsByClassName("content-Tabs")[0];
 
-var checkForSliders = function(whereToCheck) {
+    var checkForSliders = function(whereToCheck) {
 
-[].slice.call(whereToCheck.children).map(function(element, index, array) {
-if(element.classList.contains(status.state.replace('State', 'Slider'))) {
-slidesHandler();
-return;
-}    
+        [].slice.call(whereToCheck.children).map(function(element, index, array) {
 
-else if(index+1>array.length) {// && contentParentNode.children.length>0) {
-var iterator = 0;
-for (iterator=0; iterator<contentParentNode.children.length; iterator++) {
-contentParentNode = whereToCheck.children[iterator];
-checkForSliders(contentParentNode);    
-}
-return;
-}
+            if(element.classList.contains(status.state.replace('State', 'Slider'))) {
+                slidesHandler();
+            return;
+            }    
 
-else {
-console.log("No sliders found");
-return;
-}  
-    
-});
-};
+            else if(index+1>array.length) {// && contentParentNode.children.length>0) {
+                var iterator = 0;
+                for (iterator=0; iterator<contentParentNode.children.length; iterator++) {
+                    contentParentNode = whereToCheck.children[iterator];
+                    checkForSliders(contentParentNode);    
+                }
+                return;
+            }
 
-checkForSliders(contentParentNode); //checks all nodes of content-Tabs for the existence of one whose class contains "<tabName>Slider" (such as peopleSlider, modelSlider, etc);
+            else {
+                console.log("No sliders found");
+                return;
+            }  
+            
+        });
+    };
+
+    checkForSliders(contentParentNode); //checks all nodes of content-Tabs for the existence of one whose class contains "<tabName>Slider" (such as peopleSlider, modelSlider, etc);
 
 }//else close   
   
