@@ -467,8 +467,7 @@ function homeTabHandler(){
             menu.style.borderBottom = "2px solid rgb(230,230,230)";
 
             document.querySelector(".companyName").style.pointerEvents = "none";
-            menu.style.pointerEvents = "none";
-  
+    
             if( isNaN(parseInt(menu.style.height), 10) )  {
                 menu.style.height = "80px";
             }
@@ -491,8 +490,8 @@ function homeTabHandler(){
                     menu.style.height = maxMenuHeight + 'px';
 
                     document.querySelector(".companyName").style.pointerEvents = "auto";
-                    menu.style.pointerEvents = "auto";
-
+           
+                    document.getElementsByClassName("content-Tabs")[0].style.pointerEvents = "auto";
                     window.clearInterval(menuInterval);
                 }
                 //the menu is set to 0 after it reaches the bottom threshold (minimumMenuHeight + 10)
@@ -501,7 +500,7 @@ function homeTabHandler(){
                     header.removeAttribute("style");
 
                     document.querySelector(".companyName").style.pointerEvents = "auto";
-
+                    document.getElementsByClassName("content-Tabs")[0].style.pointerEvents = "auto";
                     window.clearInterval(menuInterval);
                 }
                 
