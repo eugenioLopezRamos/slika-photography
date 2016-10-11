@@ -53,6 +53,7 @@ _public front end_
 _admin panel front end_
 
 - Sort files into files and folders, right now it looks messy.
+- initial presentation of file manager is wrong (subfolders shown but files hidden)
 - Add friendly forwarding on admin pages
 
 

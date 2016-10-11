@@ -539,25 +539,36 @@ var fileManager = function(arrayOfFiles) {
 				document.body.appendChild(uploadsDummy);
 
 				[].slice.call(document.getElementsByClassName("uploaded-file-list-item")).map(function(element, index, array) { //really really should have made this into a named function by now.
-		
+					console.log("list of uploads", document.getElementsByClassName("uploaded-file-list-item"));
 
 					var file = element.innerHTML;	
 					var folder = element.innerHTML.split("/");
 					folder.splice(folder.length - 1);
 					folder = folder.join("/") + "/";
-					folder = document.getElementById(folder);
 
-					if(folder != root && !folder.classList.contains("open")) {
-						file.style.display = "none";
-					}
-					
+
+
+					document.getElementById(folder) ? folder = document.getElementById(folder) : folder = root;
+
 					var oldCurrentFolder = currentFolder;
-					!folder ? currentFolder = root : currentFolder = folder;
+		
+					currentFolder = folder;
 
 					if (!document.getElementById(file)) {
 						createFile(file, myArray.length); //also need to refactor that.
 						
 					}
+					if(folder != root && !folder.firstChild.classList.contains("open")) {
+
+						document.getElementById(file).style.display = "none";
+					}
+
+					//need to add the click evt listener
+					document.getElementById(file).addEventListener("click", function(event) {
+		
+	        			toggleSelectedState(event);
+		
+	   				 });
 
 					currentFolder = oldCurrentFolder;
 				
