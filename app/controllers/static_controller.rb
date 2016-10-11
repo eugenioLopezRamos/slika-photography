@@ -93,17 +93,17 @@ class StaticController < ApplicationController
 
     @files_in_folder.select{ |key| key.start_with?("#{@full_dir}/original-")}.map do |key| #When uploading images, the original is kept as "original-<FILENAME>"
 
-        base_file = key.gsub("#{@full_dir}/original-", '')
-        versions = Array.new #Will include all the available versions of the file (depending on base_file dimensions)
+        @base_file = key.gsub("#{@full_dir}/original-", '')
+        versions = Array.new #Will include all the available versions of the file (depending on @base_file dimensions)
 
-        @files_in_folder.select { |file_route| file_route.include?(base_file) }.map do |version| #Selects all files that include a particular base file name
+        @files_in_folder.select { |file_route| file_route.include?(@base_file) }.map do |version| #Selects all files that include a particular base file name
           #so for example, 480-myimage.jpg, 700-myimage.jpg, 1100-myimage.jpg will all be taken and then added to the "versions" array
 
-          #base_filename as hashkey, [version] as value
+          #@base_filename as hashkey, [version] as value
           to_add = version.gsub("#{@full_dir}/", '') #removes the file route
-          to_add = to_add.gsub("-#{base_file}", '') #removes the dash that separates the base filename and the filename itself
+          to_add = to_add.gsub("-#{@base_file}", '') #removes the dash that separates the base filename and the filename itself
           
-          if to_add != "original" && to_add != size_breakpoints[-1].to_s && to_add != base_file #size_breakpoints comes from ApplicationHelper 
+          if to_add != "original" && to_add != size_breakpoints[-1].to_s && to_add != @base_file #size_breakpoints comes from ApplicationHelper 
           #since it's used in the admin pages(when uploading) and in this controller.
 
           #this admittedly big if statement checks that the to_add value isn't === "original", isn't the LAST item of size_breakpoints (the thumbnail size)
@@ -113,8 +113,8 @@ class StaticController < ApplicationController
 
         end
 
-        @original_files.push base_file #adds the base file to the original files Array
-        @sizes_per_file[base_file] = versions.sort! {|a,z| z.to_i <=> a.to_i } #creates an entry in the @sizes_per_file hash for the file we just added, listing
+        @original_files.push @base_file #adds the base file to the original files Array
+        @sizes_per_file[@base_file] = versions.sort! {|a,z| z.to_i <=> a.to_i } #creates an entry in the @sizes_per_file hash for the file we just added, listing
         #its available sizes
 
     end

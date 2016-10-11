@@ -31,10 +31,6 @@ _s3_
 _heroku_
 - Related to ^, add SendGrid for mails, postgres for DB and whatever other production env changes are necessary to pass to production
 
-_misc backend_
-
-- Add staticController testing (for the slides).
-
 _post editor_
 
 - Add img upload link to post/new(these would be sent to s3/posts/<SLUG_NAME_HERE>)
@@ -48,19 +44,15 @@ _public front end_
 - Theres a small bug when moving the slides to the left and to the right or viceversa (to be fixed later, its a small bug.)
 - Change the images on the home tab
 
-
 _admin panel front end_
 
 - Sort files into files and folders, right now it looks messy.
-
 - Add friendly forwarding on admin pages
-
-
 
 
 **DONE**
 
-
+- Add staticController testing (for the slides). - Done, completes the moving of logic from slidersContent to controller
 - Move logic from slidersContent (view) to staticController - Done, testing still to go
 - In the spirit of DRYness, change the tab_ getter and post_api routes to use the normal tab/blog routes and respond to format: JS to do their current jobs. Result: tried to do it but I cant specify GET request contentType (http://stackoverflow.com/questions/17725110/jquery-ajax-get-and-contenttype) So I'll be keeping this as it is.
 - initial presentation of file manager is wrong (subfolders shown but files hidden)
