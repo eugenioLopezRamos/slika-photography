@@ -461,10 +461,12 @@ function homeTabHandler(){
             header.style.height = "auto";
             menu.style.zIndex = "2";
             menu.style.borderBottom = "2px solid rgb(230,230,230)";
-            menu.style.height = "100vh";
-/*  
+
+            document.querySelector(".companyName").style.pointerEvents = "none";
+            menu.style.pointerEvents = "none";
+  
             if( isNaN(parseInt(menu.style.height), 10) )  {
-                menu.style.height = "0px";
+                menu.style.height = "80px";
             }
       
             var currentHeight = parseInt(getComputedStyle(menu).height, 10);
@@ -476,37 +478,44 @@ function homeTabHandler(){
             }
 
 
+
             var menuInterval = window.setInterval(function(mexMenuHeight){
-                console.log("direction", direction);
-                console.log("menu", menu.style.height);
+              //  console.log("direction", direction);
+             //   console.log("menu", menu.style.height);
                 if(direction === "grow") {
-                    menu.style.height = parseInt(menu.style.height, 10) + maxMenuHeight/60 + 'px';
+                    menu.style.height = parseInt(menu.style.height, 10) + maxMenuHeight/30 + 'px';
 
                 }
                 if(direction === "shrink") {
-                    menu.style.height = parseInt(menu.style.height, 10) - maxMenuHeight/60 + 'px';
+                    menu.style.height = parseInt(menu.style.height, 10) - maxMenuHeight/30 + 'px';
 
                 }
 
                 if(direction === "grow" && parseInt(menu.style.height, 10) > 0.9 * maxMenuHeight) {
                     menu.style.height = maxMenuHeight + 'px';
+
+                    document.querySelector(".companyName").style.pointerEvents = "auto";
+                    menu.style.pointerEvents = "auto";
+
                     window.clearInterval(menuInterval);
                 }
                 if(direction === "shrink" && parseInt(menu.style.height, 10) < minimumMenuHeight + 10) {
                     menu.removeAttribute("style");
                     header.removeAttribute("style");
 
+                    document.querySelector(".companyName").style.pointerEvents = "auto";
+
                     window.clearInterval(menuInterval);
                 }
                 prevHeight = parseInt(menu.style.height, 10);
-            }, 500/60);
+            }, 400/60);
 
 
 
 
-            */
+            
 
-            $(menu).slideToggle();
+            //$(menu).slideToggle();
 
 
 
