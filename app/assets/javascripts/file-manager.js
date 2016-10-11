@@ -168,10 +168,16 @@ var fileManager = function(arrayOfFiles) {
 	    });
 	});
 
-	[].slice.call(document.getElementsByTagName("span")).map(function(element, index, array) { //but toggles them when you click the folder's <span>
+	[].slice.call(document.querySelectorAll(".upload-dir-container span")).map(function(element, index, array) { //but toggles them when you click the folder's <span>
+		
+		if(element.parentElement.parentElement != root) {
+			element.style.display = "none";
+		}
 
 	    element.addEventListener("click", function(event) {
 			var continueFunction = false;
+			var clickedTarget = event.target;
+
 
 			doubleClick++;
 
@@ -183,13 +189,34 @@ var fileManager = function(arrayOfFiles) {
 
 					[].slice.call(outerElement.parentElement.children).map(function(innerElement, index, array) { 
 
+						var newId = innerElement.parentElement.id.replace(/(\/)+/g, "\\/");
+	
 						if (outerElement != innerElement){
-						
+
+				
 							if(outerElement.classList.contains("open")) {
 								innerElement.style.display = "";
+
+								[].slice.call(document.querySelectorAll("#" + newId  + " span")).map(function(element, index, array) {
+
+									if(clickedTarget != element) {
+										element.style.display = "";
+									}
+									
+								});
 							}
 							else {
 								innerElement.style.display = "none";
+								
+								[].slice.call(document.querySelectorAll("#" + newId + " span")).map(function(element, index, array) {
+
+									if(clickedTarget != element) {
+										element.style.display = "none";
+									}
+								
+
+								});
+
 							}
 						} 
 					});
