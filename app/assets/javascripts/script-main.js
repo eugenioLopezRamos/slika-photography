@@ -249,13 +249,15 @@ function homeTabHandler(){
         
         return {
         touchStart: function(event) {
+         //   console.log("event start", event);
+            prevHeight = parseInt(getComputedStyle(menu).height, 10);
             menuSlideStartY = event.changedTouches[0].clientY;
             menuSlideStartX = event.changedTouches[0].clientX;
             document.addEventListener("touchmove", slideDownHandler);  
         },
 
         touchMove: function(event) {
-            
+           //     console.log("event move", event);
         if(document.documentElement.clientWidth>480) {
             return;
         }
@@ -455,6 +457,8 @@ function homeTabHandler(){
 
         event.preventDefault();
         event.stopPropagation();
+     //   document.removeEventListener("touchstart", touchStartHandler);
+      //  document.removeEventListener("touchend", touchEndHandler);
 
         if(document.documentElement.clientWidth < 481) {
 
@@ -476,21 +480,13 @@ function homeTabHandler(){
             }else {
                 direction = "shrink";
             }
-
-
-
+                                                
             var menuInterval = window.setInterval(function(mexMenuHeight){
               //  console.log("direction", direction);
              //   console.log("menu", menu.style.height);
-                if(direction === "grow") {
-                    menu.style.height = parseInt(menu.style.height, 10) + maxMenuHeight/30 + 'px';
+             isNaN(prevHeight) ? prevHeight = 0 : prevHeight = prevHeight;
 
-                }
-                if(direction === "shrink") {
-                    menu.style.height = parseInt(menu.style.height, 10) - maxMenuHeight/30 + 'px';
-
-                }
-
+                             //the menu is set to max height once it reaches the 0.9 * maxMenuHeight threshold
                 if(direction === "grow" && parseInt(menu.style.height, 10) > 0.9 * maxMenuHeight) {
                     menu.style.height = maxMenuHeight + 'px';
 
@@ -499,6 +495,7 @@ function homeTabHandler(){
 
                     window.clearInterval(menuInterval);
                 }
+                //the menu is set to 0 after it reaches the bottom threshold (minimumMenuHeight + 10)
                 if(direction === "shrink" && parseInt(menu.style.height, 10) < minimumMenuHeight + 10) {
                     menu.removeAttribute("style");
                     header.removeAttribute("style");
@@ -507,14 +504,35 @@ function homeTabHandler(){
 
                     window.clearInterval(menuInterval);
                 }
+                
+
+               if(direction === "grow") { //the menu grows
+                    menu.style.height = parseInt(menu.style.height, 10) + maxMenuHeight/30 + 'px';
+
+                }
+                if(direction === "shrink") { //the menu shrinks
+                    menu.style.height = parseInt(menu.style.height, 10) - maxMenuHeight/30 + 'px';
+                    
+                }
+
+            //    console.log("kkkk");
+
+            //after each run, update prevHeight's value
                 prevHeight = parseInt(menu.style.height, 10);
+            //    console.log("prevht", prevHeight);
+
+              //  if(parseInt(menu.style.height, 10) > maxMenuHeight * 0.9) {
+                 //   window.clearInterval(menuInterval);
+               // }
+
             }, 400/60);
 
 
 
 
             
-
+         //   document.addEventListener("touchstart", touchStartHandler);
+        //    document.addEventListener("touchend", touchEndHandler);
             //$(menu).slideToggle();
 
 
