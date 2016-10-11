@@ -628,7 +628,6 @@ if(isBlogUpdate) {
 if(executeAJAX) { //used for nav menu clicks
 
     useMessagesBanner("info", "Loading..."); 
-    console.log("logit");
 
 $.ajax({url: "/tab_getter", 
         data: {tab: activeTabValue, id: status[activeTabValue]}, 

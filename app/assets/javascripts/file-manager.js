@@ -618,11 +618,10 @@ var fileManager = function(arrayOfFiles) {
 	    }
 
 
-
-
 	});
 
 	$('#upload-file-form').submit(function(event) {
+		
 	    event.preventDefault();
 
 	});

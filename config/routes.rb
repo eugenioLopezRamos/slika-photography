@@ -38,7 +38,7 @@ namespace :admin do #maybe I should move this to resources: instead of namespace
  get '/files', to: 'admin#files_show'
  get 'download_file', to: 'admin#req_download_file_info' #gets messages from the download (N° of files downloaded, errors)
  post '/upload', to: 'admin#upload_file'
- post '/optimize', to: 'admin#optimize_images'
+ post '/optimize', to: 'admin#optimize_images' #currently unused and will probably remain so, was going to be used to preview the optimized files.
  post 'download_file', to: 'admin#download_file'
  delete 'delete_file', to: 'admin#delete_file'
 

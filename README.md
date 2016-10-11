@@ -33,8 +33,7 @@ _heroku_
 
 _misc backend_
 
-- Move logic from slidersContent (view) to staticController and add testing.
-- In the spirit of DRYness, change the tab_ getter and post_api routes to use the normal tab/blog routes and respond to format: JS to do their current jobs.
+- Add staticController testing (for the slides).
 
 _post editor_
 
@@ -53,7 +52,7 @@ _public front end_
 _admin panel front end_
 
 - Sort files into files and folders, right now it looks messy.
-- initial presentation of file manager is wrong (subfolders shown but files hidden)
+
 - Add friendly forwarding on admin pages
 
 
@@ -62,6 +61,9 @@ _admin panel front end_
 **DONE**
 
 
+- Move logic from slidersContent (view) to staticController - Done, testing still to go
+- In the spirit of DRYness, change the tab_ getter and post_api routes to use the normal tab/blog routes and respond to format: JS to do their current jobs. Result: tried to do it but I cant specify GET request contentType (http://stackoverflow.com/questions/17725110/jquery-ajax-get-and-contenttype) So I'll be keeping this as it is.
+- initial presentation of file manager is wrong (subfolders shown but files hidden)
 - clicking the "logo" on mobile should show the full height menu
 - on mobile the menu should start expanded -> changed jquery load to after CSS, gets better, and will probably get even better w/uglification/minification
 - See someway of not loading the fb script on tab load, its really really slow (probably just load it when clicking the fb button) - Kind of done, loads on startup, but can be reloaded correctly when revisiting (without reloading on every fb button click)

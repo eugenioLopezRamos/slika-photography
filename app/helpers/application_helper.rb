@@ -26,4 +26,8 @@ module ApplicationHelper
 
     end
 
+    def image_tabs
+        ["peopleTab", "modelsTab", "urbanTab", "eventsTab"]
+    end
+
 end
