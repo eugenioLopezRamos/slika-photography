@@ -87,7 +87,7 @@ class AdminIntegrationTest < ActionDispatch::IntegrationTest
 
 	  		#same local variables as the controller
 	        image_file = image.tempfile 
-	        image_file_name = image.original_filename
+	        image_file_name = "original-#{image.original_filename}"
 	        image_file_route = file_route 
 	        #plus the tempfile size
 	        image_file_size = image.tempfile.size
@@ -97,7 +97,8 @@ class AdminIntegrationTest < ActionDispatch::IntegrationTest
 	        test_uploaded_file_listing = test_uploaded_file_listing.select{ |entry| entry.key === "#{image_file_route}#{image_file_name}"  }.map(&:key)
 
 	        #Test filenames being the same - image_file_name is in an array because the result from S3 is also an array (in this case, of one item.)
-	        assert_equal ["#{file_route}#{image_file_name}"], test_uploaded_file_listing
+	      
+			assert_equal ["#{file_route}#{image_file_name}"], test_uploaded_file_listing
 
 	        #Should give back only one item.
 	        assert_equal test_uploaded_file_listing.length, 1
@@ -112,7 +113,7 @@ class AdminIntegrationTest < ActionDispatch::IntegrationTest
 
   	#START TEST => DOWNLOADS
 
-  		files_array = ["#{file_route}TestImage1.jpg", "#{file_route}TestImage2.jpg", "#{file_route}doesnt_exist.lol"]
+  		files_array = ["#{file_route}original-TestImage1.jpg", "#{file_route}original-TestImage2.jpg", "#{file_route}doesnt_exist.lol"]
 
 
   		mock_auth_token = "12345/678"
@@ -152,7 +153,7 @@ class AdminIntegrationTest < ActionDispatch::IntegrationTest
 		  													 #compares the original size of the file in the zip archive to its 
 		  													 #corresponding fixture uploaded tempfile.
 		  										
-		  					if "#{file_route}#{file.original_filename}" === zip_entry.name
+		  					if "#{file_route}original-#{file.original_filename}" === zip_entry.name #refactor this pls
 
 		  						assert_equal zip_entry.size, file.size
 		  						zip_file_contents << zip_entry.name
