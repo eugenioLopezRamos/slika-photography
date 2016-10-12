@@ -22,6 +22,10 @@ class Post < ApplicationRecord
   def create_slug
   	self.slug = ActionController::Base.helpers.strip_tags(self.title).downcase.parameterize
   end
+
+  def preprocess_img_tags
+
+  end
   
 
 
