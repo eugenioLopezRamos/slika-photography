@@ -17,6 +17,30 @@ before_action :create_download_log, only: :download_file
     render 'admin/files/files'
   end
 
+  def calc_sizes(array_with_sizes, image)
+
+    img = MiniMagick::Image.open(image.path)
+    img_width = img[:width]
+    sizes = []
+    
+    array_with_sizes.each_with_index do |width, index|
+
+        if index === 0 && img_width > array_with_sizes[0] 
+          sizes << array_with_sizes[0]
+        elsif (!array_with_sizes[index + 1].nil? && img_width > array_with_sizes[index + 1])
+          sizes << array_with_sizes[index + 1]
+        elsif index === (array_with_sizes.length - 1) && img_width<array_with_sizes[-1]
+            sizes << img_width
+
+        end #end if img_width vs size
+
+    end
+
+    return sizes
+
+
+  end
+
 
   def optimize_images
     
@@ -40,20 +64,9 @@ before_action :create_download_log, only: :download_file
       applicable_widths = []
 
       img_sizes = size_breakpoints #comes from ApplicationController (application helper)
-      shortened_breakpoints = img_sizes.slice(0..-2) #ignores the last size, the thumbnail, since thats always included
+      desired_sizes = img_sizes.slice(0..-2) #ignores the last size, the thumbnail, since thats always included
 
-      shortened_breakpoints.each_with_index do |width, index| 
-
-        if index === 0 && img_width > shortened_breakpoints[0] 
-          applicable_widths << shortened_breakpoints[0]
-        elsif (!shortened_breakpoints[index + 1].nil? && img_width > shortened_breakpoints[index + 1])
-          applicable_widths << shortened_breakpoints[index + 1]
-        elsif index === (shortened_breakpoints.length - 1) && img_width<shortened_breakpoints[-1]
-            applicable_widths << img_width
-
-        end #end if img_width vs size
-      
-      end
+     applicable_widths = calc_sizes(desired_sizes, image)
 
       #adds the thumbnail
       applicable_widths << img_sizes[-1]
@@ -124,7 +137,7 @@ before_action :create_download_log, only: :download_file
       return
     elsif @total_size_mb > @max_size_upload_mb     #Reject uploads over a certain size
 
-      flash.now[:error] = "Upload size exceeds the maximum(#{max_size_upload_mb} MB)!"
+      flash.now[:error] = "Upload size exceeds the maximum(#{@max_size_upload_mb} MB)!"
       render partial: '/admin/flash_messages'
       return
     else #Go ahead and upload

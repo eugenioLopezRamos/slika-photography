@@ -33,5 +33,8 @@ images/*
 #ignore .env
 .env
 
+#ignore example_att.txt, file used to try syntax in console
+/example_att.txt
+
 #ignore database.yml
 config/database.yml
