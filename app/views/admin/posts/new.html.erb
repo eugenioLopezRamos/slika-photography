@@ -33,14 +33,40 @@
                 min-height: 250px;
             }
             .message-box {
-                position: absolute;
+
                 z-index: 2;
                 border: 1px solid white;
                 background-color: #333;
                 margin: auto;
                 text-align: center;
+                min-height: 50px;
 
 
+            }
+            .alert-info{
+                width: 100%;
+            }
+            .alert-danger {
+                width: 100%;
+            }
+
+            .message-box span.uploaded-file-list-item:first-of-type {
+                font-weight: bold;
+                border: 1px solid white;
+                font-size: 110%;
+                padding: 0 10px 0 10px;
+            }
+            .action-description {
+                width: 100%;
+                background-color: #333;
+                border: 1px solid white;
+                text-align: center;
+            }
+            .dummy {
+                display: none;
+            }
+            .ImagePreviewBox {
+                resize:both;
             }
         
 
@@ -82,15 +108,13 @@
                     <%= submit_tag "Upload image", :id =>'upload-file' %>
                        <hr>
                 <% end %>
-
-
             </div>
            
             
             <div class="post-sidebar">
-
+             <span class="action-description">Messages<br></span>
                 <div class="message-box" id="messages">
-                <span class="action-description">Messages<br></span>
+                <span id="empty">No messages</span>
 
 
 
@@ -122,6 +146,7 @@
             formData.append("utf-8", utf);
 	        formData.append("authenticity-token", authenticityToken);
 	        formData.append("file_route", uploadRoute);
+
             if (files.type.match('image.*')) {
                 formData.append("image[]", files, files.name);
             }
@@ -134,19 +159,41 @@
 
             xhr.onload = function() {
                 if(xhr.status === 200) {
-                    $("#messages").html($("#messages").html() + xhr.response);
+
+                    var dummyElement = createElement("div", "dummy", "message-dummy", xhr.response);
+     
+                    document.body.appendChild(dummyElement);
+
+                    dummyElement.querySelectorAll('span.uploaded-file-list-item').forEach(function(element){
+                        element.innerHTML = "/" + element.innerHTML;
+                    });
+
+
+                    $("#messages").html(dummyElement.innerHTML + $("#messages").html());
+                    document.body.removeChild(dummyElement);
                 }
                 else {
                     $("#messages").html("Woops, something unexpected happened");
                 }
-
+                if(document.querySelector("#empty")) {
+                    document.querySelector("#empty").parentElement.removeChild(document.querySelector("#empty"));
+                }
                 document.querySelector("#file_input_field").value = "";
             }
 
 
         });
 
+        function createElement(type, cssClass, id, content) {
+            var innerHTML;
+            typeof content === "undefined" ? innerHTML = "" : innerHTML = content;
+            var newEl = document.createElement(type);
+            newEl.id = id;
+            newEl.className = cssClass;
+            newEl.innerHTML = innerHTML;
 
+            return newEl;
+        }
 
 
 

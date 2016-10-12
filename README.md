@@ -33,7 +33,7 @@ _heroku_
 
 _post editor_
 
-- Add img upload link to post/new(these would be sent to s3/posts/<SLUG_NAME_HERE>)
+- Add img upload link to post/new(these would be sent to s3/posts/) - slug removed -> Images are uploaded before the post is submitted, so there is no slug
 - Img responsivizer for posts? (check all img tags in the post, remove source, calc appropiate size, fill src)
 
 _admin controller_
