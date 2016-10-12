@@ -1,6 +1,8 @@
 <script src="//cdn.ckeditor.com/4.5.10/full/ckeditor.js"></script>
-
+<%= csrf_meta_tags %>
 <%= stylesheet_link_tag    'style-main', media: 'all'%>
+<%= javascript_include_tag 'jquery' %>
+<%= javascript_include_tag 'jquery_ujs' %>
 <meta name="viewport" content="width=device-width, initial-scale=1., user-scalable=no">
 <link href='https://fonts.googleapis.com/css?family=Stalemate&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
 <div class="sitewrapper" id="sitewrapper">  
@@ -9,29 +11,79 @@
     <div class="jumbotron">
         <div class="content-Tabs" id="blogContents">
 
+            <style>
+            form {
+                width: 100%;
+                display:flex;
+                flex-direction: column;
+             /*   margin: 20px auto 20px auto;*/
+            }
+            input {
+                max-width: 150px;
+            }
+
+            .post-container {
+                flex-direction: column;
+            }
+
+            div[title="Rich Text Editor, post-title"] {
+                min-height: 50px;
+            }
+            div[title="Rich Text Editor, post-content"] {
+                min-height: 250px;
+            }
+
+            </style>
+
+
+
+
             <div class="post-container" id="post-container">
-                <%= form_for(:post, url: admin_posts_path, html: {multipart: true}) do |f| %>
-                <%= f.text_area :title, :id => 'post-title', class: "post-title", :contenteditable => "true", :value => "POST TITLE" %>
-                    <script>
-                        CKEDITOR.disableAutoInline = true;
-                        CKEDITOR.inline('post-title', {height: '40', width: '100%', toolbar: [
-                        [ 'Source', '-', 'Bold', 'Italic', 'Underline', 'Font', 'FontSize', 'Styles', 'Format', ]
-                        ], language: 'en'});   
-                    </script>
-                <%= f.text_area :content, :id =>"post-content", class: "post-editor", :contenteditable => "true", :value =>"POST CONTENT" %>
-                    <script> 
-                        CKEDITOR.disableAutoInline = true;
-                        CKEDITOR.inline( 'post-content' );
-                    </script>
-                <hr>
-                <%= f.file_field :image, accept: 'image/jpeg, image/gif, image/png', class:'upload-btn' %>
-                <%= f.submit "Submit Post", class: "submit-button" %>
+                <%= form_for(:post, url: admin_posts_path, html: {multipart: true}, remote: true) do |f| %>
+
+                    <%= f.text_area :title, :id => 'post-title', class: "post-title", :contenteditable => "true", :value => "POST TITLE" %>
+                        <script>
+                            CKEDITOR.disableAutoInline = true;
+                            CKEDITOR.inline('post-title', { toolbar: [
+                            [ 'Source', '-', 'Bold', 'Italic', 'Underline', 'Font', 'FontSize', 'Styles', 'Format', ]
+                            ], language: 'en'});   
+                        </script>
+                    <%= f.text_area :content, :id =>"post-content", class: "post-editor", :contenteditable => "true", :value =>"POST CONTENT" %>
+                        <script> 
+                            CKEDITOR.disableAutoInline = true;
+                            CKEDITOR.inline( 'post-content' );
+                        </script>
+                    <hr>
+                    <%= f.label "Submit post" %>
+                    <%= f.submit "Submit Post", class: "submit-button" %>    
                         
                 <% end %> 
+                                <hr>
+                <%#= f.file_field :image, accept: 'image/jpeg, image/gif, image/png', class:'upload-btn' %>
+                <%= form_tag({controller: :admin, action: :upload_file, file_route: 'posts/'},  multipart: true, id: 'upload-file-form') do %>
+                    
+                    <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
+   
+                    <%= label_tag 'Upload image' %>
+                    <%= file_field_tag 'image[]', accept: 'image/jpeg, image/gif, image/png', class: 'upload-btn', :id =>'file_input_field' %>
+                    <%= hidden_field_tag :image_cache %>
+      
+                    <%= submit_tag "Upload image", :id =>'upload-file' %>
+                       <hr>
+                <% end %>
+
 
             </div>
+           
             
             <div class="post-sidebar">
+
+                <div class="message-box" id="messages">
+                    <% flash.each do |message_type, message| %>
+                        <div class="alert alert-<%= message_type %>"><%= message %></div>
+                    <% end %>
+                </div>
+
               <%= render 'layouts/tabs/blogTab_sidebar'%>
             </div>
 
@@ -39,3 +91,59 @@
     </div>
 <%= render '/layouts/bottomBar' %>
 </div>
+
+<script>
+    function ajaxFunction() {
+        $("#upload-file").click(function(event) {
+            event.preventDefault();
+            var uploadRoute = "posts/";
+            var files = document.getElementById("file_input_field").files[0];
+
+            var formData = new FormData();
+
+	 	    var utf = document.querySelectorAll("input[name='utf8']")[0].getAttribute("value");
+            var authenticityToken = document.querySelectorAll("input[name='authenticity_token']")[0].getAttribute("value");
+            
+            formData.append("utf-8", utf);
+	        formData.append("authenticity-token", authenticityToken);
+	        formData.append("file_route", uploadRoute);
+            if (files.type.match('image.*')) {
+                formData.append("image[]", files, files.name);
+            }
+
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', '/admin/upload', true);
+            xhr.setRequestHeader('X-CSRF-TOKEN', document.querySelectorAll('meta[name="csrf-token"]')[0].getAttribute("content"));
+
+            xhr.send(formData);
+
+            xhr.onload = function() {
+                if(xhr.status === 200) {
+                    $("#messages").html(xhr.response);
+                }
+                else {
+                    $("#messages").html("Woops, something unexpected happened");
+                }
+            }
+
+
+        });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    }
+  $(document).ready(ajaxFunction);
+</script>
