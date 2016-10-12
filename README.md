@@ -43,6 +43,7 @@ _public front end_
 
 - Theres a small bug when moving the slides to the left and to the right or viceversa (to be fixed later, its a small bug.)
 - Change the images on the home tab
+- Tab indexes en las paginas
 
 _admin panel front end_
 

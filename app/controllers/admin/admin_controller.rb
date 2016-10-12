@@ -160,7 +160,7 @@ before_action :create_download_log, only: :download_file
       response_message << uploaded_file_list
       flash.now[:info] = response_message.html_safe 
       render partial: '/admin/flash_messages'
-      end #else end
+    end #else end
 
   end
 
@@ -215,11 +215,7 @@ before_action :create_download_log, only: :download_file
             resp = s3.get_object({bucket: ENV['AWS_S3_BUCKET'], key: sel_file}, target: file)
 
             rescue Aws::S3::Errors::ServiceError => e
-            # raise e.message, :status => 404
-            #render :json => {"message" => e.message}, :status => 404
             @operation_results.push "<br />#{sel_file}: #{e.message.gsub('key', 'file')}<br />" 
-           # render partial: 'admin/flash_messages', :status => 404
-            # this should have more :status codes according to the possible errors S3 can throw
           end #begin close
 
           if !resp.nil?
