@@ -32,6 +32,17 @@
             div[title="Rich Text Editor, post-content"] {
                 min-height: 250px;
             }
+            .message-box {
+                position: absolute;
+                z-index: 2;
+                border: 1px solid white;
+                background-color: #333;
+                margin: auto;
+                text-align: center;
+
+
+            }
+        
 
             </style>
 
@@ -79,9 +90,10 @@
             <div class="post-sidebar">
 
                 <div class="message-box" id="messages">
-                    <% flash.each do |message_type, message| %>
-                        <div class="alert alert-<%= message_type %>"><%= message %></div>
-                    <% end %>
+                <span class="action-description">Messages<br></span>
+
+
+
                 </div>
 
               <%= render 'layouts/tabs/blogTab_sidebar'%>
@@ -94,6 +106,9 @@
 
 <script>
     function ajaxFunction() {
+        var parentWidth = getComputedStyle(document.querySelector(".post-sidebar")).width
+        document.querySelector("#messages").style.width = parentWidth;
+
         $("#upload-file").click(function(event) {
             event.preventDefault();
             var uploadRoute = "posts/";
@@ -119,11 +134,13 @@
 
             xhr.onload = function() {
                 if(xhr.status === 200) {
-                    $("#messages").html(xhr.response);
+                    $("#messages").html($("#messages").html() + xhr.response);
                 }
                 else {
                     $("#messages").html("Woops, something unexpected happened");
                 }
+
+                document.querySelector("#file_input_field").value = "";
             }
 
 
