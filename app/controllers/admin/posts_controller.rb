@@ -60,7 +60,7 @@ class Admin::PostsController < ApplicationController
         
         content_img_tags.each_with_index do |img, index|
 
-            initial_img = img.to_html
+            initial_img = img.to_xhtml
            
             full_src = img['src'].split("/").slice!(1..-1)
 
@@ -83,33 +83,41 @@ class Admin::PostsController < ApplicationController
                 size.split("-").slice!(0)
                 
             end
-          
+            @sizes.sort! {|a,z| a.to_i <=> z.to_i}
      
 
-            img['src'] = ""
-            img['data-route'] = @route
-            img['data-file'] = @file
-            img['data-sizes'] = @sizes
+            img["src"] = ""
+            img["data-route"] = "#{@route}"
+            img["data-file"] = "#{@file}"
+            img["data-sizes"] = "#{@sizes}"
 
            # content_img_tags.to_html.gsub!(initial_img.to_html,img.to_html)
         #    content_img_tags["#{index}"] = img
            # replacements << img
-            content.gsub!(initial_img, img.to_html)
-            
-              debugger
-      
+         #  debugger
+
+            content.gsub!(initial_img, img.to_xhtml)
+
+
+
+            #****************************
+             #añadir campo img tags originales para poder tenerlos al editar
+            #****************************
+
+
+
         end
                     
-
+     #   debugger
      #   puts "2222 #{content_img_tags}"
 
  
-        @modified_content = content
+   #     @modified_content = content
                     
 
       
 
-        return @modified_content
+     #   return @modified_content
                     
      
     end
