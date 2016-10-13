@@ -76,7 +76,7 @@
 
 
             <div class="post-container" id="post-container">
-                <%= form_for(:post, url: admin_posts_path, html: {multipart: true}, remote: true) do |f| %>
+                <%= form_for(:post, url: admin_posts_path, html: {multipart: true}) do |f| %>
 
                     <%= f.text_area :title, :id => 'post-title', class: "post-title", :contenteditable => "true", :value => "POST TITLE" %>
                         <script>
@@ -129,7 +129,8 @@
 </div>
 
 <script>
-    function ajaxFunction() {
+    function ajaxFunctions() {
+        /****************** IMAGE UPLOADER    ***********************/
         var parentWidth = getComputedStyle(document.querySelector(".post-sidebar")).width
         document.querySelector("#messages").style.width = parentWidth;
 
@@ -148,7 +149,9 @@
 	        formData.append("file_route", uploadRoute);
 
             if (files.type.match('image.*')) {
+
                 formData.append("image[]", files, files.name);
+
             }
 
             var xhr = new XMLHttpRequest();
@@ -194,20 +197,32 @@
 
             return newEl;
         }
+        
+        /****************** /IMAGE UPLOADER    ***********************/
+
+        /****************** POST SUBMIT     *************************/
+
+        $(document).on("ajax:success", function() {
+
+            alert("post successfully submitted!");
+
+        });
+
+        $(document).on("ajax:error", function() {
+
+            alert("Woops, there was an error. Please try again");
+
+        });
 
 
 
 
 
 
-
-
-
-
-
+        /****************** /POST SUBMIT     *************************/
 
 
 
     }
-  $(document).ready(ajaxFunction);
+  $(document).ready(ajaxFunctions);
 </script>
