@@ -1,86 +1,177 @@
 var main = function() {
-  //  console.log("CHANGEEEEE");
+    //  console.log("CHANGEEEEE");
 
-//console.log(window.location.pathname);
-//console.log(window.location.pathname.replace('/', ''));
-//console.log("tabname " + window.location.pathname.replace('/', '').split("/")[0]);//.replace(/\/\*+\/+/, ''))
-var getTabFromUrl = window.location.pathname.replace('/', '').split("/")[0];//.replace(/(\/\w+|\/)/, '');
+    //console.log(window.location.pathname);
+    //console.log(window.location.pathname.replace('/', ''));
+    //console.log("tabname " + window.location.pathname.replace('/', '').split("/")[0]);//.replace(/\/\*+\/+/, ''))
+    var getTabFromUrl = window.location.pathname.replace('/', '').split("/")[0];//.replace(/(\/\w+|\/)/, '');
 
-var activeTabValue = getTabFromUrl + 'Tab'; //used to manage the state of the different tabs
+    var activeTabValue = getTabFromUrl + 'Tab'; //used to manage the state of the different tabs
 
-var stateObject = {// initializes the state object for use in the nav menu handler
-state: activeTabValue.replace('Tab', 'State'),
-/*blogTab: (function() { //returns the post number (or slug)
-    if(getTabFromUrl == "blog" ) {
-       
-       // return window.location.pathname.replace('/blog/', '');
+    var stateObject = {// initializes the state object for use in the nav menu handler
+    state: activeTabValue.replace('Tab', 'State'),
+    /*blogTab: (function() { //returns the post number (or slug)
+        if(getTabFromUrl == "blog" ) {
+        
+        // return window.location.pathname.replace('/blog/', '');
+        }
+    })()*/
+
+    };
+
+    function useMessagesBanner(typeOfMessage, message) {
+        var banner = document.getElementById("messages-banner");
+        var bannerMessage = document.getElementById("message-text");
+        banner.classList.add(typeOfMessage); //should be "info" or "error"
+        bannerMessage.innerHTML = message;
+
+        function removeBannerClasses(event) {
+            event.target.className = "";
+            event.target.classList.add("messages");
+        }
+        banner.addEventListener("animationend", removeBannerClasses);
     }
-})()*/
 
-};
 
-function useMessagesBanner(typeOfMessage, message) {
-    var banner = document.getElementById("messages-banner");
-    var bannerMessage = document.getElementById("message-text");
-    banner.classList.add(typeOfMessage); //should be "info" or "error"
-    bannerMessage.innerHTML = message;
+    typeof stateObject[activeTabValue] == "undefined" ? stateObject[activeTabValue] = 1 : "";
+    //console.log("first state", stateObject[activeTabValue]);
 
-    function removeBannerClasses(event) {
-        event.target.className = "";
-        event.target.classList.add("messages");
+    var scheduled = false; // this is used to delay applying the state changes so the page doesnt get messed up - src= http://eloquentjavascript.net/14_event.html  - Thanks! 
+
+    history.replaceState(stateObject, "Leonardo Antonio PhotoArt", ""); //The page uses the history API for the tabs. This line of code is used for consistency, I wanted to declare the initial state of the page instead of using the browser's default.
+
+    updateState(stateObject, false);
+
+    function initialFormat() { //this function is used on load, and when resetting the elements' styling, for example on the resize event listener
+
+
     }
-    banner.addEventListener("animationend", removeBannerClasses);
-}
+
+    //al finalizar load se debe determinar la activeTab de manera dinamica, y mandar una orden de replaceState que llama a la function updateState para 
+    //invocar al eventHandler apropiado para la tab
 
 
-typeof stateObject[activeTabValue] == "undefined" ? stateObject[activeTabValue] = 1 : "";
-//console.log("first state", stateObject[activeTabValue]);
+    initialFormat();
 
-var scheduled = false; // this is used to delay applying the state changes so the page doesnt get messed up - src= http://eloquentjavascript.net/14_event.html  - Thanks! 
+    function determineSizeToGet(selectorValue) {
+  
+        var selector = selectorValue;
 
-history.replaceState(stateObject, "Leonardo Antonio PhotoArt", ""); //The page uses the history API for the tabs. This line of code is used for consistency, I wanted to declare the initial state of the page instead of using the browser's default.
+        var imageContainers = [].slice.call(document.querySelectorAll(selector));
+        var sizeToAssign = []
 
-updateState(stateObject, false);
+        imageContainers.map(function(element, index, array) {
 
-function initialFormat() { //this function is used on load, and when resetting the elements' styling, for example on the resize event listener
+           var possibleSizes = JSON.parse(element.getAttribute("data-sizes"));
+     
+            possibleSizes = possibleSizes.map(element => { return parseInt(element, 10) } )
+  
+           var screenSize = document.documentElement.clientWidth;
+
+            var sizeToGet = possibleSizes.filter(function(currSize, sizeIndex, possibleSizesArray) {
+                console.log("currSize ", currSize, "index ", sizeIndex, "array ", possibleSizesArray, "scr", screenSize);
+
+                if(sizeIndex === 0 && screenSize > currSize) { // screensize is bigger than the biggest available size?
+              
+                    return currSize; //use the biggest available size
+                }
+
+                else if(sizeIndex === possibleSizesArray.length - 1)  { //if none of the bigger images can be used, use the smallest one
+                  //  debugger
+                     return currSize;  //use the smallest size
+                }
+                else if(screenSize > currSize) {//screensize is larget than the currentcurrSize and it isnt last or first.
+                    //(!shortened_breakpoints[index + 1].nil? && img_width > shortened_breakpoints[index + 1])        
+                     return currSize;          
+                }
+                else {
+
+                    return false;
+                }
+             
+
+            });
+            var sizeToGet = Math.max(...sizeToGet);
+
+            sizeToAssign.push(sizeToGet);
 
 
-}
+        });
 
-//al finalizar load se debe determinar la activeTab de manera dinamica, y mandar una orden de replaceState que llama a la function updateState para 
-//invocar al eventHandler apropiado para la tab
+         return sizeToAssign;
+        }
+  
+
+        function getResizedImages (selectorValue, size) {
+
+            function imgLoadError(event) {
+
+                useMessagesBanner("error", "The image did not load in time. Please try again"); 
+
+            }
 
 
-initialFormat();
-var prevHeight = 0; //this variable defines the starting size of the menu on mobile, it needs to be outside the menuToggle function because otherwise it cannot be changed when clicking a menu item, so when you click a menu item
-//and then slide down the menu will start growing from where it was, not from zero.
+            var selector = selectorValue + ' img';
 
-var currentOrientation = window.orientation; // 0 = portrait, -90 || 90 = landscape, undefined = device doesn't support rotation - used on event listeners that style things according to orientation.
+            var size = size(selector);
 
-var clientWidth = document.documentElement.clientWidth; //width of client, used for several calculations later (for example, the menu height on phone size)
+            var targets = [].slice.call(document.querySelectorAll(selector));
 
-if (!Array.prototype.findIndex) { //findIndex polyfill for IE source: MDN - https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Array/findIndex
-  Array.prototype.findIndex = function(predicate) {
-    if (this === null) {
-      throw new TypeError('Array.prototype.findIndex called on null or undefined');
-    }
-    if (typeof predicate !== 'function') {
-      throw new TypeError('predicate must be a function');
-    }
-    var list = Object(this);
-    var length = list.length >>> 0;
-    var thisArg = arguments[1];
-    var value;
+            targets.map(function(element, index, array){
 
-    for (var i = 0; i < length; i++) {
-      value = list[i];
-      if (predicate.call(thisArg, value, i, list)) {
-        return i;
-      }
-    }
-    return -1;
-  };
-}  
+
+
+                if(size[index] != 0) {
+                    
+                    var route = element.getAttribute("data-route");
+                    var file = element.getAttribute("data-file");
+                    var newFile = size[index] + "-" + file;
+                    var src = route + "/" + newFile;
+
+
+                }
+
+
+                element.setAttribute("src", src);
+                element.addEventListener("error", imgLoadError);
+
+
+            });
+
+
+
+        }
+
+
+    var prevHeight = 0; //this variable defines the starting size of the menu on mobile, it needs to be outside the menuToggle function because otherwise it cannot be changed when clicking a menu item, so when you click a menu item
+    //and then slide down the menu will start growing from where it was, not from zero.
+
+    var currentOrientation = window.orientation; // 0 = portrait, -90 || 90 = landscape, undefined = device doesn't support rotation - used on event listeners that style things according to orientation.
+
+    var clientWidth = document.documentElement.clientWidth; //width of client, used for several calculations later (for example, the menu height on phone size)
+
+    if (!Array.prototype.findIndex) { //findIndex polyfill for IE source: MDN - https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Array/findIndex
+    Array.prototype.findIndex = function(predicate) {
+        if (this === null) {
+        throw new TypeError('Array.prototype.findIndex called on null or undefined');
+        }
+        if (typeof predicate !== 'function') {
+        throw new TypeError('predicate must be a function');
+        }
+        var list = Object(this);
+        var length = list.length >>> 0;
+        var thisArg = arguments[1];
+        var value;
+
+        for (var i = 0; i < length; i++) {
+        value = list[i];
+        if (predicate.call(thisArg, value, i, list)) {
+            return i;
+        }
+        }
+        return -1;
+    };
+    }  
 
 window.setTimeout(function() {
     window.addEventListener("resize", function() { //handles resizing when changing screen orientation
@@ -737,103 +828,9 @@ function slidesHandler(){
     })();
 
 
-    //can't use srcset, not supported in IE11- (and I want to support IE10/11 + Edge), will use AJAX w/ resize evt listeners :/
+    //can't use srcset, not supported in IE11- (and I want to support IE10/11 + Edge), will dynamically set src and a resize evt listener :/
 
-    /* */
-    /*var imageAddress = 'images/' + currentTab + '/' + imageSize + '-' + 'asdasd'
-    $.ajax({url:, type: 'GET', data: currentTabActiveIndex})*/
-
-   // function removeLoadingDots(event) {
-
-     //   event.target.parentElement.removeChild(document.querySelector('.dots-container'));
-        
-    //}
-
-
-    function determineSizeToGet(selectorValue) {
-  
-        var selector = selectorValue;
-
-        var possibleSizes = JSON.parse(document.querySelector(selector).getAttribute("data-sizes"));
-
-        possibleSizes = possibleSizes.map(function(element) {
-
-            return parseInt(element, 10);
-        });
-
-        var screenSize = document.documentElement.clientWidth;
-
-        var sizeToGet = possibleSizes.filter(function(element, index, array) {
-
-            if(index === 0 && screenSize > element) { // screensize is bigger than the biggest available size?
-                return element; //use the biggest available size
-            }
-
-            else if(index === array.length - 1)  { //if none of the bigger images can be used, use the smallest one
-                return element; //use the smallest size
-            }
-            else if(screenSize > element) {//screensize is larget than the currentElement and it isnt last or first.
-                //(!shortened_breakpoints[index + 1].nil? && img_width > shortened_breakpoints[index + 1])        
-                return element;         
-            }
-            else {
-
-                return;
-            }
-        
-        });
-
-        return sizeToGet;
-
-        }
-
-    function getResizedImage(selectorValue,selectorType, size) {
-        var selectorMarker = (function() {
-
-            switch(selectorType) {
-                //break is unreachable in these, so I skipped them.
-                case "class":
-                    return '.'
-                case "id":
-                    return '#'
-                case "element":
-                    return '';
-                default:
-                    return;
-            }
-        })();
-
-        function imgLoadError(event) {
-            console.log("evttt", event.target);
-          //  alert("HEEY");
-              useMessagesBanner("error", "The image did not load in time. Please try again"); 
-            ///event.target.removeEventListener("error", imgLoadError);
-        }
-
-
-        var selector = selectorMarker + selectorValue + ' img';
-
-        var size = size(selector);
-
-        var target = document.querySelector(selector);
-        //console.log("target", target);
-        var route = target.getAttribute("data-route");
-        var file = target.getAttribute("data-file");
-        var newFile = size[0] + "-" + file;
-        var src = route + "/" + newFile;
-
-        //target.addEventListener("load",removeLoadingDots)
-
-
-        target.setAttribute("src", src);
-        target.addEventListener("error", imgLoadError);
-
-    }
-
-    getResizedImage('active-slide', 'class', determineSizeToGet);
-
-
-
+    getResizedImages('.active-slide', determineSizeToGet);
     //currentTab[stateObject[activeTabValue]-1].classList.add("active-slide"); //from the currentTab array, check on stateObject what's the slide we should be at, and add 'active-slide to it'
 
         
@@ -841,7 +838,7 @@ function slidesHandler(){
     // 'memory' to remember what slide you were seeing, so it can be displayed when using the back/forward browser buttons
     //it is done this way because for this case I think cookies are a bit excessive/intrusive, since state is only relevant while the page is active (as oppossed to e.g. login status)
 
-
+ 
     //defines common variables used/shared among the different methods of the slidesHandler object/closure   
 
     var touchStartPosX;//position of the touch X "pointer" at the start of the touch event
@@ -1008,7 +1005,7 @@ function slidesHandler(){
             currentTabPrevSlide.style.animation = "imgFadeIn 0.45s forwards";
             currentTabPrevSlide.style.display= "flex";
 
-            getResizedImage('active-slide', "class", determineSizeToGet);
+            getResizedImages('.active-slide', determineSizeToGet);
 
             activePicker.value = (function() {
 
@@ -1064,7 +1061,7 @@ function slidesHandler(){
 
             //console.log("next slide claasses", currentTabNextSlide);
             
-            getResizedImage('active-slide', "class", determineSizeToGet);
+            getResizedImages('.active-slide', determineSizeToGet);
 
             activePicker.value = (function() {
                 if (activePicker.value == currentTab.length) {
@@ -1106,7 +1103,7 @@ function slidesHandler(){
         currentTab[slideToJumpTo].classList.add("active-slide");
         currentTab[slideToJumpTo].style.animation = "imgFadeIn 0.45s forwards";
         currentTab[slideToJumpTo].style.display= "flex";
-        getResizedImage('active-slide', "class", determineSizeToGet);
+        getResizedImages('.active-slide', determineSizeToGet);
 
         activePicker.value = slideToJumpTo+1;
         determineActiveIndex(); 
@@ -1170,8 +1167,7 @@ function slidesHandler(){
     if(isNaN(activePicker.value) || activePicker.value == "") {
 
     alert("Please pick a number between 1 and " + currentTab.length);
-    activePicker.value = "";
-    return;
+    activePicker.value = "";    
     } else {
     activePicker.blur(); // triggers the below event listener    
     }
@@ -1212,8 +1208,7 @@ function slidesHandler(){
     });     //closes the focus evt listener 
 
     //}
-    }); //closes the map function
-    
+    }); //closes the map function             
     }//closes slidePickerHandler
 
     slidePickerHandler();
@@ -1717,6 +1712,8 @@ function blogTabHandler(postToRequest, setListeners) {
         });
         
     }
+
+    getResizedImages('.post-content', determineSizeToGet);
     
 
     /****************** AJAX request handlers ******************/
@@ -1759,6 +1756,8 @@ function blogTabHandler(postToRequest, setListeners) {
 
     var blogContent = document.getElementById("blogContents");
     var postContainer = document.getElementsByClassName("post-container")[0];
+
+    
 
         
     function linksClickHandler(event) {
@@ -1896,7 +1895,7 @@ function blogMenuFunction(addListeners) {
     addListeners === true ? assignListeners = true : assignListeners = assignListeners;
 
     var postSidebar = document.getElementsByClassName('post-sidebar-menu')[0];
-        //need to change these 3names ^, they're a bit confusing I think
+        //need to change the postSidebar* var names, its confusing.
     var sidebarHeight = parseInt(getComputedStyle(postSidebar).height, 10);
 
     var postSidebarFull = document.getElementsByClassName('post-sidebar')[0];

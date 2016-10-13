@@ -51,79 +51,6 @@ class Admin::PostsController < ApplicationController
     end
     
 
-    def preprocess_img_tags
-      
-        content = params[:post][:content]
-        replacements = []
-
-        content_img_tags = Nokogiri.HTML(content).css('img') #Array with all the img tags and their attributes
-        
-        content_img_tags.each_with_index do |img, index|
-
-            initial_img = img.to_xhtml
-           
-            full_src = img['src'].split("/").slice!(1..-1)
-
-            full_file = full_src.slice!(-1)
-            
-
-            @route = "#{full_src.join("/")}/"
-            @file = full_file.split("-").slice!(1..-1).join("-") #removes the version prefix => original-myimage-img-foo.jpg -> myimage-img-foo.jpg
-
-            s3 = Aws::S3::Client.new
-
-            @sizes = s3.list_objects(bucket: ENV['AWS_S3_BUCKET'], marker: @route).contents.map(&:key)
-            @sizes = @sizes.select {|entry| entry.include? "#{@route}"} #selects only the files in the corresponding route
-            @sizes = @sizes.select {|entry| entry.include? "#{@file}"} #and only the files that share names with the corresponding file
-            @sizes = @sizes.select {|entry| entry.match("#{@route}#{/\d{1,4}-/}#{@file}")} # route/{1 to 4 digits}-filen.ame
-            
-            @sizes.map! do |size|
-                
-                size.gsub!(@route, "")
-                size.split("-").slice!(0)
-                
-            end
-            @sizes.sort! {|a,z| a.to_i <=> z.to_i}
-     
-
-            img["src"] = ""
-            img["data-route"] = "#{@route}"
-            img["data-file"] = "#{@file}"
-            img["data-sizes"] = "#{@sizes}"
-
-           # content_img_tags.to_html.gsub!(initial_img.to_html,img.to_html)
-        #    content_img_tags["#{index}"] = img
-           # replacements << img
-         #  debugger
-
-            content.gsub!(initial_img, img.to_xhtml)
-
-
-
-            #****************************
-             #añadir campo img tags originales para poder tenerlos al editar
-            #****************************
-
-
-
-        end
-                    
-     #   debugger
-     #   puts "2222 #{content_img_tags}"
-
- 
-   #     @modified_content = content
-                    
-
-      
-
-     #   return @modified_content
-                    
-     
-    end
-
-
-
 
 
     private
@@ -149,8 +76,53 @@ class Admin::PostsController < ApplicationController
       end
     end
 
+    def preprocess_img_tags
+      
+        content = params[:post][:content]
 
+        content_img_tags = Nokogiri.HTML(content).css('img') #Array with all the img tags and their attributes
+        
+        content_img_tags.each_with_index do |img, index|
 
+            initial_img = img.to_xhtml
+           
+            full_src = img['src'].split("/").slice!(1..-1)
 
-    
+            full_file = full_src.slice!(-1)
+            
+            @route = "#{full_src.join("/")}"
+            @file = full_file.split("-").slice!(1..-1).join("-") #removes the version prefix => original-myimage-img-foo.jpg -> myimage-img-foo.jpg
+
+            s3 = Aws::S3::Client.new
+
+            @sizes = s3.list_objects(bucket: ENV['AWS_S3_BUCKET'], marker: "#{@route}").contents.map(&:key)
+            @sizes = @sizes.select {|entry| entry.match("#{@route}/#{/\d{1,4}-/}#{@file}")} # route/{1 to 4 digits}-filename
+
+            if @sizes.empty?
+
+                img["data-sizes"] = [0]
+                return
+
+            end
+
+            @sizes.map! do |size|
+                
+                size.gsub!("#{@route}/", "")
+                size.split("-").slice!(0) #gets, for example, the 480 from "480-filename.jpg" (that is, the img version part of the filename)
+                
+            end
+            
+            @sizes.sort! {|a,z| z.to_i <=> a.to_i}
+     
+            img["data-route"] = "/#{@route}"
+            img["data-file"] = "#{@file}"
+            img["data-sizes"] = "#{@sizes}"
+
+            content.gsub!(initial_img, img.to_xhtml)
+
+        end
+                    
+  
+    end
+  
 end

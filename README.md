@@ -32,7 +32,9 @@ _heroku_
 - Related to ^, add SendGrid for mails, postgres for DB and whatever other production env changes are necessary to pass to production
 
 _post editor_
-- Img responsivizer for posts? (check all img tags in the post, remove source, calc appropiate size, fill src)
+- Add tests on post controller to test that the data-* tabs are added on @post.content
+- Make it not add anything in case aws list objects finds nothing (to handle external imgs)
+
 
 _admin controller_
 - Test optimized image creations (in admin integration controller test)
@@ -42,6 +44,7 @@ _public front end_
 - Theres a small bug when moving the slides to the left and to the right or viceversa (to be fixed later, its a small bug.)
 - Change the images on the home tab
 - Tab indexes en las paginas
+- when there are too many posts, the bar becomes very slow to drag, need to adjust that
 - change the bottom bar logos to something on the server.....
 
 _admin panel front end_
@@ -52,6 +55,7 @@ _admin panel front end_
 
 **DONE**
 
+- Img responsivizer for posts? (check all img tags in the post, remove source, calc appropiate size, fill src) - Done, didnt remove source, it's dynamically replaced in the client so its easier when handling editing
 - Add img upload link to post/new(these would be sent to s3/posts/) - slug removed -> Images are uploaded before the post is submitted, so there is no slug // Done, need to responsivize the iamges still though
 - Add staticController testing (for the slides). - Done, completes the moving of logic from slidersContent to controller
 - Move logic from slidersContent (view) to staticController - Done, testing still to go
