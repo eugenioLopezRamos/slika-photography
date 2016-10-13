@@ -4,6 +4,8 @@ var main = function() {
     //console.log(window.location.pathname);
     //console.log(window.location.pathname.replace('/', ''));
     //console.log("tabname " + window.location.pathname.replace('/', '').split("/")[0]);//.replace(/\/\*+\/+/, ''))
+
+    var assetsLocation
     var getTabFromUrl = window.location.pathname.replace('/', '').split("/")[0];//.replace(/(\/\w+|\/)/, '');
 
     var activeTabValue = getTabFromUrl + 'Tab'; //used to manage the state of the different tabs
@@ -63,9 +65,15 @@ var main = function() {
         imageContainers.map(function(element, index, array) {
 
            var possibleSizes = JSON.parse(element.getAttribute("data-sizes"));
+
+            if(!possibleSizes) {
+                sizeToAssign.push(0);
+                return;
+            }
      
             possibleSizes = possibleSizes.map(element => { return parseInt(element, 10) } )
-  
+
+
            var screenSize = document.documentElement.clientWidth;
 
             var sizeToGet = possibleSizes.filter(function(currSize, sizeIndex, possibleSizesArray) {
@@ -119,20 +127,16 @@ var main = function() {
 
             targets.map(function(element, index, array){
 
-
-
                 if(size[index] != 0) {
-                    
+
                     var route = element.getAttribute("data-route");
                     var file = element.getAttribute("data-file");
                     var newFile = size[index] + "-" + file;
                     var src = route + "/" + newFile;
-
+                    element.setAttribute("src", src);
 
                 }
 
-
-                element.setAttribute("src", src);
                 element.addEventListener("error", imgLoadError);
 
 
