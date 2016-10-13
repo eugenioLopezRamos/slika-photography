@@ -24,8 +24,8 @@ class Post < ApplicationRecord
   end
 
   def use_modified_content
-
-    self.content = @modified_content
+    
+    self.content = @modified_content #not the same as the controller's
 
   end
   
