@@ -6,7 +6,7 @@ class Post < ApplicationRecord
   validates :content, presence: true
   before_validation :create_slug
   validates :slug, presence: true
-  before_validation :use_modified_content
+ # before_validation :use_modified_content
 
   scope :by_date_desc, -> { order(created_at: "desc") } #It seems using default scopes is...complicated to say at least, even for this case, which I thought it'd be fine,
   #eg. http://weblog.jamisbuck.org/2015/9/19/default-scopes-anti-pattern.html, http://stackoverflow.com/questions/25087336/why-is-using-the-rails-default-scope-often-recommend-against
@@ -23,10 +23,10 @@ class Post < ApplicationRecord
   	self.slug = ActionController::Base.helpers.strip_tags(self.title).downcase.parameterize
   end
 
-  def use_modified_content
+ # def use_modified_content
     
-    self.content = @modified_content #not the same as the controller's
+ #   self.content = @modified_content #not the same as the controller's
 
-  end
+#  end
   
 end
