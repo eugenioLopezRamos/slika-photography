@@ -100,7 +100,6 @@ class Admin::PostsController < ApplicationController
 
             if @sizes.empty?
 
-                img["data-sizes"] = [0]
                 return
 
             end
@@ -114,7 +113,7 @@ class Admin::PostsController < ApplicationController
             
             @sizes.sort! {|a,z| z.to_i <=> a.to_i}
      
-            img["data-route"] = "/#{@route}"
+            img["data-route"] = "#{asset_path/@route}"
             img["data-file"] = "#{@file}"
             img["data-sizes"] = "#{@sizes}"
 
