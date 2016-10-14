@@ -92,7 +92,7 @@ class PostsControllerTest < ActionDispatch::IntegrationTest
 
     get new_admin_post_path
     title = "title for post"
-    content = "content for post <img src='www.fakeaddress.com/images/nothere.jpg' />"
+    content = "content for post <img src='www.fakeaddress.com/random-address/here/nothere.jpg' />"
 
     assert_difference 'Post.count', 1 do
       post admin_posts_path, params: {post: {title: title, content: content}}
@@ -106,6 +106,53 @@ class PostsControllerTest < ActionDispatch::IntegrationTest
 
   test "img tag src's found on the S3 bucket are modified by adding the attributes data-route, data-file, data-sizes" do
     
+    get admin_login_path
+    post admin_login_path, params: { session: { email: @notadmin.email, password: "password" } }
+
+    get new_admin_post_path
+    title = "title for post"
+    content = "content for post <img src='/images/post-test/original-TestImage1.jpg' /><img src='/images/post-test/original-TestImage2.jpg' />"
+
+    assert_difference 'Post.count', 1 do
+      post admin_posts_path, params: {post: {title: title, content: content}}
+    end
+
+    Post.last.reload
+    assert_not_equal Post.last.content, content
+    
+    #these are assigned just for tests
+    sizes = assigns(:all_img_data_sizes)
+    routes = assigns(:all_img_data_route)
+    files = assigns(:all_img_data_file)
+
+    #extract the img with nokogiri
+    first_img = Nokogiri.HTML(Post.last.content).css('img')[0]
+    second_img = Nokogiri.HTML(Post.last.content).css('img')[1]
+
+    #each imgs corresponding sizes
+    first_img_sizes = sizes[0]
+    second_img_sizes = sizes[1]
+
+    #each imgs corresponding route
+    first_img_route = routes[0]
+    second_img_route = routes[1]
+    #each imgs corresponding file
+    first_img_file = files[0]
+    second_img_file = files[1]
+
+    #check that ["data-sizes"] is correctly assigned.
+
+    assert_equal first_img["data-sizes"], first_img_sizes 
+    assert_equal second_img["data-sizes"], second_img_sizes
+    
+    #check that ["data-route"] is correctly assigned
+    assert_equal first_img["data-route"], first_img_route
+    assert_equal second_img["data-route"], second_img_route
+
+    #check that ["data-file"] is correctly assigned
+
+    assert_equal first_img["data-file"], first_img_file
+    assert_equal second_img["data-file"], second_file_image
 
   end
 
