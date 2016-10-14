@@ -112,10 +112,12 @@ class PostsControllerTest < ActionDispatch::IntegrationTest
     get new_admin_post_path
     title = "title for post"
     content = "content for post <img src='/images/post-test/original-TestImage1.jpg' /><img src='/images/post-test/original-TestImage2.jpg' />"
+    content = Nokogiri.HTML(content).css('body').to_xhtml #Simulates the output produced by CKEditor
 
     assert_difference 'Post.count', 1 do
       post admin_posts_path, params: {post: {title: title, content: content}}
     end
+
 
     Post.last.reload
     assert_not_equal Post.last.content, content
@@ -136,23 +138,25 @@ class PostsControllerTest < ActionDispatch::IntegrationTest
     #each imgs corresponding route
     first_img_route = routes[0]
     second_img_route = routes[1]
+    
     #each imgs corresponding file
     first_img_file = files[0]
     second_img_file = files[1]
 
     #check that ["data-sizes"] is correctly assigned.
 
-    assert_equal first_img["data-sizes"], first_img_sizes 
-    assert_equal second_img["data-sizes"], second_img_sizes
+    assert_equal first_img["data-sizes"], "#{first_img_sizes}".html_safe 
+    assert_equal second_img["data-sizes"], "#{second_img_sizes}".html_safe
     
     #check that ["data-route"] is correctly assigned
-    assert_equal first_img["data-route"], first_img_route
-    assert_equal second_img["data-route"], second_img_route
+    assert_equal first_img["data-route"], "#{first_img_route}".html_safe
+    assert_equal second_img["data-route"], "#{second_img_route}".html_safe
 
     #check that ["data-file"] is correctly assigned
 
-    assert_equal first_img["data-file"], first_img_file
-    assert_equal second_img["data-file"], second_file_image
+    assert_equal first_img["data-file"], "#{first_img_file}".html_safe
+    assert_equal second_img["data-file"], "#{second_img_file}".html_safe
+
 
   end
 

@@ -138,8 +138,9 @@ class Admin::PostsController < ApplicationController
             img["data-file"] = "#{@file}"
             img["data-sizes"] = "#{@sizes}"
 
-          
+            
             content.gsub!(initial_img, img.to_xhtml)
+           
 
         end
                     
