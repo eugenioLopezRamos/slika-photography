@@ -18,9 +18,12 @@ var fileManager = function(arrayOfFiles) {
 
 	var currentIndex = 0;
 
-	var fileREGEX = /([\w*]+[.]*[\w]+\/)*(\w*[.]*[\w]+.*\-*\(*\)*\+*)/; //  gets all directories + filenames with . and -, (, ), +
-	var folderREGEX = /([\w]+[.]*[\w]+\/\(*\)*\+*\-*)*/; // all directories, excludes files, incl chars -, (, ), +
+//	var fileREGEX = /([\w*]+[.]*[\w]+\/)*(\w*[.]*[\w]+.*\-*\(*\)*\+*)/; //  gets all directories + filenames with "." and "-", "(", ")", "+"
+//	var folderREGEX = /([\w]+[.]*[\w]+\/\(*\)*\+*\-*)*/; // all directories, excludes files, incl chars "-", "(", ")", "+"
 
+
+	var fileREGEX = /([\w]+.*[\w]+\/{1})*(.*)/	//new regexes
+	var folderREGEX = /([\w]+.*[\w]+\/{1})*/
 	var counter = 0; //only needed for testing/as a failsafe (it prevents infinite loops by comparing counter
 	//counter to myArray.length and stopping if counter > myArray.length * <value> )
 	var currentFolder = root;

@@ -345,7 +345,10 @@ before_action :create_download_log, only: :download_file
   end
 
   def is_folder?(file)
-    if file.match(/([\w]+[.]*[\w]+\/)*/) && file.gsub(/(\w*[.]*[\w]+\/)*/, '') === '' # file matches the Folder Regex AND if you replace the
+   # if file.match(/([\w]+[.]*[\w]+\/)*/) && file.gsub(/(\w*[.]*[\w]+\/)*/, '') === '' # file matches the Folder Regex AND if you replace the
+     
+     
+     if file.match(/([\w]+.*[\w]+\/{1})*/) && file.gsub(/([\w]+.*[\w]+\/{1})*/, '') === '' # file matches the Folder Regex AND if you replace the
       #folder regex with "" it becomes "" -> its a folder route instead of a file route
       #gsub is intentionally different, else there's problems when you input, for example file = "2/".gsub(/([\w]+[.]*[\w]+\/)*/) => "2/" => is_folder? => false
       #when it's actually a folder.

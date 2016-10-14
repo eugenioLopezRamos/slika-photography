@@ -12,6 +12,7 @@ class PostsControllerTest < ActionDispatch::IntegrationTest
   end
   
   test "user should not be able to create a post without being logged in" do
+
     #try to access page
     get new_admin_post_path
     assert_redirected_to admin_login_path
@@ -25,6 +26,7 @@ class PostsControllerTest < ActionDispatch::IntegrationTest
   end
   
   test "user should not be able to edit a post without log in" do
+
     #try to access page
     get edit_admin_post_path(@adminpost)
     assert_redirected_to admin_login_path
@@ -43,6 +45,7 @@ class PostsControllerTest < ActionDispatch::IntegrationTest
   end
   
   test "user should be sent to login page if trying to destroy post without log in" do
+
     #delete post with request
     delete admin_post_path(@notadminpost)
     assert_not_equal @notadminpost.title, nil
@@ -50,5 +53,62 @@ class PostsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to admin_login_path
     
   end
+
+  test "valid post should be correctly saved when submitted" do 
+    get admin_login_path
+    post admin_login_path, params: { session: { email: @notadmin.email, password: "password" } }
+
+    get new_admin_post_path
+    title = "title for post"
+    content = "content for post"
+
+    assert_difference 'Post.count', 1 do
+      post admin_posts_path, params: {post: {title: title, content: content}}
+    end
+
+    title_to_slug = ActionController::Base.helpers.strip_tags(Post.last.title).downcase.parameterize
+
+    assert_equal Post.last.title, title
+    assert_equal Post.last.content, content
+    assert_equal Post.last.slug, title_to_slug
+
+    #test that duplicate slugs are invalid
+
+    title = "title-for%post"
+    posts_count = Post.count
+
+    assert_raises(Exception) {post admin_posts_path, params: {post: 
+                                                                  {title: title, content: content}
+                                                                  } }
+
+    assert_equal Post.count, posts_count
+
+  end
+
+
+  test "img tag src's not found on the S3 bucket are kept the same" do 
+    get admin_login_path
+    post admin_login_path, params: { session: { email: @notadmin.email, password: "password" } }
+
+    get new_admin_post_path
+    title = "title for post"
+    content = "content for post <img src='www.fakeaddress.com/images/nothere.jpg' />"
+
+    assert_difference 'Post.count', 1 do
+      post admin_posts_path, params: {post: {title: title, content: content}}
+    end
+
+    assert_equal Post.last.content, content
+
+
+  end
+
+
+  test "img tag src's found on the S3 bucket are modified by adding the attributes data-route, data-file, data-sizes" do
+    
+
+  end
+
+
 
 end

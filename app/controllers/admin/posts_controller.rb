@@ -103,7 +103,7 @@ class Admin::PostsController < ApplicationController
                 return
 
             end
-
+            debugger
             @sizes.map! do |size|
                 
                 size.gsub!("#{@route}/", "")
@@ -113,7 +113,7 @@ class Admin::PostsController < ApplicationController
             
             @sizes.sort! {|a,z| z.to_i <=> a.to_i}
      
-            img["data-route"] = "#{asset_path/@route}"
+            img["data-route"] = ActionController::Base.helpers.asset_path("#{@route}#{@file}")#"#{asset_host/@route}"
             img["data-file"] = "#{@file}"
             img["data-sizes"] = "#{@sizes}"
 
