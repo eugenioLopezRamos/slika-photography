@@ -4,8 +4,6 @@ var main = function() {
     //console.log(window.location.pathname);
     //console.log(window.location.pathname.replace('/', ''));
     //console.log("tabname " + window.location.pathname.replace('/', '').split("/")[0]);//.replace(/\/\*+\/+/, ''))
-
-    var assetsLocation
     var getTabFromUrl = window.location.pathname.replace('/', '').split("/")[0];//.replace(/(\/\w+|\/)/, '');
 
     var activeTabValue = getTabFromUrl + 'Tab'; //used to manage the state of the different tabs
@@ -120,9 +118,7 @@ var main = function() {
 
 
             var selector = selectorValue + ' img';
-
             var size = size(selector);
-
             var targets = [].slice.call(document.querySelectorAll(selector));
 
             targets.map(function(element, index, array){
@@ -1727,12 +1723,9 @@ function blogTabHandler(postToRequest, setListeners) {
         
        $.ajax({url: '/post_retriever', data: {'slug': postToRequest}, type: 'GET', dataType: 'html'}).done(function(response) {
         $('#post-container').html(response);
-        currentPostId = postToRequest;//stateObject[activeTabValue];
-        console.log(currentPostId);
-        //stateObject[activeTabValue] = postToRequest;
-        
-      //  history.replaceState(stateObject, "state", "");
-            setActivePost();
+        currentPostId = postToRequest;
+        setActivePost();
+        getResizedImages('.post-content', determineSizeToGet);
     }).fail(function(response) {
 
         useMessagesBanner("error", "Oops, we couldn't retrieve that. Please try again"); 
@@ -1746,24 +1739,11 @@ function blogTabHandler(postToRequest, setListeners) {
         setActivePost();
     } 
 
-
-    /*if(typeof stateObject[activeTabValue] == "undefined"){
-        var currentPostId = document.getElementsByClassName("post")[0].id.replace('post-', '');
-
-        stateObject[activeTabValue] = currentPostId; //: requestPost = true; 
-        setActivePost();
-
-        history.replaceState(stateObject, "state", "/" + activeTabValue.replace('Tab', '') + "/" + currentPostId);
-    } */
-
     /**********************  /AJAX request handlers ************************/
 
     var blogContent = document.getElementById("blogContents");
     var postContainer = document.getElementsByClassName("post-container")[0];
 
-    
-
-        
     function linksClickHandler(event) {
         event.preventDefault();
         
@@ -1779,6 +1759,7 @@ function blogTabHandler(postToRequest, setListeners) {
             history.pushState(stateObject, "state", "/blog/" + targetPostId); //pushes the state, changes the URL
             $('#post-container').html(response); //renders the post
             setActivePost();
+            getResizedImages('.post-content', determineSizeToGet);
 
         }).fail(function(response) {
 
