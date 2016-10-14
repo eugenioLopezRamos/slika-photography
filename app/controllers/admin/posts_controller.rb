@@ -81,13 +81,29 @@ class Admin::PostsController < ApplicationController
         content = params[:post][:content]
 
         content_img_tags = Nokogiri.HTML(content).css('img') #Array with all the img tags and their attributes
-        
+
+        #these three are not used in this process itself, but are provided to make testing easier/more understandable (also avoids making double the requests to S3)
+        @all_img_data_sizes = [] 
+        @all_img_data_route = []
+        @all_img_data_file = []
+
+
+
+
+
         content_img_tags.each_with_index do |img, index|
-
+            
             initial_img = img.to_xhtml
-           
-            full_src = img['src'].split("/").slice!(1..-1)
 
+            full_src = img['src'].split("/")
+     
+          #  if full_src[0] != "" #if the first item of the src attribute is different from "" (as would happen, for example, on an external url, stop the process)
+           #     return
+           # end
+
+            
+            full_src = full_src.slice!(1..-1)
+         
             full_file = full_src.slice!(-1)
             
             @route = "#{full_src.join("/")}"
@@ -99,11 +115,12 @@ class Admin::PostsController < ApplicationController
             @sizes = @sizes.select {|entry| entry.match("#{@route}/#{/\d{1,4}-/}#{@file}")} # route/{1 to 4 digits}-filename
 
             if @sizes.empty?
-
+                
                 return
 
             end
-            debugger
+
+          
             @sizes.map! do |size|
                 
                 size.gsub!("#{@route}/", "")
@@ -112,11 +129,16 @@ class Admin::PostsController < ApplicationController
             end
             
             @sizes.sort! {|a,z| z.to_i <=> a.to_i}
-     
-            img["data-route"] = ActionController::Base.helpers.asset_path("#{@route}#{@file}")#"#{asset_host/@route}"
+
+            @all_img_data_route.push ActionController::Base.helpers.asset_path("#{@route}/")
+            @all_img_data_file.push "#{@file}"
+            @all_img_data_sizes.push @sizes
+            
+            img["data-route"] = ActionController::Base.helpers.asset_path("#{@route}/")#"#{asset_host/@route}"
             img["data-file"] = "#{@file}"
             img["data-sizes"] = "#{@sizes}"
 
+          
             content.gsub!(initial_img, img.to_xhtml)
 
         end
