@@ -75,7 +75,7 @@ var main = function() {
            var screenSize = document.documentElement.clientWidth;
 
             var sizeToGet = possibleSizes.filter(function(currSize, sizeIndex, possibleSizesArray) {
-                console.log("currSize ", currSize, "index ", sizeIndex, "array ", possibleSizesArray, "scr", screenSize);
+             //   console.log("currSize ", currSize, "index ", sizeIndex, "array ", possibleSizesArray, "scr", screenSize);
 
                 if(sizeIndex === 0 && screenSize > currSize) { // screensize is bigger than the biggest available size?
               
@@ -1706,14 +1706,14 @@ function blogTabHandler(postToRequest, setListeners) {
         [].slice.call(document.getElementsByClassName("post-link")).map(function(element, index, array) {
             console.log("currpost id", currentPostId);
             element.id === currentPostId ? element.classList.add("active-post") : element.classList.remove("active-post");
-
+            getResizedImages('.post-content', determineSizeToGet);
             //element.className.replace('post-link ', '') == currentPostId ? element.classList.add("active-post") : element.classList.remove("active-post");
 
         });
         
     }
 
-    getResizedImages('.post-content', determineSizeToGet);
+
     
 
     /****************** AJAX request handlers ******************/
@@ -1725,7 +1725,7 @@ function blogTabHandler(postToRequest, setListeners) {
         $('#post-container').html(response);
         currentPostId = postToRequest;
         setActivePost();
-        getResizedImages('.post-content', determineSizeToGet);
+
     }).fail(function(response) {
 
         useMessagesBanner("error", "Oops, we couldn't retrieve that. Please try again"); 
@@ -1735,7 +1735,6 @@ function blogTabHandler(postToRequest, setListeners) {
         stateObject[activeTabValue] = document.getElementsByClassName("post")[0].id.replace('post-', '');
         history.replaceState(stateObject, "state", '/blog/' + document.getElementsByClassName("post")[0].id.replace('post-', ''));
         currentPostId = document.getElementsByClassName('post')[0].id.replace('post-', '');
-        console.log("post request undef", currentPostId);
         setActivePost();
     } 
 
@@ -1759,7 +1758,6 @@ function blogTabHandler(postToRequest, setListeners) {
             history.pushState(stateObject, "state", "/blog/" + targetPostId); //pushes the state, changes the URL
             $('#post-container').html(response); //renders the post
             setActivePost();
-            getResizedImages('.post-content', determineSizeToGet);
 
         }).fail(function(response) {
 
@@ -1914,14 +1912,6 @@ function blogMenuFunction(addListeners) {
 
     if((menuContainerHeight<sidebarHeight) && assignListeners) { //only load event listeners on first load, not on resizes.
         /**removes any existing evt listeners. */
-        console.log("postmenuscroller", postMenuScroller);
-
-
-
-
-
-
-
        
         /* the function that actually moves the menu */
         function postMenuScroller(initialPosition, variation) {
@@ -1955,13 +1945,13 @@ function blogMenuFunction(addListeners) {
                 var transformAmount = (function() {
 
                     if((scrollButtonPrevScroll + variation)>minTransform) { //if translateY would be lower than zero (or whatever the minTransform is set to), return minTransform;
-        
+                         console.log("min trans", minTransform);
                         return minTransform;
 
                     }
 
                     else if ((scrollButtonPrevScroll + variation)<maxTransform) { //if the scroll would be more than all of  the posts, cap it to the max height of the posts menu container
-              
+                        console.log("max trans", maxTransform);
                         return maxTransform;
                     }
 
@@ -1977,7 +1967,7 @@ function blogMenuFunction(addListeners) {
 
                 return;
             } 
-        //}
+        
         /**** /the function that actually moves the menu ***********************/
 
         /* mousewheel handler */
@@ -2003,10 +1993,13 @@ function blogMenuFunction(addListeners) {
                 },
 
                 mouseMoveHandler: function(event) {
+
                     event.preventDefault();
                     event.stopPropagation();
-    
-                    delta = -event.movementY;//mouseStartPositionY - event.clientY;              
+   
+                    var percentageOfScrollbar = -event.movementY/scrollBarHeight;
+                    var delta = percentageOfScrollbar * sidebarHeight;
+
                     postMenuScroller("default", delta);
                   
                 },
@@ -2089,15 +2082,8 @@ function blogMenuFunction(addListeners) {
 
         }
 
-    //    function assignBlogMenuEventListener() {
-
         postSidebarMenuContainer.addEventListener("touchstart", touchStartHandler);
         postSidebarMenuContainer.addEventListener("touchend", touchEndHandler); //was postSidebarMenuContainer. .....
-
-      //  }
-
-      //  assignBlogMenuEventListener();
-
 
         /** /touch scrollbar handler   **/
 
@@ -2107,23 +2093,36 @@ function blogMenuFunction(addListeners) {
         function scrollClickHandler(event) {
 
             
-            var scrollButtonTop = scrollButton.getBoundingClientRect().top;
+            var scrollButtonTop = scrollButton.offsetTop; //scrollButton.getBoundingClientRect().top;
 
             var valueToUse = (function() {
 
-                var scrollBarToTop = parseInt(scrollBar.getBoundingClientRect().top, 10);
+                var scrollBarToTop = parseInt(scrollBar.offsetTop, 10);//parseInt(scrollBar.getBoundingClientRect().top, 10);
                 return (event.clientY - scrollBarToTop);
             })();
 
-            delta = -valueToUse - scrollButtonPrevScroll;
- 
-           postMenuScroller("default", delta);
+            var percentOfScrollbar = valueToUse/scrollBarHeight //What % of the scrollbar did we click?
+            var moveAmount = percentOfScrollbar * sidebarHeight; //transform the post sidebar menu in percentageOfScrollbar %
+            
+            delta = -moveAmount - scrollButtonPrevScroll + scrollButtonHeight*2;
+
+            postMenuScroller("default", delta);
 
         }
 
         scrollBar.addEventListener("click", scrollClickHandler);
 
+        function scrollFocusHandler(event) {
 
+            var delta = postSidebar.offsetTop - event.target.offsetTop;
+            delta = delta - scrollButtonPrevScroll;
+
+            postMenuScroller("default", delta);
+        }
+
+        document.querySelectorAll('.post-sidebar a').forEach(function(element){
+            element.addEventListener("focus", scrollFocusHandler);
+        })
 
 
     } else if(menuContainerHeight>sidebarHeight) {

@@ -136,7 +136,7 @@ class Admin::PostsController < ApplicationController
             
             img["data-route"] = ActionController::Base.helpers.asset_path("#{@route}/")
             img["data-file"] = "#{@file}"
-            img["data-sizes"] = "#{@sizes}"
+            img["data-sizes"] = "#{@sizes.slice!(0..-2)}"
 
             
             content.gsub!(initial_img, img.to_xhtml)

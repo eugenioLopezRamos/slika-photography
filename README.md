@@ -38,8 +38,7 @@ _public front end_
 - change the bottom bar logos to something on the server.....
 
 - Theres a small bug when moving the slides to the left and to the right or viceversa (to be fixed later, its a small bug.)
-- when there are too many posts, the bar becomes very slow to drag, need to adjust that
-- move scrollbar to focus (post sidebar menu)
+
 
 _admin panel front end_
 
@@ -49,6 +48,10 @@ _admin panel front end_
 
 
 **DONE**
+
+- when there are too many posts, the bar becomes very slow to drag, need to adjust that
+- Scrollbar click not working correctly when theres too many posts, cant get to lower half
+- Move scrollbar to focus (post sidebar menu)
 - There's a bug with image assignation on blog posts (reproduce by loading post w/ incorrect img route -> load a post with correct img route -> go back to first post, the src of the previous valid post is incorrectly assigned)
 Fixed -> Just had to add the getResizedImages function to the ajax calls
 - Add ajax tests on staticController (for post_retriever and tabs_retriever)

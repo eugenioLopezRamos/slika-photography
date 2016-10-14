@@ -132,8 +132,8 @@ class PostsControllerTest < ActionDispatch::IntegrationTest
     second_img = Nokogiri.HTML(Post.last.content).css('img')[1]
 
     #each imgs corresponding sizes
-    first_img_sizes = sizes[0]
-    second_img_sizes = sizes[1]
+    first_img_sizes = sizes[0].slice!(0..-2) #exclude thumbnail size
+    second_img_sizes = sizes[1].slice!(0..-2) #exclude thumbnail size
 
     #each imgs corresponding route
     first_img_route = routes[0]
