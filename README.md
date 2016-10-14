@@ -33,22 +33,24 @@ _heroku_
 
 _public front end_
 
-- Theres a small bug when moving the slides to the left and to the right or viceversa (to be fixed later, its a small bug.)
 - Change the images on the home tab
 - Tab indexes en las paginas
-- when there are too many posts, the bar becomes very slow to drag, need to adjust that
 - change the bottom bar logos to something on the server.....
 
-- There's a bug with image assignation on blog posts (reproduce by loading post w/ incorrect img route -> load a post with correct img route -> go back to first post, the src of the previous valid post is incorrectly assigned)
+- Theres a small bug when moving the slides to the left and to the right or viceversa (to be fixed later, its a small bug.)
+- when there are too many posts, the bar becomes very slow to drag, need to adjust that
+- move scrollbar to focus (post sidebar menu)
 
 _admin panel front end_
 
 - Sort files into files and folders, right now it looks messy.
-- Add friendly forwarding on admin pages
+
+
 
 
 **DONE**
-
+- There's a bug with image assignation on blog posts (reproduce by loading post w/ incorrect img route -> load a post with correct img route -> go back to first post, the src of the previous valid post is incorrectly assigned)
+Fixed -> Just had to add the getResizedImages function to the ajax calls
 - Add ajax tests on staticController (for post_retriever and tabs_retriever)
 - Test optimized image creations (in admin integration controller test)
 - Add tests on post controller to test that the data-* tabs are added on @post.content
@@ -72,7 +74,8 @@ _admin panel front end_
 - Add loading message to the tab getter requests - Done and fixed a bug about referencing a nonexistant DOM object (the msg banners when changing tabs)
 - check the animations on image load, seems like they arent working quite right on first load. - They seem to be working fine now.
 - Contact tab is bad. Review - Fixed. Changed animations.
-- check the accuracy of the image resizer method on admin controller. -> Done, refactored the function a bit.
+- check the accuracy of the image resizer method on admin controller. -> rray){
+Done, refactored the function a bit.
 - change |file| to temp_file later (admin controller ln. 240, currently it's called file, same as the iterator of its parent block)
 - Use application_ helper size_breakpoints in admin controller instead of own method.
 - Server side verification of file -> image
@@ -108,7 +111,6 @@ _admin panel front end_
 - clean up the file manager javascript, it looks awful right now (could probably use a refactor though)
 - Add size limit on uploads/downloads client side and server side
 - Chrome 54 beta has a weird bug with image height: auto when setting a width(should be proportional but is now setting height to the minimum) - Need to check if it happens on win Chrome 53 (doesnt on linux Chrome 53 nor firefox latest stable) -> probably happens in IE/edge too, better set explicit minheight :::::::: 30/09/2016 update seems to have been fixed? Not sure what happened, working correctly in chrome 54 beta & Edge (with which I had height:auto problems before)
-
 - verify that :slug params are safe (or if they need sanitization/parameterization)
 - fix posts slug redirecter, it always queries the posts model
 - Images are shown according to the first integer on their filename (filename.to_i)
@@ -160,3 +162,4 @@ These are "would be nice to have"s
 - Resque queues for upload/convert?
 - reassemble the manifest files for the asset pipeline into 2 files: main and admin
 - Check if I can use cloudflare instead of cloudFront.
+- Add friendly forwarding on admin pages
