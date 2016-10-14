@@ -724,7 +724,7 @@ if(executeAJAX) { //used for nav menu clicks
 
     useMessagesBanner("info", "Loading..."); 
 
-$.ajax({url: "/tab_getter", 
+$.ajax({url: "/tab_retriever", 
         data: {tab: activeTabValue, id: status[activeTabValue]}, 
         type: 'GET', 
         dataType: 'html'}).done(function(response) {
@@ -1725,7 +1725,7 @@ function blogTabHandler(postToRequest, setListeners) {
 
     if(typeof postToRequest !== "undefined") { //this is used when both states are blogtab
         
-       $.ajax({url: '/post_api', data: {'slug': postToRequest}, type: 'GET', dataType: 'html'}).done(function(response) {
+       $.ajax({url: '/post_retriever', data: {'slug': postToRequest}, type: 'GET', dataType: 'html'}).done(function(response) {
         $('#post-container').html(response);
         currentPostId = postToRequest;//stateObject[activeTabValue];
         console.log(currentPostId);
@@ -1771,7 +1771,7 @@ function blogTabHandler(postToRequest, setListeners) {
         window.setTimeout(function() {
         var targetPostId = event.target.id//event.target.className.replace('post-link ', '').replace('active-post', '').replace('/\s*/',''); //determines the id of the post to retrieve
 
-        $.ajax({url: '/post_api', data: {'slug': targetPostId}, type: 'GET', dataType: 'html'}).done(function(response) {
+        $.ajax({url: '/post_retriever', data: {'slug': targetPostId}, type: 'GET', dataType: 'html'}).done(function(response) {
 
             stateObject.state = 'blogState'; //updates the state object state (which is used by updatestate/the popstate event listener)
             stateObject[activeTabValue] = targetPostId; //stores the id of the post that was retrieved from the server
