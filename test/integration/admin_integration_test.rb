@@ -48,6 +48,7 @@ class AdminIntegrationTest < ActionDispatch::IntegrationTest
 # Find "#START TEST => DOWNLOADS" (WITHOUT the quotation marks) to go to the beginning of the downloads test
 # Find "#START TEST => DOWNLOADS_INFO" (WITHOUT the quotation marks) to go to the beginning of the req_download_info test
 # Find "#START TEST => DELETIONS" (WITHOUT the quotation marks) to go to the beginning of the file delete test
+
  test "Tests full file manager flow -> Uploads files from disk to S3, downloads them from S3 to disk while generating logs, then deletes them" do
  		#maybe add a second upload with an actual file_route instead of just empty and refactor the loop code
 	  	#to loop over arrays and them over images? sounds slow but is more thorough.
@@ -81,34 +82,37 @@ class AdminIntegrationTest < ActionDispatch::IntegrationTest
 
 	  	post admin_upload_path(@admin), params: {file_route: file_route, image: uploaded_images_array}
 
-
-
 	  	uploaded_images_array.each do |image|
 
-	  		#same local variables as the controller
-	        image_file = image.tempfile 
-	        image_file_name = "original-#{image.original_filename}"
+	        image_file_name = "#{image.original_filename}"
 	        image_file_route = file_route 
-	        #plus the tempfile size
-	        image_file_size = image.tempfile.size
 
-	  		#tests route + original filename being equal to the route + filename on the bucket(eg. is file uploaded to the intended "folder"?).
-	  		test_uploaded_file_listing = s3.list_objects(bucket: ENV['AWS_S3_BUCKET'], marker: image_file_route).contents
-	        test_uploaded_file_listing = test_uploaded_file_listing.select{ |entry| entry.key === "#{image_file_route}#{image_file_name}"  }.map(&:key)
+	  		#tests route + prefix + original filename being equal to the route + filename on the bucket(eg. is file uploaded to the intended "folder"?).
+	  		@test_uploaded_file_listing = s3.list_objects(bucket: ENV['AWS_S3_BUCKET'], marker: image_file_route).contents
+		
+			#get all corresponding sizes
+			sizes = @controller.calc_sizes(size_breakpoints, image)
+			sizes.unshift("original") #adds a new item at the beginning of the array, "original" which is the unmodified version of the img
 
-	        #Test filenames being the same - image_file_name is in an array because the result from S3 is also an array (in this case, of one item.)
-	      
-			assert_equal ["#{file_route}#{image_file_name}"], test_uploaded_file_listing
+			#this tests the existence of each version of the img
+			sizes.each do |prefix|
 
-	        #Should give back only one item.
-	        assert_equal test_uploaded_file_listing.length, 1
-	        #Test route on the bucket being same to params[:file_route] + image_file_name.      
-	        assert_equal "#{image_file_route}#{image_file_name}", "#{test_uploaded_file_listing[0]}"
+				block_uploaded_file_listing = @test_uploaded_file_listing.select{ |entry| entry.key === "#{image_file_route}#{prefix}-#{image_file_name}"  }.map(&:key)
 
-	        #tests same file size - I'm doing this comparison instead of downloading the file with get_object then comparing them.
-	        test_uploaded_file_size = s3.list_objects(bucket: ENV['AWS_S3_BUCKET'], marker: image_file_route).contents
-	        test_uploaded_file_size = test_uploaded_file_size.select{ |entry| entry.key === "#{image_file_route}#{image_file_name}"  }.map(&:size)
-	        assert_equal image.size, test_uploaded_file_size[0]
+				#Test filenames being the same - image_file_name is in an array because the result from S3 is also an array (in this case, of one item.)
+			
+				assert_equal ["#{file_route}#{prefix}-#{image_file_name}"], block_uploaded_file_listing
+				#Should give back only one item.
+				assert_equal block_uploaded_file_listing.length, 1
+				#Test route on the bucket being same to params[:file_route] + image_file_name.      
+				assert_equal "#{image_file_route}#{prefix}-#{image_file_name}", "#{block_uploaded_file_listing[0]}"
+
+			end
+
+			#tests same original file size - I'm doing this comparison instead of downloading the file with get_object then comparing them.
+			test_uploaded_file_size = @test_uploaded_file_listing.select {|entry| entry.key === "#{image_file_route}original-#{image_file_name}"}.map(&:size)
+			assert_equal image.size, test_uploaded_file_size[0]
+
 	  	end
 
   	#START TEST => DOWNLOADS

@@ -41,8 +41,11 @@ _public front end_
 - Tab indexes en las paginas
 - when there are too many posts, the bar becomes very slow to drag, need to adjust that
 - change the bottom bar logos to something on the server.....
+
 - There's a bug with image assignation on blog posts (reproduce by loading post w/ incorrect img route -> load a post with correct img route -> go back to first post, the src of the previous valid post is incorrectly assigned)
 
+_front end & backend_
+- Add ajax tests on staticController (using xhr: true as detailed on the rails testing guide)
 
 _admin panel front end_
 
