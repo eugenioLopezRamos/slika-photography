@@ -31,9 +31,6 @@ _s3_
 _heroku_
 - Related to ^, add SendGrid for mails, postgres for DB and whatever other production env changes are necessary to pass to production
 
-_post editor_
-- Add tests on post controller to test that the data-* tabs are added on @post.content
-
 _admin controller_
 - Test optimized image creations (in admin integration controller test)
 
@@ -55,6 +52,7 @@ _admin panel front end_
 
 **DONE**
 
+- Add tests on post controller to test that the data-* tabs are added on @post.content
 - Polishing the new post page, the inline editor looks weird and the normal editor looks too big.
 - Make it not add anything in case aws list objects finds nothing (to handle external imgs)
 - Img responsivizer for posts? (check all img tags in the post, remove source, calc appropiate size, fill src) - Done, didnt remove source, it's dynamically replaced in the client so its easier when handling editing

@@ -97,9 +97,9 @@ class Admin::PostsController < ApplicationController
 
             full_src = img['src'].split("/")
      
-          #  if full_src[0] != "" #if the first item of the src attribute is different from "" (as would happen, for example, on an external url, stop the process)
-           #     return
-           # end
+            if full_src[0] != "" #if the first item of the src attribute is different from "" (as would happen, for example, on an external url, stop the process)
+               return
+            end
 
             
             full_src = full_src.slice!(1..-1)
@@ -134,7 +134,7 @@ class Admin::PostsController < ApplicationController
             @all_img_data_file.push "#{@file}"
             @all_img_data_sizes.push @sizes
             
-            img["data-route"] = ActionController::Base.helpers.asset_path("#{@route}/")#"#{asset_host/@route}"
+            img["data-route"] = ActionController::Base.helpers.asset_path("#{@route}/")
             img["data-file"] = "#{@file}"
             img["data-sizes"] = "#{@sizes}"
 
