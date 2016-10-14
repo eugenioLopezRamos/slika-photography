@@ -31,9 +31,6 @@ _s3_
 _heroku_
 - Related to ^, add SendGrid for mails, postgres for DB and whatever other production env changes are necessary to pass to production
 
-_admin controller_
-- Test optimized image creations (in admin integration controller test)
-
 _public front end_
 
 - Theres a small bug when moving the slides to the left and to the right or viceversa (to be fixed later, its a small bug.)
@@ -44,9 +41,6 @@ _public front end_
 
 - There's a bug with image assignation on blog posts (reproduce by loading post w/ incorrect img route -> load a post with correct img route -> go back to first post, the src of the previous valid post is incorrectly assigned)
 
-_front end & backend_
-- Add ajax tests on staticController (using xhr: true as detailed on the rails testing guide)
-
 _admin panel front end_
 
 - Sort files into files and folders, right now it looks messy.
@@ -55,6 +49,8 @@ _admin panel front end_
 
 **DONE**
 
+- Add ajax tests on staticController (for post_retriever and tabs_retriever)
+- Test optimized image creations (in admin integration controller test)
 - Add tests on post controller to test that the data-* tabs are added on @post.content
 - Polishing the new post page, the inline editor looks weird and the normal editor looks too big.
 - Make it not add anything in case aws list objects finds nothing (to handle external imgs)

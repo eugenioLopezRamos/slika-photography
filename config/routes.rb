@@ -17,14 +17,14 @@ Rails.application.routes.draw do
 
   get '/blog/', :slug => "zetaomega9ya-itsindeedthelastpostletmego", to: 'static#show', :tab => 'blogTab'
   get '/blog/:slug', to: 'static#show', :tab => 'blogTab'
-  get 'post_api', to: 'static#retrieve_posts'
+  get 'post_retriever', to: 'static#retrieve_posts'
 
-  get '/tab_getter', to: 'static#retrieve_tabs'
+  get '/tab_retriever', to: 'static#retrieve_tabs'
 
 
 
   
-namespace :admin do #maybe I should move this to resources: instead of namespace but I'm not sure
+namespace :admin do
  
  #resources routes
  resources :users #creates the REST routes for the users model

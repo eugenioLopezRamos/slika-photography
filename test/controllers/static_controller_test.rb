@@ -52,7 +52,7 @@ class StaticControllerTest < ActionDispatch::IntegrationTest
       img_full_routes.each do |id|
 
         filename = String.new
-       # debugger
+
         img_ids.each do |name|
           if name.include? id
             filename = name.split("/")[-1]
@@ -75,6 +75,32 @@ class StaticControllerTest < ActionDispatch::IntegrationTest
       #  assert_select "data-sizes",   
       end
     end
+  end
+
+  test "ajax requests for tabs produce the corresponding tab" do
+    #test tabs
+    @tabs = ApplicationHelper::image_tabs
+
+    @tabs.each do |tab|
+
+      get '/tab_retriever', params: {tab: tab, id: "undefined" } # undefined is the first get when site is loaded and you nav to another tab you haven't
+      #previously navegated to.
+
+      assert_select "div.#{tab.gsub("Tab", "Slider")}", 1
+
+    end
+  end
+  test "ajax requests for posts displays post content" do
+
+    #This case will 404, which I assume is fine since we want to
+    #just test that the elements are being correctly composed and passed to the browser
+    get '/post_retriever', params: {slug: "any-slug"}
+
+    assert_select "div.post", 1
+    assert_select "div.post-title", 1
+    assert_select "div.post-content", 1
+    
+  
   end
 
 
