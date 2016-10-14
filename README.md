@@ -33,8 +33,6 @@ _heroku_
 
 _post editor_
 - Add tests on post controller to test that the data-* tabs are added on @post.content
-- Make it not add anything in case aws list objects finds nothing (to handle external imgs)
-
 
 _admin controller_
 - Test optimized image creations (in admin integration controller test)
@@ -47,7 +45,7 @@ _public front end_
 - when there are too many posts, the bar becomes very slow to drag, need to adjust that
 - change the bottom bar logos to something on the server.....
 
-_admin panel front end_
+_admin panel front end_s
 
 - Sort files into files and folders, right now it looks messy.
 - Add friendly forwarding on admin pages
@@ -55,6 +53,8 @@ _admin panel front end_
 
 **DONE**
 
+- Polishing the new post page, the inline editor looks weird and the normal editor looks too big.
+- Make it not add anything in case aws list objects finds nothing (to handle external imgs)
 - Img responsivizer for posts? (check all img tags in the post, remove source, calc appropiate size, fill src) - Done, didnt remove source, it's dynamically replaced in the client so its easier when handling editing
 - Add img upload link to post/new(these would be sent to s3/posts/) - slug removed -> Images are uploaded before the post is submitted, so there is no slug // Done, need to responsivize the iamges still though
 - Add staticController testing (for the slides). - Done, completes the moving of logic from slidersContent to controller
@@ -158,7 +158,6 @@ These are "would be nice to have"s
 
 - Facebook comments on blog posts  
 - JSON based AJAX translations  
-- Polishing the new post page, the inline editor looks weird and the normal editor looks too big.
 - Resque queues for upload/convert?
 - reassemble the manifest files for the asset pipeline into 2 files: main and admin
 - Check if I can use cloudflare instead of cloudFront.

@@ -7,9 +7,11 @@
 
 <div class="login-container">
 
+    <div class="message-box">
       <% flash.each do |message_type, message| %>
         <div class="alert alert-<%= message_type %>"><%= message %></div>
       <% end %>
+    </div>
 
     <span class="action-title">Log In</span>
     <span class="action-description">Please enter your credentials</span>
