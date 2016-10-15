@@ -7,9 +7,9 @@ class StaticController < ApplicationController
   
 
   def show
-    if image_tabs.include? params[:tab]
-      slider_tabs_images
-    end
+  #  if image_tabs.include? params[:tab]
+      assign_images
+  #  end
 
     render 'home'
   end
@@ -45,9 +45,9 @@ class StaticController < ApplicationController
       end
 
     #check if the tab is a *Slides tab
-    if image_tabs.include? params[:tab] #image_tabs comes from from application_helper 
-      slider_tabs_images #determines which images to put on the tab
-    end
+   # if image_tabs.include? params[:tab] #image_tabs comes from from application_helper 
+      assign_images #determines which images to put on the tab
+  #  end
 
     end
 
@@ -55,10 +55,18 @@ class StaticController < ApplicationController
   end
 
 
-  def slider_tabs_images
+  def assign_images
 
     @assets_dir = 'images/' #base directory of all assets
-    @image_dir = "#{params[:tab].gsub('Tab', 'Slides')}" #The folder of each tab's slides.
+
+
+    if image_tabs.include? params[:tab]
+      @image_dir = "#{params[:tab].gsub('Tab', 'Slides')}"
+    else
+      @image_dir = "#{params[:tab].gsub('Tab', '')}" 
+    end
+    #@image_dir = "#{params[:tab].gsub('Tab', 'Slides')}" #The folder of each tab's slides.
+
     @tab_value = @image_dir.gsub("Slides", "Slide") #the name of a single slide. Used for the HTML.
   
     @active_slide_class = 'active-slide' #HTML class to be used for the active slide - This is used by the javascript and css to display and style things.
