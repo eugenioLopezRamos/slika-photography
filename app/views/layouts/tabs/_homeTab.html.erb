@@ -2,7 +2,19 @@
 
     <h1 class="homeTabTitle">Lorem Ipsum</h1>
     
-    <img class="home-main-img" src>
+
+
+      <% if Rails.env.development? || Rails.env.test? %>
+      <%#  resets the @full_dir so "public/" isn't added twice since image_tag auto adds it. 
+            Probably should have used just plain old HTML but at least I learned a bit about the asset_path
+            I guess %>
+        <% @full_dir = "#{@assets_dir}#{@image_dir}" %>
+      <% end %>
+
+      <% @main_image = @original_files.select { |image| image.include? "main" }%>
+ 
+      <%= image_tag("", class: 'home-main-img', id: "#{@full_dir}/#{@main_image[0]}", data: {sizes: @sizes_per_file[@main_image[0]], route: "#{asset_path @full_dir}" , file: "#{@main_image[0]}" } ) %>
+
     <div class="homeBody">
       <p class="home-main-par">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam eu nulla vitae metus rhoncus ultricies quis nec felis. Duis -lectus turpis, auctor sed enim ac, blandit mollis justo. Nam quis nisi dapibus, vulputate lacus eleifend, maximus magna.
         Quisque et ullamcorper magna. In bibendum, elit at bibendum rutrum, erat nunc pulvinar nisl, vel elementum metus purus ac purus. Mauris gravida porta nibh non consectetur. Suspendisse ullamcorper enim eros, at fringilla nibh iaculis a. Nunc accumsan
@@ -14,20 +26,34 @@
     
     <div class="smallThumbnails">
       <div class="smallThumbnailsContainer">
-        
+
         <div class="smallThumbnailImgs" id="thumbnailPhoto1"><span>Expand</span></div>
         <div class="smallThumbnailImgs" id="thumbnailPhoto2"><span>Expand</span></div>
         <div class="smallThumbnailImgs" id="thumbnailPhoto3"><span>Expand</span></div> 
         <div class="smallThumbnailImgs" id="thumbnailPhoto4"><span>Expand</span></div> 
       </div>
+
     </div>
     
   <div class="bigThumbnails" id="bigThumbnails">
      <div class="bigThumbnailsContainer">
+
+
+
+        <% @thumbnails = @original_files.select {|image| !image.include? "main"} %>
+
+        <% @thumbnails.each_with_index do  |image, index|   %>
+
+          <%= image_tag("", class: "bigThumbnailImgs _#{(index + 1)}", id: "#{@full_dir}/#{image}", data: {sizes: @sizes_per_file[image], route: "#{asset_path @full_dir}" , file: "#{image}" } ) %>
+
+        <% end %>
+<!--
       <img class="bigThumbnailImgs" id="bigThumbnailPhoto1" src>
       <img class="bigThumbnailImgs" id="bigThumbnailPhoto2" src>
       <img class="bigThumbnailImgs" id="bigThumbnailPhoto3" src>
       <img class="bigThumbnailImgs" id="bigThumbnailPhoto4" src>
+-->
+
     </div> 
   </div>
     

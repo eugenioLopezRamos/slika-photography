@@ -15,7 +15,7 @@ Rails.application.routes.draw do
   get '/contact', to: 'static#show', :tab => 'contactTab'
   post '/contact', to: 'contact_mailer#create'
 
-  get '/blog/', :slug => "zetaomega9ya-itsindeedthelastpostletmego", to: 'static#show', :tab => 'blogTab'
+  get '/blog/', :slug => "theverylastpost999", to: 'static#show', :tab => 'blogTab'
   get '/blog/:slug', to: 'static#show', :tab => 'blogTab'
   get 'post_retriever', to: 'static#retrieve_posts'
 

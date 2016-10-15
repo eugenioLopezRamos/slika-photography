@@ -1,5 +1,5 @@
 var main = function() {
-    //  console.log("CHANGEEEEE");
+
 
     //console.log(window.location.pathname);
     //console.log(window.location.pathname.replace('/', ''));
@@ -117,10 +117,11 @@ var main = function() {
             }
 
 
-            var selector = selectorValue + ' img';
+            var selector = selectorValue;
+            
             var size = size(selector);
             var targets = [].slice.call(document.querySelectorAll(selector));
-
+        
             targets.map(function(element, index, array){
 
                 if(size[index] != 0) {
@@ -259,7 +260,7 @@ function homeTabHandler(){
 
     var smallThumbnailsArray = [].slice.call(document.getElementsByClassName("smallThumbnailImgs"));
     var bigThumbnailsArray = [].slice.call(document.getElementsByClassName("bigThumbnailImgs"));
-    getResizedImages('#homeContent', determineSizeToGet);
+    getResizedImages(".home-main-img", determineSizeToGet);
 
     function stopScroll(event) {
         event.stopPropagation();
@@ -297,7 +298,13 @@ function homeTabHandler(){
  
 
         bigThumbnailsArray.map(function(element){element.style.display = "none";}); //makes all big imgs have display = "none"
-        
+
+        var classesList = [].slice.call(document.getElementsByClassName("bigThumbnailImgs")[clickedImageIndex].classList);
+        classesList = classesList.join(".");
+       
+
+        getResizedImages("." + classesList, determineSizeToGet);
+
         document.getElementsByClassName("bigThumbnailImgs")[clickedImageIndex].style.display = "flex"; //this makes visible the img with the same index as the one we clicked. Since these are just the big versions of the small thumbnails, they make visible the same index of bigimgs
         document.getElementById("bigThumbnails").style.display = "block"; //makes the container visible.
 
@@ -842,7 +849,7 @@ function slidesHandler(){
 
     //can't use srcset, not supported in IE11- (and I want to support IE10/11 + Edge), will dynamically set src and a resize evt listener :/
 
-    getResizedImages('.active-slide', determineSizeToGet);
+    getResizedImages('.active-slide img', determineSizeToGet);
     //currentTab[stateObject[activeTabValue]-1].classList.add("active-slide"); //from the currentTab array, check on stateObject what's the slide we should be at, and add 'active-slide to it'
 
         
@@ -1020,7 +1027,7 @@ function slidesHandler(){
             currentTabPrevSlide.style.animation = "imgFadeIn 0.45s forwards";
             currentTabPrevSlide.style.display= "flex";
 
-            getResizedImages('.active-slide', determineSizeToGet);
+            getResizedImages('.active-slide img', determineSizeToGet);
 
             activePicker.value = (function() {
 
@@ -1075,7 +1082,7 @@ function slidesHandler(){
 
             //console.log("next slide claasses", currentTabNextSlide);
             
-            getResizedImages('.active-slide', determineSizeToGet);
+            getResizedImages('.active-slide img', determineSizeToGet);
 
             activePicker.value = (function() {
                 if (activePicker.value == currentTab.length) {
@@ -1116,7 +1123,7 @@ function slidesHandler(){
         currentTab[slideToJumpTo].classList.add("active-slide");
         currentTab[slideToJumpTo].style.animation = "imgFadeIn 0.45s forwards";
         currentTab[slideToJumpTo].style.display= "flex";
-        getResizedImages('.active-slide', determineSizeToGet);
+        getResizedImages('.active-slide img', determineSizeToGet);
 
         activePicker.value = slideToJumpTo+1;
         determineActiveIndex(); 
@@ -1712,14 +1719,14 @@ assignFocusListeners(allTextAreas);
 function blogTabHandler(postToRequest, setListeners) {
 
 
-
+    var wasLinkClicked = false; //used to detect if the focused <a> was clicked. If so, the focus evt listener is cancelled.
     var setListeners = typeof setListeners == "undefined" ? true : setListeners;
     
     function setActivePost() {
         [].slice.call(document.getElementsByClassName("post-link")).map(function(element, index, array) {
             console.log("currpost id", currentPostId);
             element.id === currentPostId ? element.classList.add("active-post") : element.classList.remove("active-post");
-            getResizedImages('.post-content', determineSizeToGet);
+            getResizedImages('.post-content img', determineSizeToGet);
             //element.className.replace('post-link ', '') == currentPostId ? element.classList.add("active-post") : element.classList.remove("active-post");
 
         });
@@ -1757,8 +1764,12 @@ function blogTabHandler(postToRequest, setListeners) {
     var postContainer = document.getElementsByClassName("post-container")[0];
 
     function linksClickHandler(event) {
+ 
+        event.stopPropagation();
         event.preventDefault();
-        
+        console.log("clicked hanlder ajax")
+
+
         if(!scheduled) {
         window.setTimeout(function() {
         var targetPostId = event.target.id//event.target.className.replace('post-link ', '').replace('active-post', '').replace('/\s*/',''); //determines the id of the post to retrieve
@@ -1783,15 +1794,17 @@ function blogTabHandler(postToRequest, setListeners) {
 
             
         }
+
+       
     }
     
 
-    if(setListeners == true){
+    if(setListeners === true){
 
     [].slice.call(document.getElementsByClassName("post-link")).map(function(element, index, array) {
-        console.log(element.removeEventListener("click", linksClickHandler));
-    element.removeEventListener("click", linksClickHandler);
-    element.addEventListener("click", linksClickHandler);
+
+        element.removeEventListener("click", linksClickHandler);
+        element.addEventListener("click", linksClickHandler);
     });
 
    
@@ -1887,6 +1900,7 @@ function blogTabHandler(postToRequest, setListeners) {
 function blogMenuFunction(addListeners) {
 
     var assignListeners = false;
+
 
     addListeners === true ? assignListeners = true : assignListeners = assignListeners;
 
@@ -2104,7 +2118,6 @@ function blogMenuFunction(addListeners) {
 
 
         function scrollClickHandler(event) {
-
             
             var scrollButtonTop = scrollButton.offsetTop; //scrollButton.getBoundingClientRect().top;
 
@@ -2123,14 +2136,23 @@ function blogMenuFunction(addListeners) {
 
         }
 
-        scrollBar.addEventListener("click", scrollClickHandler);
+        scrollBar.addEventListener("click", scrollClickHandler, true);
 
         function scrollFocusHandler(event) {
 
-            var delta = postSidebar.offsetTop - event.target.offsetTop;
-            delta = delta - scrollButtonPrevScroll;
+            console.log("focus evt", event);
+    
+            if(event.relatedTarget) {
+                var delta = postSidebar.offsetTop - event.target.offsetTop;
+                delta = delta - scrollButtonPrevScroll;
 
-            postMenuScroller("default", delta);
+                postMenuScroller("default", delta);
+
+            }
+
+         
+
+
         }
 
         document.querySelectorAll('.post-sidebar a').forEach(function(element){
@@ -2151,6 +2173,10 @@ blogMenuFunction(true);
 
 window.removeEventListener("resize", blogMenuFunction);
 window.addEventListener("resize", blogMenuFunction);
+
+
+
+
 
 }
 } //end of blogTabHandler

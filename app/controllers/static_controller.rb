@@ -7,9 +7,10 @@ class StaticController < ApplicationController
   
 
   def show
-  #  if image_tabs.include? params[:tab]
+
+    if image_tabs.include?(params[:tab]) || params[:tab] === "homeTab"
       assign_images
-  #  end
+    end
 
     render 'home'
   end
@@ -62,12 +63,16 @@ class StaticController < ApplicationController
 
     if image_tabs.include? params[:tab]
       @image_dir = "#{params[:tab].gsub('Tab', 'Slides')}"
+      @tab_value = @image_dir.gsub("Slides", "Slide") #the name of a single slide. Used for the HTML.
     else
       @image_dir = "#{params[:tab].gsub('Tab', '')}" 
+      @tab_value = "#{params[:tab].gsub('Tab', '')}"
     end
+
+   
     #@image_dir = "#{params[:tab].gsub('Tab', 'Slides')}" #The folder of each tab's slides.
 
-    @tab_value = @image_dir.gsub("Slides", "Slide") #the name of a single slide. Used for the HTML.
+
   
     @active_slide_class = 'active-slide' #HTML class to be used for the active slide - This is used by the javascript and css to display and style things.
     
@@ -127,8 +132,8 @@ class StaticController < ApplicationController
 
     end
 
-    @original_files.sort! {|a,z| a.to_i <=> z.to_i}
-
+    @original_files.sort! {|a,z| a.to_s <=> z.to_s}
+ 
   end
 
 
