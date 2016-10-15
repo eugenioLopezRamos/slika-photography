@@ -34,21 +34,19 @@ _heroku_
 _public front end_
 
 - Change the images on the home tab
-- Tab indexes en las paginas
-- change the bottom bar logos to something on the server.....
-
-- Theres a small bug when moving the slides to the left and to the right or viceversa (to be fixed later, its a small bug.)
-
+- Tab indexes en las paginas en contactTab
+- change the bottom bar and contact tab logos to something on the server.
+- Same treatment for touch scrollbtn move as for mousedrag
 
 _admin panel front end_
 
 - Sort files into files and folders, right now it looks messy.
-
-
-
+- Working.... type of message when AJAX is sent but in process.
+- Make an option to just upload(instead of creating 9001 versions of the img)
 
 **DONE**
 
+- Theres a small bug when moving the slides to the left and to the right or viceversa (to be fixed later, its a small bug.) - Fixed anyway
 - when there are too many posts, the bar becomes very slow to drag, need to adjust that
 - Scrollbar click not working correctly when theres too many posts, cant get to lower half
 - Move scrollbar to focus (post sidebar menu)

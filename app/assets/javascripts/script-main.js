@@ -256,6 +256,11 @@ function homeTabHandler(){
     
     var setBigThumbEvtHandler = 1;  
 
+
+    var smallThumbnailsArray = [].slice.call(document.getElementsByClassName("smallThumbnailImgs"));
+    var bigThumbnailsArray = [].slice.call(document.getElementsByClassName("bigThumbnailImgs"));
+    getResizedImages('#homeContent', determineSizeToGet);
+
     function stopScroll(event) {
         event.stopPropagation();
         event.preventDefault();
@@ -273,34 +278,41 @@ function homeTabHandler(){
     }    //end of bigThumbEvtHandler
 
 
-
-
         
     function smallThumbnailHandler(event) {
 
-    var clickedImageIndex = [].slice.call(document.getElementsByClassName("smallThumbnailImgs")).findIndex(function(element) { //index of the element whose id is equal to the id of the target of the smallThumbnails click event
-        if(element.id == event.target.id){
-            return element.id;    
-        } 
-        else {
-            return;
-        }
-    }, 0);
+        
 
-    [].slice.call(document.getElementsByClassName("bigThumbnailImgs")).map(function(element){element.style.display = "none";}); //makes all big imgs have display = "none"
-    document.getElementsByClassName("bigThumbnailImgs")[clickedImageIndex].style.display = "flex"; //this makes visible the img with the same index as the one we clicked. Since these are just the big versions of the small thumbnails, they make visible the same index of bigimgs
-    document.getElementById("bigThumbnails").style.display = "block"; //makes the container visible.
+        var clickedImageIndex = smallThumbnailsArray.findIndex(function(element) { //index of the element whose id is equal to the id of the target of the smallThumbnails click event
+            
+            if(element.id === event.target.id){
+                return element.id;    
+            } 
+            else {
+                return;
+            }
+
+        }, 0);
+
+ 
+
+        bigThumbnailsArray.map(function(element){element.style.display = "none";}); //makes all big imgs have display = "none"
+        
+        document.getElementsByClassName("bigThumbnailImgs")[clickedImageIndex].style.display = "flex"; //this makes visible the img with the same index as the one we clicked. Since these are just the big versions of the small thumbnails, they make visible the same index of bigimgs
+        document.getElementById("bigThumbnails").style.display = "block"; //makes the container visible.
 
 
-    document.getElementsByClassName("active-Tab")[0].addEventListener("touchmove", stopScroll); //this way the evt listener is dumped by JS garbage collection on tab change, and it stops a bug where
-    //if you change tabs while a big thumbnail is open, when coming back the stopScroll function would still be in memory  and thus the homeTab becomes un-scrollable (because of event.preventDefault)
-    (setBigThumbEvtHandler==1) ? document.getElementById("bigThumbnails").addEventListener("click", bigThumbEvtHandler) : ""; //sets an event listener for the big imgs container (if it has not been set yet)
+        document.getElementsByClassName("active-Tab")[0].addEventListener("touchmove", stopScroll); //this way the evt listener is dumped by JS garbage collection on tab change, and it stops a bug where
+        //if you change tabs while a big thumbnail is open, when coming back the stopScroll function would still be in memory  and thus the homeTab becomes un-scrollable (because of event.preventDefault)
+        (setBigThumbEvtHandler==1) ? document.getElementById("bigThumbnails").addEventListener("click", bigThumbEvtHandler) : ""; //sets an event listener for the big imgs container (if it has not been set yet)
 
 
     }    //end of smallThumbnailHandler
 
-    [].slice.call(document.getElementsByClassName("smallThumbnailImgs")).map(function(element, array, index) { //adds a click event listener to each element with the class "smallThumbnail"
-    element.addEventListener("click", smallThumbnailHandler);
+    smallThumbnailsArray.map(function(element, array, index) { //adds a click event listener to each element with the class "smallThumbnail"
+
+        element.addEventListener("click", smallThumbnailHandler);
+
     });
 
 }
@@ -923,21 +935,23 @@ function slidesHandler(){
         var deltaX = newX - originalPosX;//the difference between the start X position and the current position - a negative value means newX is to the left of originalPosX, positive is to the right
 
     if(deltaX>0) {
-        document.getElementsByClassName("active-slide")[0].style.left = deltaX + 'px';
+          
+        document.getElementsByClassName("active-slide")[0].style.right = -deltaX + 'px';
     }
 
     if(deltaX<0) {
+      
         document.getElementsByClassName("active-slide")[0].style.right = -deltaX + 'px';    
     }
 
     if(deltaX>0 && deltaX>touchMoveThreshold) { //user moves touch to the right for more than 110 pixels
-    //document.getElementsByClassName("active-slide")[0].style.display = "none";
+
         document.removeEventListener("touchmove", movePass); //if I don't remove this, every 1px you move the touch cursor will change slides
         prevSlideHandler(); //goes to the prevSlide function
 
     }
     if(deltaX<0 && deltaX<touchMoveThreshold*-1) {//user moves touch to the left for more than 110 pixels
-    //document.getElementsByClassName("active-slide")[0].style.display = "none";
+
         document.removeEventListener("touchmove", movePass);
         nextSlideHandler(); //nextSlide function.
 
@@ -946,8 +960,8 @@ function slidesHandler(){
     },
 
     touchEnd: function(){ //called upon lifting the finger off the activeslide, it simply removes the event listener we set up in touchStart.
-        parseInt(document.getElementsByClassName("active-slide")[0].style.right, 10) < touchMoveThreshold ? document.getElementsByClassName("active-slide")[0].removeAttribute("style") : "";
-        parseInt(document.getElementsByClassName("active-slide")[0].style.left, 10) < touchMoveThreshold  ? document.getElementsByClassName("active-slide")[0].removeAttribute("style") : "";
+
+        Math.abs(parseInt(document.getElementsByClassName("active-slide")[0].style.right, 10)) < touchMoveThreshold ? document.getElementsByClassName("active-slide")[0].removeAttribute("style") : "";
         document.removeEventListener("touchmove", movePass);
     },
 
@@ -984,13 +998,14 @@ function slidesHandler(){
     scheduled=true; //stops the event from happening again.
 
     var currentTabPrevSlide = (function(){
-    if (currentTabActiveIndex==0){
-        return currentTab[currentTab.length-1]; //arrays are zero indexed.
-        }
-        else {
-        return currentTab[currentTabActiveIndex-1];
-        }
-    })();
+
+        if (currentTabActiveIndex==0){
+            return currentTab[currentTab.length-1]; //arrays are zero indexed.
+            }
+            else {
+            return currentTab[currentTabActiveIndex-1];
+            }
+        })();
 
         currentTab[currentTabActiveIndex].style.animation = "fadeOut 0.45s forwards";//this will get changed to an animation, but for now it will suffice
         
@@ -1023,7 +1038,6 @@ function slidesHandler(){
             determineActiveIndex(); 
             assignTouchEventListeners(); //assigns the touch evt listeners - Can probably make this more efficient by not loading them on non touch devices + removing all the evt listeners except the one currently in use(on currentTab)
 
-            console.log(currentTabActiveIndex);
         }, 460);    
         
         
@@ -1076,8 +1090,7 @@ function slidesHandler(){
             scheduled=false; //allows the event to happen again once its finished
             determineActiveIndex();  
             assignTouchEventListeners();    
-            console.log("crtTab Active index",currentTabActiveIndex);
-            console.log(stateObject[activeTabValue]);
+
         }, 460);   
 
     }
