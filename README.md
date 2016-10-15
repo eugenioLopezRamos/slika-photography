@@ -33,11 +33,8 @@ _heroku_
 
 _public front end_
 
-
-- Tab indexes en las paginas en contactTab
 - change the bottom bar and contact tab logos to something on the server.
 - Same treatment for touch scrollbtn move as for mousedrag
-- scrollbar focus evt listener works weird when clicking
 
 _admin panel front end_
 
@@ -46,7 +43,8 @@ _admin panel front end_
 - Make an option to just upload(instead of creating 9001 versions of the img)
 
 **DONE**
-
+- Tab indexes en las paginas en contactTab - Working correctly.
+- scrollbar focus evt listener works weird when clicking - Fixed, had to change evt listener to mousedown instead of click, and prevent default on click evt.
 - Change the images on the home tab
 - Theres a small bug when moving the slides to the left and to the right or viceversa (to be fixed later, its a small bug.) - Fixed anyway
 - when there are too many posts, the bar becomes very slow to drag, need to adjust that
