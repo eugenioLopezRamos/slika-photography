@@ -1722,6 +1722,13 @@ function blogTabHandler(postToRequest, setListeners) {
     var wasLinkClicked = false; //used to detect if the focused <a> was clicked. If so, the focus evt listener is cancelled.
     var setListeners = typeof setListeners == "undefined" ? true : setListeners;
     
+    document.querySelectorAll('.post-link').forEach(function(element) {
+        element.addEventListener("click", function(event) {
+            event.preventDefault();
+        });
+    });
+
+
     function setActivePost() {
         [].slice.call(document.getElementsByClassName("post-link")).map(function(element, index, array) {
             console.log("currpost id", currentPostId);
@@ -1768,10 +1775,10 @@ function blogTabHandler(postToRequest, setListeners) {
         event.stopPropagation();
         event.preventDefault();
         console.log("clicked hanlder ajax")
+        var wasLinkClicked = true;
 
-
-        if(!scheduled) {
-        window.setTimeout(function() {
+       // if(!scheduled) {
+     //   window.setTimeout(function() {
         var targetPostId = event.target.id//event.target.className.replace('post-link ', '').replace('active-post', '').replace('/\s*/',''); //determines the id of the post to retrieve
 
         $.ajax({url: '/post_retriever', data: {'slug': targetPostId}, type: 'GET', dataType: 'html'}).done(function(response) {
@@ -1788,14 +1795,8 @@ function blogTabHandler(postToRequest, setListeners) {
             useMessagesBanner("error", "Oops, we couldn't retrieve that. Please try again"); 
     
             });                    
-            
-            
-        }, 200);
 
-            
-        }
-
-       
+       wasLinkClicked = false;
     }
     
 
@@ -1803,9 +1804,12 @@ function blogTabHandler(postToRequest, setListeners) {
 
     [].slice.call(document.getElementsByClassName("post-link")).map(function(element, index, array) {
 
-        element.removeEventListener("click", linksClickHandler);
-        element.addEventListener("click", linksClickHandler);
+        element.removeEventListener("mousedown", linksClickHandler);
+        element.addEventListener("mousedown", linksClickHandler);
+    
     });
+
+    
 
    
 
@@ -1911,7 +1915,7 @@ function blogMenuFunction(addListeners) {
     var postSidebarFull = document.getElementsByClassName('post-sidebar')[0];
     var postSidebarMenuContainer = document.getElementsByClassName('post-sidebar-menu-container')[0];
     var menuContainerHeight = parseInt(getComputedStyle(postSidebarMenuContainer).height, 10);
-    console.log("is it here????????");
+
     var scrollBar = document.getElementById("blog-menu-scrollbar");
     var scrollButtonPrevScroll = 0;
     var scrollScheduled = false; //debouncer
@@ -1933,9 +1937,9 @@ function blogMenuFunction(addListeners) {
                                         return size + "px";
                                     })();
 
-                                    console.log("here it goes");
+                          
        var scrollButtonHeight = parseInt(getComputedStyle(scrollButton).height, 10);
-       console.log("here it is");
+  
 
     if((menuContainerHeight<sidebarHeight) && assignListeners) { //only load event listeners on first load, not on resizes.
         /**removes any existing evt listeners. */
@@ -2140,18 +2144,14 @@ function blogMenuFunction(addListeners) {
 
         function scrollFocusHandler(event) {
 
-            console.log("focus evt", event);
-    
-            if(event.relatedTarget) {
+             if(!wasLinkClicked) {
+
                 var delta = postSidebar.offsetTop - event.target.offsetTop;
                 delta = delta - scrollButtonPrevScroll;
 
                 postMenuScroller("default", delta);
 
-            }
-
-         
-
+             }
 
         }
 
