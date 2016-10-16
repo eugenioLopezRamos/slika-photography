@@ -38,7 +38,12 @@ var fileManager = function(arrayOfFiles) {
 	        var newFolder = document.createElement("ul"); //.classList.add("folder");
 	        newFolder.classList.add("folder");
 	        var folderSpan = document.createElement("span");
-	        var folderSpanText = document.createTextNode(object.replace(parentFolder.id, ''));
+	        var folderSpanText = document.createTextNode(" "+object.replace(parentFolder.id, ''));
+			var folderIcon = document.createElement("img");
+			folderIcon.setAttribute("src", "/images/external/folder-icon.png");
+
+
+			folderSpan.appendChild(folderIcon);
 	        folderSpan.appendChild(folderSpanText);
 			folderSpan.id = object;
 	        newFolder.appendChild(folderSpan);
@@ -71,6 +76,10 @@ var fileManager = function(arrayOfFiles) {
 	    var file = document.createElement("li");
 	    file.classList.add("file");
 	    var fileName = document.createTextNode(object.replace(folderREGEX, ''));
+		var fileIcon = document.createElement("img");
+		fileIcon.setAttribute("src", "/images/external/file-icon.png");
+		//<img src="/images/external/file-icon.png"> img code
+		file.appendChild(fileIcon);
 	    file.appendChild(fileName);
 	    file.id = object;
 	    currentFolder.appendChild(file);
@@ -148,6 +157,71 @@ var fileManager = function(arrayOfFiles) {
 	}
 
 	directorize(myArray);
+
+	function sortDirectory(startFolder, firstItemType){
+		if(startFolder.childElementCount > 0) {
+			var startFolder = startFolder; //where to start ordering
+			var itemTypes = ["file", "folder"];
+
+			var firstItemType = itemTypes.findIndex(function(element) { 
+
+				if(element === firstItemType) {
+					return element;
+				}
+
+			});
+
+			firstItemType = itemTypes.splice(firstItemType, 1); //should be either "file" or "folder"
+
+			var secondItemType = itemTypes; // this is just for clarity, the itemTypes array was modified w/ the .splice.
+
+			var removedElements = [];
+			var childrenOfFolder = [].slice.call(startFolder.children);
+
+			childrenOfFolder.map(function(element) {
+
+				if(element.classList.contains(firstItemType) && element.parentElement === startFolder) {
+				
+					var firstChild = (function() { // This is the first child that ISN'T the type that we specified as firstItemType.
+
+						for(i=0; i<childrenOfFolder.length; i++) {
+
+							if(childrenOfFolder[i].classList.contains(secondItemType) && childrenOfFolder[i].parentElement === startFolder) {
+								return childrenOfFolder[i];
+							}
+
+						} //close for loop
+
+					})(); //close firstChild IIFE
+
+				
+					element.parentElement.insertBefore(element, firstChild);//element.parentElement.firstChild);
+
+					}
+				}); //close childrenOfFolder map
+
+
+			var nextFolders = [].slice.call(startFolder.children).filter(function(element) { 
+
+					if(element.classList.contains("folder") && element.childElementCount > 0) {
+						return element;
+					} 
+
+				}); //close nextFolders
+
+			nextFolders.map(function(element){
+
+				sortDirectory(element, firstItemType[0]);
+
+			}); //close nextFolders map
+
+		
+		} //close if childElementCount
+
+	} //close sortDirectory
+
+	sortDirectory(root, "folder");
+
 
 	/**********************			ASSIGN HANDLERS/EVENT LISTENERS ETC				*****************************/
 	function toggleSelectedState(event) {
@@ -261,7 +335,7 @@ var fileManager = function(arrayOfFiles) {
 									}
 									totalSize = totalSize/1024/1024;
 									return totalSize;
-								console.log("files coll", document.getElementById('file_input_field').files)
+							
 								})();
 
 		if(sizeInMBs > maxMBs){
