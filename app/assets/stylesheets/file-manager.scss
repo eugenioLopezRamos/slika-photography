@@ -1,0 +1,138 @@
+body {
+	flex-direction: column;
+}
+
+.user-data-form-container {
+	width: 50%;
+}
+li {
+	margin-left: 40px;
+	margin-top: 15px;
+	margin-bottom: 15px;
+	height: 2em;
+	line-height: 2em;
+	cursor: pointer;
+	list-style-type: none;
+	list-style-position: inside;
+}
+
+li img {
+	vertical-align: middle;
+
+}
+
+ul, span {
+	cursor: pointer;
+}
+
+.upload-dir-container {
+	border: 1px solid blue;
+	background-color: rgb(200, 200, 200);
+	text-decoration: underline blue;
+
+}
+
+.message-box {
+	display: flex;
+	position: relative;
+	margin: auto;
+	width: 100%;
+	justify-content: center;
+
+}
+.selected {
+	background-color: #4274f4;
+	color: white;
+	font-weight: bold;
+	font-style: italic;
+	border-radius: 2px;
+	border: 1px solid blue;
+}
+
+form {
+	width: 100%;
+}
+.file-dashboard {
+display: flex;	
+}
+
+.file-dashboard li {
+margin: 5px 0 5px 0;
+}
+
+.file-list {
+display: flex;
+flex-direction: column;
+min-width: 25%;
+width: 25%;
+max-width: 25%;
+overflow: auto;
+
+}
+
+/*button.file-list {
+min-width: 12.5%;
+width: 12.5%;
+max-width: 12.5%;
+height: auto;
+}*/
+
+button.file-list#model {
+display:none;
+}
+
+li.file-info {
+list-style-type: none;	
+margin: auto;
+
+}
+
+.file-list-button-container {
+display: flex;
+flex-direction:row;
+
+}
+
+.file-list button {
+	margin: auto;
+min-height: 36px; /*same as li fontsize + margin*/
+max-height: 36px;
+width: 50%;	
+}
+.file-divider {
+margin: 3px 0 3px 0;
+
+}
+
+hr.file-info {
+	background-color: rgb(41, 57, 82);
+	width: 100%;
+	height: 2px;
+}
+
+span.open {
+	color: green;
+}
+span.selected.open {
+	color: lightgreen;
+}
+
+@media screen and (max-width: 480px) {
+.user-data-form-container {
+	width: 100%;
+	font-size: 90%;
+}
+
+.file-list button {
+margin: 0;
+width: 100%;
+
+}
+
+.file-dashboard .action-description {
+	margin-bottom: 5px;
+}
+
+
+
+}

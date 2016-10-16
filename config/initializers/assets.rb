@@ -15,7 +15,7 @@ Rails.application.config.assets.precompile += %w( style-main.scss.erb )
 Rails.application.config.assets.precompile += %w( file-manager.js )
 
 Rails.application.config.assets.precompile += %w( admin.scss )
-
+Rails.application.config.assets.precompile += %w( file-manager.scss )
 #Rails.application.config.assets.precompile += %w( jquery.js )
 #Rails.application.config.assets.precompile += %w( jquery_ujs.js )
 Rails.application.config.assets.precompile =  ['*.js', '*.css', '*.scss']

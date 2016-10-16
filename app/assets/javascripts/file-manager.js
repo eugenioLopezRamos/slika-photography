@@ -14,9 +14,30 @@ var fileManager = function(arrayOfFiles) {
 	var root = document.getElementById("root");
 
 	var myArray = arrayOfFiles;
-	initialArray = "";
+
+	delete window.initialArray; //deletes the global initialArray var.
 
 	var currentIndex = 0;
+
+	function createMessageBoxMsg(type, message) {
+
+		document.querySelector("#messages").innerHTML = "";
+
+		var newDiv = document.createElement("div");
+		newDiv.classList.add("message-box");
+		document.querySelector("#messages").appendChild(newDiv);
+		
+		var messageContainer = document.createElement("div");
+		messageContainer.classList.add("alert");
+		messageContainer.classList.add("alert-" + type);
+		messageContainer.innerText = message;
+
+
+		newDiv.appendChild(messageContainer);
+
+		
+		
+	}
 
 //	var fileREGEX = /([\w*]+[.]*[\w]+\/)*(\w*[.]*[\w]+.*\-*\(*\)*\+*)/; //  gets all directories + filenames with "." and "-", "(", ")", "+"
 //	var folderREGEX = /([\w]+[.]*[\w]+\/\(*\)*\+*\-*)*/; // all directories, excludes files, incl chars "-", "(", ")", "+"
@@ -345,7 +366,7 @@ var fileManager = function(arrayOfFiles) {
 
 			}
 		else {
-			console.log("fire again", caller.files);
+		
 			populateFileDashboard(caller.files, "file-name");
 
 		}
@@ -463,9 +484,8 @@ var fileManager = function(arrayOfFiles) {
 	        });
 
 	        return route;
-	    })();
 
-	    //could also use multiple file downloads with rubyzip or something
+	    })();
 
 	    var formData = new FormData();
 	    var utf = document.querySelectorAll("input[name='utf8']")[0].getAttribute("value");
@@ -481,16 +501,16 @@ var fileManager = function(arrayOfFiles) {
 
 	    req.responseType = "blob";
 
-
 	    req.onload = function(event) {
+
 	        if (req.status === 200) {
 
 	            var blob = req.response;
 	            var link = document.createElement('a');
 	            link.href = window.URL.createObjectURL(blob);
-	            //var currentDate = new Date().toDateString();
-	            var fileName = "download.zip"; //document.getElementsByClassName('selected')[0].id.replace(folderREGEX, '').split('.');
-	            link.download = fileName; //[0] + "." + fileName[1];
+	         
+	            var fileName = "download.zip"; 
+	            link.download = fileName; 
 	            link.click();
 
 	        } else if (req.status != 200) {
@@ -508,26 +528,32 @@ var fileManager = function(arrayOfFiles) {
 	        [].slice.call(document.getElementsByClassName('selected')).map(function(element, index, array) {
 	            element.classList.toggle('selected');
 	        });
+
 	        //get messages from the server
 	        $.ajax({
+
 	            url: 'download_file',
 	            type: 'GET',
 	            data: {
 	                "authenticity-token": authenticityToken
 	            }
+
 	        }).done(function(response) {
+
 	            $('#messages').html(response);
+
 	        }).fail(function(response) {
-	            $('#messages').html("Woops, couldn't retrieve messages from the server")
+
+	            $('#messages').html("Woops, couldn't retrieve messages from the server");
+
 	        });
-
-
+		
 	    };
 
 	    req.send(formData);
 
-
-
+		createMessageBoxMsg("info", "In progress...");
+	
 	});
 
 	$('#delete-files').click(function(event) {
@@ -540,22 +566,26 @@ var fileManager = function(arrayOfFiles) {
 	        });
 	        return selected;
 	    })();
+
 	    $.ajax({
 	        url: "delete_file",
 	        data: JSON.stringify({
 	            files: deleteArray
 	        }),
 	        type: 'DELETE',
-	        contentType: 'application/json'
+	        contentType: 'application/json',
+			beforeSend: createMessageBoxMsg("info", "In progress...")
 	    }).done(function(response) {
 
 	        document.getElementById("messages").innerHTML = response;
 	        [].slice.call(document.getElementsByClassName('selected')).map(function(element, index, array) {
+
 	            var currentChildToRemove = document.getElementById(element.id);
 	            element.parentElement.removeChild(currentChildToRemove);
 
 	        });
 	    });
+	
 	    //AJAX sending the array/method to use to delete the files we need to delete
 
 	});
@@ -626,6 +656,8 @@ var fileManager = function(arrayOfFiles) {
 	    xhr.setRequestHeader('X-CSRF-TOKEN', document.querySelectorAll('meta[name="csrf-token"]')[0].getAttribute("content"));
 
 	    xhr.send(formData);
+		createMessageBoxMsg("info", "In progress...")
+
 	    xhr.onload = function() {
 
 	        if (xhr.status === 200) {
