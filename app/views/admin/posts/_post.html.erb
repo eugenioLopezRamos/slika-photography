@@ -10,9 +10,6 @@
 <%# :slug param from the URL %>
 <%# if it does, @post = the record that it found, otherwise creates a new Post object(so it doesn't break the front end javascript) %>
 
-	<% puts "param slug #{params[:slug]}" %>
-	<% puts "sanitized slug #{sanitized_slug}" %>
-
 	<% if Post.exists?(:slug => sanitized_slug) %>
 
 		<% @post = Post.find_by(slug: sanitized_slug) %>
