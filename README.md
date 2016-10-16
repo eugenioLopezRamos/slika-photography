@@ -34,13 +34,11 @@ _heroku_
 _admin panel front end_
 
 
-- Working.... type of message when AJAX is sent but in process.
-- Make an option to just upload(instead of creating 9001 versions of the img)
-- 99.9% I'll make the file manager css its own file instead of using the style tag, it has grown quite a bit
-
 
 **DONE**
 
+- Make the file manager css its own file instead of using the style tag, it has grown quite a bit
+- Working.... type of message when AJAX is sent but in process.
 - Sort files into files and folders, right now it looks messy.
 - Added icons for folders and files on file manager
 - change the bottom bar and contact tab logos to something on the server.
@@ -165,3 +163,4 @@ These are "would be nice to have"s
 - reassemble the manifest files for the asset pipeline into 2 files: main and admin
 - Check if I can use cloudflare instead of cloudFront.
 - Add friendly forwarding on admin pages
+- Make an option to just upload(instead of creating 9001 versions of the img)
