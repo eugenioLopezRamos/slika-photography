@@ -1847,7 +1847,7 @@ function blogTabHandler(postToRequest, setListeners) {
                     var originalPosX = touchStartPosX;
                     var newX = event.changedTouches[0].clientX;
 
-                    var deltaX = (newX - originalPosX)*1.1;// - touchMoveThreshold;
+                    var deltaX = (newX - originalPosX)*2;// - touchMoveThreshold;
                     var marginLeftValue = isNaN(parseInt(blogContent.style.marginLeft, 10)) ? blogContent.style.marginLeft = '0px' : parseInt(getComputedStyle(blogContent).marginLeft, 10);
 
 
