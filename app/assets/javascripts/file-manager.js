@@ -266,7 +266,7 @@ var fileManager = function(arrayOfFiles) {
 	    });
 	});
 
-	[].slice.call(document.querySelectorAll(".upload-dir-container span")).map(function(element, index, array) { //but toggles them when you click the folder's <span>
+	[].slice.call(document.querySelectorAll(".upload-dir-container span")).map(function(element, index, array) { //but toggles them when you click the folder's span
 		
 		if(element.parentElement.parentElement != root) {
 			element.style.display = "none";

@@ -69,7 +69,7 @@ var main = function() {
                 return;
             }
      
-            possibleSizes = possibleSizes.map(element => { return parseInt(element, 10) } )
+            possibleSizes = possibleSizes.map(function(element) { return parseInt(element, 10) } )
 
 
            var screenSize = document.documentElement.clientWidth;
