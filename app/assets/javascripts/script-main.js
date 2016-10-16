@@ -1,21 +1,11 @@
 var main = function() {
 
-
-    //console.log(window.location.pathname);
-    //console.log(window.location.pathname.replace('/', ''));
-    //console.log("tabname " + window.location.pathname.replace('/', '').split("/")[0]);//.replace(/\/\*+\/+/, ''))
     var getTabFromUrl = window.location.pathname.replace('/', '').split("/")[0];//.replace(/(\/\w+|\/)/, '');
 
     var activeTabValue = getTabFromUrl + 'Tab'; //used to manage the state of the different tabs
 
     var stateObject = {// initializes the state object for use in the nav menu handler
     state: activeTabValue.replace('Tab', 'State'),
-    /*blogTab: (function() { //returns the post number (or slug)
-        if(getTabFromUrl == "blog" ) {
-        
-        // return window.location.pathname.replace('/blog/', '');
-        }
-    })()*/
 
     };
 
@@ -34,7 +24,7 @@ var main = function() {
 
 
     typeof stateObject[activeTabValue] == "undefined" ? stateObject[activeTabValue] = 1 : "";
-    //console.log("first state", stateObject[activeTabValue]);
+
 
     var scheduled = false; // this is used to delay applying the state changes so the page doesnt get messed up - src= http://eloquentjavascript.net/14_event.html  - Thanks! 
 
@@ -75,7 +65,7 @@ var main = function() {
            var screenSize = document.documentElement.clientWidth;
 
             var sizeToGet = possibleSizes.filter(function(currSize, sizeIndex, possibleSizesArray) {
-             //   console.log("currSize ", currSize, "index ", sizeIndex, "array ", possibleSizesArray, "scr", screenSize);
+
 
                 if(sizeIndex === 0 && screenSize > currSize) { // screensize is bigger than the biggest available size?
               
@@ -360,7 +350,7 @@ function homeTabHandler(){
         
         return {
         touchStart: function(event) {
-         //   console.log("event start", event);
+
             prevHeight = parseInt(getComputedStyle(menu).height, 10);
             menuSlideStartY = event.changedTouches[0].clientY;
             menuSlideStartX = event.changedTouches[0].clientX;
@@ -368,7 +358,7 @@ function homeTabHandler(){
         },
 
         touchMove: function(event) {
-           //     console.log("event move", event);
+     
         if(document.documentElement.clientWidth>480) {
             return;
         }
@@ -518,8 +508,6 @@ function homeTabHandler(){
 
         var clickedId = this.id;
 
-        console.log("evt", event);
-        console.log("evt ttgt", event.target);
         event.preventDefault();
 
         prevHeight = 0; //makes menu height reset to zero again
@@ -592,8 +580,7 @@ function homeTabHandler(){
             }
                                                 
             var menuInterval = window.setInterval(function(mexMenuHeight){
-              //  console.log("direction", direction);
-             //   console.log("menu", menu.style.height);
+
              isNaN(prevHeight) ? prevHeight = 0 : prevHeight = prevHeight;
 
                              //the menu is set to max height once it reaches the 0.9 * maxMenuHeight threshold
@@ -625,29 +612,13 @@ function homeTabHandler(){
                     
                 }
 
-            //    console.log("kkkk");
 
             //after each run, update prevHeight's value
                 prevHeight = parseInt(menu.style.height, 10);
-            //    console.log("prevht", prevHeight);
 
-              //  if(parseInt(menu.style.height, 10) > maxMenuHeight * 0.9) {
-                 //   window.clearInterval(menuInterval);
-               // }
 
             }, 400/60);
 
-
-
-
-            
-         //   document.addEventListener("touchstart", touchStartHandler);
-        //    document.addEventListener("touchend", touchEndHandler);
-            //$(menu).slideToggle();
-
-
-
-            
         }
 
         else {
@@ -668,45 +639,20 @@ function homeTabHandler(){
 /*************************************************************************************END OF NAVMENU HANDLER ************************************************************************************/
 
 function popStateHandler(popstateEvent) {
-//if(!popStateScheduled) {
-    //window.removeEventListener("popstate", popStateHandler);    
-    //popStateScheduled=true; //need to stop this evt listener from listening while in progress (I'll remove it)
-   // setTimeout(function() {
+
     document.getElementById(activeTabValue).style.backgroundColor = "#333";
     var param = popstateEvent;
-  /*******/
-          console.log("popstate", popstateEvent.state.state, "stateObject", stateObject.state);
-   // stateObject[activeTabValue] = popstateEvent.state[activeTabValue];
-    //aqui tengo q pasar el param.state[activeTabValue] a updateState para q
-    //llegue a la funcion blogtabhandler y asi se pida al servidor el post correcto
+
     var executeAJAX;
-    
-  /*  if(popstateEvent.state.state === stateObject.state === "blogState"){
-       // console.log("popstate", popstateEvent, "stateObject", stateObject);
-       console.log("this should fire");
-        executeAJAX = true;    
-    }else {
-        executeAJAX = false; 
-    }*/
-    
-   //
-   
-//   stateObject.state = popstateEvent.state.state; //sets the state property value to the value of the state property that's on the popstate event (so, back or forwards)
-   
+  
    var isBlogUpdate = (function(){
        if(popstateEvent.state.state === "blogState" && stateObject.state === "blogState"){
            return true;
        }
    })();
    
-//  !isBlogUpdate ? executeAJAX = false : executeAJAX = true
-   
     updateState(param.state, executeAJAX, isBlogUpdate);
-   // window.addEventListener("popstate", popStateHandler);
-    //popStateScheduled=false;
-//}, 400); //setTimeout close
-//}//scheduled close
-}//function close
+
 
 
 /*************************************************************************************START OF POPSTATE EVENT LISTENER ************************************************************************************/
@@ -725,7 +671,7 @@ typeof executeAJAX === "undefined" ? executeAJAX = true : executeAJAX = executeA
 
 
 var stateToRequest = status.state;
-//console.log("stateToRequest", stateToRequest);
+
 var trimmedStatus = status.state.replace('State', '');
 
 activeTabValue = trimmedStatus + "Tab" ; //sets activeTabvalue
@@ -804,7 +750,7 @@ else{
             }
 
             else {
-                console.log("No sliders found");
+           
                 return;
             }  
             
@@ -833,7 +779,7 @@ function slidesHandler(){
     var currentTab = [].slice.call(document.getElementsByClassName(stateObject.state.replace('State', 'Slide'))); //makes an array of items of all the slide containing divs
     //var currentTab = stateObject.state.replace('State', 'Slide');
     var currentTabActiveIndex = stateObject[activeTabValue]-1;
-    console.log("state", stateObject)
+
     var initialClientWidth = document.documentElement.clientWidth;
 
 
@@ -1081,7 +1027,7 @@ function slidesHandler(){
             currentTabNextSlide.style.animation = "imgFadeIn 0.45s forwards";
             currentTabNextSlide.style.display= "flex";
 
-            //console.log("next slide claasses", currentTabNextSlide);
+
             
             getResizedImages('.active-slide img', determineSizeToGet);
 
@@ -1131,7 +1077,7 @@ function slidesHandler(){
         assignTouchEventListeners();
         }, 460);    
 
-        console.log(currentTabActiveIndex);
+
     }
 
 
@@ -1149,7 +1095,7 @@ function slidesHandler(){
         //end of touch event listener
         currentTab[currentTabActiveIndex].addEventListener("touchend", onTouchEnd);
 
-        console.log("current tab active index", currentTabActiveIndex);
+
 
     }
 
@@ -1159,7 +1105,7 @@ function slidesHandler(){
 
     var slidePicker = [].slice.call(document.getElementsByClassName("slidePicker")); //array of all slide pickers 
 
-    //console.log(slidePicker);
+
     //I don't really like this solution...seems really ugly.
 
     //It works like this: .map goes through each item of slidePicker, sets a new var called "assignEvtListeners" to true. if assignEvtListeners is true, executes  array[index].addEvtListener("focus"...)'s
@@ -1177,7 +1123,7 @@ function slidesHandler(){
     determineActiveIndex();
     //definir el valor activo al momento de focusear activePicker.
     var activePickerCurValue = activePicker.value;
-    console.log(assignEvtListeners);
+
 
     document.addEventListener("keypress", function(event) {
         
@@ -1347,8 +1293,8 @@ return { //returns an anonymous object, the properties of which we have to acces
 };
 };
 
-var clickedObject = valueOfObjectPropInArrayFinder("name", event.target.name, inputData).targeted; //var comment = "damn that function name is long"
-var notClickedObjects = valueOfObjectPropInArrayFinder("name", event.target.name, inputData).notTargeted; //console.log(comment)
+var clickedObject = valueOfObjectPropInArrayFinder("name", event.target.name, inputData).targeted; // that function is long...
+var notClickedObjects = valueOfObjectPropInArrayFinder("name", event.target.name, inputData).notTargeted; // ^
 
 //this function modifies the values of the inputboxes according to user actions and the inputboxes values, if empty, fills the box with the defaultValue, if value=defaultValue, empties the clicked inputbox (and leaves the others alone)
 var modifyInputValues = function(targetedArray, deleteDefault) { // this is the ES6 way of default function parameter value, ES5 should be done like this example: https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Functions/Default_parameters
@@ -1539,7 +1485,7 @@ var dragBoxFunction = (function(){
      },
      positionChange: function(boxToMove,XAxisPosition,YAxisPosition) {
          //applies the position changes according to mousemovement
-      //console.log("newX    " + XAxisPosition + "newY   " + YAxisPosition);
+
                         boxToMove.style.left = XAxisPosition + 'px';
                         boxToMove.style.top = YAxisPosition + 'px';
      }
@@ -1673,7 +1619,7 @@ switch(currentOrientation) {
     break;
     
     default:
-    console.log("unexpected currentOrientation value");
+
     
 }   //switch statement 
 
@@ -1696,7 +1642,7 @@ target[i].addEventListener("blur", function(event) {
         break;
         
         case -90 || 90:
-        console.log("landscape");
+
         break;
     }
 });
@@ -1732,10 +1678,10 @@ function blogTabHandler(postToRequest, setListeners) {
 
     function setActivePost() {
         [].slice.call(document.getElementsByClassName("post-link")).map(function(element, index, array) {
-            console.log("currpost id", currentPostId);
+
             element.id === currentPostId ? element.classList.add("active-post") : element.classList.remove("active-post");
             getResizedImages('.post-content img', determineSizeToGet);
-            //element.className.replace('post-link ', '') == currentPostId ? element.classList.add("active-post") : element.classList.remove("active-post");
+
 
         });
         
@@ -1775,7 +1721,7 @@ function blogTabHandler(postToRequest, setListeners) {
  
         event.stopPropagation();
         event.preventDefault();
-        console.log("clicked hanlder ajax")
+
         var wasLinkClicked = true;
 
        // if(!scheduled) {
@@ -1853,7 +1799,7 @@ function blogTabHandler(postToRequest, setListeners) {
 
                     if(Math.abs(deltaX) - touchMoveThreshold>0) {
                             deltaX>=0 ? deltaX = deltaX - touchMoveThreshold : deltaX = deltaX + touchMoveThreshold;
-                            //console.log(deltaX);
+                 
                             if(marginLeftValue<=0 && Math.abs(marginLeftValue+10) <= leftStopThreshold) { 
                                 blogContent.style.marginLeft = Math.min((parseInt(startPrevMargin, 10) + deltaX), 0) + 'px';
                                 }
@@ -1932,7 +1878,7 @@ function blogMenuFunction(addListeners) {
     var touchStartPositionY = 0;
             scrollButton.style.height = (function(){    //scrollbutton height will be same % of scrollbar as post-sidebar-menu-container.height is of post-sidebar-menu 
                                         var containerToPostMenuRatio = menuContainerHeight/sidebarHeight;
-                                        console.log("calc scroll btn size");
+                           
                                         var size = scrollBarHeight * containerToPostMenuRatio;
                                 
                                         return size + "px";
@@ -1977,13 +1923,13 @@ function blogMenuFunction(addListeners) {
                 var transformAmount = (function() {
 
                     if((scrollButtonPrevScroll + variation)>minTransform) { //if translateY would be lower than zero (or whatever the minTransform is set to), return minTransform;
-                         console.log("min trans", minTransform);
+                    
                         return minTransform;
 
                     }
 
                     else if ((scrollButtonPrevScroll + variation)<maxTransform) { //if the scroll would be more than all of  the posts, cap it to the max height of the posts menu container
-                        console.log("max trans", maxTransform);
+                  
                         return maxTransform;
                     }
 
