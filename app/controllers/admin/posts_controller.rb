@@ -132,7 +132,7 @@ class Admin::PostsController < ApplicationController
 
             @all_img_data_route.push ActionController::Base.helpers.asset_path("#{@route}/")
             @all_img_data_file.push "#{@file}"
-            @all_img_data_sizes.push @sizes
+            @all_img_data_sizes.push "#{@sizes.slice(0..-2)}"
             
             img["data-route"] = ActionController::Base.helpers.asset_path("#{@route}/")
             img["data-file"] = "#{@file}"

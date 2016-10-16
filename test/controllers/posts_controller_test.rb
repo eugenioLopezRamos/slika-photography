@@ -115,14 +115,15 @@ class PostsControllerTest < ActionDispatch::IntegrationTest
     content = Nokogiri.HTML(content).css('body').to_xhtml #Simulates the output produced by CKEditor
 
     assert_difference 'Post.count', 1 do
-      post admin_posts_path, params: {post: {title: title, content: content}}
+
+      post admin_posts_path, params: { post: {title: title, content: content} }
+
     end
 
-
     Post.last.reload
-    assert_not_equal Post.last.content, content
+    assert_not_equal Post.last.content, content #shouldn't be equal, since the controller processes the post content's img tags w/Nokogiri before saving
     
-    #these are assigned just for tests
+    #these are assigned just for tests (in the controller)
     sizes = assigns(:all_img_data_sizes)
     routes = assigns(:all_img_data_route)
     files = assigns(:all_img_data_file)
@@ -132,8 +133,8 @@ class PostsControllerTest < ActionDispatch::IntegrationTest
     second_img = Nokogiri.HTML(Post.last.content).css('img')[1]
 
     #each imgs corresponding sizes
-    first_img_sizes = sizes[0].slice!(0..-2) #exclude thumbnail size
-    second_img_sizes = sizes[1].slice!(0..-2) #exclude thumbnail size
+    first_img_sizes = sizes[0]
+    second_img_sizes = sizes[1] 
 
     #each imgs corresponding route
     first_img_route = routes[0]
@@ -144,18 +145,18 @@ class PostsControllerTest < ActionDispatch::IntegrationTest
     second_img_file = files[1]
 
     #check that ["data-sizes"] is correctly assigned.
-
-    assert_equal first_img["data-sizes"], "#{first_img_sizes}".html_safe 
-    assert_equal second_img["data-sizes"], "#{second_img_sizes}".html_safe
+    # expected, actual
+    assert_equal first_img["data-sizes"], first_img_sizes.html_safe
+    assert_equal second_img["data-sizes"], second_img_sizes.html_safe
     
     #check that ["data-route"] is correctly assigned
-    assert_equal first_img["data-route"], "#{first_img_route}".html_safe
-    assert_equal second_img["data-route"], "#{second_img_route}".html_safe
+    assert_equal first_img["data-route"], first_img_route.html_safe
+    assert_equal second_img["data-route"], second_img_route.html_safe
 
     #check that ["data-file"] is correctly assigned
 
-    assert_equal first_img["data-file"], "#{first_img_file}".html_safe
-    assert_equal second_img["data-file"], "#{second_img_file}".html_safe
+    assert_equal first_img["data-file"], first_img_file.html_safe
+    assert_equal second_img["data-file"], second_img_file.html_safe
 
 
   end
