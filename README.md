@@ -33,13 +33,16 @@ _heroku_
 
 _admin panel front end_
 
-- Sort files into files and folders, right now it looks messy.
+
 - Working.... type of message when AJAX is sent but in process.
 - Make an option to just upload(instead of creating 9001 versions of the img)
+- 99.9% I'll make the file manager css its own file instead of using the style tag, it has grown quite a bit
+
 
 **DONE**
 
-
+- Sort files into files and folders, right now it looks messy.
+- Added icons for folders and files on file manager
 - change the bottom bar and contact tab logos to something on the server.
 - Same treatment for touch scrollbtn move as for mousedrag
 - Tab indexes en las paginas en contactTab - Working correctly.
@@ -76,7 +79,7 @@ Fixed -> Just had to add the getResizedImages function to the ajax calls
 - Contact tab is bad. Review - Fixed. Changed animations.
 - check the accuracy of the image resizer method on admin controller. -> rray){
 Done, refactored the function a bit.
-- change |file| to temp_file later (admin controller ln. 240, currently it's called file, same as the iterator of its parent block)
+- change |file| to temp_file later (admin controller ln. ~240, currently it's called file, same as the iterator of its parent block)
 - Use application_ helper size_breakpoints in admin controller instead of own method.
 - Server side verification of file -> image
 - There's a bug with blog tab JS where it incorrectly goes remembers the first post that you load -> Checked, couldn't make it bug.
@@ -147,7 +150,6 @@ Done, refactored the function a bit.
 -login page styling
 - Make the checkbox on login modify the remember state
 - Fixed remember login related problems (now remembers/forgets as intended
-
 - Add account activation and password forget to users + tests
 - contact mailer test
 - Format the admin pages somewhat decently
