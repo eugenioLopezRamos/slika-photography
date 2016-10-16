@@ -97,7 +97,8 @@ var main = function() {
              
 
             });
-            var sizeToGet = Math.max(...sizeToGet);
+
+            var sizeToGet = Math.max.apply(null, sizeToGet);
 
             sizeToAssign.push(sizeToGet);
 
