@@ -31,11 +31,6 @@ _s3_
 _heroku_
 - Related to ^, add SendGrid for mails, postgres for DB and whatever other production env changes are necessary to pass to production
 
-_public front end_
-
-- change the bottom bar and contact tab logos to something on the server.
-- Same treatment for touch scrollbtn move as for mousedrag
-
 _admin panel front end_
 
 - Sort files into files and folders, right now it looks messy.
@@ -43,6 +38,10 @@ _admin panel front end_
 - Make an option to just upload(instead of creating 9001 versions of the img)
 
 **DONE**
+
+
+- change the bottom bar and contact tab logos to something on the server.
+- Same treatment for touch scrollbtn move as for mousedrag
 - Tab indexes en las paginas en contactTab - Working correctly.
 - scrollbar focus evt listener works weird when clicking - Fixed, had to change evt listener to mousedown instead of click, and prevent default on click evt.
 - Change the images on the home tab

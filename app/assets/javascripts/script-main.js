@@ -2083,8 +2083,11 @@ function blogMenuFunction(addListeners) {
 
                 touchMoveHandler: function(event) {
 
-                    event.stopPropagation();                 
-                    delta = (event.changedTouches[0].clientY - touchStartPositionY);
+                    event.stopPropagation();  
+
+                    var percentageOfScrollbar = (event.changedTouches[0].clientY - touchStartPositionY)/scrollBarHeight;
+                    delta = percentageOfScrollbar*sidebarHeight;
+
                     event.target.id === "blog-menu-scrollbar-btn" ? delta = -delta : delta = delta; // If touching the scrollbutton, direction is reversed so it matches using a scrollbar on desktop.
                     postMenuScroller("default", delta);
                     touchStartPositionY = event.changedTouches[0].clientY;
