@@ -31,10 +31,6 @@ _s3_
 _heroku_
 - Related to ^, add SendGrid for mails, postgres for DB and whatever other production env changes are necessary to pass to production
 
-_admin panel front end_
-
-
-
 **DONE**
 
 - Make the file manager css its own file instead of using the style tag, it has grown quite a bit
