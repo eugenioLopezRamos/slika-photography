@@ -15,9 +15,7 @@ A portfolio site with AJAX, pushstate, and an admin panel
 	- You can also confirm this is the case in /test/integration/admin_integration_test.rb
 
  - Rails test should be GREEN(provided you have set your AWS S3 ENV variables correctly)
-
-
-
+ 
 **TO DO**
 
 - Add staging env to test the app in the same condition as the production env.
