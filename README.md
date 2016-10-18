@@ -5,7 +5,6 @@ A portfolio site with AJAX, pushstate, and an admin panel
 
  - Clone repo
  - Bundle install
- - db:setup
  - db:migrate
  - Do note that the site requires the AWS S3 ENV variables to be set. The tests that depend on them are skipped in case any of them is nil.
  - Required variables:
