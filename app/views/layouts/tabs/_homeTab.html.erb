@@ -12,8 +12,8 @@
       <% end %>
 
       <% @main_image = @original_files.select { |image| image.include? "main" }%>
- 
-      <%= image_tag("", class: 'home-main-img', id: "#{@full_dir}/#{@main_image[0]}", data: {sizes: @sizes_per_file[@main_image[0]], route: "#{asset_path @full_dir}" , file: "#{@main_image[0]}" } ) %>
+
+      <%= image_tag("", class: 'home-main-img', id: "#{@full_dir}/#{@main_image[0]}", data: {sizes: [480], route: "#{asset_path @full_dir}" , file: "#{@main_image[0]}" } ) %>
 
     <div class="homeBody">
       <p class="home-main-par">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam eu nulla vitae metus rhoncus ultricies quis nec felis. Duis -lectus turpis, auctor sed enim ac, blandit mollis justo. Nam quis nisi dapibus, vulputate lacus eleifend, maximus magna.

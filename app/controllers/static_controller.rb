@@ -101,6 +101,11 @@ class StaticController < ApplicationController
     #currently in the dev env the background is taken from public/images/background and the rest of iamges are taken from Rails.root/images
     #this is due to me prioritizing the route format of the S3 bucket.
 
+
+
+
+    ### Photos should be XXX-home-YYY.jpg
+    ### where XXX => resolution and YYY is either main for main photo or 1..4 for thumbnails
     @original_files = Array.new #will contain the base filename of each photo
     @sizes_per_file = Hash.new #A hash with the following structure = "filename" => [available image sizes] } 
 
