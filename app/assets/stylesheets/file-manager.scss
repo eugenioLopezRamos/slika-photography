@@ -21,8 +21,13 @@ li img {
 
 }
 
-ul, span {
-	cursor: pointer;
+ul.folder{
+	 cursor:pointer;
+	 user-select: none;
+	 span {
+			cursor: pointer;
+	 		user-select: none;
+	 }
 }
 
 .upload-dir-container {

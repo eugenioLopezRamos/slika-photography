@@ -435,21 +435,21 @@ var fileManager = function(arrayOfFiles) {
 
 				document.getElementById("file-original-size").appendChild(newLi);
 
-				var newButton = document.createElement("button");
-				var newButton2 = document.createElement("button");
-				newButton.classList.add("file-info", "get-processed-data-btn")
-				newButton.id = element.name + "-getProcessedData";
+				// var newButton = document.createElement("button");
+				// var newButton2 = document.createElement("button");
+				// newButton.classList.add("file-info", "get-processed-data-btn")
+				// newButton.id = element.name + "-getProcessedData";
 
-				newButton2.classList.add("file-info", "preview-file-btn")				
-				newButton2.id = element.name + "-previewFile";
+				// newButton2.classList.add("file-info", "preview-file-btn")				
+				// newButton2.id = element.name + "-previewFile";
 
-				newButton.innerText = "Get size";
+				// newButton.innerText = "Get size";
 
-				newButton2.innerText = "Preview File";
+				// newButton2.innerText = "Preview File";
 				
-				document.getElementById("file-compressed-size").appendChild(newButton);
+				// document.getElementById("file-compressed-size").appendChild(newButton);
 
-				document.getElementById("file-serverside-info").appendChild(newButton2);
+				// document.getElementById("file-serverside-info").appendChild(newButton2);
 	
 	
 		}
@@ -600,7 +600,7 @@ var fileManager = function(arrayOfFiles) {
 	    var uploadRoute;
 		var selectedFiles = document.getElementsByClassName('selected');
 	    if (selectedFiles.length === 1) {
-	        uploadRoute = selectedFiles[0].innerText;
+	        uploadRoute = selectedFiles[0].innerText.trim();
 	    } else if (selectedFiles.length > 1)  {
 
 			var answer = window.confirm("Files will be uploaded to the first selected folder:\n" + selectedFiles[0].innerText +//

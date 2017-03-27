@@ -36,7 +36,7 @@
 
 <%= button_to "Download file", admin_upload_path, class: 'file-manager-button', :id => "download-file", :remote => false %> 
 <%= button_to "Delete files", admin_upload_path,  class: 'file-manager-button', :id => "delete-files" %>
-<!--<div class="upload-prep" id="upload-prep">-->
+
 	<span class="action-title">Upload preparation area</span>
 	<span class="action-description">Here you can see how your uploaded files will be processed</span>
 
@@ -48,15 +48,6 @@
 
 		<div class="file-list" id="file-original-size">
 			<span class="action-description">Original size</span>
-		</div>
-
-		<div class="file-list" id="file-compressed-size">
-			<span class="action-description">New size</span>
-		</div>
-
-		<div class="file-list" id="file-serverside-info">
-			<span class="action-description">Preview</span>
-		
 		</div>
 	</div>
 
