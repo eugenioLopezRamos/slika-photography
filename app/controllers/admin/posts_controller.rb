@@ -109,6 +109,9 @@ class Admin::PostsController < ApplicationController
             @route = "#{full_src.join("/")}"
             @file = full_file.split("-").slice!(1..-1).join("-") #removes the version prefix => original-myimage-img-foo.jpg -> myimage-img-foo.jpg
 
+            if env_keys_missing?
+                return
+            end
             s3 = Aws::S3::Client.new
 
             @sizes = s3.list_objects(bucket: ENV['AWS_S3_BUCKET'], marker: "#{@route}").contents.map(&:key)

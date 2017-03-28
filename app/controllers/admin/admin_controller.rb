@@ -141,7 +141,9 @@ before_action :create_download_log, only: :download_file
       render partial: '/admin/flash_messages'
       return
     else #Go ahead and upload
-      
+      if env_keys_missing?
+        return
+      end
       s3 = Aws::S3::Client.new #create the client
       
         optimized_array = optimize_images # AdminController#optimize_images
@@ -188,19 +190,11 @@ before_action :create_download_log, only: :download_file
     #same as delete, check every item to see if it's a folder, if it is s3.list_objects, add all children keys to the array
     #then array.uniq! it up
 
-    s3 = Aws::S3::Client.new 
-    # if Rails.env === "test"
-    #   s3 = Aws::S3::Client.new(stub_responses: true)
-    #   get_object_stub_1 = {
-    #   body: File.open("#{Rails.root}/test/fixtures/files/testImage1.jpg", "rb")
+    if env_keys_missing?
+      return
+    end
 
-    # }
-    # get_object_stub_2 = {
-    #   body: File.open("#{Rails.root}/test/fixtures/files/testImage2.jpg", "rb")
-    # }
-    # s3.stub_responses(:get_object, [get_object_stub_1, get_object_stub_2, {body: nil}])
-    # end
-      
+    s3 = Aws::S3::Client.new 
 
     files_array.each do |file|
 
@@ -318,6 +312,10 @@ before_action :create_download_log, only: :download_file
     #need to add somesort of authentication so not everybody can delete files
     files_array = params[:files]
     to_delete = []
+    if env_keys_missing?
+      return
+    end
+    
     s3 = Aws::S3::Client.new
     #this controller needs to detect whether the selected item is a folder or a file, and if it's a folder,
     #delete the folder item and all of its children

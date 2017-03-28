@@ -20,11 +20,9 @@
 
 
 
-<% 	
-	env_keys = [ENV["AWS_SECRET_ACCESS_KEY"], ENV["AWS_ACCESS_KEY_ID"], ENV["AWS_S3_BUCKET"], ENV["AWS_REGION"]]
-
-	if env_keys.include?("") || env_keys.include?(nil)
-		files_in_bucket = ["No se puede acceder a bucket"]
+<% 
+	if env_keys_missing?
+		files_in_bucket = ["Can't access S3 bucket. Check env variables"]
 	else
 	 	s3 = Aws::S3::Client.new 
 		files_in_bucket = s3.list_objects(bucket: ENV['AWS_S3_BUCKET']).contents.map(&:key) 

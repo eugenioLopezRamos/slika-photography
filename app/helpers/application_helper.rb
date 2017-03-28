@@ -30,4 +30,12 @@ module ApplicationHelper
         ["peopleTab", "modelsTab", "urbanTab", "eventsTab"]
     end
 
+    def env_keys
+        [ENV["AWS_SECRET_ACCESS_KEY"], ENV["AWS_ACCESS_KEY_ID"], ENV["AWS_S3_BUCKET"], ENV["AWS_REGION"]]
+    end
+
+    def env_keys_missing?
+        env_keys.include?("") || env_keys.include?(nil)
+    end
+
 end
