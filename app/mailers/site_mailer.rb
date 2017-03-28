@@ -6,7 +6,7 @@ class SiteMailer < ApplicationMailer
     @email = email   
     @subject = subject
     @cl_message = message
-    mail to: "eugenionlopez@gmail.com", subject: "You have been contacted"
+    mail to: "someone@example.com", subject: "You have been contacted"
 
   end
 
@@ -14,7 +14,7 @@ class SiteMailer < ApplicationMailer
     @greeting = "Hi"
     @user = user
   
-    mail to: user.email, subject: 'Invitation to Leonardo Antonio PhotoArt'
+    mail to: user.email, subject: 'Invitation to Slika Photography'
   end
 
   def password_reset(user)

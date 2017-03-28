@@ -6,7 +6,7 @@ class SiteMailerTest < ActionMailer::TestCase
   test "new_contact_email" do
     mail = SiteMailer.new_contact_email("Pedro", "from@example.com","Client contact", "Hi")
     assert_equal "You have been contacted", mail.subject
-    assert_equal ["eugenionlopez@gmail.com"], mail.to
+    assert_equal ["someone@example.com"], mail.to
     assert_equal ["noreply@example.com"], mail.from
     assert_match "Hi", mail.body.encoded
   end
@@ -15,7 +15,7 @@ class SiteMailerTest < ActionMailer::TestCase
     user = users(:michael)
     user.activation_token = User.new_token
     mail = SiteMailer.account_activation(user)
-    assert_equal "Invitation to Leonardo Antonio PhotoArt", mail.subject
+    assert_equal "Invitation to Slika Photography", mail.subject
     assert_equal [user.email], mail.to
     assert_equal ["noreply@example.com"], mail.from
     assert_match user.name,               mail.body.encoded

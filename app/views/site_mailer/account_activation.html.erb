@@ -1,6 +1,6 @@
 <h3><%= @greeting %>  <%= @user.name %>,<h3>
 
-<p>You have received an invitation to join Leonardo Antonio Photoart</p>
+<p>You have received an invitation to join Slika Photography</p>
 <p>To activate your account, please click the following link:</p>
 
 <%= link_to "Activate account",  edit_admin_account_activation_url(@user.activation_token, email: @user.email) %>
