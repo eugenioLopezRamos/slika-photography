@@ -6,15 +6,14 @@ A portfolio site with AJAX, pushstate, and an admin panel
  - Clone repo
  - Bundle install
  - db:migrate
- - Do note that the site requires the AWS S3 ENV variables to be set. The tests that depend on them are skipped in case any of them is nil.
+ - Do note that the site requires the AWS S3 ENV variables to be set. The tests that depend on them use stubs
  - Required variables:
  	- ENV['AWS_ACCESS_KEY_ID']
 	- ENV['AWS_SECRET_ACCESS_KEY']
 	- ENV['AWS_REGION']
 	- ENV['AWS_S3_BUCKET']
-	- You can also confirm this is the case in /test/integration/admin_integration_test.rb
 
- - Rails test should be GREEN(provided you have set your AWS S3 ENV variables correctly)
+ - Rails test should be GREEN
  
 **TO DO**
 

@@ -18,13 +18,16 @@
 </div>
 
 
-<% s3 = Aws::S3::Client.new %>
+
 
 <% 	
-	if ENV["AWS_S3_BUCKET"] != nil
-		files_in_bucket = s3.list_objects(bucket: ENV['AWS_S3_BUCKET']).contents.map(&:key) 
+	env_keys = [ENV["AWS_SECRET_ACCESS_KEY"], ENV["AWS_ACCESS_KEY_ID"], ENV["AWS_S3_BUCKET"], ENV["AWS_REGION"]]
+
+	if env_keys.include?("") || env_keys.include?(nil)
+		files_in_bucket = ["No se puede acceder a bucket"]
 	else
-		files_in_bucket = ["vacio"]
+	 	s3 = Aws::S3::Client.new 
+		files_in_bucket = s3.list_objects(bucket: ENV['AWS_S3_BUCKET']).contents.map(&:key) 
 	end
 %>
 

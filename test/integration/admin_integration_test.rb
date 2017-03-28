@@ -23,20 +23,6 @@ class AdminIntegrationTest < ActionDispatch::IntegrationTest
 
 	@uploaded_heavy_img = Rack::Test::UploadedFile.new(@heavy_img, "image/jpeg")
 
-	#Skips the tests if any of these ENV variables is nil, since they are required to correctly test the controller.
-	
-	# if ENV['AWS_S3_BUCKET'].nil? || ENV['AWS_SECRET_ACCESS_KEY'].nil? || ENV['AWS_REGION'].nil? || ENV['AWS_ACCESS_KEY_ID'].nil?
-	# 	skip "At least one of these ENV variables is nil:\n  
-	# 	ENV['AWS_S3_BUCKET'], \n
-	# 	ENV['AWS_SECRET_ACCESS_KEY'], \n
-	# 	ENV['AWS_REGION']\n
-	# 	ENV['AWS_ACCESS_KEY_ID'],\n 
-	# 	Can't test S3 integration -> skipping AdminIntegrationTest"
-		
-	# end
-
-
-
   end
 
 #im not sure if these are 100% ok, since all of these are done via AJAX requests instead of through rails "standard" forms
