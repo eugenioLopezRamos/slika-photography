@@ -18,6 +18,7 @@ A portfolio site with AJAX, pushstate, and an admin panel
 You can access the admin panel home localhost:300/admin - Email: "juan@perez.com", password: "password"
 File management requires an AWS bucket configured :(
 To pass to production some email solution (eg mailgun) should be used, plus postgres or another SQL DB to replace SQLite
+Production also uses ENV["CDN"] for CDN. As this was developed using AWS, this was cloudfront but you're free to use whichever you prefer
 
 
 
