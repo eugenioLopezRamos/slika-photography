@@ -188,7 +188,19 @@ before_action :create_download_log, only: :download_file
     #same as delete, check every item to see if it's a folder, if it is s3.list_objects, add all children keys to the array
     #then array.uniq! it up
 
-    s3 = Aws::S3::Client.new
+    s3 = Aws::S3::Client.new 
+    # if Rails.env === "test"
+    #   s3 = Aws::S3::Client.new(stub_responses: true)
+    #   get_object_stub_1 = {
+    #   body: File.open("#{Rails.root}/test/fixtures/files/testImage1.jpg", "rb")
+
+    # }
+    # get_object_stub_2 = {
+    #   body: File.open("#{Rails.root}/test/fixtures/files/testImage2.jpg", "rb")
+    # }
+    # s3.stub_responses(:get_object, [get_object_stub_1, get_object_stub_2, {body: nil}])
+    # end
+      
 
     files_array.each do |file|
 
@@ -215,6 +227,7 @@ before_action :create_download_log, only: :download_file
     #debugger
     selected_files.uniq!
 
+
  
 
     @temp_zip = Tempfile.new('temp.zip', "#{Rails.root}/tmp")
@@ -224,9 +237,8 @@ before_action :create_download_log, only: :download_file
       selected_files.each do |sel_file| #need to fix this on folders.
         Tempfile.open("tmpfile", "#{Rails.root}/tmp", :encoding => 'binary') do |file|
           begin 
-
+        
             resp = s3.get_object({bucket: ENV['AWS_S3_BUCKET'], key: sel_file}, target: file)
-
             rescue Aws::S3::Errors::ServiceError => e
             @operation_results.push "<br />#{sel_file}: #{e.message.gsub('key', 'file')}<br />" 
           end #begin close

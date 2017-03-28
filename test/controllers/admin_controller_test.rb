@@ -35,12 +35,12 @@ class AdminControllerTest < ActionDispatch::IntegrationTest
     get admin_login_path
     assert_template 'sessions/new'
     log_in_as(@user)
-    if ENV['AWS_S3_BUCKET'].nil? || ENV['AWS_SECRET_ACCESS_KEY'].nil? || ENV['AWS_S3_REGION'].nil? || ENV['AWS_S3_ACCESS_KEY_ID'].nil?
+    if ENV['AWS_S3_BUCKET'].nil? || ENV['AWS_SECRET_ACCESS_KEY'].nil? || ENV['AWS_REGION'].nil? || ENV['AWS_ACCESS_KEY_ID'].nil?
       skip "At least one of these ENV variables is nil:\n  
       ENV['AWS_S3_BUCKET'], \n
       ENV['AWS_SECRET_ACCESS_KEY'], \n
-      ENV['AWS_S3_REGION']\n
-      ENV['AWS_S3_ACCESS_KEY_ID'],\n 
+      ENV['AWS_REGION']\n
+      ENV['AWS_ACCESS_KEY_ID'],\n 
       Can't test S3 integration -> skipping AdminControllerTest - test 'User is shown upload sshow page when requesting it'"
       
     end

@@ -105,24 +105,26 @@ class PostsControllerTest < ActionDispatch::IntegrationTest
 
 
   test "img tag src's found on the S3 bucket are modified by adding the attributes data-route, data-file, data-sizes" do
+
+
     # Requires AWS env variables to be set, else it is skipped.
 
-    if ENV['AWS_S3_BUCKET'].nil? || ENV['AWS_SECRET_ACCESS_KEY'].nil? || ENV['AWS_S3_REGION'].nil? || ENV['AWS_S3_ACCESS_KEY_ID'].nil?
-      skip "At least one of these ENV variables is nil:\n  
-      ENV['AWS_S3_BUCKET'], \n
-      ENV['AWS_SECRET_ACCESS_KEY'], \n
-      ENV['AWS_S3_REGION']\n
-      ENV['AWS_S3_ACCESS_KEY_ID'],\n 
-      Can't test S3 integration -> skipping PostControllerTest - Test 'img tag src's found on the S3 bucket are modified by adding the attributes data-route, data-file, data-sizes'"
+    # if ENV['AWS_S3_BUCKET'].nil? || ENV['AWS_SECRET_ACCESS_KEY'].nil? || ENV['AWS_REGION'].nil? || ENV['AWS_ACCESS_KEY_ID'].nil?
+    #   skip "At least one of these ENV variables is nil:\n  
+    #   ENV['AWS_S3_BUCKET'], \n
+    #   ENV['AWS_SECRET_ACCESS_KEY'], \n
+    #   ENV['AWS_REGION']\n
+    #   ENV['AWS_ACCESS_KEY_ID'],\n 
+    #   Can't test S3 integration -> skipping PostControllerTest - Test 'img tag src's found on the S3 bucket are modified by adding the attributes data-route, data-file, data-sizes'"
       
-    end
+    # end
 
     get admin_login_path
     post admin_login_path, params: { session: { email: @notadmin.email, password: "password" } }
 
     get new_admin_post_path
     title = "title for post"
-    content = "content for post <img src='/images/post-test/original-TestImage1.jpg' /><img src='/images/post-test/original-TestImage2.jpg' />"
+    content = "content for post <img src='/images/post-test/original-testImage1.jpg' /><img src='/images/post-test/original-testImage2.jpg' />"
     content = Nokogiri.HTML(content).css('body').to_xhtml #Simulates the output produced by CKEditor
 
     assert_difference 'Post.count', 1 do

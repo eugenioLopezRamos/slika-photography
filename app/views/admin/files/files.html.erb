@@ -20,7 +20,13 @@
 
 <% s3 = Aws::S3::Client.new %>
 
-<% files_in_bucket = s3.list_objects(bucket: ENV['AWS_S3_BUCKET']).contents.map(&:key) %>
+<% 	
+	if ENV["AWS_S3_BUCKET"] != nil
+		files_in_bucket = s3.list_objects(bucket: ENV['AWS_S3_BUCKET']).contents.map(&:key) 
+	else
+		files_in_bucket = ["vacio"]
+	end
+%>
 
 <script id="initial-script">
 	initialArray = <%= raw files_in_bucket %> // a global to be deleted on document.ready
@@ -29,7 +35,7 @@
 <span class="action-title">File Manager</span>
 <span class="action-description">Here you can browse the files currently in your S3 bucket</span>
 <p class='action-description'>
-	Notes:<br>Ctrl + left click (or long touch on mobile devices) selects/unselects files
+	Notes:<br>Left click (or long touch on mobile devices) selects/unselects files
 		  <br>Double click on a folder selects the folder.
 </p>
 

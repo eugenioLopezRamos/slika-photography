@@ -112,12 +112,11 @@ class Admin::PostsController < ApplicationController
             s3 = Aws::S3::Client.new
 
             @sizes = s3.list_objects(bucket: ENV['AWS_S3_BUCKET'], marker: "#{@route}").contents.map(&:key)
+          #  debugger
             @sizes = @sizes.select {|entry| entry.match("#{@route}/#{/\d{1,4}-/}#{@file}")} # route/{1 to 4 digits}-filename
 
             if @sizes.empty?
-                
                 return
-
             end
 
           

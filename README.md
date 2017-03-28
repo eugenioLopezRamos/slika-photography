@@ -10,7 +10,7 @@ A portfolio site with AJAX, pushstate, and an admin panel
  - Required variables:
  	- ENV['AWS_ACCESS_KEY_ID']
 	- ENV['AWS_SECRET_ACCESS_KEY']
-	- ENV['AWS_S3_REGION']
+	- ENV['AWS_REGION']
 	- ENV['AWS_S3_BUCKET']
 	- You can also confirm this is the case in /test/integration/admin_integration_test.rb
 

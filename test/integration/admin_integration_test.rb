@@ -10,11 +10,11 @@ class AdminIntegrationTest < ActionDispatch::IntegrationTest
 
   def setup
   	@admin = users(:michael)
-  	@image_1_name = 'TestImage1.jpg'
-  	@image_2_name = 'TestImage2.jpg'
+  	@image_1_name = 'testImage1.jpg'
+  	@image_2_name = 'testImage2.jpg'
 
-  	@image_1 = file_fixture('TestImage1.jpg')
- 	@image_2 = file_fixture('TestImage2.jpg')
+  	@image_1 = file_fixture('testImage1.jpg')
+ 	@image_2 = file_fixture('testImage2.jpg')
 
  	@heavy_img = file_fixture('heavy-img.jpg')
 
@@ -25,15 +25,15 @@ class AdminIntegrationTest < ActionDispatch::IntegrationTest
 
 	#Skips the tests if any of these ENV variables is nil, since they are required to correctly test the controller.
 	
-	if ENV['AWS_S3_BUCKET'].nil? || ENV['AWS_SECRET_ACCESS_KEY'].nil? || ENV['AWS_S3_REGION'].nil? || ENV['AWS_S3_ACCESS_KEY_ID'].nil?
-		skip "At least one of these ENV variables is nil:\n  
-		ENV['AWS_S3_BUCKET'], \n
-		ENV['AWS_SECRET_ACCESS_KEY'], \n
-		ENV['AWS_S3_REGION']\n
-		ENV['AWS_S3_ACCESS_KEY_ID'],\n 
-		Can't test S3 integration -> skipping AdminIntegrationTest"
+	# if ENV['AWS_S3_BUCKET'].nil? || ENV['AWS_SECRET_ACCESS_KEY'].nil? || ENV['AWS_REGION'].nil? || ENV['AWS_ACCESS_KEY_ID'].nil?
+	# 	skip "At least one of these ENV variables is nil:\n  
+	# 	ENV['AWS_S3_BUCKET'], \n
+	# 	ENV['AWS_SECRET_ACCESS_KEY'], \n
+	# 	ENV['AWS_REGION']\n
+	# 	ENV['AWS_ACCESS_KEY_ID'],\n 
+	# 	Can't test S3 integration -> skipping AdminIntegrationTest"
 		
-	end
+	# end
 
 
 
@@ -52,7 +52,6 @@ class AdminIntegrationTest < ActionDispatch::IntegrationTest
  test "Tests full file manager flow -> Uploads files from disk to S3, downloads them from S3 to disk while generating logs, then deletes them" do
  		#maybe add a second upload with an actual file_route instead of just empty and refactor the loop code
 	  	#to loop over arrays and them over images? sounds slow but is more thorough.
-
 
  	#log in.
  	log_in_as(@admin)
@@ -89,18 +88,18 @@ class AdminIntegrationTest < ActionDispatch::IntegrationTest
 
 	  		#tests route + prefix + original filename being equal to the route + filename on the bucket(eg. is file uploaded to the intended "folder"?).
 	  		@test_uploaded_file_listing = s3.list_objects(bucket: ENV['AWS_S3_BUCKET'], marker: image_file_route).contents
-		
+			
 			#get all corresponding sizes
 			sizes = @controller.calc_sizes(size_breakpoints, image)
 			sizes.unshift("original") #adds a new item at the beginning of the array, "original" which is the unmodified version of the img
 
 			#this tests the existence of each version of the img
 			sizes.each do |prefix|
-
+		
 				block_uploaded_file_listing = @test_uploaded_file_listing.select{ |entry| entry.key === "#{image_file_route}#{prefix}-#{image_file_name}"  }.map(&:key)
 
 				#Test filenames being the same - image_file_name is in an array because the result from S3 is also an array (in this case, of one item.)
-			
+		
 				assert_equal ["#{file_route}#{prefix}-#{image_file_name}"], block_uploaded_file_listing
 				#Should give back only one item.
 				assert_equal block_uploaded_file_listing.length, 1
@@ -111,13 +110,14 @@ class AdminIntegrationTest < ActionDispatch::IntegrationTest
 
 			#tests same original file size - I'm doing this comparison instead of downloading the file with get_object then comparing them.
 			test_uploaded_file_size = @test_uploaded_file_listing.select {|entry| entry.key === "#{image_file_route}original-#{image_file_name}"}.map(&:size)
+			
 			assert_equal image.size, test_uploaded_file_size[0]
 
 	  	end
 
   	#START TEST => DOWNLOADS
 
-  		files_array = ["#{file_route}original-TestImage1.jpg", "#{file_route}original-TestImage2.jpg", "#{file_route}doesnt_exist.lol"]
+  		files_array = ["#{file_route}original-testImage1.jpg", "#{file_route}original-testImage2.jpg", "#{file_route}doesnt_exist.lol"]
 
 
   		mock_auth_token = "12345/678"
@@ -158,7 +158,7 @@ class AdminIntegrationTest < ActionDispatch::IntegrationTest
 		  													 #corresponding fixture uploaded tempfile.
 		  										
 		  					if "#{file_route}original-#{file.original_filename}" === zip_entry.name #refactor this pls
-
+						#	  debugger
 		  						assert_equal zip_entry.size, file.size
 		  						zip_file_contents << zip_entry.name
 		  					end
@@ -169,6 +169,7 @@ class AdminIntegrationTest < ActionDispatch::IntegrationTest
 		  			end
 
 		  		end
+				   
 		  		# Does the zip file contain the same files as the files requested in the POST request?
 		  		assert_equal zip_file_contents, files_array.slice(0..-2) #Has to exclude the unexistant download! chop off the last one.
 		  		
