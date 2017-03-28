@@ -46,10 +46,11 @@ ul.folder{
 
 }
 .selected {
-	background-color: #4274f4;
+	background-color: rgba(103, 147, 246, 1);
 	color: white;
 	font-weight: bold;
 	font-style: italic;
+	padding-top:3px;
 	border-radius: 2px;
 	border: 1px solid blue;
 }
@@ -115,11 +116,27 @@ hr.file-info {
 	height: 2px;
 }
 
-span.open {
-	color: green;
+.folder-span {
+	img.open-icon {
+		display:none;
+	}
+	img.closed-icon {
+		display:initial;
+	}
+}
+
+.folder-span.open {
+	font-weight: bold;
+	img.open-icon {
+		display:initial;
+	}
+	img.closed-icon {
+		display:none;
+	}
+
 }
 span.selected.open {
-	color: lightgreen;
+	color: white;
 }
 
 @media screen and (max-width: 480px) {

@@ -61,12 +61,19 @@ var fileManager = function(arrayOfFiles) {
 	        var folderSpan = document.createElement("span");
 	        var folderSpanText = document.createTextNode(" "+object.replace(parentFolder.id, ''));
 			var folderIcon = document.createElement("img");
-			folderIcon.setAttribute("src", "/images/external/folder-icon.png");
 
+			folderIcon.classList.add("closed-icon");
+			folderIcon.setAttribute("src", "/images/external/folder-icon.png");
+			
+			var folderIconOpen = document.createElement("img");
+			folderIconOpen.classList.add("open-icon");
+			folderIconOpen.setAttribute("src", "/images/external/folder-icon-open-transp.png")
 
 			folderSpan.appendChild(folderIcon);
+			folderSpan.appendChild(folderIconOpen);
 	        folderSpan.appendChild(folderSpanText);
 			folderSpan.id = object;
+			folderSpan.classList.add("folder-span");
 	        newFolder.appendChild(folderSpan);
 	        newFolder.id = object;
 	        return newFolder;
