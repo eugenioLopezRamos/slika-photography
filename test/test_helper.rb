@@ -2,6 +2,7 @@ ENV['RAILS_ENV'] ||= 'test'
 require File.expand_path('../../config/environment', __FILE__)
 require 'rails/test_help'
 require "minitest/reporters"
+
 Minitest::Reporters.use!
 
 
@@ -64,6 +65,14 @@ get_object_stub_2 = File.open("#{Rails.root}/test/fixtures/files/testImage2.jpg"
 
 s3 = Aws::S3::Client.new(stub_responses: true)
 
+  env_keys =[ENV["AWS_SECRET_ACCESS_KEY"], ENV["AWS_ACCESS_KEY_ID"], ENV["AWS_S3_BUCKET"], ENV["AWS_REGION"]]
+	#mock aws keys
+	if env_keys.include?("") || env_keys.include?(nil)
+		ENV["AWS_S3_BUCKET"] = "mock_bucket"
+    ENV["AWS_SECRET_ACCESS_KEY"] = "1234"
+    ENV["AWS_ACCESS_KEY_ID"] = "4321AA"
+    ENV["AWS_REGION"] = "sa-east-1"
+	end
 Aws.config[:s3] = {
   stub_responses: {
     list_objects: {contents: mock_objects},
