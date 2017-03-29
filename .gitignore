@@ -18,9 +18,6 @@
 .byebug_history
 #ignore vscode...
 /.vscode
-#ignore secrets
-
-/config/secrets.yml
 
 #ignore public uploads
 public/uploads/*
