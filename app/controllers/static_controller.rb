@@ -91,7 +91,10 @@ class StaticController < ApplicationController
     #in production, use S3
     if Rails.env.production?
       if env_keys_missing?
-        puts "s3 keys missing!"
+        puts "S3 keys missing! - Loading assets from /public"
+        @full_dir = "#{@public_folder}#{@full_dir}"
+        @files_in_folder = Dir.entries("#{@full_dir}/") - %w[. ..] #remove the dots from the dir result.
+        @files_in_folder.map! { |file| file = "#{@full_dir}/#{file}" }      
         return
       end
       s3 = Aws::S3::Client.new
