@@ -2,14 +2,7 @@
 
     <h1 class="homeTabTitle">Lorem Ipsum</h1>
     
-
-
-      <%#if Rails.env.development? || Rails.env.test? %>
-      <%#  resets the @full_dir so "public/" isn't added twice since image_tag auto adds it. 
-            Probably should have used just plain old HTML but at least I learned a bit about the asset_path
-            I guess %>
-        <% @full_dir = "#{@assets_dir}#{@image_dir}" %>
-      <%#end %>
+      <% @full_dir = "#{@assets_dir}#{@image_dir}" %>
 
       <% @main_image = @original_files.select { |image| image.include? "main" }%>
 

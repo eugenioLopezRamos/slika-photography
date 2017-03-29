@@ -3,15 +3,8 @@
     <% @counter += 1 %>
 
     <% if @counter === @active_slide %>
-      
-      <#% if Rails.env.development? || Rails.env.test? %>
-      <%#  resets the @full_dir so "public/" isn't added twice since image_tag auto adds it. 
-            Probably should have used just plain old HTML but at least I learned a bit about the asset_path
-            I guess %>
+    
         <% @full_dir = "#{@assets_dir}#{@image_dir}" %>
-      <#% end %>
-
-      <%# tbh it would have taken less time to just use normal html instead of the image_tag helpers.... %>
 
       <%= content_tag :div, class: "#{@tab_value} #{@active_slide_class}" do %>
               <%= render 'layouts/loadAnim' %> 
