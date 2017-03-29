@@ -104,7 +104,7 @@ class StaticController < ApplicationController
       @files_in_folder = Dir.entries("#{@full_dir}/") - %w[. ..] #remove the dots from the dir result.
       @files_in_folder.map! { |file| file = "#{@full_dir}/#{file}" }
     end
-
+    puts "FILES IN FOLDER #{@files_in_folder}"
     #currently in the dev env the background is taken from public/images/background and the rest of iamges are taken from Rails.root/images
     #this is due to me prioritizing the route format of the S3 bucket.
 
