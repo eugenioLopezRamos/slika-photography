@@ -4,7 +4,10 @@
 
     <% if @counter === @active_slide %>
     
-        <% @full_dir = "#{@assets_dir}#{@image_dir}" %>
+        <% if env_keys_missing? 
+            @full_dir = "#{@assets_dir}#{@image_dir}"
+          end
+        %>
 
       <%= content_tag :div, class: "#{@tab_value} #{@active_slide_class}" do %>
               <%= render 'layouts/loadAnim' %> 

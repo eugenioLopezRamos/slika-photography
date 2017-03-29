@@ -2,7 +2,10 @@
 
     <h1 class="homeTabTitle">Lorem Ipsum</h1>
     
-      <% @full_dir = "#{@assets_dir}#{@image_dir}" %>
+      <% if env_keys_missing? 
+          @full_dir = "#{@assets_dir}#{@image_dir}" 
+         end
+      %>
 
       <% @main_image = @original_files.select { |image| image.include? "main" }%>
 
