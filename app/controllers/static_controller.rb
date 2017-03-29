@@ -91,6 +91,7 @@ class StaticController < ApplicationController
     #in production, use S3
     if Rails.env.production?
       if env_keys_missing?
+        puts "s3 keys missing!"
         return
       end
       s3 = Aws::S3::Client.new
