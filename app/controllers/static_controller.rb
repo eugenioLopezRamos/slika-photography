@@ -95,6 +95,7 @@ class StaticController < ApplicationController
     else #else use the local files.
       puts "S3 keys missing!"
       @full_dir = Rails.env.production? ? "#{@full_dir}" : "#{@public_folder}#{@full_dir}" 
+      puts "FULL DIR #{@full_dir}"
       @files_in_folder = Dir.entries("#{@full_dir}/") - %w[. ..] #remove the dots from the dir result.
       @files_in_folder.map! { |file| file = "#{@full_dir}/#{file}" }
     end
