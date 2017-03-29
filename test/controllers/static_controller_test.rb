@@ -1,6 +1,18 @@
 require 'test_helper'
-
+include ApplicationHelper
 class StaticControllerTest < ActionDispatch::IntegrationTest
+
+  def setup
+    #Dont try to use S3 here.
+    # if !ApplicationHelper::env_keys_missing?
+    #   ENV["AWS_S3_BUCKET"] = nil
+    #   ENV["AWS_SECRET_ACCESS_KEY"] = nil
+    #   ENV["AWS_ACCESS_KEY_ID"] = nil
+    #   ENV["AWS_REGION"] = nil
+    # end
+
+  end
+
   test "should get home" do
     get '/home'
     assert_response :success
@@ -30,14 +42,25 @@ class StaticControllerTest < ActionDispatch::IntegrationTest
     @tabs.each do |tab|
       get "/#{tab}"
 
-      @public = assigns(:public_folder)
+      @public = ApplicationHelper::env_keys_missing? ? assigns(:public_folder) : ""
       @assets = assigns(:assets_dir)
       @image_dir = assigns(:image_dir)
       @sizes_per_file = assigns(:sizes_per_file)
       @base_file = assigns(:base_file)
     
-      images = Dir.entries("#{Rails.root}/#{@public}#{@assets}#{@image_dir}/") - %w(. ..)
-   
+
+
+      if !ApplicationHelper::env_keys_missing?
+        prefix = "#{@assets}#{@image_dir}/"
+        images = Aws::S3::Client.new
+                                .list_objects(bucket: ENV["AWS_S3_BUCKET"], prefix: prefix)
+                                .contents
+                                .map {|element| element[:key].gsub(prefix, "")}
+                               
+      else
+        images = Dir.entries("#{Rails.root}/#{@public}#{@assets}#{@image_dir}/") - %w(. ..)
+      end
+    #  debugger
       img_count = images.select {|filename| filename.include? "original-"}.length
       img_ids = images.select {|filename| filename.include? "original-"}
       img_full_routes = img_ids

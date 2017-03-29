@@ -1,16 +1,34 @@
 require 'test_helper'
+include ApplicationHelper
 
 class PostsControllerTest < ActionDispatch::IntegrationTest
-  # test "the truth" do
-  #   assert true
-  # end
+	@@original_bucket = ENV["AWS_S3_BUCKET"]
+	@@original_access_key = ENV["AWS_SECRET_ACCESS_KEY"]
+	@@original_access_key_id = ENV["AWS_ACCESS_KEY_ID"]
+	@@original_region = ENV["AWS_REGION"]
+
   def setup
     @admin = users(:michael)
     @notadmin = users(:mary)
     @adminpost = posts(:crabs)
     @notadminpost = posts(:apples)
+
+   # mock aws keys
+    if ApplicationHelper::env_keys_missing?
+      ENV["AWS_S3_BUCKET"] = "mock_bucket"
+      ENV["AWS_SECRET_ACCESS_KEY"] = "1234"
+      ENV["AWS_ACCESS_KEY_ID"] = "4321AA"
+      ENV["AWS_REGION"] = "sa-east-1"
+    end
   end
-  
+
+  def teardown
+    ENV["AWS_S3_BUCKET"] = @@original_bucket
+    ENV["AWS_SECRET_ACCESS_KEY"] = @@original_access_key
+    ENV["AWS_ACCESS_KEY_ID"] = @@original_access_key_id
+    ENV["AWS_REGION"] = @@original_region 
+  end
+
   test "user should not be able to create a post without being logged in" do
 
     #try to access page

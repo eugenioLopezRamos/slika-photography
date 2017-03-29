@@ -4,9 +4,9 @@
 
     <% if @counter === @active_slide %>
     
-        <% if env_keys_missing? 
-            @full_dir = "#{@assets_dir}#{@image_dir}"
-          end
+        <% #if !env_keys_missing? 
+              @full_dir = "#{@assets_dir}#{@image_dir}"
+          #end
         %>
 
       <%= content_tag :div, class: "#{@tab_value} #{@active_slide_class}" do %>

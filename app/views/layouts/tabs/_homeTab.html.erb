@@ -2,9 +2,9 @@
 
     <h1 class="homeTabTitle">Lorem Ipsum</h1>
     
-      <% if env_keys_missing? 
+      <% #if !env_keys_missing? 
           @full_dir = "#{@assets_dir}#{@image_dir}" 
-         end
+        # end
       %>
 
       <% @main_image = @original_files.select { |image| image.include? "main" }%>
@@ -43,12 +43,6 @@
           <%= image_tag("", class: "bigThumbnailImgs _#{(index + 1)}", id: "#{@full_dir}/#{image}", data: {sizes: @sizes_per_file[image], route: "#{asset_path @full_dir}" , file: "#{image}" } ) %>
 
         <% end %>
-<!--
-      <img class="bigThumbnailImgs" id="bigThumbnailPhoto1" src>
-      <img class="bigThumbnailImgs" id="bigThumbnailPhoto2" src>
-      <img class="bigThumbnailImgs" id="bigThumbnailPhoto3" src>
-      <img class="bigThumbnailImgs" id="bigThumbnailPhoto4" src>
--->
 
     </div> 
   </div>

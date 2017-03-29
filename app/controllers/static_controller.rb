@@ -89,7 +89,7 @@ class StaticController < ApplicationController
     end
 
     #in production, use S3 unless env_keys_missing (aws env keys missing)
-    if Rails.env.production? && !env_keys_missing?
+    if !env_keys_missing?
         s3 = Aws::S3::Client.new
         @files_in_folder = s3::list_objects(bucket:ENV['AWS_S3_BUCKET'], prefix: @full_dir).contents.map(&:key)
     else #else use the local files.
