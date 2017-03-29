@@ -88,18 +88,12 @@ class StaticController < ApplicationController
         @active_slide = params[:id].to_i
     end
 
-    #in production, use S3
-    if Rails.env.production?
-      if env_keys_missing?
-        puts "S3 keys missing! - Loading assets from /public"
-        @full_dir = "#{@public_folder}#{@full_dir}"
-        @files_in_folder = Dir.entries("#{@full_dir}/") - %w[. ..] #remove the dots from the dir result.
-        @files_in_folder.map! { |file| file = "#{@full_dir}/#{file}" }      
-        return
-      end
-      s3 = Aws::S3::Client.new
-      @files_in_folder = s3::list_objects(bucket:ENV['AWS_S3_BUCKET'], prefix: @full_dir).contents.map(&:key)
+    #in production, use S3 unless env_keys_missing (aws env keys missing)
+    if Rails.env.production? && !env_keys_missing?
+        s3 = Aws::S3::Client.new
+        @files_in_folder = s3::list_objects(bucket:ENV['AWS_S3_BUCKET'], prefix: @full_dir).contents.map(&:key)
     else #else use the local files.
+      puts "S3 keys missing! - Loading assets from /public"
       @full_dir = "#{@public_folder}#{@full_dir}"
       @files_in_folder = Dir.entries("#{@full_dir}/") - %w[. ..] #remove the dots from the dir result.
       @files_in_folder.map! { |file| file = "#{@full_dir}/#{file}" }
