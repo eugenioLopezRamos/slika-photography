@@ -93,18 +93,12 @@ class StaticController < ApplicationController
         s3 = Aws::S3::Client.new
         @files_in_folder = s3::list_objects(bucket:ENV['AWS_S3_BUCKET'], prefix: @full_dir).contents.map(&:key)
     else #else use the local files.
-      puts "S3 keys missing!"
       @full_dir = "#{@public_folder}#{@full_dir}" 
-      puts "FULL DIR #{@full_dir}"
       @files_in_folder = Dir.entries("#{@full_dir}/") - %w[. ..] #remove the dots from the dir result.
       @files_in_folder.map! { |file| file = "#{@full_dir}/#{file}" }
     end
-    puts "FILES IN FOLDER #{@files_in_folder}"
     #currently in the dev env the background is taken from public/images/background and the rest of iamges are taken from Rails.root/images
     #this is due to me prioritizing the route format of the S3 bucket.
-
-
-
 
     ### Photos should be XXX-home-YYY.jpg
     ### where XXX => resolution and YYY is either main for main photo or 1..4 for thumbnails

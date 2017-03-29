@@ -7,4 +7,4 @@
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 
 User.create!(name: "Juan Perez", email: "juan@perez.com", admin: true,password: "password", password_confirmation: "password")
-Post.create!([{title: "hello", content: "hello there", user_id: "1", slug: "hello"}])
+Post.create!([{title: "Test post", content: "This is a test post! Use the editor in the admin panel to add more interesting ones", user_id: "1", slug: "test-post"}])
